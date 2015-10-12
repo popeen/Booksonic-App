@@ -658,4 +658,8 @@
         <item quantity="other">%d dagar kvar av provperioden</item>
     </plurals>
 
+
+	<!--PopMod-->
+	<string name="main.author">Författare</string>
+
 </resources>

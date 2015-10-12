@@ -1,7 +1,6 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.res.Resources;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -103,26 +102,27 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 		List<Integer> albums = new ArrayList<>();
 		albums.add(R.string.main_albums_newest);
-		albums.add(R.string.main_albums_random);
+		albums.add(R.string.main_author);
 		if(ServerInfo.checkServerVersion(context, "1.8")) {
 			albums.add(R.string.main_albums_alphabetical);
 		}
+		albums.add(R.string.main_albums_random);
 		if(!Util.isTagBrowsing(context)) {
-			albums.add(R.string.main_albums_highest);
+			//albums.add(R.string.main_albums_highest);
 		}
-		albums.add(R.string.main_albums_starred);
-		albums.add(R.string.main_albums_genres);
 		albums.add(R.string.main_albums_year);
-		albums.add(R.string.main_albums_recent);
-		albums.add(R.string.main_albums_frequent);
+		albums.add(R.string.main_albums_starred);
+		//albums.add(R.string.main_albums_genres);
+		//albums.add(R.string.main_albums_recent);
+		//albums.add(R.string.main_albums_frequent);
 
 		sections.add(albums);
 		headers.add("albums");
 
 		if(ServerInfo.checkServerVersion(context, "1.8")) {
-			List<Integer> videos = Arrays.asList(R.string.main_videos);
-			sections.add(videos);
-			headers.add("videos");
+			//List<Integer> videos = Arrays.asList(R.string.main_videos);
+			//sections.add(videos);
+			//headers.add("videos");
 		}
 
 		return new MainAdapter(context, headers, sections, this);
@@ -145,6 +145,9 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		} else if("years".equals(type)) {
 			SubsonicFragment fragment = new SelectYearFragment();
 			replaceFragment(fragment);
+		} else if("author".equals(type)) {
+			SubsonicFragment fragment = new SelectArtistFragment();
+			replaceFragment(fragment);
 		} else {
 			// Clear out recently added count when viewing
 			if("newest".equals(type)) {
@@ -152,7 +155,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
 				editor.commit();
 			}
-			
+
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
@@ -248,7 +251,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				@Override
 				protected File doInBackground() throws Throwable {
 					updateProgress("Gathering Logs");
-					File logcat = new File(Environment.getExternalStorageDirectory(), "dsub-logcat.txt");
+					File logcat = new File(FileUtil.getSubsonicDirectory(context), "logcat.txt");
 					Util.delete(logcat);
 					Process logcatProc = null;
 
@@ -283,8 +286,8 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 					footer += "\nROM: " + Build.DISPLAY;
 
 					Intent email = new Intent(Intent.ACTION_SENDTO,
-						Uri.fromParts("mailto", "dsub.android@gmail.com", null));
-					email.putExtra(Intent.EXTRA_SUBJECT, "DSub " + version + " Error Logs");
+							Uri.fromParts("mailto", "patrik@ptjwebben.se", null));
+					email.putExtra(Intent.EXTRA_SUBJECT, "PSub " + version + " Error Logs");
 					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n\n" + footer);
 					Uri attachment = Uri.fromFile(logcat);
 					email.putExtra(Intent.EXTRA_STREAM, attachment);
@@ -314,6 +317,8 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			showAlbumList("years");
 		} else if(item == R.string.main_albums_alphabetical) {
 			showAlbumList("alphabeticalByName");
+		} else if(item == R.string.main_author) {
+			showAlbumList("author");
 		} else if(item == R.string.main_videos) {
 			showVideos();
 		}

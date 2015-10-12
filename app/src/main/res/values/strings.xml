@@ -657,4 +657,8 @@
         <item quantity="other">%d days left of trial period</item>
     </plurals>
 
+
+	<!--PopMod-->
+	<string name="main.author">Author</string>
+
 </resources>
