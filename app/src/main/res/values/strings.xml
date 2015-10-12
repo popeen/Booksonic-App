@@ -660,5 +660,6 @@
 
 	<!--PopMod-->
 	<string name="main.author">Author</string>
+	<string name="album.book_desc">Eventually there will be a description of the book here</string>
 
 </resources>

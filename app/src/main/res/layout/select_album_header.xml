@@ -39,6 +39,16 @@
 			</TextView>
 
 			<TextView
+				android:text="0:00"
+				android:id="@+id/select_album_song_length"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:singleLine="true"
+				android:ellipsize="none"
+				android:textColor="?android:textColorSecondary"/>
+
+			<TextView
 				android:text="This is the artist name"
 				android:id="@+id/select_album_artist"
 				android:layout_width="wrap_content"
@@ -54,16 +64,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:paddingTop="14dip"
-				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:singleLine="true"
-				android:ellipsize="none"
-				android:textColor="?android:textColorSecondary"/>
-
-			<TextView
-				android:text="0:00"
-				android:id="@+id/select_album_song_length"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:singleLine="true"
 				android:ellipsize="none"

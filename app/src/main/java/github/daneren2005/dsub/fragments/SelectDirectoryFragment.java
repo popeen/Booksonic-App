@@ -103,6 +103,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	boolean largeAlbums = false;
 	boolean topTracks = false;
 	String lookupEntry;
+    Integer totalDuration;
+	String bookInfo;
 
 	public SelectDirectoryFragment() {
 		super();
@@ -153,6 +155,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			lookupEntry = args.getString(Constants.INTENT_EXTRA_SEARCH_SONG);
 			topTracks = args.getBoolean(Constants.INTENT_EXTRA_TOP_TRACKS);
 			showAll = args.getBoolean(Constants.INTENT_EXTRA_SHOW_ALL);
+
+			bookInfo = getResources().getString(R.string.album_book_desc);
+
 
 			String childId = args.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID);
 			if(childId != null) {
@@ -897,7 +902,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	public void removeFromPlaylist(final String id, final String name, final List<Integer> indexes) {
 		new LoadingTask<Void>(context, true) {
 			@Override
-			protected Void doInBackground() throws Throwable {				
+			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.removeFromPlaylist(id, indexes, context, null);
 				return null;
@@ -924,11 +929,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		}.execute();
 	}
-	
+
 	public void downloadAllPodcastEpisodes() {
 		new LoadingTask<Void>(context, true) {
 			@Override
-			protected Void doInBackground() throws Throwable {				
+			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 
 				for(int i = 0; i < entries.size(); i++) {
@@ -951,11 +956,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		}.execute();
 	}
-	
+
 	public void downloadPodcastEpisode(final PodcastEpisode episode) {
 		new LoadingTask<Void>(context, true) {
 			@Override
-			protected Void doInBackground() throws Throwable {				
+			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.downloadPodcastEpisode(episode.getEpisodeId(), context, null);
 				return null;
@@ -972,37 +977,37 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		}.execute();
 	}
-	
+
 	public void deletePodcastEpisode(final PodcastEpisode episode) {
 		Util.confirmDialog(context, R.string.common_delete, episode.getTitle(), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				new LoadingTask<Void>(context, true) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						MusicService musicService = MusicServiceFactory.getMusicService(context);
-						musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
-						if (getDownloadService() != null) {
-							List<Entry> episodeList = new ArrayList<Entry>(1);
-							episodeList.add(episode);
-							getDownloadService().delete(episodeList);
-						}
-						return null;
-					}
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                new LoadingTask<Void>(context, true) {
+                    @Override
+                    protected Void doInBackground() throws Throwable {
+                        MusicService musicService = MusicServiceFactory.getMusicService(context);
+                        musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
+                        if (getDownloadService() != null) {
+                            List<Entry> episodeList = new ArrayList<Entry>(1);
+                            episodeList.add(episode);
+                            getDownloadService().delete(episodeList);
+                        }
+                        return null;
+                    }
 
-					@Override
-					protected void done(Void result) {
-						entryGridAdapter.removeItem(episode);
-					}
+                    @Override
+                    protected void done(Void result) {
+                        entryGridAdapter.removeItem(episode);
+                    }
 
-					@Override
-					protected void error(Throwable error) {
-						Log.w(TAG, "Failed to delete podcast episode", error);
-						Util.toast(context, getErrorMessage(error), false);
-					}
-				}.execute();
-			}
-		});
+                    @Override
+                    protected void error(Throwable error) {
+                        Log.w(TAG, "Failed to delete podcast episode", error);
+                        Util.toast(context, getErrorMessage(error), false);
+                    }
+                }.execute();
+            }
+        });
 	}
 
 	public void unstarSelected() {
@@ -1104,23 +1109,23 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		builder.setMessage(R.string.select_album_donate_dialog_message);
 
 		builder.setPositiveButton(R.string.select_album_donate_dialog_now,
-			new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialogInterface, int i) {
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DONATION_URL)));
-				}
-			});
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DONATION_URL)));
+                    }
+                });
 
 		builder.setNegativeButton(R.string.select_album_donate_dialog_later,
-			new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialogInterface, int i) {
-					dialogInterface.dismiss();
-					if (onValid != null) {
-						onValid.execute();
-					}
-				}
-			});
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        if (onValid != null) {
+                            onValid.execute();
+                        }
+                    }
+                });
 
 		builder.create().show();
 	}
@@ -1190,23 +1195,23 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(artistInfo != null) {
 			final String url = artistInfo.getImageUrl();
 			coverArtView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (url == null) {
-						return;
-					}
+                @Override
+                public void onClick(View v) {
+                    if (url == null) {
+                        return;
+                    }
 
-					AlertDialog.Builder builder = new AlertDialog.Builder(context);
-					ImageView fullScreenView = new ImageView(context);
-					imageLoader.loadImage(fullScreenView, url, true);
-					builder.setCancelable(true);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    ImageView fullScreenView = new ImageView(context);
+                    imageLoader.loadImage(fullScreenView, url, true);
+                    builder.setCancelable(true);
 
-					AlertDialog imageDialog = builder.create();
-					// Set view here with unecessary 0's to remove top/bottom border
-					imageDialog.setView(fullScreenView, 0, 0, 0, 0);
-					imageDialog.show();
-				}
-			});
+                    AlertDialog imageDialog = builder.create();
+                    // Set view here with unecessary 0's to remove top/bottom border
+                    imageDialog.setView(fullScreenView, 0, 0, 0, 0);
+                    imageDialog.show();
+                }
+            });
 			imageLoader.loadImage(coverArtView, url, false);
 		} else if(entries.size() > 0) {
 			Entry coverArt = null;
@@ -1257,7 +1262,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		Set<String> artists = new HashSet<String>();
 		Set<Integer> years = new HashSet<Integer>();
-		Integer totalDuration = 0;
+		totalDuration = 0;
 		for (Entry entry : entries) {
 			if (!entry.isDirectory()) {
 				songCount++;
@@ -1275,12 +1280,19 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 
 		final TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
-		if(podcastDescription != null || artistInfo != null) {
+		if(podcastDescription != null || artistInfo != null || bookInfo != null) {
 			artistView.setVisibility(View.VISIBLE);
-			String text = podcastDescription != null ? podcastDescription : artistInfo.getBiography();
+            String text = "";
+            if(podcastDescription != null){
+                text = podcastDescription;
+            }else if(bookInfo != null){
+                text = bookInfo;
+            }else if(artistInfo != null){
+                text = artistInfo.getBiography();
+            }
 			Spanned spanned = null;
 			if(text != null) {
-				spanned = Html.fromHtml(text);
+				spanned = Html.fromHtml("<b>Längd</b>: " + Util.formatDuration(totalDuration) + "<br/>" + text + "<br/> ");
 			}
 			artistView.setText(spanned);
 			artistView.setSingleLine(false);
@@ -1355,8 +1367,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			songLengthView.setVisibility(View.GONE);
 		} else {
 			String s = context.getResources().getQuantityString(R.plurals.select_album_n_songs, songCount, songCount);
-			songCountView.setText(s.toUpperCase());
-			songLengthView.setText(Util.formatDuration(totalDuration));
+            songCountView.setVisibility(View.GONE);
+            songLengthView.setVisibility(View.GONE);
 		}
 	}
 	private void setupButtonEvents(View header) {
@@ -1364,6 +1376,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || Util.isOffline(context) || !UserUtil.canShare() || artistInfo != null) {
 			shareButton.setVisibility(View.GONE);
 		} else {
+            shareButton.setVisibility(View.GONE);
 			shareButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -1395,6 +1408,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					});
 				}
 			});
+            starButton.setVisibility(View.GONE);
 		} else {
 			starButton.setVisibility(View.GONE);
 		}
@@ -1404,16 +1418,17 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true) && !Util.isOffline(context)  && artistInfo == null) {
 			ratingBar.setRating(directory.getRating());
 			ratingBarWrapper.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					setRating(directory, new OnRatingChange() {
-						@Override
-						void ratingChange(int rating) {
-							ratingBar.setRating(directory.getRating());
-						}
-					});
-				}
-			});
+                @Override
+                public void onClick(View v) {
+                    setRating(directory, new OnRatingChange() {
+                        @Override
+                        void ratingChange(int rating) {
+                            ratingBar.setRating(directory.getRating());
+                        }
+                    });
+                }
+            });
+            ratingBar.setVisibility(View.GONE);
 		} else {
 			ratingBar.setVisibility(View.GONE);
 		}

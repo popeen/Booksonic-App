@@ -661,5 +661,6 @@
 
 	<!--PopMod-->
 	<string name="main.author">Författare</string>
+	<string name="album.book_desc">Här kommer det så småningom finnas en beskrivning av boken</string>
 
 </resources>
