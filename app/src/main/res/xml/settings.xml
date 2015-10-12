@@ -92,7 +92,7 @@
 				android:title="@string/settings.large_album_art"
 				android:summary="@string/settings.large_album_art_summary"
 				android:key="largeAlbumArt"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 		</PreferenceCategory>
 
 		<PreferenceCategory
@@ -108,7 +108,7 @@
 				android:title="@string/common.play_shuffled"
 				android:summary="@string/settings.menu_options.play_shuffled_summary"
 				android:key="showPlayShuffled"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/common.play_next"
@@ -120,13 +120,13 @@
 				android:title="@string/common.play_last"
 				android:summary="@string/settings.menu_options.play_last_summary"
 				android:key="showPlayLast"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/common.download"
 				android:summary="@string/settings.menu_options.download_summary"
 				android:key="showDownload"
-				android:defaultValue="false"/>
+				android:defaultValue="true"/>
 
 			<CheckBoxPreference
 				android:title="@string/common.pin"
@@ -150,13 +150,13 @@
 				android:title="@string/menu.share"
 				android:summary="@string/settings.menu_options.shared_summary"
 				android:key="showShared"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/menu.rate"
 				android:summary="@string/settings.menu_options.rate_summary"
 				android:key="showRating"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 		</PreferenceCategory>
 	</PreferenceScreen>
 
@@ -170,31 +170,31 @@
 				android:title="@string/settings.podcasts_enabled"
 				android:summary="@string/settings.podcasts_enabled_summary"
 				android:key="podcastsEnabled"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.bookmarks_enabled"
 				android:summary="@string/settings.bookmarks_enabled_summary"
 				android:key="bookmarksEnabled"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.shares_enabled"
 				android:summary="@string/settings.shares_enabled_summary"
 				android:key="sharedEnabled"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.chat_enabled"
 				android:summary="@string/settings.chat_enabled_summary"
 				android:key="chatEnabled"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.admin_enabled"
 				android:summary="@string/settings.admin_enabled_summary"
 				android:key="adminEnabled"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 		</PreferenceCategory>
 
 		<PreferenceCategory
@@ -274,14 +274,14 @@
 			<ListPreference
 				android:title="@string/settings.preload_wifi"
 				android:key="preloadCountWifi"
-				android:defaultValue="3"
+				android:defaultValue="-1"
 				android:entryValues="@array/preloadCountValues"
 				android:entries="@array/preloadCountNames"/>
 
 			<ListPreference
 				android:title="@string/settings.preload_mobile"
 				android:key="preloadCountMobile"
-				android:defaultValue="3"
+				android:defaultValue="5"
 				android:entryValues="@array/preloadCountValues"
 				android:entries="@array/preloadCountNames"/>
 
@@ -298,7 +298,7 @@
 				android:title="@string/settings.hide_media_title"
 				android:summary="@string/settings.hide_media_summary"
 				android:key="hideMedia"
-				android:defaultValue="false"/>
+				android:defaultValue="true"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.screen_lit_title"
@@ -475,7 +475,7 @@
 				android:title="@string/settings.scrobble_title"
 				android:summary="@string/settings.scrobble_summary"
 				android:key="scrobble"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.media_button_title"
