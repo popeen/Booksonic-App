@@ -27,6 +27,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -59,6 +60,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -72,6 +74,7 @@ import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.HeadphoneListenerService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.updates.UpdateApp;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
@@ -118,6 +121,12 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 	@Override
 	protected void onCreate(Bundle bundle) {
+
+		UpdateApp updateApp = new UpdateApp();
+        updateApp.setContext(this);
+        updateApp.execute();
+
+
 		UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
 		if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
 			// tv = true;
@@ -165,7 +174,10 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			Util.getPreferences(this).registerOnSharedPreferenceChangeListener(preferencesListener);
 		}
 	}
-
+    public void longToast(String msg){
+        Toast t = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+        t.show();
+    }
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
