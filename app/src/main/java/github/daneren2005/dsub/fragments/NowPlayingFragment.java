@@ -691,19 +691,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				context.supportInvalidateOptionsMenu();
 				return true;
 			case R.id.menu_shuffle:
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						getDownloadService().shuffle();
-						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						Util.toast(context, R.string.download_menu_shuffle_notification);
-					}
-				}.execute();
-				return true;
+                if(getDownloadService().getSleepTimer()) {
+                    getDownloadService().stopSleepTimer();
+                    context.supportInvalidateOptionsMenu();
+                } else {
+                    startTimer();
+                }
+                return true;
 			case R.id.menu_save_playlist:
 				List<Entry> entries = new LinkedList<Entry>();
 				for (DownloadFile downloadFile : getDownloadService().getSongs()) {

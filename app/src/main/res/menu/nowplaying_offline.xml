@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/menu_shuffle"
-        android:icon="?attr/shuffle"
-        android:title="@string/download.menu_shuffle"
-        compat:showAsAction="always|withText"/>
+	<item
+		android:id="@+id/menu_shuffle"
+		android:icon="@drawable/ic_schedule_white_24dp"
+		android:title="@string/menu.timer"
+		compat:showAsAction="ifRoom|withText"/>
 
 	<item
 		android:id="@+id/menu_mediaroute"
