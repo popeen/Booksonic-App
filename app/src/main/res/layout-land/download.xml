@@ -40,7 +40,24 @@
 				android:layout_weight="1"
 				android:background="@android:color/transparent">
 
-				<LinearLayout
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="No timer set"
+                    android:paddingTop="15dp"
+                    android:id="@+id/textTimer"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginLeft="12dip"
+                    android:layout_marginRight="12dip"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:textColor="?android:textColorPrimary"
+                    android:visibility="gone"/>
+
+                <LinearLayout
 					android:id="@+id/download_other_controls_wrapper"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"

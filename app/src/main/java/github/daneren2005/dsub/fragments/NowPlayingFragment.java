@@ -479,6 +479,19 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					positionTextView.setText(Util.formatDuration(position / 1000));
 					setControlsVisible(true);
 				}
+				DownloadService downloadService = getDownloadService();
+				TextView textTimer = (TextView) context.findViewById(R.id.textTimer);
+				if(downloadService != null && downloadService.getSleepTimer()) {
+					int timeRemaining = downloadService.getSleepTimeRemaining();
+					textTimer.setText(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
+					if(timeRemaining > 0){
+						textTimer.setVisibility(View.VISIBLE);
+					}else{
+						textTimer.setVisibility(View.GONE);
+					}
+				}else{
+					textTimer.setVisibility(View.GONE);
+				}
 			}
 		});
 
@@ -501,7 +514,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(downloadService != null && downloadService.getSleepTimer()) {
 			int timeRemaining = downloadService.getSleepTimeRemaining();
 			timerMenu = menu.findItem(R.id.menu_toggle_timer);
-			timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
+            if(timeRemaining > 1){
+                timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
+            }else{
+                timerMenu.setTitle(R.string.menu_set_timer);
+            }
+
 		}
 		if(downloadService != null && downloadService.getKeepScreenOn()) {
 			menu.findItem(R.id.menu_screen_on_off).setChecked(true);
@@ -1348,7 +1366,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		DownloadService downloadService = getDownloadService();
 		if(downloadService.getSleepTimer() && timerMenu != null) {
 			int timeRemaining = downloadService.getSleepTimeRemaining();
-			timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
+            if(timeRemaining > 1){
+                timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
+            }else{
+                timerMenu.setTitle(R.string.menu_set_timer);
+            }
 		}
 	}
 

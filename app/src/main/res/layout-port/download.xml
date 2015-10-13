@@ -27,14 +27,29 @@
 				<FrameLayout android:orientation="vertical"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_alignParentTop="true">
-
+					android:layout_alignParentTop="true"
+					android:id="@+id/frameLayout">
 					<github.daneren2005.dsub.view.RecyclingImageView
 						android:id="@+id/download_album_art_image"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:scaleType="fitCenter"
 						android:layout_gravity="center_horizontal|top"/>
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="No timer set"
+                        android:id="@+id/textTimer"
+                        android:layout_gravity="center_horizontal|top"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:gravity="center_horizontal"
+                        android:background="@color/overlayColor"
+                        android:textColor="#FFF"
+                        android:visibility="gone"/>
 
 					<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 						android:id="@+id/download_overlay_buttons"
@@ -43,7 +58,6 @@
 						android:background="@color/overlayColor"
 						android:layout_gravity="center_horizontal|bottom"
 						android:visibility="invisible">
-
 						<LinearLayout
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
@@ -55,6 +69,7 @@
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
 								android:layout_gravity="center_horizontal">
+
 
 								<ImageButton
 									android:id="@+id/download_rating_bad"
@@ -107,6 +122,7 @@
 						android:textStyle="bold"
 						android:textSize="18sp"
 						android:ellipsize="end"/>
+
 
 			</RelativeLayout>
 
