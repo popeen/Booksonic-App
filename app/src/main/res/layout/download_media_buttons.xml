@@ -13,7 +13,7 @@
             android:layout_centerVertical="true"
             />
 
-    <github.popeen.booksonic.view.AutoRepeatButton
+    <github.daneren2005.dsub.view.AutoRepeatButton
             style="@style/PlaybackControl.Small"
             android:id="@+id/download_previous"
             android:src="?attr/media_button_backward"
@@ -44,7 +44,7 @@
             android:layout_centerInParent="true"
             />
 
-    <github.popeen.booksonic.view.AutoRepeatButton
+    <github.daneren2005.dsub.view.AutoRepeatButton
             style="@style/PlaybackControl.Small"
             android:id="@+id/download_next"
             android:src="?attr/media_button_forward"

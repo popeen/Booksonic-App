@@ -5,7 +5,7 @@ android {
 	buildToolsVersion "22.0.0"
 
 	defaultConfig {
-		applicationId "github.popeen.booksonic"
+		applicationId "github.daneren2005.dsub"
 		minSdkVersion 14
 		targetSdkVersion 22
 	}

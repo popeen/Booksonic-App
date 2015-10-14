@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="github.popeen.booksonic.dsub"
+          package="github.daneren2005.dsub"
           android:installLocation="internalOnly"
           android:versionCode="162"
           android:versionName="5.0.4">
           
     <instrumentation android:name="android.test.InstrumentationTestRunner"
-		android:targetPackage="github.popeen.booksonic.dsub"
+		android:targetPackage="github.daneren2005.dsub"
 		android:label="Tests" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -36,13 +36,13 @@
     <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
     <application android:label="@string/common.appname"
-    	android:backupAgent="github.popeen.booksonic.util.SettingsBackupAgent"
+    	android:backupAgent="github.daneren2005.dsub.util.SettingsBackupAgent"
     	android:icon="@drawable/launch"
     	android:theme="@style/Theme.DSub.Light">
     	
         <uses-library android:name="android.test.runner" />
 
-		<activity android:name="github.popeen.booksonic.activity.SubsonicFragmentActivity"
+		<activity android:name="github.daneren2005.dsub.activity.SubsonicFragmentActivity"
 				  android:configChanges="orientation|keyboardHidden"
 				  android:launchMode="standard">
 			<intent-filter>
@@ -52,11 +52,11 @@
 			</intent-filter>
 		</activity>
 
-        <activity android:name="github.popeen.booksonic.activity.SettingsActivity"
+        <activity android:name="github.daneren2005.dsub.activity.SettingsActivity"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
-        <activity android:name="github.popeen.booksonic.activity.VoiceQueryReceiverActivity"
+        <activity android:name="github.daneren2005.dsub.activity.VoiceQueryReceiverActivity"
                   android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
@@ -70,7 +70,7 @@
 			</intent-filter>
         </activity>
 
-        <activity android:name="github.popeen.booksonic.activity.QueryReceiverActivity"
+        <activity android:name="github.daneren2005.dsub.activity.QueryReceiverActivity"
                   android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
@@ -79,7 +79,7 @@
         </activity>
 
 		<activity
-			android:name="github.popeen.booksonic.activity.EditPlayActionActivity"
+			android:name="github.daneren2005.dsub.activity.EditPlayActionActivity"
 			android:label="@string/tasker.start_playing"
 			android:icon="@drawable/launch">
 
@@ -88,10 +88,10 @@
 			</intent-filter>
 		</activity>
 
-        <service android:name="github.popeen.booksonic.service.DownloadService"
+        <service android:name=".service.DownloadService"
                  android:label="DSub Playback Service"/>
 		<service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
-		<service android:name="github.popeen.booksonic.service.sync.AuthenticatorService">
+		<service android:name="github.daneren2005.dsub.service.sync.AuthenticatorService">
 			<intent-filter>
 				<action android:name="android.accounts.AccountAuthenticator"/>
 			</intent-filter>
@@ -99,7 +99,7 @@
 			<meta-data android:name="android.accounts.AccountAuthenticator"
 				android:resource="@xml/authenticator" />
 		</service>
-		<service android:name="github.popeen.booksonic.service.sync.PlaylistSyncService"
+		<service android:name="github.daneren2005.dsub.service.sync.PlaylistSyncService"
 			android:exported="true"
 			android:process=":sync">
 
@@ -109,7 +109,7 @@
 			<meta-data android:name="android.content.SyncAdapter"
 				android:resource="@xml/playlists_syncadapter" />
 		</service>
-		<service android:name="github.popeen.booksonic.service.sync.PodcastSyncService"
+		<service android:name="github.daneren2005.dsub.service.sync.PodcastSyncService"
 				 android:exported="true"
 				 android:process=":sync">
 
@@ -119,7 +119,7 @@
 			<meta-data android:name="android.content.SyncAdapter"
 					   android:resource="@xml/podcasts_syncadapter" />
 		</service>
-		<service android:name="github.popeen.booksonic.service.sync.StarredSyncService"
+		<service android:name="github.daneren2005.dsub.service.sync.StarredSyncService"
 				 android:exported="true"
 				 android:process=":sync">
 
@@ -129,7 +129,7 @@
 			<meta-data android:name="android.content.SyncAdapter"
 					   android:resource="@xml/starred_syncadapter" />
 		</service>
-		<service android:name="github.popeen.booksonic.service.sync.MostRecentSyncService"
+		<service android:name="github.daneren2005.dsub.service.sync.MostRecentSyncService"
 				 android:exported="true"
 				 android:process=":sync">
 
@@ -140,36 +140,36 @@
 					   android:resource="@xml/mostrecent_syncadapter" />
 		</service>
 
-		<service android:name="github.popeen.booksonic.service.HeadphoneListenerService"
+		<service android:name="github.daneren2005.dsub.service.HeadphoneListenerService"
 			android:label="DSub Headphone Listener"/>
 		<receiver
-			android:name="github.popeen.booksonic.receiver.BootReceiver">
+			android:name="github.daneren2005.dsub.receiver.BootReceiver">
 			<intent-filter>
 				<action
 					android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
 		</receiver>
 
-        <receiver android:name="github.popeen.booksonic.receiver.MediaButtonIntentReceiver">
+        <receiver android:name="github.daneren2005.dsub.receiver.MediaButtonIntentReceiver">
         	<intent-filter>
 				<action android:name="android.intent.action.MEDIA_BUTTON" />
 			</intent-filter>
         </receiver>
 
-		<receiver android:name="github.popeen.booksonic.receiver.AudioNoisyReceiver">
+		<receiver android:name="github.daneren2005.dsub.receiver.AudioNoisyReceiver">
 			<intent-filter android:priority="999">
 				<action android:name="android.media.AUDIO_BECOMING_NOISY" />
 			</intent-filter>
 		</receiver>
 		
-		<receiver android:name="github.popeen.booksonic.receiver.A2dpIntentReceiver">
+		<receiver android:name="github.daneren2005.dsub.receiver.A2dpIntentReceiver">
 			<intent-filter>
 				<action android:name="android.music.playstatusrequest"/>
 			</intent-filter>
 		</receiver>
 
         <receiver
-			android:name="github.popeen.booksonic.provider.DSubWidget4x1"
+			android:name="github.daneren2005.dsub.provider.DSubWidget4x1"
 			android:label="@string/widget.4x1">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -177,7 +177,7 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x1"/>
         </receiver>
 		<receiver
-			android:name="github.popeen.booksonic.provider.DSubWidget4x2"
+			android:name="github.daneren2005.dsub.provider.DSubWidget4x2"
 			android:label="@string/widget.4x2">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -185,7 +185,7 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x2"/>
         </receiver>
 		<receiver
-			android:name="github.popeen.booksonic.provider.DSubWidget4x3"
+			android:name="github.daneren2005.dsub.provider.DSubWidget4x3"
 			android:label="@string/widget.4x3">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -193,7 +193,7 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x3"/>
         </receiver>
 		<receiver
-			android:name="github.popeen.booksonic.provider.DSubWidget4x4"
+			android:name="github.daneren2005.dsub.provider.DSubWidget4x4"
 			android:label="@string/widget.4x4">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -202,38 +202,38 @@
         </receiver>
 
 		<receiver
-			android:name="github.popeen.booksonic.receiver.PlayActionReceiver">
+			android:name="github.daneren2005.dsub.receiver.PlayActionReceiver">
 
 			<intent-filter>
 				<action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
 			</intent-filter>
 		</receiver>
 
-        <provider android:name="github.popeen.booksonic.provider.DSubSearchProvider"
-                  android:authorities="github.popeen.booksonic.provider.DSubSearchProvider"/>
-		<provider android:name="github.popeen.booksonic.provider.PlaylistStubProvider"
-			android:authorities="github.popeen.booksonic.dsub.playlists.provider"
+        <provider android:name="github.daneren2005.dsub.provider.DSubSearchProvider"
+                  android:authorities="github.daneren2005.dsub.provider.DSubSearchProvider"/>
+		<provider android:name="github.daneren2005.dsub.provider.PlaylistStubProvider"
+			android:authorities="github.daneren2005.dsub.playlists.provider"
 			android:label="@string/button_bar.playlists"
 			android:exported="false"
 			android:syncable="true"/>
-		<provider android:name="github.popeen.booksonic.provider.PodcastStubProvider"
-			android:authorities="github.popeen.booksonic.dsub.podcasts.provider"
+		<provider android:name="github.daneren2005.dsub.provider.PodcastStubProvider"
+			android:authorities="github.daneren2005.dsub.podcasts.provider"
 			android:label="@string/button_bar.podcasts"
 			android:exported="false"
 			android:syncable="true"/>
-		<provider android:name="github.popeen.booksonic.provider.StarredStubProvider"
-				  android:authorities="github.popeen.booksonic.dsub.starred.provider"
+		<provider android:name="github.daneren2005.dsub.provider.StarredStubProvider"
+				  android:authorities="github.daneren2005.dsub.starred.provider"
 				  android:label="@string/main.albums_starred"
 				  android:exported="false"
 				  android:syncable="true"/>
-		<provider android:name="github.popeen.booksonic.provider.MostRecentStubProvider"
-				  android:authorities="github.popeen.booksonic.dsub.mostrecent.provider"
+		<provider android:name="github.daneren2005.dsub.provider.MostRecentStubProvider"
+				  android:authorities="github.daneren2005.dsub.mostrecent.provider"
 				  android:label="@string/main.albums_newest"
 				  android:exported="false"
 				  android:syncable="true"/>
 
         <meta-data android:name="android.app.default_searchable"
-                   android:value="github.popeen.booksonic.activity.QueryReceiverActivity"/>
+                   android:value="github.daneren2005.dsub.activity.QueryReceiverActivity"/>
                    
         <meta-data android:name="com.google.android.backup.api_key"
         	android:value="AEdPqrEAAAAIUhOMtwa_eG-f0oYUHnetl_Cz7cO9zae8ZXOK5w"/>
