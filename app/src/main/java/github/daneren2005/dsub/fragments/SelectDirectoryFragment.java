@@ -29,6 +29,16 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
+
+import github.daneren2005.dsub.BuildConfig;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.adapter.AlphabeticalAlbumAdapter;
 import github.daneren2005.dsub.adapter.EntryInfiniteGridAdapter;
@@ -43,6 +53,9 @@ import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
@@ -63,6 +76,7 @@ import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.GridSpacingDecoration;
 import github.daneren2005.dsub.view.MyLeadingMarginSpan2;
 import github.daneren2005.dsub.view.UpdateView;
+import github.daneren2005.dsub.util.BookInfoAPI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,6 +124,28 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		super();
 	}
 
+    public String readJson(String url) {
+        StringBuilder builder = new StringBuilder();
+        HttpClient client = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet(url);
+        try {
+            HttpResponse response = client.execute(httpGet);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream content = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return builder.toString();
+    }
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
@@ -156,8 +192,19 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			topTracks = args.getBoolean(Constants.INTENT_EXTRA_TOP_TRACKS);
 			showAll = args.getBoolean(Constants.INTENT_EXTRA_SHOW_ALL);
 
-			bookInfo = getResources().getString(R.string.album_book_desc);
+            bookInfo = "Could not collect any info about the book at this time";
+            try{
+                SharedPreferences prefs = Util.getPreferences(context);
+                String url =  prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + Util.getActiveServer(context), null) +
+                        "/rest/getBookDirectory.view?u=" + prefs.getString(Constants.PREFERENCES_KEY_USERNAME + Util.getActiveServer(context), null) +
+                        "&p=" + prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null) +
+                        "&v=" + Constants.REST_PROTOCOL_VERSION_SUBSONIC +
+                        "&id=" + directory.getId() +
+                        "&f=json";
+                bookInfo = new BookInfoAPI().execute(url).get();
 
+            } catch(Exception e){}
+            if(bookInfo.equals("noInfo")){bookInfo = "The server has no description for this book"; }
 
 			String childId = args.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID);
 			if(childId != null) {
