@@ -10,7 +10,7 @@
 		android:layout_height="0dp"
 		android:layout_weight="1">
 
-		<github.daneren2005.dsub.view.SquareImageView
+		<github.popeen.booksonic.view.SquareImageView
 			android:id="@+id/album_coverart"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"/>

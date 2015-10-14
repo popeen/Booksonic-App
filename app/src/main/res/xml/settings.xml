@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:myns="http://schemas.android.com/apk/res/github.daneren2005.dsub"
+	xmlns:myns="http://schemas.android.com/apk/res/github.popeen.booksonic"
 	android:title="@string/settings.title">
 
 	<PreferenceScreen
@@ -200,7 +200,7 @@
 		<PreferenceCategory
 			android:title="@string/button_bar.chat">
 
-			<github.daneren2005.dsub.view.SeekBarPreference
+			<github.popeen.booksonic.view.SeekBarPreference
 				android:title="@string/settings.chat_refresh"
 				android:key="chatRefreshRate"
 				android:defaultValue="30"
@@ -362,7 +362,7 @@
 		<PreferenceCategory
 				android:title="@string/settings.playback_title">
 
-				<github.daneren2005.dsub.view.SeekBarPreference
+				<github.popeen.booksonic.view.SeekBarPreference
 					android:title="@string/settings.playlist_random_size_title"
 					android:key="randomSize"
 					android:defaultValue="20"
@@ -440,7 +440,7 @@
 				android:entryValues="@array/replayGainTypeValues"
 				android:entries="@array/replayGainTypeNames"/>
 
-			<github.daneren2005.dsub.view.SeekBarPreference
+			<github.popeen.booksonic.view.SeekBarPreference
 				android:key="replayGainBump2"
 				android:dialogLayout="@layout/seekbar_preference"
 				android:title="@string/settings.replay_gain_bump"
@@ -450,7 +450,7 @@
 				myns:stepSize="10"
 				myns:display="%+.1f dB"/>
 
-			<github.daneren2005.dsub.view.SeekBarPreference
+			<github.popeen.booksonic.view.SeekBarPreference
 				android:key="replayGainUntagged2"
 				android:dialogLayout="@layout/seekbar_preference"
 				android:title="@string/settings.replay_gain_untagged"

@@ -5,7 +5,7 @@
 	android:layout_height="wrap_content"
 	android:background="?attr/selectableItemBackground">
 
-	<github.daneren2005.dsub.view.RecyclingImageView
+	<github.popeen.booksonic.view.RecyclingImageView
 		android:id="@+id/playlist_coverart"
 		android:layout_width="@dimen/AlbumArt.Small"
 		android:layout_height="@dimen/AlbumArt.Small"
