@@ -1297,7 +1297,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			titleView.setPadding(0, 6, 4, 8);
 		} else if(name != null) {
 			titleView.setText(name);
-
 			if(artistInfo != null) {
 				titleView.setPadding(0, 6, 4, 8);
 			}
@@ -1339,7 +1338,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
             }
 			Spanned spanned = null;
 			if(text != null) {
-				spanned = Html.fromHtml("<b>Längd</b>: " + Util.formatDuration(totalDuration) + "<br/>" + text + "<br/> ");
+				spanned = Html.fromHtml("<b>"+artists.iterator().next()+"</b><br/><b>Längd</b>: " + Util.formatDuration(totalDuration) + "<br/>" + text + "<br/> ");
 			}
 			artistView.setText(spanned);
 			artistView.setSingleLine(false);
@@ -1368,7 +1367,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							width = coverArtView.getWidth() + coverArtView.getPaddingRight();
 						}
 						float textLineHeight = artistView.getPaint().getTextSize();
-						int lines = (int) Math.ceil(height / textLineHeight);
+						int lines = (int) Math.ceil(height / textLineHeight)+1;
 
 						SpannableString ss = new SpannableString(spannedText);
 						ss.setSpan(new MyLeadingMarginSpan2(lines, width), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
