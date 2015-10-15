@@ -15,13 +15,13 @@
 			android:layout_height="0dip"
 			android:layout_weight="1">
 
-			<github.daneren2005.dsub.view.MyViewFlipper
+			<github.popeen.dsub.view.MyViewFlipper
 				android:id="@+id/download_playlist_flipper"
 				android:layout_width="0dp"
 				android:layout_height="fill_parent"
 				android:layout_weight="1">
 
-				<github.daneren2005.dsub.view.RecyclingImageView
+				<github.popeen.dsub.view.RecyclingImageView
 					android:id="@+id/download_album_art_image"
 					android:src="@drawable/unknown_album_large"
 					android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
 
 				<include layout="@layout/download_playlist"/>
 
-			</github.daneren2005.dsub.view.MyViewFlipper>
+			</github.popeen.dsub.view.MyViewFlipper>
 
 			<RelativeLayout android:orientation="vertical"
 				android:id="@+id/download_control_layout"
