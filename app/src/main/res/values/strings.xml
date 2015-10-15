@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common.appname">DSub</string>
-    <string name="common.ok">OK</string>
+	<string name="common.appname">Booksonic</string>
+	<string name="common.ok">OK</string>
     <string name="common.save">Save</string>
     <string name="common.cancel">Cancel</string>
     <string name="common.play_now">Play Now</string>
@@ -660,7 +660,7 @@
 
 	<!--PopMod-->
 	<string name="main.author">Author</string>
-	<string name="album.book_desc">Eventually there will be a description of the book here</string>
+	<string name="album.book_desc">noInfo</string>
 	<string name="menu.timer">Timer</string>
 
 </resources>
