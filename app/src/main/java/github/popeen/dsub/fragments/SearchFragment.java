@@ -40,8 +40,8 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	private static final String TAG = SearchFragment.class.getSimpleName();
 
 	private static final int MAX_ARTISTS = 10;
-	private static final int MAX_ALBUMS = 10;
-	private static final int MAX_SONGS = 25;
+	private static final int MAX_ALBUMS = 30;
+	private static final int MAX_SONGS = 0;
 
 	protected RecyclerView recyclerView;
 	protected SearchAdapter adapter;
