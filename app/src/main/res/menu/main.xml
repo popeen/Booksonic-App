@@ -7,11 +7,12 @@
 		android:title="@string/menu.search"
 		compat:showAsAction="always|withText"/>
 	
-	<item 
+	<item
 		android:id="@+id/menu_global_shuffle"
 		android:icon="?attr/shuffle"
 		android:title="@string/menu.shuffle"
-		compat:showAsAction="always|withText"/>
+		compat:showAsAction="always|withText"
+		android:visible="false"/>
 
 	<group android:id="@+id/madsonic">
 		<item

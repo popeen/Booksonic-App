@@ -9,7 +9,8 @@
 	<group android:id="@+id/hide_play_shuffled">
 		<item
 			android:id="@+id/artist_menu_play_shuffled"
-			android:title="@string/common.play_shuffled"/>
+			android:title="@string/common.play_shuffled"
+			android:visible="false"/>
 	</group>
 
 	<group android:id="@+id/hide_play_next">

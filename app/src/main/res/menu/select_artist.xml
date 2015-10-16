@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
-	<item 
+	<item
 		android:id="@+id/menu_global_shuffle"
 		android:icon="?attr/shuffle"
 		android:title="@string/menu.shuffle"
-		compat:showAsAction="always|withText"/>
+		compat:showAsAction="always|withText"
+		android:visible="false"/>
 		
 	<item 
 		android:id="@+id/menu_global_search"

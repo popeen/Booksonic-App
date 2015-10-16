@@ -11,7 +11,8 @@
 		android:id="@+id/menu_shuffle"
 		android:icon="?attr/shuffle"
 		android:title="@string/menu.shuffle"
-		compat:showAsAction="ifRoom|withText"/>
+		compat:showAsAction="ifRoom|withText"
+		android:visible="false"/>
 		
 	<item 
 		android:id="@+id/menu_delete"
