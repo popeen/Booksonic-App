@@ -1328,16 +1328,22 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(podcastDescription != null || artistInfo != null || bookInfo != null) {
 			artistView.setVisibility(View.VISIBLE);
             String text = "";
+            if(bookInfo != null){
+                text = bookInfo;
+            }
             if(podcastDescription != null){
                 text = podcastDescription;
-            }else if(bookInfo != null){
-                text = bookInfo;
-            }else if(artistInfo != null){
+            }
+            if(artistInfo != null){
                 text = artistInfo.getBiography();
             }
 			Spanned spanned = null;
 			if(text != null) {
-				spanned = Html.fromHtml("<b>"+artists.iterator().next()+"</b><br/><b>Längd</b>: " + Util.formatDuration(totalDuration) + "<br/>" + text + "<br/> ");
+				String newText = "";
+				try{ newText += "<b>"+artists.iterator().next()+"</b><br/>";} catch(Exception e){}
+				try{ if(totalDuration > 0) { newText += "<b>Längd</b>: " + Util.formatDuration(totalDuration) + "<br/>"; } } catch(Exception e){}
+				try{ newText += text+"<br/>";} catch(Exception e){}
+				spanned = Html.fromHtml(newText);
 			}
 			artistView.setText(spanned);
 			artistView.setSingleLine(false);
