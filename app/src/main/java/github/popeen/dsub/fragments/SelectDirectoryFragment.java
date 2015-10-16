@@ -192,17 +192,25 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
             bookInfo = "Could not collect any info about the book at this time";
             try{
+                String endpoint = "getBookDirectory";
+                if(Util.isTagBrowsing(context)){
+                    endpoint = "getBook";
+                }
                 SharedPreferences prefs = Util.getPreferences(context);
                 String url =  prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + Util.getActiveServer(context), null) +
-                        "/rest/getBookDirectory.view?u=" + prefs.getString(Constants.PREFERENCES_KEY_USERNAME + Util.getActiveServer(context), null) +
+                        "/rest/" + endpoint + ".view?u=" + prefs.getString(Constants.PREFERENCES_KEY_USERNAME + Util.getActiveServer(context), null) +
                         "&p=" + prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null) +
                         "&v=" + Constants.REST_PROTOCOL_VERSION_SUBSONIC +
 						"&c=booksonic" +
                         "&id=" + directory.getId() +
                         "&f=json";
-                bookInfo = new BookInfoAPI().execute(url).get();
 
-            } catch(Exception e){}
+                Log.w("GetInfo", url);
+                bookInfo = new BookInfoAPI(context).execute(url).get();
+
+            } catch(Exception e){
+                Log.w("GetInfoError", e.toString());
+            }
             if(bookInfo.equals("noInfo")){bookInfo = "The server has no description for this book"; }
 
 			String childId = args.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID);

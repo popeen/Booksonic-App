@@ -1,5 +1,6 @@
 package github.popeen.dsub.util;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.apache.http.HttpEntity;
@@ -19,6 +20,11 @@ import java.io.InputStreamReader;
  */
 public class BookInfoAPI extends AsyncTask<String, Void, String> {
 
+    private Context context;
+
+    public BookInfoAPI(Context context){
+        this.context = context;
+    }
     private Exception exception;
 
     public String readJson(String url) {
@@ -48,12 +54,15 @@ public class BookInfoAPI extends AsyncTask<String, Void, String> {
             String input = readJson(urls[0]);
             JSONObject json = new JSONObject(input);
 
-            return json.getJSONObject("subsonic-response").getJSONObject("directory").get("description").toString();
-
+            if(Util.isTagBrowsing(context)){
+                return json.getJSONObject("subsonic-response").getJSONObject("album").get("description").toString();
+            }else {
+                return json.getJSONObject("subsonic-response").getJSONObject("directory").get("description").toString();
+            }
 
         } catch (Exception e) {
             this.exception = e;
-            return "Couldn't collect any info about the book, is the server running Popeens Madsonic?";
+            return "Couldn't collect any info about the book, is the server running a Booksonic server?";
         }
     }
 
