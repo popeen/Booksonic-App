@@ -39,13 +39,13 @@
 	<string name="button_bar.downloading">Téléchargement</string>
 
     <string name="main.welcome_title">Bienvenue !</string>
-    <string name="main.welcome_text">Bienvenue dans DSub ! L\'application est actuellement configurée pour se connecter au serveur de démo Subsonic (<b>demo.subsonic.org</b>). Vous pouvez configurer votre propre serveur dans les paramètres. Choisir <b>Paramètres</b> et mettre à jour la configuration pour vous y connecter.</string>
-    	<string name="main.about_title">A propos de DSub</string>
+    <string name="main.welcome_text">Bienvenue dans Booksonic ! L\'application est actuellement configurée pour se connecter au serveur de démo Subsonic (<b>demo.subsonic.org</b>). Vous pouvez configurer votre propre serveur dans les paramètres. Choisir <b>Paramètres</b> et mettre à jour la configuration pour vous y connecter.</string>
+    	<string name="main.about_title">A propos de Booksonic</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Cache permanent</font> :
-		<br/>Lorsque des titres sont téléchargés par DSub, ils peuvent être supprimés pour libérer de l\'espace pour de nouveaux téléchargements. Le cache permanent premet, lui, de ne jamais supprimer automatiquement la musique téléchargée.
+		<br/>Lorsque des titres sont téléchargés par Booksonic, ils peuvent être supprimés pour libérer de l\'espace pour de nouveaux téléchargements. Le cache permanent premet, lui, de ne jamais supprimer automatiquement la musique téléchargée.
 		<p/><font color="red">ChromeCast a échoué</font> :
 		<br/>Assurez-vous de ne pas utiliser un certificat auto-signé, Chromecast les rejette systématiquement.
 	]]>
@@ -246,7 +246,7 @@
 
     <string name="error.label">Erreur</string>
 
-    <string name="settings.title">Paramètres DSub</string>
+    <string name="settings.title">Paramètres Booksonic</string>
     <string name="settings.test_connection_title">Test de connexion</string>
 	<string name="settings.servers_add">Ajouter un serveur</string>
 	<string name="settings.servers_remove">Supprimer le serveur</string>
@@ -266,7 +266,7 @@
     <string name="settings.cache_size">Taille de la mémoire tampon (MB)</string>
     <string name="settings.cache_location">Emplacement de la mémoire tampon</string>
     <string name="settings.cache_location_error">Emplacement invalide pour la mémoire tampon. Utilisation emplacement par défaut.</string>
-    <string name="settings.cache_location_reset">L\'emplacement choisi pour la mémoire tampon ne peut plus être utilisé. S\'il y a eu une mise à jour récente vers Android 4.4 KiktKat, la façon dont les application écrivent sur la carte SD à changée afin que ces dernières ne puissent écrire que dans un emplacement spécifique. L\'emplacement à utiliser pour DSub a déjà été mis à jour. Afin de supprimer toutes les données obsolètes, il faut vider l\'ancien emplacement en utilisant un ordinateur.</string>
+    <string name="settings.cache_location_reset">L\'emplacement choisi pour la mémoire tampon ne peut plus être utilisé. S\'il y a eu une mise à jour récente vers Android 4.4 KiktKat, la façon dont les application écrivent sur la carte SD à changée afin que ces dernières ne puissent écrire que dans un emplacement spécifique. L\'emplacement à utiliser pour Booksonic a déjà été mis à jour. Afin de supprimer toutes les données obsolètes, il faut vider l\'ancien emplacement en utilisant un ordinateur.</string>
 	<string name="settings.cache_clear">Vider la mémoire tampon</string>
 	<string name="settings.cache_clear_complete">Mémoire tampon vidée</string>
     <string name="settings.testing_connection">Test de connexion...</string>
@@ -409,7 +409,7 @@
 	<string name="settings.browse_by_tags">Naviguer via les tags</string>
 	<string name="settings.browse_by_tags_summary">Naviguer via les tags plutôt que via l\'arborescence de fichier.  Nécessite Subsonic 4.7+</string>
 	<string name="settings.override_system_language">Ne pas utiliser la langue du système</string>
-	<string name="settings.override_system_language_summary">Afficher DSub en Anglais même si une traduction existe pour la langue système. Peut nécessiter un vidage du cache de l\'application.</string>
+	<string name="settings.override_system_language_summary">Afficher Booksonic en Anglais même si une traduction existe pour la langue système. Peut nécessiter un vidage du cache de l\'application.</string>
 	<string name="settings.drawer_items_title">Entrées de menu</string>
 	<string name="settings.play_now_after">Jouer maintenant - Plus tard</string>
 	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Subsonic web GUI)</string>
@@ -493,7 +493,7 @@
 
     <string name="service.connecting">Interrogation du serveur, veuillez patienter.</string>
 
-    <string name="parser.upgrade_client"> Versions incompatible. Mettre à jour DSub.</string>
+    <string name="parser.upgrade_client"> Versions incompatible. Mettre à jour Booksonic.</string>
     <string name="parser.upgrade_server">Versions incompatibles. Mettre à jour le serveur Subsonic.</string>
     <string name="parser.not_authenticated">Mauvais nom d\'utilisateur ou mot de passe.</string>
     <string name="parser.not_authorized">Non autorisé. Vérifier les droit de l\'utilisateur sur le serveur Subsonic.</string>
@@ -513,10 +513,10 @@
 	<string name="equalizer.db_size">%d dB</string>
 	<string name="equalizer.bass_size">%d mille</string>
 
-	<string name="widget.4x1">DSub (4x1)</string>
-	<string name="widget.4x2">DSub (4x2)</string>
-	<string name="widget.4x3">DSub (4x3)</string>
-	<string name="widget.4x4">DSub (4x4)</string>
+	<string name="widget.4x1">Booksonic (4x1)</string>
+	<string name="widget.4x2">Booksonic (4x2)</string>
+	<string name="widget.4x3">Booksonic (4x3)</string>
+	<string name="widget.4x4">Booksonic (4x4)</string>
     <string name="widget.initial_text">Toucher pour choisir de la musique</string>
     <string name="widget.sdcard_busy">Carte SD indisponible</string>
     <string name="widget.sdcard_missing">Pas de carte SD</string>
@@ -536,7 +536,7 @@
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
 
 	<string name="tasker.start_playing">Commencer la lecture</string>
-	<string name="tasker.start_playing_title">Tasker -> Démarrer DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Démarrer Booksonic</string>
 	<string name="tasker.edit_shuffle_mode">Démarrer en mode lecture aléatoire : </string>
 	<string name="tasker.start_playing_shuffled">Démarrer la lecture en mode lecture aléatoire</string>
 

@@ -29,9 +29,9 @@
     <string name="button_bar.now_playing">Плеер</string>
 
     <string name="main.welcome_title">Здравствуйте!</string>
-    <string name="main.welcome_text">Добро пожаловать в DSub! Это приложение настроено на работу с демо сервером Subsonic. После настройки Вашего персонального сервера (доступен на <b>subsonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
+    <string name="main.welcome_text">Добро пожаловать в Booksonicub! Это приложение настроено на работу с демо сервером Subsonic. После настройки Вашего персонального сервера (доступен на <b>subsonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
 	
-	<string name="main.about_title">О программе DSub</string>
+	<string name="main.about_title">О программе Booksonic</string>
     <string name="main.select_server">Выбрать сервер</string>
     <string name="main.shuffle">Случайное воспроизведение</string>
     <string name="main.offline">Отключиться</string>
@@ -139,7 +139,7 @@
 
     <string name="error.label">Ошибка</string>
 
-    <string name="settings.title">Настройки DSub</string>
+    <string name="settings.title">Настройки Booksonic</string>
     <string name="settings.test_connection_title">Проверить соединение</string>
     <string name="settings.servers_title">Серверы</string>
     <string name="settings.server_name">Название</string>
@@ -206,7 +206,7 @@
     <string name="settings.search_history_cleared">История поиска очищена</string>
     <string name="settings.other_title">Другие настройки</string>
     <string name="settings.scrobble_title">Скробблинг на Last.fm</string>
-    <string name="settings.scrobble_summary">Не забудьте установить логин и пароль от Last.fm на сервере DSub</string>
+    <string name="settings.scrobble_summary">Не забудьте установить логин и пароль от Last.fm на сервере Booksonic</string>
     <string name="settings.hide_media_title">Прятать от других</string>
     <string name="settings.hide_media_summary">Прятать музыкальные файлы от других приложений</string>
     <string name="settings.hide_media_toast">Изменения вступят в силу при следующем поиске музыки на Вашем устройстве.</string>
@@ -242,7 +242,7 @@
 
     <string name="service.connecting">Подключение к серверу. Пожалуйста, подождите.</string>
 
-    <string name="parser.upgrade_client">Несовместимые версии. Пожалуйста, обновите приложение DSub для Android.</string>
+    <string name="parser.upgrade_client">Несовместимые версии. Пожалуйста, обновите приложение Booksonic для Android.</string>
     <string name="parser.upgrade_server">Несовместимые версии. Пожалуйста, обновите сервер Subsonic.</string>
     <string name="parser.not_authenticated">Неправильное имя пользователя или пароль.</string>
     <string name="parser.not_authorized">Не авторизирован. Проверьте права пользователя на сервере Subsonic.</string>
