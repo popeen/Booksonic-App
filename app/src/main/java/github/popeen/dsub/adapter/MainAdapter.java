@@ -80,29 +80,15 @@ public class MainAdapter extends SectionAdapter<Integer> {
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header) {
 		UpdateView view = holder.getUpdateView();
 		CheckBox checkBox = (CheckBox) view.findViewById(R.id.item_checkbox);
+        checkBox.setVisibility(View.GONE);
 
 		String display;
 		if ("albums".equals(header)) {
 			display = context.getResources().getString(R.string.main_albums_title);
-
-			if(!Util.isOffline(context) && ServerInfo.canAlbumListPerFolder(context)) {
-				checkBox.setVisibility(View.VISIBLE);
-				checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-						Util.setAlbumListsPerFolder(context, isChecked);
-					}
-				});
-				checkBox.setChecked(Util.getAlbumListsPerFolder(context));
-			} else {
-				checkBox.setVisibility(View.GONE);
-			}
 		} else if("videos".equals(header)) {
 			display = context.getResources().getString(R.string.main_videos);
-			checkBox.setVisibility(View.GONE);
 		} else {
 			display = header;
-			checkBox.setVisibility(View.GONE);
 		}
 
 		if(view != null) {
