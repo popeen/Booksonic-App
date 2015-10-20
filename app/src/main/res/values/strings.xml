@@ -662,5 +662,7 @@
 	<string name="main.author">Author</string>
 	<string name="album.book_desc">noInfo</string>
 	<string name="menu.timer">Timer</string>
+	<string name="album.book.length">Length</string>
+	<string name="album.book.reader">Reader</string>
 
 </resources>

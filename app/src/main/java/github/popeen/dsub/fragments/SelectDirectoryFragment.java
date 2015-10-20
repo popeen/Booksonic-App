@@ -48,6 +48,7 @@ import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.domain.Share;
 import github.popeen.dsub.service.DownloadService;
+import github.popeen.dsub.util.BookInfoAPIParams;
 import github.popeen.dsub.util.DrawableTint;
 import github.popeen.dsub.util.ImageLoader;
 
@@ -115,35 +116,35 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	boolean largeAlbums = false;
 	boolean topTracks = false;
 	String lookupEntry;
-    Integer totalDuration;
+	Integer totalDuration;
 	String bookInfo;
 
 	public SelectDirectoryFragment() {
 		super();
 	}
 
-    public String readJson(String url) {
-        StringBuilder builder = new StringBuilder();
-        HttpClient client = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(url);
-        try {
-            HttpResponse response = client.execute(httpGet);
-            StatusLine statusLine = response.getStatusLine();
-            int statusCode = statusLine.getStatusCode();
-            if (statusCode == 200) {
-                HttpEntity entity = response.getEntity();
-                InputStream content = entity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    builder.append(line);
-                }
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return builder.toString();
-    }
+	public String readJson(String url) {
+		StringBuilder builder = new StringBuilder();
+		HttpClient client = new DefaultHttpClient();
+		HttpGet httpGet = new HttpGet(url);
+		try {
+			HttpResponse response = client.execute(httpGet);
+			StatusLine statusLine = response.getStatusLine();
+			int statusCode = statusLine.getStatusCode();
+			if (statusCode == 200) {
+				HttpEntity entity = response.getEntity();
+				InputStream content = entity.getContent();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return builder.toString();
+	}
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
@@ -189,29 +190,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			lookupEntry = args.getString(Constants.INTENT_EXTRA_SEARCH_SONG);
 			topTracks = args.getBoolean(Constants.INTENT_EXTRA_TOP_TRACKS);
 			showAll = args.getBoolean(Constants.INTENT_EXTRA_SHOW_ALL);
-
-            bookInfo = "Could not collect any info about the book at this time";
-            try{
-                String endpoint = "getBookDirectory";
-                if(Util.isTagBrowsing(context)){
-                    endpoint = "getBook";
-                }
-                SharedPreferences prefs = Util.getPreferences(context);
-                String url =  prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + Util.getActiveServer(context), null) +
-                        "/rest/" + endpoint + ".view?u=" + prefs.getString(Constants.PREFERENCES_KEY_USERNAME + Util.getActiveServer(context), null) +
-                        "&p=" + prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null) +
-                        "&v=" + Constants.REST_PROTOCOL_VERSION_SUBSONIC +
-						"&c=booksonic" +
-                        "&id=" + directory.getId() +
-                        "&f=json";
-
-                Log.w("GetInfo", url);
-                bookInfo = new BookInfoAPI(context).execute(url).get();
-
-            } catch(Exception e){
-                Log.w("GetInfoError", e.toString());
-            }
-            if(bookInfo.equals("noInfo")){bookInfo = "The server has no description for this book"; }
 
 			String childId = args.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID);
 			if(childId != null) {
@@ -271,8 +249,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				invalidated = true;
 			}
 		} else {
-            licenseValid = true;
-            finishLoading();
+			licenseValid = true;
+			finishLoading();
 		}
 
 		if(name != null) {
@@ -678,7 +656,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		@Override
 		protected Pair<MusicDirectory, Boolean> doInBackground() throws Throwable {
-		  MusicService musicService = MusicServiceFactory.getMusicService(context);
+			MusicService musicService = MusicServiceFactory.getMusicService(context);
 			MusicDirectory dir = load(musicService);
 			licenseValid = musicService.isLicenseValid(context, this);
 
@@ -725,7 +703,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		return entryGridAdapter;
 	}
 
-    private void finishLoading() {
+	private void finishLoading() {
 		boolean validData = !entries.isEmpty() || !albums.isEmpty();
 		if(!validData) {
 			setEmpty(true);
@@ -1034,34 +1012,34 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 	public void deletePodcastEpisode(final PodcastEpisode episode) {
 		Util.confirmDialog(context, R.string.common_delete, episode.getTitle(), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                new LoadingTask<Void>(context, true) {
-                    @Override
-                    protected Void doInBackground() throws Throwable {
-                        MusicService musicService = MusicServiceFactory.getMusicService(context);
-                        musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
-                        if (getDownloadService() != null) {
-                            List<Entry> episodeList = new ArrayList<Entry>(1);
-                            episodeList.add(episode);
-                            getDownloadService().delete(episodeList);
-                        }
-                        return null;
-                    }
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				new LoadingTask<Void>(context, true) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						MusicService musicService = MusicServiceFactory.getMusicService(context);
+						musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
+						if (getDownloadService() != null) {
+							List<Entry> episodeList = new ArrayList<Entry>(1);
+							episodeList.add(episode);
+							getDownloadService().delete(episodeList);
+						}
+						return null;
+					}
 
-                    @Override
-                    protected void done(Void result) {
-                        entryGridAdapter.removeItem(episode);
-                    }
+					@Override
+					protected void done(Void result) {
+						entryGridAdapter.removeItem(episode);
+					}
 
-                    @Override
-                    protected void error(Throwable error) {
-                        Log.w(TAG, "Failed to delete podcast episode", error);
-                        Util.toast(context, getErrorMessage(error), false);
-                    }
-                }.execute();
-            }
-        });
+					@Override
+					protected void error(Throwable error) {
+						Log.w(TAG, "Failed to delete podcast episode", error);
+						Util.toast(context, getErrorMessage(error), false);
+					}
+				}.execute();
+			}
+		});
 	}
 
 	public void unstarSelected() {
@@ -1157,29 +1135,29 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			builder.setTitle(R.string.select_album_donate_dialog_0_trial_days_left);
 		} else {
 			builder.setTitle(context.getResources().getQuantityString(R.plurals.select_album_donate_dialog_n_trial_days_left,
-															  trialDaysLeft, trialDaysLeft));
+					trialDaysLeft, trialDaysLeft));
 		}
 
 		builder.setMessage(R.string.select_album_donate_dialog_message);
 
 		builder.setPositiveButton(R.string.select_album_donate_dialog_now,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DONATION_URL)));
-                    }
-                });
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DONATION_URL)));
+					}
+				});
 
 		builder.setNegativeButton(R.string.select_album_donate_dialog_later,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        if (onValid != null) {
-                            onValid.execute();
-                        }
-                    }
-                });
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						dialogInterface.dismiss();
+						if (onValid != null) {
+							onValid.execute();
+						}
+					}
+				});
 
 		builder.create().show();
 	}
@@ -1249,23 +1227,23 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(artistInfo != null) {
 			final String url = artistInfo.getImageUrl();
 			coverArtView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (url == null) {
-                        return;
-                    }
+				@Override
+				public void onClick(View v) {
+					if (url == null) {
+						return;
+					}
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    ImageView fullScreenView = new ImageView(context);
-                    imageLoader.loadImage(fullScreenView, url, true);
-                    builder.setCancelable(true);
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					ImageView fullScreenView = new ImageView(context);
+					imageLoader.loadImage(fullScreenView, url, true);
+					builder.setCancelable(true);
 
-                    AlertDialog imageDialog = builder.create();
-                    // Set view here with unecessary 0's to remove top/bottom border
-                    imageDialog.setView(fullScreenView, 0, 0, 0, 0);
-                    imageDialog.show();
-                }
-            });
+					AlertDialog imageDialog = builder.create();
+					// Set view here with unecessary 0's to remove top/bottom border
+					imageDialog.setView(fullScreenView, 0, 0, 0, 0);
+					imageDialog.show();
+				}
+			});
 			imageLoader.loadImage(coverArtView, url, false);
 		} else if(entries.size() > 0) {
 			Entry coverArt = null;
@@ -1331,25 +1309,50 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				}
 			}
 		}
+		String artistName = artists.iterator().next();
+		bookInfo = "Could not collect any info about the book at this time";
+		try{
+			String endpoint = "getBookDirectory";
+			if(Util.isTagBrowsing(context)){
+				endpoint = "getBook";
+			}
+			SharedPreferences prefs = Util.getPreferences(context);
+			String url =  prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + Util.getActiveServer(context), null) +
+					"/rest/" + endpoint + ".view?u=" + prefs.getString(Constants.PREFERENCES_KEY_USERNAME + Util.getActiveServer(context), null) +
+					"&p=" + prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null) +
+					"&v=" + Constants.REST_PROTOCOL_VERSION_SUBSONIC +
+					"&c=booksonic" +
+					"&id=" + directory.getId() +
+					"&f=json";
+
+			Log.w("GetInfo", url);
+			BookInfoAPIParams params = new BookInfoAPIParams(url, artistName, titleView.getText().toString());
+			bookInfo = new BookInfoAPI(context).execute(params).get();
+
+		} catch(Exception e){
+			Log.w("GetInfoError", e.toString());
+		}
+		if(bookInfo.equals("noInfo")){bookInfo = "The server has no description for this book"; }
 
 		final TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
 		if(podcastDescription != null || artistInfo != null || bookInfo != null) {
 			artistView.setVisibility(View.VISIBLE);
-            String text = "";
-            if(bookInfo != null){
-                text = bookInfo;
-            }
-            if(podcastDescription != null){
-                text = podcastDescription;
-            }
-            if(artistInfo != null){
-                text = artistInfo.getBiography();
-            }
+			String text = "";
+			if(bookInfo != null){
+				text = bookInfo;
+			}
+			if(podcastDescription != null){
+				text = podcastDescription;
+			}
+			if(artistInfo != null){
+				text = artistInfo.getBiography();
+			}
 			Spanned spanned = null;
 			if(text != null) {
 				String newText = "";
-				try{ newText += "<b>"+artists.iterator().next()+"</b><br/>";} catch(Exception e){}
-				try{ if(totalDuration > 0) { newText += "<b>Längd</b>: " + Util.formatDuration(totalDuration) + "<br/>"; } } catch(Exception e){}
+				try{ newText += "<b>" + context.getResources().getString(R.string.main_artist) + "</b>: " + artistName + "<br/>";} catch(Exception e){}
+				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_reader) + "</b>: " + "" + "<br/>"; } } catch(Exception e){}
+				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_length) + "</b>: " + Util.formatDuration(totalDuration) + "<br/>"; } } catch(Exception e){}
 				try{ newText += text+"<br/>";} catch(Exception e){}
 				spanned = Html.fromHtml(newText);
 			}
@@ -1380,7 +1383,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							width = coverArtView.getWidth() + coverArtView.getPaddingRight();
 						}
 						float textLineHeight = artistView.getPaint().getTextSize();
-						int lines = (int) Math.ceil(height / textLineHeight)+1;
+						int lines = (int) Math.ceil(height / textLineHeight);
 
 						SpannableString ss = new SpannableString(spannedText);
 						ss.setSpan(new MyLeadingMarginSpan2(lines, width), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -1426,8 +1429,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			songLengthView.setVisibility(View.GONE);
 		} else {
 			String s = context.getResources().getQuantityString(R.plurals.select_album_n_songs, songCount, songCount);
-            songCountView.setVisibility(View.GONE);
-            songLengthView.setVisibility(View.GONE);
+			songCountView.setVisibility(View.GONE);
+			songLengthView.setVisibility(View.GONE);
 		}
 	}
 	private void setupButtonEvents(View header) {
@@ -1435,7 +1438,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || Util.isOffline(context) || !UserUtil.canShare() || artistInfo != null) {
 			shareButton.setVisibility(View.GONE);
 		} else {
-            shareButton.setVisibility(View.GONE);
+			shareButton.setVisibility(View.GONE);
 			shareButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -1467,7 +1470,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					});
 				}
 			});
-            starButton.setVisibility(View.GONE);
+			starButton.setVisibility(View.GONE);
 		} else {
 			starButton.setVisibility(View.GONE);
 		}
@@ -1477,17 +1480,17 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true) && !Util.isOffline(context)  && artistInfo == null) {
 			ratingBar.setRating(directory.getRating());
 			ratingBarWrapper.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setRating(directory, new OnRatingChange() {
-                        @Override
-                        void ratingChange(int rating) {
-                            ratingBar.setRating(directory.getRating());
-                        }
-                    });
-                }
-            });
-            ratingBar.setVisibility(View.GONE);
+				@Override
+				public void onClick(View v) {
+					setRating(directory, new OnRatingChange() {
+						@Override
+						void ratingChange(int rating) {
+							ratingBar.setRating(directory.getRating());
+						}
+					});
+				}
+			});
+			ratingBar.setVisibility(View.GONE);
 		} else {
 			ratingBar.setVisibility(View.GONE);
 		}

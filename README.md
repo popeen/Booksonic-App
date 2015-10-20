@@ -9,8 +9,6 @@ Booksonic also comes with a modified server that allows it to get more informati
 For now that means that you can get book descriptions inside the app, in the future it will probably mean a bit more.
 Since I havent started working on anything other then the API for the servers I recommend you check the github page regularly if you decide to use the Booksonic server, any update notices you might get are for Subsonic, not Booksonic.
 
-For those on Madsonic that refuses to make the switch to any other server there is a modified version of Madsonic 5.1 available, however you should know that the Madsonic version will not get any updates to the web client and will only get API updates.
-
 If you would rather keep the server you are using right now Booksonic will work with that too but you will lose some functionality.
 
 So whats the catch? 
@@ -21,5 +19,3 @@ This means that if you intend to listen to both audiobooks and music I would rec
 Vanilla DSub: https://github.com/daneren2005/Subsonic
 
 Booksonic Server: https://github.com/popeen/Popeens-Subsonic
-
-Booksonic Madsonic Server: https://github.com/popeen/Popeens-Madsonic
