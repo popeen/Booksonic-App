@@ -1309,9 +1309,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				}
 			}
 		}
-		String artistName = artists.iterator().next();
+		String artistName = "";
 		bookInfo = "Could not collect any info about the book at this time";
 		try{
+			artistName = artists.iterator().next();
 			String endpoint = "getBookDirectory";
 			if(Util.isTagBrowsing(context)){
 				endpoint = "getBook";
@@ -1350,7 +1351,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			Spanned spanned = null;
 			if(text != null) {
 				String newText = "";
-				try{ newText += "<b>" + context.getResources().getString(R.string.main_artist) + "</b>: " + artistName + "<br/>";} catch(Exception e){}
+				try{ if(!artistName.equals("")){ newText += "<b>" + context.getResources().getString(R.string.main_artist) + "</b>: " + artistName + "<br/>"; } } catch(Exception e){}
 				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_reader) + "</b>: " + "" + "<br/>"; } } catch(Exception e){}
 				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_length) + "</b>: " + Util.formatDuration(totalDuration) + "<br/>"; } } catch(Exception e){}
 				try{ newText += text+"<br/>";} catch(Exception e){}
