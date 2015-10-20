@@ -28,6 +28,7 @@
 	<string name="common.close">Stäng</string>
 	<string name="common.false">Ja</string>
 	<string name="common.true">Nej</string>
+	<string name="common.never">Aldrig</string>
 
     <string name="button_bar.home">Hem</string>
     <string name="button_bar.browse">Bibliotek</string>
