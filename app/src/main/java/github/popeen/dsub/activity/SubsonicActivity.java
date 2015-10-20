@@ -120,11 +120,11 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 	@Override
 	protected void onCreate(Bundle bundle) {
-
-		UpdateApp updateApp = new UpdateApp();
-        updateApp.setContext(this);
-        updateApp.execute();
-
+		if(!Constants.PLAY_VERSION) {
+			UpdateApp updateApp = new UpdateApp();
+			updateApp.setContext(this);
+			updateApp.execute();
+		}
 
 		UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
 		if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {

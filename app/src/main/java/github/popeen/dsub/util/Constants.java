@@ -24,6 +24,8 @@ package github.popeen.dsub.util;
  */
 public final class Constants {
 
+	public static final boolean PLAY_VERSION = true;
+
     // Character encoding used throughout.
     public static final String UTF_8 = "UTF-8";
 
