@@ -170,7 +170,7 @@
 				android:title="@string/settings.podcasts_enabled"
 				android:summary="@string/settings.podcasts_enabled_summary"
 				android:key="podcastsEnabled"
-				android:defaultValue="false"/>
+				android:defaultValue="true"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.bookmarks_enabled"
