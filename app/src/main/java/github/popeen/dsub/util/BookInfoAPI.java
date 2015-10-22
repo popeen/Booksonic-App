@@ -79,8 +79,8 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String> {
                 Log.w("GoogleBooks", input);
                 JSONObject json = new JSONObject(input);
 
-                try{ returnData = json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("description").toString() + "\nThis description was automatically fetched from google books"; }
-                catch(Exception e){ returnData = json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("description").toString() + "\nThis description was automatically fetched from google books"; }
+                try{ returnData = json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("description").toString() + "\nThis description for " + json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("title").toString() + " was automatically fetched from google books"; }
+                catch(Exception e){ returnData = json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("description").toString() + "\nThis description for " + json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("title").toString() + " was automatically fetched from google books"; }
 
             } catch (Exception e) {
                 this.exception = e;
