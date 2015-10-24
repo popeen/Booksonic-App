@@ -135,7 +135,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 	}
 
 	@Override
-	public void onItemClicked(PodcastChannel channel) {
+	public void onItemClicked(UpdateView<PodcastChannel> updateView, PodcastChannel channel) {
 		if("error".equals(channel.getStatus())) {
 			Util.toast(context, context.getResources().getString(R.string.select_podcasts_invalid_podcast_channel, channel.getErrorMessage() == null ? "error" : channel.getErrorMessage()));
 		} else if("downloading".equals(channel.getStatus())) {

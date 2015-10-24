@@ -141,7 +141,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	}
 
 	@Override
-	public void onItemClicked(Serializable item) {
+	public void onItemClicked(UpdateView<Serializable> updateView, Serializable item) {
 		Log.d(TAG, item.getClass().getSimpleName());
 		if (item instanceof Artist) {
 			onArtistSelected((Artist) item, false);

@@ -83,6 +83,7 @@ import github.popeen.dsub.util.*;
 import github.popeen.dsub.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
+import github.popeen.dsub.activity.SubsonicActivity;
 
 public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener, SectionAdapter.OnItemClickedListener<DownloadFile>, OnSongChangedListener {
 	private static final String TAG = NowPlayingFragment.class.getSimpleName();
@@ -192,24 +193,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			starButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					DownloadFile currentDownload = getDownloadService().getCurrentPlaying();
-					if (currentDownload != null) {
-						final Entry currentSong = currentDownload.getSong();
-						toggleStarred(currentSong, new OnStarChange() {
-							@Override
-							void starChange(boolean starred) {
-								if(currentSong.isStarred()) {
-									starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
-								} else {
-									if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-										starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
-									} else {
-										starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
-									}
-								}
-							}
-						});
-					}
+					getDownloadService().toggleStarred();
 				}
 			});
 		} else {
@@ -357,36 +341,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					return;
 				}
 
-				DownloadFile downloadFile = downloadService.getCurrentPlaying();
-				if(downloadFile == null) {
-					return;
-				}
-				Entry entry = downloadFile.getSong();
-
-				// If rating == 1, already set so unset
-				if(entry.getRating() == 1) {
-					setRating(entry, 0);
-
-					if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-						rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_dark);
-					} else {
-						rateBadButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.rating_bad));
-					}
-				} else {
-					// Immediately skip to the next song
-					downloadService.next(true);
-
-					// Otherwise set rating to 1
-					setRating(entry, 1);
-					rateBadButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_bad_selected));
-
-					// Make sure good rating is blank
-					if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-						rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_dark);
-					} else {
-						rateGoodButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.rating_good));
-					}
-				}
+				downloadService.toggleRating(1);
 			}
 		});
 		rateGoodButton.setOnClickListener(new View.OnClickListener() {
@@ -397,33 +352,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					return;
 				}
 
-				DownloadFile downloadFile = downloadService.getCurrentPlaying();
-				if(downloadFile == null) {
-					return;
-				}
-				Entry entry = downloadFile.getSong();
-
-				// If rating == 5, already set so unset
-				if(entry.getRating() == 5) {
-					setRating(entry, 0);
-
-					if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-						rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_dark);
-					} else {
-						rateGoodButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.rating_good));
-					}
-				} else {
-					// Otherwise set rating to maximum
-					setRating(entry, 5);
-					rateGoodButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_good_selected));
-
-					// Make sure bad rating is blank
-					if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-						rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_dark);
-					} else {
-						rateBadButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.rating_bad));
-					}
-				}
+				downloadService.toggleRating(5);
 			}
 		});
 
@@ -510,12 +439,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(downloadService != null && downloadService.getSleepTimer()) {
 			int timeRemaining = downloadService.getSleepTimeRemaining();
 			timerMenu = menu.findItem(R.id.menu_toggle_timer);
-            if(timeRemaining > 1){
-                timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
-            }else{
-                timerMenu.setTitle(R.string.menu_set_timer);
-            }
-
+			if(timeRemaining > 1){
+				timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
+			} else {
+				timerMenu.setTitle(R.string.menu_set_timer);
+			}
 		}
 		if(downloadService != null && downloadService.getKeepScreenOn()) {
 			menu.findItem(R.id.menu_screen_on_off).setChecked(true);
@@ -687,13 +615,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				context.supportInvalidateOptionsMenu();
 				return true;
 			case R.id.menu_shuffle:
-                if(getDownloadService().getSleepTimer()) {
-                    getDownloadService().stopSleepTimer();
-                    context.supportInvalidateOptionsMenu();
-                } else {
-                    startTimer();
-                }
-                return true;
+				if(getDownloadService().getSleepTimer()) {
+					getDownloadService().stopSleepTimer();
+					context.supportInvalidateOptionsMenu();
+				} else {
+					startTimer();
+				}
+				return true;
 			case R.id.menu_save_playlist:
 				List<Entry> entries = new LinkedList<Entry>();
 				for (DownloadFile downloadFile : getDownloadService().getSongs()) {
@@ -702,10 +630,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				createNewPlaylist(entries, true);
 				return true;
 			case R.id.menu_star:
-				toggleStarred(song.getSong());
+				UpdateHelper.toggleStarred(context, song.getSong());
 				return true;
 			case R.id.menu_rate:
-				setRating(song.getSong());
+				UpdateHelper.setRating(context, song.getSong());
 				return true;
 			case R.id.menu_toggle_timer:
 				if(getDownloadService().getSleepTimer()) {
@@ -1101,7 +1029,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.createBookmark(currentSong, position, comment, context, null);
 
-				new EntryInstanceUpdater(currentSong) {
+				new UpdateHelper.EntryInstanceUpdater(currentSong) {
 					@Override
 					public void update(Entry found) {
 						found.setBookmark(new Bookmark(position));
@@ -1225,7 +1153,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onItemClicked(final DownloadFile item) {
+	public void onItemClicked(UpdateView<DownloadFile> updateView, final DownloadFile item) {
 		warnIfStorageUnavailable();
 		new SilentBackgroundTask<Void>(context) {
 			@Override
@@ -1243,54 +1171,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			Entry song = currentPlaying.getSong();
 			songTitleTextView.setText(song.getTitle());
 			getImageLoader().loadImage(albumArtImageView, song, true, true);
-			if(song.isStarred()) {
-				starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
-			} else {
-				if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-					starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
-				} else {
-					starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
-				}
-			}
 			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
 
-			int badRating, goodRating, bookmark;
-			if(song.getRating() == 1) {
-				rateBadButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_bad_selected));
-			} else {
-				if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-					badRating = R.drawable.ic_action_rating_bad_dark;
-				} else {
-					badRating = DrawableTint.getDrawableRes(context, R.attr.rating_bad);
-				}
-				rateBadButton.setImageResource(badRating);
-			}
-
-			if(song.getRating() == 5) {
-				rateGoodButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_good_selected));
-			} else {
-				if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-					goodRating = R.drawable.ic_action_rating_good_dark;
-				} else {
-					goodRating = DrawableTint.getDrawableRes(context, R.attr.rating_good);
-				}
-				rateGoodButton.setImageResource(goodRating);
-			}
-
-			if(song.getBookmark() != null) {
-				bookmarkButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_menu_bookmark_selected));
-			} else {
-				if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-					bookmark = R.drawable.ic_menu_bookmark_dark;
-				} else {
-					bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
-				}
-				bookmarkButton.setImageResource(bookmark);
-			}
 		} else {
 			songTitleTextView.setText(null);
 			getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
-			starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
 			setSubtitle(null);
 		}
 	}
@@ -1327,6 +1212,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
 		if(this.currentPlaying != currentPlaying) {
 			onSongChanged(currentPlaying, currentPlayingIndex);
+			onMetadataUpdate(currentPlaying != null ? currentPlaying.getSong() : null, DownloadService.METADATA_UPDATED_ALL);
 		}
 	}
 
@@ -1354,13 +1240,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		DownloadService downloadService = getDownloadService();
-		if(downloadService.getSleepTimer() && timerMenu != null) {
+		if(downloadService != null && downloadService.getSleepTimer() && timerMenu != null) {
 			int timeRemaining = downloadService.getSleepTimeRemaining();
-            if(timeRemaining > 1){
-                timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
-            }else{
-                timerMenu.setTitle(R.string.menu_set_timer);
-            }
+			if(timeRemaining > 1){
+				timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
+			} else {
+				timerMenu.setTitle(R.string.menu_set_timer);
+			}
 		}
 	}
 
@@ -1410,6 +1296,53 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				stopButton.setVisibility(View.INVISIBLE);
 				startButton.setVisibility(View.VISIBLE);
 				break;
+		}
+	}
+
+	@Override
+	public void onMetadataUpdate(Entry song, int fieldChange) {
+		if(song != null && song.isStarred()) {
+			starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
+		} else {
+			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
+			} else {
+				starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
+			}
+		}
+
+		int badRating, goodRating, bookmark;
+		if(song != null && song.getRating() == 1) {
+			rateBadButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_bad_selected));
+		} else {
+			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+				badRating = R.drawable.ic_action_rating_bad_dark;
+			} else {
+				badRating = DrawableTint.getDrawableRes(context, R.attr.rating_bad);
+			}
+			rateBadButton.setImageResource(badRating);
+		}
+
+		if(song != null && song.getRating() == 5) {
+			rateGoodButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_good_selected));
+		} else {
+			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+				goodRating = R.drawable.ic_action_rating_good_dark;
+			} else {
+				goodRating = DrawableTint.getDrawableRes(context, R.attr.rating_good);
+			}
+			rateGoodButton.setImageResource(goodRating);
+		}
+
+		if(song != null && song.getBookmark() != null) {
+			bookmarkButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_menu_bookmark_selected));
+		} else {
+			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+				bookmark = R.drawable.ic_menu_bookmark_dark;
+			} else {
+				bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
+			}
+			bookmarkButton.setImageResource(bookmark);
 		}
 	}
 

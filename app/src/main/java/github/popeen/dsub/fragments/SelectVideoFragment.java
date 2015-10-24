@@ -54,7 +54,7 @@ public class SelectVideoFragment extends SelectRecyclerFragment<MusicDirectory.E
 	}
 
 	@Override
-	public void onItemClicked(MusicDirectory.Entry entry) {
+	public void onItemClicked(UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry entry) {
 		playVideo(entry);
 	}
 

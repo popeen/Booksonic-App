@@ -21,7 +21,7 @@ package github.popeen.dsub.fragments;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
+import android.widget.ArrayAdapter;
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.Bookmark;
@@ -83,7 +83,7 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 	}
 
 	@Override
-	public void onItemClicked(final MusicDirectory.Entry bookmark) {
+	public void onItemClicked(UpdateView<MusicDirectory.Entry> updateView, final MusicDirectory.Entry bookmark) {
 		final DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
 			return;

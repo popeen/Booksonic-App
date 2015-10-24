@@ -171,7 +171,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	}
 
 	@Override
-	public void onItemClicked(Playlist playlist) {
+	public void onItemClicked(UpdateView<Playlist> updateView, Playlist playlist) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());

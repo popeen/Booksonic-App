@@ -24,6 +24,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -38,6 +41,7 @@ import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.service.OfflineException;
 import github.popeen.dsub.service.ServerTooOldException;
 import github.popeen.dsub.adapter.SettingsAdapter;
+import github.popeen.dsub.view.UpdateView;
 
 public final class UserUtil {
 	private static final String TAG = UserUtil.class.getSimpleName();
@@ -383,7 +387,26 @@ public final class UserUtil {
 		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setLayoutManager(layoutManager);
-		recyclerView.setAdapter(new SettingsAdapter(context, user, null, true));
+		recyclerView.setAdapter(new SettingsAdapter(context, user, null, true, new SectionAdapter.OnItemClickedListener<User.Setting>() {
+			@Override
+			public void onItemClicked(UpdateView<User.Setting> updateView, User.Setting item) {
+				if(updateView.isCheckable()) {
+					boolean newValue = !item.getValue();
+					item.setValue(newValue);
+					updateView.setChecked(newValue);
+				}
+			}
+
+			@Override
+			public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<User.Setting> updateView, User.Setting item) {
+
+			}
+
+			@Override
+			public boolean onContextItemSelected(MenuItem menuItem, UpdateView<User.Setting> updateView, User.Setting item) {
+				return false;
+			}
+		}));
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_add_user)

@@ -120,7 +120,7 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
 	}
 
 	@Override
-	public void onItemClicked(DownloadFile item) {
+	public void onItemClicked(UpdateView<DownloadFile> updateView, DownloadFile item) {
 
 	}
 

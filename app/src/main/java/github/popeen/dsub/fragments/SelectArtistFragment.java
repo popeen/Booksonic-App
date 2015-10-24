@@ -89,7 +89,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 	}
 
 	@Override
-	public void onItemClicked(Artist artist) {
+	public void onItemClicked(UpdateView<Artist> updateView, Artist artist) {
 		SubsonicFragment fragment;
 		if((Util.isFirstLevelArtist(context) || Util.isOffline(context) || Util.isTagBrowsing(context)) || "root".equals(artist.getId()) || groupId != null) {
 			fragment = new SelectDirectoryFragment();

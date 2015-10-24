@@ -6,12 +6,12 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.MainAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
@@ -100,23 +100,12 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			albums.add(R.string.main_albums_alphabetical);
 		}
 		albums.add(R.string.main_albums_random);
-		if(!Util.isTagBrowsing(context)) {
-			//albums.add(R.string.main_albums_highest);
-		}
 		albums.add(R.string.main_albums_year);
 		albums.add(R.string.main_albums_starred);
-		//albums.add(R.string.main_albums_genres);
-		//albums.add(R.string.main_albums_recent);
-		//albums.add(R.string.main_albums_frequent);
 
 		sections.add(albums);
 		headers.add("albums");
 
-		if(ServerInfo.checkServerVersion(context, "1.8")) {
-			//List<Integer> videos = Arrays.asList(R.string.main_videos);
-			//sections.add(videos);
-			//headers.add("videos");
-		}
 
 		return new MainAdapter(context, headers, sections, this);
 	}
@@ -244,7 +233,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				@Override
 				protected File doInBackground() throws Throwable {
 					updateProgress("Gathering Logs");
-					File logcat = new File(FileUtil.getSubsonicDirectory(context), "logcat.txt");
+					File logcat = new File(Environment.getExternalStorageDirectory(), "dsub-logcat.txt");
 					Util.delete(logcat);
 					Process logcatProc = null;
 
@@ -280,7 +269,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 					Intent email = new Intent(Intent.ACTION_SENDTO,
 							Uri.fromParts("mailto", "patrik@ptjwebben.se", null));
-					email.putExtra(Intent.EXTRA_SUBJECT, "PSub " + version + " Error Logs");
+					email.putExtra(Intent.EXTRA_SUBJECT, "Booksonic " + version + " Error Logs");
 					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n\n" + footer);
 					Uri attachment = Uri.fromFile(logcat);
 					email.putExtra(Intent.EXTRA_STREAM, attachment);
@@ -291,7 +280,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	}
 
 	@Override
-	public void onItemClicked(Integer item) {
+	public void onItemClicked(UpdateView<Integer> updateView, Integer item) {
 		if (item == R.string.main_albums_newest) {
 			showAlbumList("newest");
 		} else if (item == R.string.main_albums_random) {

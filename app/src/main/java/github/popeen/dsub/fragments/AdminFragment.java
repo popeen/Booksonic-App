@@ -132,7 +132,7 @@ public class AdminFragment extends SelectRecyclerFragment<User> {
 	}
 
 	@Override
-	public void onItemClicked(User user) {
+	public void onItemClicked(UpdateView<User> updateView, User user) {
 		SubsonicFragment fragment = new UserFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(Constants.INTENT_EXTRA_NAME_ID, user);

@@ -19,7 +19,6 @@
 package github.popeen.dsub.fragments;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,6 +31,7 @@ import android.os.Bundle;
 import android.os.StatFs;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,8 +47,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RatingBar;
 import android.widget.TextView;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.activity.SubsonicActivity;
 import github.popeen.dsub.activity.SubsonicFragmentActivity;
@@ -71,27 +82,16 @@ import github.popeen.dsub.service.ServerTooOldException;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ImageLoader;
+import github.popeen.dsub.util.LoadingTask;
 import github.popeen.dsub.util.MenuUtil;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.SilentBackgroundTask;
-import github.popeen.dsub.util.LoadingTask;
+import github.popeen.dsub.util.UpdateHelper;
 import github.popeen.dsub.util.UserUtil;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.view.GridSpacingDecoration;
 import github.popeen.dsub.view.PlaylistSongView;
 import github.popeen.dsub.view.UpdateView;
-
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 
 import static github.popeen.dsub.domain.MusicDirectory.Entry;
 
@@ -321,7 +321,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				deleteRecursively(artist);
 				break;
 			case R.id.artist_menu_star:
-				toggleStarred(artist);
+				UpdateHelper.toggleStarred(context, artist);
 				break;
 			case R.id.album_menu_play_now:
 				artistOverride = true;
@@ -348,7 +348,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				downloadRecursively(entry.getId(), true, true, false, false, true);
 				break;
 			case R.id.album_menu_star:
-				toggleStarred(entry);
+				UpdateHelper.toggleStarred(context, entry);
 				break;
 			case R.id.album_menu_delete:
 				deleteRecursively(entry);
@@ -381,7 +381,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				addToPlaylist(songs);
 				break;
 			case R.id.song_menu_star:
-				toggleStarred(entry);
+				UpdateHelper.toggleStarred(context, entry);
 				break;
 			case R.id.song_menu_play_external:
 				playExternalPlayer(entry);
@@ -405,7 +405,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				deleteBookmark(entry, null);
 				break;
 			case R.id.menu_rate:
-				setRating(entry);
+				UpdateHelper.setRating(context, entry);
 				break;
 			default:
 				return false;
@@ -784,106 +784,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		dialog.show();
 	}
 
-	public void toggleStarred(Entry entry) {
-		toggleStarred(entry, null);
-	}
-
-	public void toggleStarred(final Entry entry, final OnStarChange onStarChange) {
-		final boolean starred = !entry.isStarred();
-		entry.setStarred(starred);
-		if(onStarChange != null) {
-			onStarChange.starChange(starred);
-		}
-
-		new SilentBackgroundTask<Void>(context) {
-			@Override
-			protected Void doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				if(entry.isDirectory() && Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					if(entry.isAlbum()) {
-						musicService.setStarred(null, null, Arrays.asList(entry), starred, null, context);
-					} else {
-						musicService.setStarred(null, Arrays.asList(entry), null, starred, null, context);
-					}
-				} else {
-					musicService.setStarred(Arrays.asList(entry), null, null, starred, null, context);
-				}
-
-				new EntryInstanceUpdater(entry) {
-					@Override
-					public void update(Entry found) {
-						found.setStarred(starred);
-					}
-				}.execute();
-
-				return null;
-			}
-
-			@Override
-			protected void done(Void result) {
-				// UpdateView
-				Util.toast(context, context.getResources().getString(starred ? R.string.starring_content_starred : R.string.starring_content_unstarred, entry.getTitle()));
-			}
-
-			@Override
-			protected void error(Throwable error) {
-				Log.w(TAG, "Failed to star", error);
-				entry.setStarred(!starred);
-				if(onStarChange != null) {
-					onStarChange.starChange(!starred);
-				}
-
-				String msg;
-				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-					msg = getErrorMessage(error);
-				} else {
-					msg = context.getResources().getString(R.string.starring_content_error, entry.getTitle()) + " " + getErrorMessage(error);
-				}
-
-				Util.toast(context, msg, false);
-			}
-		}.execute();
-	}
-
-	public void toggleStarred(final Artist entry) {
-		final boolean starred = !entry.isStarred();
-		entry.setStarred(starred);
-
-		new SilentBackgroundTask<Void>(context) {
-			@Override
-			protected Void doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					musicService.setStarred(null, Arrays.asList(new Entry(entry)), null, starred, null, context);
-				} else {
-					musicService.setStarred(Arrays.asList(new Entry(entry)), null, null, starred, null, context);
-				}
-				return null;
-			}
-
-			@Override
-			protected void done(Void result) {
-				// UpdateView
-				Util.toast(context, context.getResources().getString(starred ? R.string.starring_content_starred : R.string.starring_content_unstarred, entry.getName()));
-			}
-
-			@Override
-			protected void error(Throwable error) {
-				Log.w(TAG, "Failed to star", error);
-				entry.setStarred(!starred);
-
-				String msg;
-				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-					msg = getErrorMessage(error);
-				} else {
-					msg = context.getResources().getString(R.string.starring_content_error, entry.getName()) + " " + getErrorMessage(error);
-				}
-
-				Util.toast(context, msg, false);
-			}
-		}.execute();
-	}
-
+	
 	protected void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
 		downloadRecursively(id, "", true, save, append, autoplay, shuffle, background);
 	}
@@ -1731,7 +1632,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deleteBookmark(entry, context, null);
 
-						new EntryInstanceUpdater(entry) {
+						new UpdateHelper.EntryInstanceUpdater(entry) {
 							@Override
 							public void update(Entry found) {
 								found.setBookmark(null);
@@ -1765,80 +1666,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}.execute();
 			}
 		});
-	}
-
-	protected void setRating(Entry entry) {
-		setRating(entry, null);
-	}
-	protected void setRating(final Entry entry, final OnRatingChange onRatingChange) {
-		View layout = context.getLayoutInflater().inflate(R.layout.rating, null);
-		final RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.rating_bar);
-		ratingBar.setRating((float) entry.getRating());
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(context.getResources().getString(R.string.rating_title, entry.getTitle()))
-				.setView(layout)
-				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						int rating = (int) ratingBar.getRating();
-						setRating(entry, rating, onRatingChange);
-					}
-				})
-				.setNegativeButton(R.string.common_cancel, null);
-
-		AlertDialog dialog = builder.create();
-		dialog.show();
-	}
-
-	protected void setRating(Entry entry, int rating) {
-		setRating(entry, rating, null);
-	}
-	protected void setRating(final Entry entry, final int rating, final OnRatingChange onRatingChange) {
-		final int oldRating = entry.getRating();
-		entry.setRating(rating);
-
-		if(onRatingChange != null) {
-			onRatingChange.ratingChange(rating);
-		}
-
-		new SilentBackgroundTask<Void>(context) {
-			@Override
-			protected Void doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.setRating(entry, rating, context, null);
-
-				new EntryInstanceUpdater(entry) {
-					@Override
-					public void update(Entry found) {
-						found.setRating(rating);
-					}
-				}.execute();
-				return null;
-			}
-
-			@Override
-			protected void done(Void result) {
-				Util.toast(context, context.getResources().getString(rating > 0 ? R.string.rating_set_rating : R.string.rating_remove_rating, entry.getTitle()));
-			}
-
-			@Override
-			protected void error(Throwable error) {
-				entry.setRating(oldRating);
-				if(onRatingChange != null) {
-					onRatingChange.ratingChange(oldRating);
-				}
-
-				String msg;
-				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-					msg = getErrorMessage(error);
-				} else {
-					msg = context.getResources().getString(rating > 0 ? R.string.rating_set_rating_failed : R.string.rating_remove_rating_failed, entry.getTitle()) + " " + getErrorMessage(error);
-				}
-
-				Util.toast(context, msg, false);
-			}
-		}.execute();
 	}
 
 	public SectionAdapter getCurrentAdapter() { return null; }
@@ -1957,47 +1784,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				downloadService.delete(songs);
 			}
 		}
-	}
-
-	protected abstract class EntryInstanceUpdater {
-		private Entry entry;
-
-		public EntryInstanceUpdater(Entry entry) {
-			this.entry = entry;
-		}
-
-		public abstract void update(Entry found);
-
-		public void execute() {
-			DownloadService downloadService = getDownloadService();
-			if(downloadService != null && !entry.isDirectory()) {
-				boolean serializeChanges = false;
-				List<DownloadFile> downloadFiles = downloadService.getDownloads();
-				for(DownloadFile file: downloadFiles) {
-					Entry check = file.getSong();
-					if(entry.getId().equals(check.getId())) {
-						update(entry);
-						serializeChanges = true;
-					}
-				}
-
-				if(serializeChanges) {
-					downloadService.serializeQueue();
-				}
-			}
-
-			Entry find = UpdateView.findEntry(entry);
-			if(find != null) {
-				update(find);
-			}
-		}
-	}
-
-	public abstract class OnRatingChange {
-		abstract void ratingChange(int rating);
-	}
-	public abstract class OnStarChange {
-		abstract void starChange(boolean starred);
 	}
 
 	public abstract class RecursiveLoader extends LoadingTask<Boolean> {

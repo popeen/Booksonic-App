@@ -66,7 +66,7 @@ public class SelectYearFragment extends SelectRecyclerFragment<String> {
 	}
 
 	@Override
-	public void onItemClicked(String decade) {
+	public void onItemClicked(UpdateView<String> updateView, String decade) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, "years");

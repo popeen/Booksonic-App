@@ -94,7 +94,7 @@ public class SelectShareFragment extends SelectRecyclerFragment<Share> {
 	}
 
 	@Override
-	public void onItemClicked(Share share) {
+	public void onItemClicked(UpdateView<Share> updateView, Share share) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(Constants.INTENT_EXTRA_NAME_SHARE, share);

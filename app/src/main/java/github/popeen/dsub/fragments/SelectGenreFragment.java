@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.Genre;
@@ -55,7 +54,7 @@ public class SelectGenreFragment extends SelectRecyclerFragment<Genre> {
 	}
 	
 	@Override
-	public void onItemClicked(Genre genre) {
+	public void onItemClicked(UpdateView<Genre> updateView, Genre genre) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, "genres");
