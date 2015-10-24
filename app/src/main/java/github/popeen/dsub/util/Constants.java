@@ -25,6 +25,7 @@ package github.popeen.dsub.util;
 public final class Constants {
 
 	public static final boolean PLAY_VERSION = true;
+	public static final String PREFERENCES_KEY_REVERSE = "playlistReverse";
 
     // Character encoding used throughout.
     public static final String UTF_8 = "UTF-8";

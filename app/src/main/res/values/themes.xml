@@ -28,7 +28,7 @@
 		<item name="toggle_list">@drawable/action_toggle_list_light</item>
 		<item name="select_server">@drawable/main_select_server_light</item>
 		<item name="playing">@drawable/playing_light</item>
-		<item name="downloading">@drawable/downloading_light</item>
+		<item name="downloading">@drawable/downloading_dark</item>
 		<item name="bookmark">@drawable/ic_menu_bookmark_light</item>
 		<item name="share">@drawable/ic_menu_share_light</item>
 		<item name="add_person">@drawable/ic_menu_add_person_dark</item>

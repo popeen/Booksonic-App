@@ -102,6 +102,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		albums.add(R.string.main_albums_random);
 		albums.add(R.string.main_albums_year);
 		albums.add(R.string.main_albums_starred);
+		albums.add(R.string.button_bar_podcasts);
 
 		sections.add(albums);
 		headers.add("albums");
@@ -129,6 +130,9 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			replaceFragment(fragment);
 		} else if("author".equals(type)) {
 			SubsonicFragment fragment = new SelectArtistFragment();
+			replaceFragment(fragment);
+		} else if("podcast".equals(type)) {
+			SubsonicFragment fragment = new SelectPodcastsFragment();
 			replaceFragment(fragment);
 		} else {
 			// Clear out recently added count when viewing
@@ -301,8 +305,8 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			showAlbumList("alphabeticalByName");
 		} else if(item == R.string.main_author) {
 			showAlbumList("author");
-		} else if(item == R.string.main_videos) {
-			showVideos();
+		} else if(item == R.string.button_bar_podcasts) {
+			showAlbumList("podcast");
 		}
 	}
 

@@ -14,6 +14,7 @@
 */
 package github.popeen.dsub.fragments;
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ import github.popeen.dsub.adapter.PodcastChannelAdapter;
 import github.popeen.dsub.view.UpdateView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChannel> {
@@ -56,7 +58,9 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 		if(super.onOptionsItemSelected(item)) {
 			return true;
 		}
-
+		SubsonicFragment fragment;
+		Bundle args;
+		FragmentTransaction trans;
 		switch (item.getItemId()) {
 			case R.id.menu_check:
 				refreshPodcasts();

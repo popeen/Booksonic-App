@@ -1,6 +1,8 @@
 package github.popeen.dsub.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,6 +57,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -118,9 +121,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	String lookupEntry;
 	Integer totalDuration;
 	String bookInfo;
+	boolean playlistReverse;
 
 	public SelectDirectoryFragment() {
 		super();
+	}
+
+	public void playlistReverse(boolean reverse){
+		this.playlistReverse = reverse;
 	}
 
 	public String readJson(String url) {
@@ -341,6 +349,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			case R.id.menu_radio:
 				startArtistRadio(id);
 				return true;
+			case R.id.reverse:
+				FragmentTransaction ft = getFragmentManager().beginTransaction();
+				ft.detach(this).attach(this).commit();
+				return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -421,7 +433,18 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				return;
 			}
 
-			playNow(Arrays.asList(entry));
+			List<Entry> songs = new ArrayList<Entry>();
+
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true)) {
+				Iterator it = entries.listIterator(entries.indexOf(entry));
+				while(it.hasNext()) {
+					songs.add((Entry) it.next());
+				}
+			} else {
+				songs.add(entry);
+			}
+
+			playNow(songs);
 		} else {
 			List<Entry> songs = new ArrayList<Entry>();
 
@@ -1274,10 +1297,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 	}
 	private void setupTextDisplay(final View header) {
+
 		final TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
 		if(playlistName != null) {
 			titleView.setText(playlistName);
 		} else if(podcastName != null) {
+			Collections.reverse(entries);
 			titleView.setText(podcastName);
 			titleView.setPadding(0, 6, 4, 8);
 		} else if(name != null) {
