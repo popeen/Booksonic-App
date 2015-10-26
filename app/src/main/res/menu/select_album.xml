@@ -11,8 +11,9 @@
 		android:id="@+id/menu_radio"
 		android:icon="?attr/radio"
 		android:title="@string/menu.start_radio"
-		compat:showAsAction="ifRoom|withText"/>
-		
+		compat:showAsAction="ifRoom|withText"
+		android:visible="false"/>
+
 	<item
 		android:id="@+id/menu_shuffle"
 		android:icon="?attr/shuffle"
