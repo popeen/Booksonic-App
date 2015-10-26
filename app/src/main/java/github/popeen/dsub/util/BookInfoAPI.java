@@ -23,7 +23,7 @@ import java.net.URLEncoder;
  */
 
 
-public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String> {
+public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
 
     private Context context;
     private String author;
@@ -56,17 +56,20 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String> {
         }
         return builder.toString();
     }
-    protected String doInBackground(BookInfoAPIParams... apiParams) {
-        String returnData = "noInfo";
+    protected String[] doInBackground(BookInfoAPIParams... apiParams) {
+        String[] returnData = new String[2];
+        returnData[0] = "noInfo";
 
         try {
             String input = readJson(apiParams[0].getURL());
             JSONObject json = new JSONObject(input);
 
             if(Util.isTagBrowsing(context)){
-                returnData = json.getJSONObject("subsonic-response").getJSONObject("album").get("description").toString();
+                returnData[0] = json.getJSONObject("subsonic-response").getJSONObject("album").get("description").toString();
+                returnData[1] = json.getJSONObject("subsonic-response").getJSONObject("album").get("reader").toString();
             }else {
-                returnData = json.getJSONObject("subsonic-response").getJSONObject("directory").get("description").toString();
+                returnData[0] = json.getJSONObject("subsonic-response").getJSONObject("directory").get("description").toString();
+                returnData[1] = json.getJSONObject("subsonic-response").getJSONObject("directory").get("reader").toString();
             }
         } catch (Exception e) {
             this.exception = e;
@@ -79,8 +82,8 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String> {
                 Log.w("GoogleBooks", input);
                 JSONObject json = new JSONObject(input);
 
-                try{ returnData = json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("description").toString() + "\nThis description for " + json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("title").toString() + " was automatically fetched from google books"; }
-                catch(Exception e){ returnData = json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("description").toString() + "\nThis description for " + json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("title").toString() + " was automatically fetched from google books"; }
+                try{ returnData[0] = json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("description").toString() + "\nThis description for " + json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("title").toString() + " was automatically fetched from google books"; }
+                catch(Exception e){ returnData[0] = json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("description").toString() + "\nThis description for " + json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("title").toString() + " was automatically fetched from google books"; }
 
             } catch (Exception e) {
                 this.exception = e;
@@ -90,8 +93,5 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String> {
         return returnData;
     }
 
-    protected void onPostExecute(String string) {
-        // TODO: check this.exception
-        // TODO: do something with the feed
-    }
+    protected void onPostExecute(String[] string){}
 }

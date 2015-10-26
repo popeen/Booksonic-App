@@ -11,7 +11,7 @@
 	<item
 		android:id="@+id/reverse"
 		android:icon="?attr/downloading"
-		android:title="Reverse"
+		android:title="@string/playlist.reverse"
 		compat:showAsAction="always|withText"/>
 
 	<group android:id="@+id/not_touchscreen">

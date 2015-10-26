@@ -666,5 +666,6 @@
 	<string name="menu.timer">Timer</string>
 	<string name="album.book.length">Längd</string>
 	<string name="album.book.reader">Uppläsare</string>
+	<string name="playlist.reverse">Omvänt</string>
 
 </resources>

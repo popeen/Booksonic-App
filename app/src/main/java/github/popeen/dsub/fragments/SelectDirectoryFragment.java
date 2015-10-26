@@ -1,7 +1,6 @@
 package github.popeen.dsub.fragments;
 
 import android.annotation.TargetApi;
-import android.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
@@ -120,7 +119,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	boolean topTracks = false;
 	String lookupEntry;
 	Integer totalDuration;
-	String bookInfo;
+	String[] bookInfo = new String[2];
+	String bookDescription;
+	String bookReader;
 	boolean playlistReverse;
 
 	public SelectDirectoryFragment() {
@@ -433,18 +434,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				return;
 			}
 
-			List<Entry> songs = new ArrayList<Entry>();
-
-			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true)) {
-				Iterator it = entries.listIterator(entries.indexOf(entry));
-				while(it.hasNext()) {
-					songs.add((Entry) it.next());
-				}
-			} else {
-				songs.add(entry);
-			}
-
-			playNow(songs);
+			playNow(Arrays.asList(entry));
 		} else {
 			List<Entry> songs = new ArrayList<Entry>();
 
@@ -1335,7 +1325,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		}
 		String artistName = "";
-		bookInfo = "Could not collect any info about the book at this time";
+		bookDescription = "Could not collect any info about the book at this time";
 		try{
 			artistName = artists.iterator().next();
 			String endpoint = "getBookDirectory";
@@ -1354,18 +1344,21 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			Log.w("GetInfo", url);
 			BookInfoAPIParams params = new BookInfoAPIParams(url, artistName, titleView.getText().toString());
 			bookInfo = new BookInfoAPI(context).execute(params).get();
+			bookDescription = bookInfo[0];
+			bookReader = bookInfo[1];
 
 		} catch(Exception e){
 			Log.w("GetInfoError", e.toString());
 		}
-		if(bookInfo.equals("noInfo")){bookInfo = "The server has no description for this book"; }
+		if(bookDescription.equals("noInfo")){
+			bookDescription = "The server has no description for this book"; }
 
 		final TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
-		if(podcastDescription != null || artistInfo != null || bookInfo != null) {
+		if(podcastDescription != null || artistInfo != null || bookDescription != null) {
 			artistView.setVisibility(View.VISIBLE);
 			String text = "";
-			if(bookInfo != null){
-				text = bookInfo;
+			if(bookDescription != null){
+				text = bookDescription;
 			}
 			if(podcastDescription != null){
 				text = podcastDescription;
@@ -1377,7 +1370,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			if(text != null) {
 				String newText = "";
 				try{ if(!artistName.equals("")){ newText += "<b>" + context.getResources().getString(R.string.main_artist) + "</b>: " + artistName + "<br/>"; } } catch(Exception e){}
-				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_reader) + "</b>: " + "" + "<br/>"; } } catch(Exception e){}
+				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_reader) + "</b>: " + bookReader + "<br/>"; } } catch(Exception e){}
 				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_length) + "</b>: " + Util.formatDuration(totalDuration) + "<br/>"; } } catch(Exception e){}
 				try{ newText += text+"<br/>";} catch(Exception e){}
 				spanned = Html.fromHtml(newText);
@@ -1409,7 +1402,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							width = coverArtView.getWidth() + coverArtView.getPaddingRight();
 						}
 						float textLineHeight = artistView.getPaint().getTextSize();
-						int lines = (int) Math.ceil(height / textLineHeight);
+						int lines = (int) Math.ceil(height / textLineHeight) + 1;
 
 						SpannableString ss = new SpannableString(spannedText);
 						ss.setSpan(new MyLeadingMarginSpan2(lines, width), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
