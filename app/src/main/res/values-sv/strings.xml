@@ -311,8 +311,8 @@
 	<string name="settings.open_to_tab">Öppna i flik</string>
 	<string name="settings.open_to_tab_summary">Öppna direkt i den här fliken</string>
     <string name="settings.network_title">Nätverk</string>
-    <string name="settings.max_bitrate_wifi">Max ljud bithastighet (bitrate) - Wi-Fi</string>
-    <string name="settings.max_bitrate_mobile">Max ljud bithastighet (bitrate) - Mobil data</string>
+    <string name="settings.max_bitrate_wifi">Max bithastighet (bitrate) - Wi-Fi</string>
+    <string name="settings.max_bitrate_mobile">Max bithastighet (bitrate) - Mobil data</string>
     <string name="settings.max_bitrate_32">32 Kbps</string>
     <string name="settings.max_bitrate_64">64 Kbps</string>
     <string name="settings.max_bitrate_80">80 Kbps</string>

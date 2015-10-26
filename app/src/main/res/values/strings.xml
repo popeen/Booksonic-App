@@ -313,8 +313,8 @@
 	<string name="settings.open_to_tab">Open To Tab</string>
 	<string name="settings.open_to_tab_summary">Open directly to this tab</string>
     <string name="settings.network_title">Network</string>
-    <string name="settings.max_bitrate_wifi">Max Audio bitrate - Wi-Fi</string>
-    <string name="settings.max_bitrate_mobile">Max Audio bitrate - Mobile</string>
+    <string name="settings.max_bitrate_wifi">Max bitrate - Wi-Fi</string>
+    <string name="settings.max_bitrate_mobile">Max bitrate - Mobile</string>
     <string name="settings.max_bitrate_32">32 Kbps</string>
     <string name="settings.max_bitrate_64">64 Kbps</string>
     <string name="settings.max_bitrate_80">80 Kbps</string>

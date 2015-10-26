@@ -171,8 +171,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		theme = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_THEME);
 		maxBitrateWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI);
 		maxBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE);
-		maxVideoBitrateWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
-		maxVideoBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
+		//maxVideoBitrateWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
+		//maxVideoBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
 		networkTimeout = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
 		cacheLocation = (EditTextPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
 		preloadCountWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI);
@@ -182,7 +182,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		pauseDisconnect = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
 		serversCategory = (PreferenceCategory) this.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
 		addServerPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
-		videoPlayer = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
+		//videoPlayer = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		syncInterval = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
 		syncEnabled = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
 		syncWifi = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
@@ -311,8 +311,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		theme.setSummary(theme.getEntry());
 		maxBitrateWifi.setSummary(maxBitrateWifi.getEntry());
 		maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());
-		maxVideoBitrateWifi.setSummary(maxVideoBitrateWifi.getEntry());
-		maxVideoBitrateMobile.setSummary(maxVideoBitrateMobile.getEntry());
+		//maxVideoBitrateWifi.setSummary(maxVideoBitrateWifi.getEntry());
+		//maxVideoBitrateMobile.setSummary(maxVideoBitrateMobile.getEntry());
 		networkTimeout.setSummary(networkTimeout.getEntry());
 		cacheLocation.setSummary(cacheLocation.getText());
 		preloadCountWifi.setSummary(preloadCountWifi.getEntry());
@@ -320,7 +320,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		keepPlayedCount.setSummary(keepPlayedCount.getEntry());
 		tempLoss.setSummary(tempLoss.getEntry());
 		pauseDisconnect.setSummary(pauseDisconnect.getEntry());
-		videoPlayer.setSummary(videoPlayer.getEntry());
+		//videoPlayer.setSummary(videoPlayer.getEntry());
 		syncInterval.setSummary(syncInterval.getEntry());
 		openToTab.setSummary(openToTab.getEntry());
 		try {
