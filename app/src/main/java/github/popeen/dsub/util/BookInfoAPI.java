@@ -61,6 +61,7 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
         returnData[0] = "noInfo";
 
         try {
+
             String input = readJson(apiParams[0].getURL());
             JSONObject json = new JSONObject(input);
 
@@ -75,7 +76,7 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
             this.exception = e;
         }
 
-        if(returnData.equals("noInfo")){
+        if(returnData[0].equals("noInfo")){
             try {
                 Log.w("GoogleBooks", "https://www.googleapis.com/books/v1/volumes?q=" + URLEncoder.encode(apiParams[0].getAuthor(), "UTF-8") + "+" + URLEncoder.encode(apiParams[0].getTitle(), "UTF-8"));
                 String input = readJson("https://www.googleapis.com/books/v1/volumes?q=" + URLEncoder.encode(apiParams[0].getAuthor(), "UTF-8") + "+" + URLEncoder.encode(apiParams[0].getTitle(), "UTF-8"));
