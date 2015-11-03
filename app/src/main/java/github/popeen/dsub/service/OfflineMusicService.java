@@ -737,6 +737,10 @@ public class OfflineMusicService implements MusicService {
 				channel.setId(parts[0]);
 				channel.setName(parts[0]);
 				channel.setStatus("completed");
+				File albumArt = FileUtil.getAlbumArtFile(context, channel);
+				if (albumArt.exists()) {
+					channel.setCoverArt(albumArt.getPath());
+				}
 
 				if(parts.length > 1) {
 					channel.setUrl(parts[1]);
@@ -756,7 +760,12 @@ public class OfflineMusicService implements MusicService {
 	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
 		return getMusicDirectory(FileUtil.getPodcastDirectory(context, id).getPath(), null, false, context, progressListener, true);
 	}
-	
+
+	@Override
+	public MusicDirectory getNewestPodcastEpisodes(int count, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
 	@Override
 	public void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);

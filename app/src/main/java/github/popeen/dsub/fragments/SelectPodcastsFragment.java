@@ -14,10 +14,13 @@
 */
 package github.popeen.dsub.fragments;
 
+import android.content.res.Resources;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +30,8 @@ import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PodcastChannel;
+import github.popeen.dsub.domain.PodcastEpisode;
+import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.service.OfflineException;
@@ -41,18 +46,27 @@ import github.popeen.dsub.util.Util;
 import github.popeen.dsub.adapter.PodcastChannelAdapter;
 import github.popeen.dsub.view.UpdateView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
-public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChannel> {
+public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();
 
-	public void onCreate(Bundle bundle){
-		super.onCreate(bundle);
-		setHasOptionsMenu(true);
-	}
+	private boolean hasCoverArt;
+	private MusicDirectory newestEpisodes;
 
+	@Override
+	public void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+		hasCoverArt = ServerInfo.checkServerVersion(context, "1.13") || Util.isOffline(context);
+		if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true) && hasCoverArt) {
+			largeAlbums = true;
+		}
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(super.onOptionsItemSelected(item)) {
@@ -74,45 +88,48 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		menu.clear();
-		menuInflater.inflate(R.menu.select_podcasts, menu);
-		if(Util.isOffline(context) || !UserUtil.canPodcast()){
-			menu.removeItem(R.id.menu_add_podcast);
-			menu.removeItem(R.id.menu_check);
-		}
-	}
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Serializable> updateView, Serializable item) {
+		if(item instanceof PodcastChannel) {
+			PodcastChannel channel = (PodcastChannel) item;
+			if (!Util.isOffline(context) && UserUtil.canPodcast()) {
+				menuInflater.inflate(R.menu.select_podcasts_context, menu);
 
-	@Override
-	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<PodcastChannel> updateView, PodcastChannel podcast) {
-		if(!Util.isOffline(context) && UserUtil.canPodcast()) {
-			menuInflater.inflate(R.menu.select_podcasts_context, menu);
-			if (SyncUtil.isSyncedPodcast(context, podcast.getId())) {
-				menu.removeItem(R.id.podcast_menu_sync);
+
+				if (SyncUtil.isSyncedPodcast(context, channel.getId())) {
+					menu.removeItem(R.id.podcast_menu_sync);
+				} else {
+					menu.removeItem(R.id.podcast_menu_stop_sync);
+				}
 			} else {
-				menu.removeItem(R.id.podcast_menu_stop_sync);
+				menuInflater.inflate(R.menu.select_podcasts_context_offline, menu);
 			}
 		}else{
-			menuInflater.inflate(R.menu.select_podcasts_context_offline, menu);
+			onCreateContextMenuSupport(menu, menuInflater, updateView, item);
 		}
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<PodcastChannel> updateView, PodcastChannel channel) {
-		switch (menuItem.getItemId()) {
-			case R.id.podcast_menu_sync:
-				syncPodcast(channel);
-				break;
-			case R.id.podcast_menu_stop_sync:
-				stopSyncPodcast(channel);
-				break;
-			case R.id.podcast_channel_info:
-				displayPodcastInfo(channel);
-				break;
-			case R.id.podcast_channel_delete:
-				deletePodcast(channel);
-				break;
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Serializable> updateView, Serializable item) {
+		if(item instanceof PodcastChannel) {
+			PodcastChannel channel = (PodcastChannel) item;
+
+			switch (menuItem.getItemId()) {
+				case R.id.podcast_menu_sync:
+					syncPodcast(channel);
+					break;
+				case R.id.podcast_menu_stop_sync:
+					stopSyncPodcast(channel);
+					break;
+				case R.id.podcast_channel_info:
+					displayPodcastInfo(channel);
+					break;
+				case R.id.podcast_channel_delete:
+					deletePodcast(channel);
+					break;
+			}
+		} else {
+			return onContextItemSelected(menuItem, item);
 		}
 
 		return true;
@@ -124,13 +141,51 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 	}
 
 	@Override
-	public SectionAdapter getAdapter(List<PodcastChannel> channels) {
-		return new PodcastChannelAdapter(context, channels, this);
+	public SectionAdapter getAdapter(List<Serializable> channels) {
+		if(newestEpisodes == null || newestEpisodes.getChildrenSize() == 0) {
+			return new PodcastChannelAdapter(context, channels, hasCoverArt ? getImageLoader() : null, this, largeAlbums);
+		} else {
+			List<String> headers = Arrays.asList(PodcastChannelAdapter.EPISODE_HEADER, PodcastChannelAdapter.CHANNEL_HEADER);
+
+			List<MusicDirectory.Entry> episodes = newestEpisodes.getChildren();
+			List<Serializable> serializableEpisodes = new ArrayList<>();
+
+			// Put 3 in current list
+			while(serializableEpisodes.size() < 3 && !episodes.isEmpty()) {
+				serializableEpisodes.add(episodes.remove(0));
+			}
+
+			// Put rest in extra set
+			List<Serializable> extraEpisodes = new ArrayList<>();
+			extraEpisodes.addAll(episodes);
+
+			List<List<Serializable>> sections = new ArrayList<>();
+			sections.add(serializableEpisodes);
+			sections.add(channels);
+
+			return new PodcastChannelAdapter(context, headers, sections, extraEpisodes, ServerInfo.checkServerVersion(context, "1.13") ? getImageLoader() : null, this, largeAlbums);
+		}
 	}
 
 	@Override
-	public List<PodcastChannel> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
-		return musicService.getPodcastChannels(refresh, context, listener);
+	public List<Serializable> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+		List<PodcastChannel> channels = musicService.getPodcastChannels(refresh, context, listener);
+
+		if(!Util.isOffline(context) && ServerInfo.hasNewestPodcastEpisodes(context)) {
+			try {
+				newestEpisodes = musicService.getNewestPodcastEpisodes(10, context, listener);
+			} catch (Exception e) {
+				Log.e(TAG, "Failed to download newest episodes", e);
+				newestEpisodes = null;
+			}
+		} else {
+			newestEpisodes = null;
+		}
+
+		List<Serializable> serializableList = new ArrayList<>();
+		serializableList.addAll(channels);
+
+		return serializableList;
 	}
 
 	@Override
@@ -139,21 +194,57 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 	}
 
 	@Override
-	public void onItemClicked(UpdateView<PodcastChannel> updateView, PodcastChannel channel) {
-		if("error".equals(channel.getStatus())) {
-			Util.toast(context, context.getResources().getString(R.string.select_podcasts_invalid_podcast_channel, channel.getErrorMessage() == null ? "error" : channel.getErrorMessage()));
-		} else if("downloading".equals(channel.getStatus())) {
-			Util.toast(context, R.string.select_podcasts_initializing);
-		} else {
-			SubsonicFragment fragment = new SelectDirectoryFragment();
-			Bundle args = new Bundle();
-			args.putString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, channel.getId());
-			args.putString(Constants.INTENT_EXTRA_NAME_PODCAST_NAME, channel.getName());
-			args.putString(Constants.INTENT_EXTRA_NAME_PODCAST_DESCRIPTION, channel.getDescription());
-			fragment.setArguments(args);
+	public void onItemClicked(UpdateView<Serializable> updateView, Serializable item) {
+		if(item instanceof PodcastChannel) {
+			PodcastChannel channel = (PodcastChannel) item;
+			if ("error".equals(channel.getStatus())) {
+				Util.toast(context, context.getResources().getString(R.string.select_podcasts_invalid_podcast_channel, channel.getErrorMessage() == null ? "error" : channel.getErrorMessage()));
+			} else if ("downloading".equals(channel.getStatus())) {
+				Util.toast(context, R.string.select_podcasts_initializing);
+			} else {
+				SubsonicFragment fragment = new SelectDirectoryFragment();
+				Bundle args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, channel.getId());
+				args.putString(Constants.INTENT_EXTRA_NAME_PODCAST_NAME, channel.getName());
+				args.putString(Constants.INTENT_EXTRA_NAME_PODCAST_DESCRIPTION, channel.getDescription());
+				fragment.setArguments(args);
 
-			replaceFragment(fragment);
+				replaceFragment(fragment);
+			}
+		} else {
+			PodcastEpisode episode = (PodcastEpisode) item;
+
+			String status = episode.getStatus();
+			if("error".equals(status)) {
+				Util.toast(context, R.string.select_podcasts_error);
+				return;
+			} else if(!"completed".equals(status)) {
+				Util.toast(context, R.string.select_podcasts_skipped);
+				return;
+			}
+
+			playNow(Arrays.asList((MusicDirectory.Entry) episode));
 		}
+	}
+
+	@Override
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final int columns) {
+		return new GridLayoutManager.SpanSizeLookup() {
+			@Override
+			public int getSpanSize(int position) {
+				SectionAdapter adapter = getCurrentAdapter();
+				if(adapter != null) {
+					int viewType = getCurrentAdapter().getItemViewType(position);
+					if (viewType == SectionAdapter.VIEW_TYPE_HEADER || viewType == PodcastChannelAdapter.VIEW_TYPE_PODCAST_EPISODE || viewType == PodcastChannelAdapter.VIEW_TYPE_PODCAST_LEGACY) {
+						return columns;
+					} else {
+						return 1;
+					}
+				} else {
+					return 1;
+				}
+			}
+		};
 	}
 
 	public void refreshPodcasts() {

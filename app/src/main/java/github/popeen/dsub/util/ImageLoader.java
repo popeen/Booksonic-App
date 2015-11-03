@@ -42,6 +42,7 @@ import github.popeen.dsub.R;
 import github.popeen.dsub.domain.ArtistInfo;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.Playlist;
+import github.popeen.dsub.domain.PodcastChannel;
 import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
@@ -56,6 +57,8 @@ import github.popeen.dsub.util.compat.RemoteControlClientBase;
  */
 public class ImageLoader {
 	private static final String TAG = ImageLoader.class.getSimpleName();
+	public static final String PLAYLIST_PREFIX = "pl-";
+	public static final String PODCAST_PREFIX = "pc-";
 
 	private Context context;
 	private LruCache<String, Bitmap> cache;
@@ -301,14 +304,26 @@ public class ImageLoader {
 		MusicDirectory.Entry entry = new MusicDirectory.Entry();
 		String id;
 		if(Util.isOffline(context)) {
-			id = "pl-" + playlist.getName();
+			id = PLAYLIST_PREFIX + playlist.getName();
 			entry.setTitle(playlist.getComment());
 		} else {
-			id = "pl-" + playlist.getId();
+			id = PLAYLIST_PREFIX + playlist.getId();
 			entry.setTitle(playlist.getName());
 		}
 		entry.setId(id);
 		entry.setCoverArt(id);
+		// So this isn't treated as a artist
+		entry.setParent("");
+
+		return loadImage(view, entry, large, crossfade);
+	}
+
+
+	public SilentBackgroundTask loadImage(View view, PodcastChannel channel, boolean large, boolean crossfade) {
+		MusicDirectory.Entry entry = new MusicDirectory.Entry();
+		entry.setId(PODCAST_PREFIX + channel.getId());
+		entry.setTitle(channel.getName());
+		entry.setCoverArt(channel.getCoverArt());
 		// So this isn't treated as a artist
 		entry.setParent("");
 
