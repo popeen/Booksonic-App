@@ -630,7 +630,7 @@
 	<string name="details.title">Title</string>
 	<string name="details.url">URL</string>
 	<string name="details.error">Error Message</string>
-	<string name="details.author">Author</string>
+    <string name="details.author">Author</string>
 	<string name="details.email">Email</string>
 	<string name="details.version">Version</string>
 	<string name="details.files_cached">Files Cached</string>
@@ -669,5 +669,6 @@
 	<string name="album.book.length">Length</string>
 	<string name="album.book.reader">Narrator</string>
 	<string name="playlist.reverse">Reverse</string>
+    <string name="details.fork">Forked from</string>
 
 </resources>

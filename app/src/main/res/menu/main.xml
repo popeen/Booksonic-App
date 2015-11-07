@@ -32,10 +32,6 @@
 		android:id="@+id/menu_log"
 		android:title="@string/menu.log"/>
 
-	<item 
-		android:id="@+id/menu_changelog"
-		android:title="@string/changelog_full_title"/>
-
 	<item
 		android:id="@+id/menu_exit"
 		android:title="@string/menu.exit"/>

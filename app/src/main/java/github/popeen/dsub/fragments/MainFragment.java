@@ -68,10 +68,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			case R.id.menu_about:
 				showAboutDialog();
 				return true;
-			case R.id.menu_changelog:
-				ChangeLog changeLog = new ChangeLog(context, Util.getPreferences(context));
-				changeLog.getFullLogDialog().show();
-				return true;
 			case R.id.menu_faq:
 				showFAQDialog();
 				return true;
@@ -180,12 +176,15 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				List<String> details = new ArrayList<>();
 
 				headers.add(R.string.details_author);
-				details.add("Scott Jackson");
+				details.add("Patrik Johansson");
 
 				headers.add(R.string.details_email);
-				details.add("dsub.android@gmail.com");
+				details.add("support@ptjwebben.se");
 
-				try {
+                headers.add(R.string.details_fork);
+                details.add("DSub");
+
+                try {
 					headers.add(R.string.details_version);
 					details.add(context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName);
 				} catch(Exception e) {
