@@ -26,6 +26,8 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 public class RecyclingImageView extends ImageView {
+	private boolean invalidated = false;
+
 	public RecyclingImageView(Context context) {
 		super(context);
 	}
@@ -50,6 +52,7 @@ public class RecyclingImageView extends ImageView {
 			if(drawable instanceof BitmapDrawable) {
 				if (isBitmapRecycled(drawable)) {
 					this.setImageDrawable(null);
+					invalidated = true;
 				}
 			} else if(drawable instanceof TransitionDrawable) {
 				TransitionDrawable transitionDrawable = (TransitionDrawable) drawable;
@@ -58,6 +61,7 @@ public class RecyclingImageView extends ImageView {
 				Drawable lastDrawable = transitionDrawable.getDrawable(transitionDrawable.getNumberOfLayers() - 1);
 				if(isBitmapRecycled(lastDrawable)) {
 					this.setImageDrawable(null);
+					invalidated = true;
 				} else {
 					// Go through earlier bitmaps and make sure that they are not recycled
 					for (int i = 0; i < transitionDrawable.getNumberOfLayers(); i++) {
@@ -75,6 +79,12 @@ public class RecyclingImageView extends ImageView {
 		super.onDraw(canvas);
 	}
 
+	@Override
+	public void setImageDrawable(Drawable drawable) {
+		super.setImageDrawable(drawable);
+		invalidated = false;
+	}
+
 	private boolean isBitmapRecycled(Drawable drawable) {
 		if(!(drawable instanceof BitmapDrawable)) {
 			return false;
@@ -86,5 +96,9 @@ public class RecyclingImageView extends ImageView {
 		} else {
 			return false;
 		}
+	}
+
+	public boolean isInvalidated() {
+		return invalidated;
 	}
 }

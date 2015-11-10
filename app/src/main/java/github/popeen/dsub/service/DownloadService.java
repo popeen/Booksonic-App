@@ -67,6 +67,7 @@ import java.util.TimerTask;
 
 import android.annotation.TargetApi;
 import android.app.Service;
+import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -276,6 +277,25 @@ public class DownloadService extends Service {
 		super.onStartCommand(intent, flags, startId);
 		lifecycleSupport.onStart(intent);
 		return START_NOT_STICKY;
+	}
+
+	@Override
+	public void onTrimMemory(int level) {
+		Log.w(TAG, "Level: " + level);
+		ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(this);
+		if(imageLoader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			if (level < ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+				if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL) {
+					imageLoader.onLowMemory(0.75f);
+				} else if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
+					imageLoader.onLowMemory(0.50f);
+				} else if(level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_MODERATE) {
+					imageLoader.onLowMemory(0.25f);
+				}
+			} else if (level >= TRIM_MEMORY_MODERATE) {
+				imageLoader.onLowMemory(0.25f);
+			}
+		}
 	}
 
 	@Override
