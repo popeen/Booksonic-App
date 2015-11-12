@@ -36,6 +36,7 @@ import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.service.OfflineException;
 import github.popeen.dsub.service.ServerTooOldException;
+import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.Constants;
@@ -186,6 +187,20 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 		if(!Util.isOffline(context) && ServerInfo.hasNewestPodcastEpisodes(context)) {
 			try {
 				newestEpisodes = musicService.getNewestPodcastEpisodes(10, context, listener);
+
+				for(MusicDirectory.Entry entry: newestEpisodes.getChildren()) {
+					for(PodcastChannel channel: channels) {
+						if(channel.getId().equals(entry.getParent())) {
+							PodcastEpisode episode = (PodcastEpisode) entry;
+
+							// Update with information normally done in PodcastEntryParser
+							episode.setArtist(channel.getName());
+							episode.setCoverArt(channel.getCoverArt());
+							episode.setPath(FileUtil.getPodcastPath(context, episode));
+							break;
+						}
+					}
+				}
 			} catch (Exception e) {
 				Log.e(TAG, "Failed to download newest episodes", e);
 				newestEpisodes = null;

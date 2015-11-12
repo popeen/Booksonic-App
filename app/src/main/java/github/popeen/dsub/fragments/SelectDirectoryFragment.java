@@ -1,4 +1,3 @@
-
 package github.popeen.dsub.fragments;
 
 import android.annotation.TargetApi;
@@ -77,6 +76,7 @@ import github.popeen.dsub.util.Util;
 import github.popeen.dsub.view.FastScroller;
 import github.popeen.dsub.view.GridSpacingDecoration;
 import github.popeen.dsub.view.MyLeadingMarginSpan2;
+import github.popeen.dsub.view.RecyclingImageView;
 import github.popeen.dsub.view.UpdateView;
 import github.popeen.dsub.util.BookInfoAPI;
 
@@ -1162,8 +1162,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	private void setupCoverArt(View header) {
+		setupCoverArtImpl((RecyclingImageView) header.findViewById(R.id.select_album_art));
+	}
+	private void setupCoverArtImpl(RecyclingImageView coverArtView) {
 		final ImageLoader imageLoader = getImageLoader();
-		View coverArtView = header.findViewById(R.id.select_album_art);
 
 		// Try a few times to get a random cover art
 		if(artistInfo != null) {
@@ -1214,6 +1216,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			});
 			imageLoader.loadImage(coverArtView, albumRep, false, true);
 		}
+
+		coverArtView.setOnInvalidated(new RecyclingImageView.OnInvalidated() {
+			@Override
+			public void onInvalidated(RecyclingImageView imageView) {
+				setupCoverArtImpl(imageView);
+			}
+		});
 	}
 	private void setupTextDisplay(final View header) {
 

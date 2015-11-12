@@ -31,6 +31,7 @@ import static github.popeen.dsub.domain.PlayerState.STOPPED;
 import static github.popeen.dsub.domain.RemoteControlState.LOCAL;
 
 import github.popeen.dsub.R;
+import github.popeen.dsub.activity.SubsonicActivity;
 import github.popeen.dsub.audiofx.AudioEffectsController;
 import github.popeen.dsub.audiofx.EqualizerController;
 import github.popeen.dsub.domain.Bookmark;
@@ -42,6 +43,7 @@ import github.popeen.dsub.domain.RepeatMode;
 import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.receiver.MediaButtonIntentReceiver;
 import github.popeen.dsub.util.ArtistRadioBuffer;
+import github.popeen.dsub.util.ImageLoader;
 import github.popeen.dsub.util.Notifications;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.Constants;
@@ -281,9 +283,9 @@ public class DownloadService extends Service {
 
 	@Override
 	public void onTrimMemory(int level) {
-		Log.w(TAG, "Level: " + level);
 		ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(this);
 		if(imageLoader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			Log.i(TAG, "Memory Trim Level: " + level);
 			if (level < ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
 				if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL) {
 					imageLoader.onLowMemory(0.75f);
@@ -292,8 +294,10 @@ public class DownloadService extends Service {
 				} else if(level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_MODERATE) {
 					imageLoader.onLowMemory(0.25f);
 				}
-			} else if (level >= TRIM_MEMORY_MODERATE) {
+			} else if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) {
 				imageLoader.onLowMemory(0.25f);
+			} else if(level >= ComponentCallbacks2.TRIM_MEMORY_COMPLETE) {
+				imageLoader.onLowMemory(0.75f);
 			}
 		}
 	}
@@ -473,6 +477,10 @@ public class DownloadService extends Service {
 		List<DownloadFile> playlist = new ArrayList<>();
 		if(currentPlaying != null) {
 			int index = downloadList.indexOf(currentPlaying);
+			if(index == -1) {
+				index = 0;
+			}
+
 			int size = size();
 			int end = index + REMOTE_PLAYLIST_TOTAL;
 			for(int i = index; i < size && i < end; i++) {

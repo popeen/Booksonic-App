@@ -28,6 +28,7 @@ import java.util.List;
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.User;
 import github.popeen.dsub.util.ImageLoader;
+import github.popeen.dsub.view.RecyclingImageView;
 import github.popeen.dsub.view.SettingView;
 import github.popeen.dsub.view.UpdateView;
 
@@ -63,8 +64,14 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String description) {
 		View header = holder.getView();
 
-		ImageView coverArtView = (ImageView) header.findViewById(R.id.user_avatar);
+		RecyclingImageView coverArtView = (RecyclingImageView) header.findViewById(R.id.user_avatar);
 		imageLoader.loadAvatar(context, coverArtView, user.getUsername());
+		coverArtView.setOnInvalidated(new RecyclingImageView.OnInvalidated() {
+			@Override
+			public void onInvalidated(RecyclingImageView imageView) {
+				imageLoader.loadAvatar(context, imageView, user.getUsername());
+			}
+		});
 
 		TextView usernameView = (TextView) header.findViewById(R.id.user_username);
 		usernameView.setText(user.getUsername());
