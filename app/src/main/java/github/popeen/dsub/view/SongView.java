@@ -29,6 +29,7 @@ import github.popeen.dsub.domain.PodcastEpisode;
 import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.DownloadFile;
 import github.popeen.dsub.util.DrawableTint;
+import github.popeen.dsub.util.SQLiteHandler;
 import github.popeen.dsub.util.Util;
 
 import java.io.File;
@@ -66,6 +67,9 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private boolean bookmarked = false;
 	private boolean showPodcast = false;
 
+    private SQLiteHandler sqlh = new SQLiteHandler(context);
+
+
 	public SongView(Context context) {
 		super(context);
 		LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
@@ -86,6 +90,13 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 	public void setObjectImpl(MusicDirectory.Entry song, Boolean checkable) {
 		this.checkable = checkable;
+        ImageView heard = (ImageView) findViewById(R.id.track_heard);
+        boolean isHeared = true; //TODO Make this acctually check if it has been heard
+        if(this.sqlh.getTrack(song.getId())[0] != null){
+            heard.setVisibility(View.VISIBLE);
+        }else{
+            heard.setVisibility(View.GONE);
+        }
 
 		StringBuilder artist = new StringBuilder(40);
 

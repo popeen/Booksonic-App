@@ -37,7 +37,7 @@
 		android:paddingLeft="10dip"
 		android:paddingRight="3dip">
 
-		<TextView
+        <TextView
 			android:id="@+id/album_title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -54,6 +54,15 @@
 			android:textAppearance="?android:attr/textAppearanceSmall"
 			android:singleLine="true"
 			android:textColor="?android:textColorSecondary"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:singleLine="true"
+            android:textColor="?android:textColorSecondary"
+            android:text="You have already listened to this"
+            android:id="@+id/heard"/>
 
 	</LinearLayout>
 

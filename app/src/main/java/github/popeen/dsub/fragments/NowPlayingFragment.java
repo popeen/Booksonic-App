@@ -14,6 +14,7 @@
 */
 package github.popeen.dsub.fragments;
 
+import java.security.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -130,6 +131,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private int currentPlayingSize = 0;
 	private MenuItem timerMenu;
 
+    private SQLiteHandler sqlh;
+
 	/**
 	 * Called when the activity is first created.
 	 */
@@ -143,6 +146,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		}
 		primaryFragment = false;
+        sqlh  = new SQLiteHandler(context);
 	}
 
 	@Override
@@ -708,16 +712,16 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		context.runWhenServiceAvailable(new Runnable() {
-			@Override
-			public void run() {
-				if(primaryFragment) {
-					DownloadService downloadService = getDownloadService();
-					downloadService.startRemoteScan();
-					downloadService.addOnSongChangedListener(NowPlayingFragment.this, true);
-				}
-				updateRepeatButton();
-			}
-		});
+            @Override
+            public void run() {
+                if (primaryFragment) {
+                    DownloadService downloadService = getDownloadService();
+                    downloadService.startRemoteScan();
+                    downloadService.addOnSongChangedListener(NowPlayingFragment.this, true);
+                }
+                updateRepeatButton();
+            }
+        });
 	}
 
 	@Override
@@ -1166,19 +1170,27 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 	@Override
 	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex) {
+        try {
+            String track[] = new String[3];
+            track[0] = this.currentPlaying.getSong().getId();
+            track[1] = "true";
+            Long temp = System.currentTimeMillis() / 1000L;
+            track[2] = temp.toString();
+            this.sqlh.addTrack(track);
+        }catch(Exception e){}
 		this.currentPlaying = currentPlaying;
 		if (currentPlaying != null) {
 			Entry song = currentPlaying.getSong();
 			songTitleTextView.setText(song.getTitle());
 			getImageLoader().loadImage(albumArtImageView, song, true, true);
 			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
-
 		} else {
 			songTitleTextView.setText(null);
 			getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
 			setSubtitle(null);
 		}
-	}
+
+    }
 
 	@Override
 	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex) {
