@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="1.0.1" versioncode="2" releasedate="2015-11-20">
-        <change>The app keeps track of what you have listened to</change>
-        <change>Improved tablet dual pane behavior (DSub update)</change>
-        <change>Bugfixes</change>
-    </release>
+
+	<release version="1.0.1" versioncode="2" releasedate="2015-11-20">
+		<change>The app keeps track of what you have listened to</change>
+		<change>Improved tablet dual pane behavior (DSub update)</change>
+		<change>Bugfixes</change>
+	</release>
 	<release version="1.0" versioncode="1" releasedate="2015-11-09">
-        <change>Some of the new feautures requires server update to Booksonic 1.0 Beta1 or newer</change>
+		<change>Some of the new feautures requires server update to Booksonic 1.0 Beta1 or newer</change>
 		<change>Based on DSub 5.1</change>
-        <change>Added book descriton</change>
-        <change>Added narrator</change>
-        <change>Improved sleeptimer</change>
-        <change>Lots of other small things</change>
+		<change>Added book descriton</change>
+		<change>Added narrator</change>
+		<change>Improved sleeptimer</change>
+		<change>Lots of other small things</change>
 	</release>
 </changelog>

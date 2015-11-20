@@ -710,7 +710,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		currentFragment.setPrimaryFragment(true);
 		supportInvalidateOptionsMenu();
 
-		if(secondaryContainer == null) {
+		if(secondaryContainer == null || oldFragment.isAlwaysFullscreen() || currentFragment.isAlwaysStartFullscreen()) {
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
 			trans.hide(oldFragment);
@@ -756,6 +756,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 			// Commit it all
 			trans.commit();
+
+			oldFragment.setIsOnlyVisible(false);
+			currentFragment.setIsOnlyVisible(false);
 		}
 		recreateSpinner();
 	}
@@ -763,16 +766,16 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		if(currentFragment != null) {
 			currentFragment.setPrimaryFragment(false);
 		}
-		Fragment oldFrag = currentFragment;
+		SubsonicFragment oldFragment = currentFragment;
 
 		currentFragment = backStack.remove(backStack.size() - 1);
 		currentFragment.setPrimaryFragment(true, false);
 		supportInvalidateOptionsMenu();
 
-		if(secondaryContainer == null) {
+		if(secondaryContainer == null || currentFragment.isAlwaysFullscreen() || oldFragment.isAlwaysStartFullscreen()) {
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
-			trans.remove(oldFrag);
+			trans.remove(oldFragment);
 			trans.show(currentFragment);
 			trans.commit();
 		} else {
@@ -780,10 +783,10 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 			// Remove old right fragment
 			trans.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
-			trans.remove(oldFrag);
+			trans.remove(oldFragment);
 
 			// Only switch places if there is a backstack, otherwise primary container is correct
-			if(backStack.size() > 0) {
+			if(backStack.size() > 0 && !backStack.get(backStack.size() - 1).isAlwaysFullscreen() && !currentFragment.isAlwaysStartFullscreen()) {
 				trans.setCustomAnimations(0, 0, 0, 0);
 				// Add current left fragment to right side
 				trans.remove(currentFragment);
@@ -802,6 +805,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			} else {
 				secondaryContainer.startAnimation(AnimationUtils.loadAnimation(this, R.anim.exit_to_right));
 				secondaryContainer.setVisibility(View.GONE);
+
+				currentFragment.setIsOnlyVisible(true);
 			}
 
 			trans.commit();

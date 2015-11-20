@@ -106,6 +106,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected View rootView;
 	protected boolean primaryFragment = false;
 	protected boolean secondaryFragment = false;
+	protected boolean isOnlyVisible = true;
+	protected boolean alwaysFullscreen = false;
+	protected boolean alwaysStartFullscreen = false;
 	protected boolean invalidated = false;
 	protected static Random random = new Random();
 	protected GestureDetector gestureScanner;
@@ -218,12 +221,20 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void onCreateContextMenuSupport(Menu menu, MenuInflater menuInflater, UpdateView updateView, Object selected) {
 		if(selected instanceof Entry) {
 			Entry entry = (Entry) selected;
-			if(entry instanceof PodcastEpisode && !entry.isVideo()) {
+			if(entry instanceof PodcastEpisode) {
 				if(Util.isOffline(context)) {
-					menuInflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
+					if(entry.isVideo()) {
+						menuInflater.inflate(R.menu.select_video_context_offline, menu);
+					} else {
+						menuInflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
+					}
 				}
 				else {
-					menuInflater.inflate(R.menu.select_podcast_episode_context, menu);
+					if(entry.isVideo()) {
+						menuInflater.inflate(R.menu.select_podcast_episode_video_context, menu);
+					} else {
+						menuInflater.inflate(R.menu.select_podcast_episode_context, menu);
+					}
 
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
@@ -469,6 +480,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void setSecondaryFragment(boolean secondary) {
 		secondaryFragment = secondary;
 	}
+	public void setIsOnlyVisible(boolean isOnlyVisible) {
+		this.isOnlyVisible = isOnlyVisible;
+	}
+	public boolean isAlwaysFullscreen() {
+		return alwaysFullscreen;
+	}
+	public boolean isAlwaysStartFullscreen() {
+		return alwaysStartFullscreen;
+	}
 
 	public void invalidate() {
 		if(primaryFragment) {
@@ -625,7 +645,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		final int columns = getRecyclerColumnCount();
 		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
 
-		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup(columns);
+		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup();
 		if(spanSizeLookup != null) {
 			gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
 		}
@@ -640,7 +660,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		return layoutManager;
 	}
-	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final int columns) {
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
 		return new GridLayoutManager.SpanSizeLookup() {
 			@Override
 			public int getSpanSize(int position) {
@@ -648,7 +668,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				if(adapter != null) {
 					int viewType = getCurrentAdapter().getItemViewType(position);
 					if (viewType == SectionAdapter.VIEW_TYPE_HEADER) {
-						return columns;
+						return getRecyclerColumnCount();
 					} else {
 						return 1;
 					}
@@ -662,7 +682,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		return new GridSpacingDecoration();
 	}
 	public int getRecyclerColumnCount() {
-		return context.getResources().getInteger(R.integer.Grid_Columns);
+		if(isOnlyVisible) {
+			return context.getResources().getInteger(R.integer.Grid_FullScreen_Columns);
+		} else {
+			return context.getResources().getInteger(R.integer.Grid_Columns);
+		}
 	}
 
 	protected void warnIfStorageUnavailable() {

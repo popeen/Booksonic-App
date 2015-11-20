@@ -51,6 +51,11 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	private boolean skipSearch = false;
 	private String currentQuery;
 
+	public SearchFragment() {
+		super();
+		alwaysStartFullscreen = true;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,13 +95,25 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	}
 
 	@Override
-	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final int columns) {
+	public void setIsOnlyVisible(boolean isOnlyVisible) {
+		boolean update = this.isOnlyVisible != isOnlyVisible;
+		super.setIsOnlyVisible(isOnlyVisible);
+		if(update && adapter != null) {
+			RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+			if(layoutManager instanceof GridLayoutManager) {
+				((GridLayoutManager) layoutManager).setSpanCount(getRecyclerColumnCount());
+			}
+		}
+	}
+
+	@Override
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
 		return new GridLayoutManager.SpanSizeLookup() {
 			@Override
 			public int getSpanSize(int position) {
 				int viewType = adapter.getItemViewType(position);
 				if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER || viewType == ArtistAdapter.VIEW_TYPE_ARTIST) {
-					return columns;
+					return getRecyclerColumnCount();
 				} else {
 					return 1;
 				}
