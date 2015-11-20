@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-
-	<release version="1.0.1" versioncode="2" releasedate="2015-11-20">
+	<release version="1.0.1" versioncode="3" releasedate="2015-11-20">
 		<change>The app keeps track of what you have listened to</change>
 		<change>Improved tablet dual pane behavior (DSub update)</change>
 		<change>Bugfixes</change>

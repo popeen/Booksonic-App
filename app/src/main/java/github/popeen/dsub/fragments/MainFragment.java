@@ -69,6 +69,10 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			case R.id.menu_about:
 				showAboutDialog();
 				return true;
+            case R.id.menu_changelog:
+                ChangeLog changeLog = new ChangeLog(context, Util.getPreferences(context));
+                changeLog.getFullLogDialog().show();
+                return true;
 			case R.id.menu_faq:
 				showFAQDialog();
 				return true;
