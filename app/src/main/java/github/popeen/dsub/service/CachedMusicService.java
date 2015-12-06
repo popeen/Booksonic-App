@@ -53,6 +53,7 @@ import github.popeen.dsub.domain.Share;
 import github.popeen.dsub.domain.User;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.ProgressListener;
+import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.TimeLimitedCache;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.Util;
@@ -259,6 +260,26 @@ public class CachedMusicService implements MusicService {
 			if(cachedPlaylist == null || !playlistFile.exists() || !cachedPlaylist.getChildren().equals(dir.getChildren())) {
 				FileUtil.writePlaylistFile(context, playlistFile, dir);
 			}
+
+			if(cachedPlaylist != null) {
+				// Make sure this playlist is supposed to be synced
+				ArrayList<SyncUtil.SyncSet> playlistList = SyncUtil.getSyncedPlaylists(context, musicService.getInstance(context));
+				for(int i = 0; i < playlistList.size(); i++) {
+					SyncUtil.SyncSet syncPlaylist = playlistList.get(i);
+					if(syncPlaylist.id != null && syncPlaylist.id.equals(id)) {
+						List<Entry> toDelete = cachedPlaylist.getChildren();
+						for (Entry entry : dir.getChildren()) {
+							toDelete.remove(entry);
+						}
+
+						for (Entry entry : toDelete) {
+							DownloadFile file = new DownloadFile(context, entry, true);
+							file.unpin();
+						}
+						break;
+					}
+				}
+			}
 		}
         return dir;
     }
@@ -289,7 +310,7 @@ public class CachedMusicService implements MusicService {
     }
 	
 	@Override
-	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
+	public void deletePlaylist(final String id, Context context, ProgressListener progressListener) throws Exception {
 		musicService.deletePlaylist(id, context, progressListener);
 
 		new PlaylistUpdater(context, id) {
@@ -297,6 +318,20 @@ public class CachedMusicService implements MusicService {
 			public void updateResult(List<Playlist> objects, Playlist result) {
 				objects.remove(result);
 				cachedPlaylists.set(objects);
+
+				ArrayList<SyncUtil.SyncSet> playlistList = SyncUtil.getSyncedPlaylists(context, musicService.getInstance(context));
+				for(int i = 0; i < playlistList.size(); i++) {
+					SyncUtil.SyncSet syncPlaylist = playlistList.get(i);
+					if(syncPlaylist.id != null && syncPlaylist.id.equals(id)) {
+						MusicDirectory musicDirectory = FileUtil.deserialize(context, getCacheName(context, "playlist", id), MusicDirectory.class);
+						for(Entry entry: musicDirectory.getChildren()) {
+							DownloadFile file = new DownloadFile(context, entry, true);
+							file.unpin();
+						}
+
+						break;
+					}
+				}
 			}
 		}.execute();
 	}
@@ -319,7 +354,7 @@ public class CachedMusicService implements MusicService {
 	}
 	
 	@Override
-	public void removeFromPlaylist(String id, final List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
+	public void removeFromPlaylist(final String id, final List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
 		musicService.removeFromPlaylist(id, toRemove, context, progressListener);
 
 		new MusicDirectoryUpdater(context, "playlist", id) {
@@ -330,9 +365,27 @@ public class CachedMusicService implements MusicService {
 
 			@Override
 			public void updateResult(List<Entry> objects, Entry result) {
+				// Make sure this playlist is supposed to be synced
+				boolean supposedToUnpin = false;
+				ArrayList<SyncUtil.SyncSet> playlistList = SyncUtil.getSyncedPlaylists(context, musicService.getInstance(context));
+				for(int i = 0; i < playlistList.size(); i++) {
+					SyncUtil.SyncSet syncPlaylist = playlistList.get(i);
+					if(syncPlaylist.id != null && syncPlaylist.id.equals(id)) {
+						supposedToUnpin = true;
+						break;
+					}
+				}
+
 				// Remove in reverse order so indexes are still correct as we iterate through
 				for(ListIterator<Integer> iterator = toRemove.listIterator(toRemove.size()); iterator.hasPrevious(); ) {
-					objects.remove((int) iterator.previous());
+					int index = iterator.previous();
+					if(supposedToUnpin) {
+						Entry entry = objects.get(index);
+						DownloadFile file = new DownloadFile(context, entry, true);
+						file.unpin();
+					}
+
+					objects.remove(index);
 				}
 			}
 		}.execute();
@@ -1196,7 +1249,7 @@ public class CachedMusicService implements MusicService {
 		public ArrayList<Entry> getArrayList() {
 			musicDirectory = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
 			if(musicDirectory != null) {
-				return new ArrayList<Entry>(musicDirectory.getChildren());
+				return new ArrayList<>(musicDirectory.getChildren());
 			} else {
 				return null;
 			}

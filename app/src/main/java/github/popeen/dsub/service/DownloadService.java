@@ -401,7 +401,10 @@ public class DownloadService extends Service {
 					offset++;
 				}
 			}
-			setNextPlaying();
+
+			if(remoteState == LOCAL || (remoteController != null && remoteController.isNextSupported())) {
+				setNextPlaying();
+			}
 		} else {
 			int size = size();
 			int index = getCurrentPlayingIndex();
@@ -881,13 +884,13 @@ public class DownloadService extends Service {
 			if(remoteState == LOCAL) {
 				nextPlayingTask = new CheckCompletionTask(nextPlaying);
 				nextPlayingTask.execute();
-			} else if(remoteController != null) {
+			} else if(remoteController != null && remoteController.isNextSupported()) {
 				remoteController.changeNextTrack(nextPlaying);
 			}
 		} else {
 			if(remoteState == LOCAL) {
 				// resetNext();
-			} else if(remoteController != null) {
+			} else if(remoteController != null && remoteController.isNextSupported()) {
 				remoteController.changeNextTrack(nextPlaying);
 			}
 			nextPlaying = null;
@@ -1100,11 +1103,14 @@ public class DownloadService extends Service {
 				}
 
 				mediaPlayer.seekTo(position);
-				cachedPosition = position;
 				subtractPosition = 0;
 			}
+			cachedPosition = position;
 
 			onSongProgress();
+			if(playerState == PAUSED) {
+				lifecycleSupport.serializeDownloadQueue();
+			}
 		} catch (Exception x) {
 			handleError(x);
 		}
@@ -1183,7 +1189,16 @@ public class DownloadService extends Service {
 	}
 
 	public void onSongCompleted() {
+		setPlayerState(PlayerState.COMPLETED);
+		postPlayCleanup();
 		play(getNextPlayingIndex());
+	}
+	public void onNextStarted(DownloadFile nextPlaying) {
+		setPlayerState(COMPLETED);
+		postPlayCleanup();
+		setCurrentPlaying(nextPlaying, true);
+		setPlayerState(STARTED);
+		setNextPlayerState(IDLE);
 	}
 
 	public synchronized void pause() {
@@ -1408,6 +1423,13 @@ public class DownloadService extends Service {
 			positionCache.stop();
 			positionCache = null;
 		}
+
+		if(remoteController != null && remoteController.isNextSupported()) {
+			if(playerState == PREPARING || playerState == IDLE) {
+				nextPlayerState = IDLE;
+			}
+		}
+
 		onStateUpdate();
 	}
 
@@ -2663,6 +2685,13 @@ public class DownloadService extends Service {
 					mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
 				}
 			});
+		}
+
+		// Setup next playing at least a couple of seconds into the song since both Chromecast and some DLNA clients report PLAYING when still PREPARING
+		if(position > 2000 && remoteController != null && remoteController.isNextSupported()) {
+			if(playerState == STARTED && nextPlayerState == IDLE) {
+				setNextPlaying();
+			}
 		}
 	}
 	private void onStateUpdate() {

@@ -41,9 +41,7 @@ public abstract class RemoteController {
 	public abstract void changePosition(int seconds);
 	public abstract void changeTrack(int index, DownloadFile song);
 	// Really is abstract, just don't want to require RemoteController's support it
-	public void changeNextTrack(DownloadFile song) {
-
-	};
+	public void changeNextTrack(DownloadFile song) {}
 	public boolean isNextSupported() {
 		return this.nextSupported;
 	}

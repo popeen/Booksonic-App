@@ -17,12 +17,21 @@
  Copyright 2009 (C) Sindre Mehus
  */
 
+
 package github.popeen.dsub.activity;
 
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+
+import android.provider.MediaStore;
+import android.provider.SearchRecentSuggestions;
+import android.util.Log;
+
+
+
+
 
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.Util;
@@ -35,7 +44,9 @@ import github.popeen.dsub.util.Util;
  * @author Sindre Mehus
  */
 public class VoiceQueryReceiverActivity extends Activity {
-	private static String GMS_SEARCH_ACTION = "com.google.android.gms.actions.SEARCH_ACTION";
+
+	private static final String TAG = VoiceQueryReceiverActivity.class.getSimpleName();
+	private static final String GMS_SEARCH_ACTION = "com.google.android.gms.actions.SEARCH_ACTION";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +60,7 @@ public class VoiceQueryReceiverActivity extends Activity {
 			if(!GMS_SEARCH_ACTION.equals(getIntent().getAction())) {
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
 			}
+            intent.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, getIntent().getStringExtra(MediaStore.EXTRA_MEDIA_FOCUS));
 			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             Util.startActivityWithoutTransition(VoiceQueryReceiverActivity.this, intent);
         }

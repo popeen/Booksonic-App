@@ -692,7 +692,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 	}
 
-	protected SubsonicFragment getCurrentFragment() {
+	public SubsonicFragment getCurrentFragment() {
 		return this.currentFragment;
 	}
 
