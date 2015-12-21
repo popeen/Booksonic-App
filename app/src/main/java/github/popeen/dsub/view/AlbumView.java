@@ -38,10 +38,8 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 
 	private File file;
 	private TextView titleView;
-	private TextView heared;
 	private TextView artistView;
 	private boolean showArtist = true;
-    private boolean isHeared;
 
 	public AlbumView(Context context, boolean cell) {
 		super(context);
@@ -54,7 +52,6 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 
 		coverArtView = findViewById(R.id.album_coverart);
 		titleView = (TextView) findViewById(R.id.album_title);
-        heared = (TextView) findViewById(R.id.heard);
 		artistView = (TextView) findViewById(R.id.album_artist);
 
 		ratingBar = (RatingBar) findViewById(R.id.album_rating);
@@ -71,13 +68,6 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	}
 
 	protected void setObjectImpl(MusicDirectory.Entry album, ImageLoader imageLoader) {
-        isHeared = false; //TODO Make this acctually check if it has been heard
-		titleView.setText(album.getAlbumDisplay());
-		if(isHeared){
-            heared.setVisibility(View.VISIBLE);
-        }else{
-            heared.setVisibility(View.GONE);
-        }
 		String artist = "";
 		if(showArtist) {
 			artist = album.getArtist();
