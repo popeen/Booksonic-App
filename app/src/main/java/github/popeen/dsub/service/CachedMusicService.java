@@ -53,6 +53,7 @@ import github.popeen.dsub.domain.Share;
 import github.popeen.dsub.domain.User;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.ProgressListener;
+import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.TimeLimitedCache;
 import github.popeen.dsub.util.FileUtil;
@@ -167,22 +168,27 @@ public class CachedMusicService implements MusicService {
 			dir = cached;
 
 			new SilentBackgroundTask<Void>(context) {
+				MusicDirectory refreshed;
+
 				@Override
 				protected Void doInBackground() throws Throwable {
-					Util.sleepQuietly(2000L);
-					MusicDirectory refreshed = musicService.getMusicDirectory(id, name, true, context, null);
-					cached.updateDifferences(context, musicService.getInstance(context), refreshed);
+					refreshed = musicService.getMusicDirectory(id, name, true, context, null);
+					updateAllSongs(context, refreshed);
+					cached.updateMetadata(refreshed);
+					deleteRemovedEntries(context, refreshed, cached);
 					FileUtil.serialize(context, refreshed, getCacheName(context, "directory", id));
 					return null;
 				}
 
-				// TODO: When upgrading to RecyclerView, this should be usable since won't have split entry/album lists
-				/*@Override
+				// Update which entries exist
+				@Override
 				public void done(Void result) {
 					if(progressListener != null) {
-						progressListener.updateCache();
+						if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
+							progressListener.updateCache();
+						}
 					}
-				}*/
+				}
 
 				@Override
 				public void error(Throwable error) {
@@ -193,21 +199,51 @@ public class CachedMusicService implements MusicService {
 
 		if(dir == null) {
 			dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
+			updateAllSongs(context, dir);
 			FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
 			
 			// If a cached copy exists to check against, look for removes
 			deleteRemovedEntries(context, dir, cached);
 		}
+		dir.sortChildren(context, musicService.getInstance(context));
 
 		return dir;
     }
 
 	@Override
-	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getArtist(final String id, final String name, final boolean refresh, final Context context, final ProgressListener progressListener) throws Exception {
 		MusicDirectory dir = null;
-		MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "artist", id), MusicDirectory.class);
-		if(!refresh) {
+		final MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "artist", id), MusicDirectory.class);
+		if(!refresh && cached != null) {
 			dir = cached;
+
+			new SilentBackgroundTask<Void>(context) {
+				MusicDirectory refreshed;
+
+				@Override
+				protected Void doInBackground() throws Throwable {
+					refreshed = musicService.getArtist(id, name, refresh, context, null);
+					cached.updateMetadata(refreshed);
+					deleteRemovedEntries(context, refreshed, cached);
+					FileUtil.serialize(context, refreshed, getCacheName(context, "artist", id));
+					return null;
+				}
+
+				// Update which entries exist
+				@Override
+				public void done(Void result) {
+					if(progressListener != null) {
+						if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
+							progressListener.updateCache();
+						}
+					}
+				}
+
+				@Override
+				public void error(Throwable error) {
+					Log.e(TAG, "Failed to refresh getArtist", error);
+				}
+			}.execute();
 		}
 
 		if(dir == null) {
@@ -217,25 +253,57 @@ public class CachedMusicService implements MusicService {
 			// If a cached copy exists to check against, look for removes
 			deleteRemovedEntries(context, dir, cached);
 		}
+		dir.sortChildren(context, musicService.getInstance(context));
 
 		return dir;
 	}
 
 	@Override
-	public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getAlbum(final String id, final String name, final boolean refresh, final Context context, final ProgressListener progressListener) throws Exception {
 		MusicDirectory dir = null;
-		MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "album", id), MusicDirectory.class);
-		if(!refresh) {
+		final MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "album", id), MusicDirectory.class);
+		if(!refresh && cached != null) {
 			dir = cached;
+
+			new SilentBackgroundTask<Void>(context) {
+				MusicDirectory refreshed;
+
+				@Override
+				protected Void doInBackground() throws Throwable {
+					refreshed = musicService.getAlbum(id, name, refresh, context, null);
+					updateAllSongs(context, refreshed);
+					cached.updateMetadata(refreshed);
+					deleteRemovedEntries(context, refreshed, cached);
+					FileUtil.serialize(context, refreshed, getCacheName(context, "album", id));
+					return null;
+				}
+
+				// Update which entries exist
+				@Override
+				public void done(Void result) {
+					if(progressListener != null) {
+						if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
+							progressListener.updateCache();
+						}
+					}
+				}
+
+				@Override
+				public void error(Throwable error) {
+					Log.e(TAG, "Failed to refresh getAlbum", error);
+				}
+			}.execute();
 		}
 
 		if(dir == null) {
 			dir = musicService.getAlbum(id, name, refresh, context, progressListener);
+			updateAllSongs(context, dir);
 			FileUtil.serialize(context, dir, getCacheName(context, "album", id));
 
 			// If a cached copy exists to check against, look for removes
 			deleteRemovedEntries(context, dir, cached);
 		}
+		dir.sortChildren(context, musicService.getInstance(context));
 
 		return dir;
 	}
@@ -254,6 +322,7 @@ public class CachedMusicService implements MusicService {
 		}
 		if(dir == null) {
 			dir = musicService.getPlaylist(refresh, id, name, context, progressListener);
+			updateAllSongs(context, dir);
 			FileUtil.serialize(context, dir, getCacheName(context, "playlist", id));
 
 			File playlistFile = FileUtil.getPlaylistFile(context, Util.getServerName(context, musicService.getInstance(context)), dir.getName());
@@ -488,8 +557,6 @@ public class CachedMusicService implements MusicService {
 									// Only save if actually added to artist
 									if (changed) {
 										musicDirectory.replaceChildren(objects);
-										// Reapply sort after addition
-										musicDirectory.sortChildren(context, instance);
 										FileUtil.serialize(context, musicDirectory, cacheName);
 									}
 								}
@@ -520,8 +587,6 @@ public class CachedMusicService implements MusicService {
 								public void save(ArrayList<Artist> objects) {
 									if (changed) {
 										indexes.setArtists(objects);
-										// Reapply sort after addition
-										indexes.sortChildren(context);
 										FileUtil.serialize(context, indexes, cacheName);
 										cachedIndexes.set(indexes);
 									}
@@ -832,6 +897,7 @@ public class CachedMusicService implements MusicService {
 
 		if(result == null) {
 			result = musicService.getPodcastEpisodes(refresh, id, context, progressListener);
+			updateAllSongs(context, result);
 			FileUtil.serialize(context, result, getCacheName(context, "directory", altId));
 		}
 
@@ -1497,6 +1563,13 @@ public class CachedMusicService implements MusicService {
 			indexes.setArtists(objects);
 			FileUtil.serialize(context, indexes, cacheName);
 			cachedIndexes.set(indexes);
+		}
+	}
+
+	protected void updateAllSongs(Context context, MusicDirectory dir) {
+		List<Entry> songs = dir.getSongs();
+		if(!songs.isEmpty()) {
+			SongDBHandler.getHandler(context).addSongs(musicService.getInstance(context), songs);
 		}
 	}
 

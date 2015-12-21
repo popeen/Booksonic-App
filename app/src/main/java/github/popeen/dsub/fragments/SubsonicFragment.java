@@ -49,6 +49,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import github.popeen.dsub.R;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -86,6 +88,7 @@ import github.popeen.dsub.util.LoadingTask;
 import github.popeen.dsub.util.MenuUtil;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.SilentBackgroundTask;
+import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.UpdateHelper;
 import github.popeen.dsub.util.UserUtil;
 import github.popeen.dsub.util.Util;
@@ -1286,6 +1289,16 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		headers.add(R.string.details_starred);
 		details.add(Util.formatBoolean(context, song.isStarred()));
+
+		try {
+			Long[] dates = SongDBHandler.getHandler(context).getLastPlayed(song);
+			if(dates != null && dates[0] != null && dates[0] > 0) {
+				headers.add(R.string.details_last_played);
+				details.add(Util.formatDate((dates[1] != null && dates[1] > dates[0]) ? dates[1] : dates[0]));
+			}
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to get last played", e);
+		}
 
 		if(song instanceof PodcastEpisode) {
 			headers.add(R.string.details_description);

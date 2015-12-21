@@ -94,7 +94,7 @@ public class FastScroller extends LinearLayout {
 		switch(action)
 		{
 			case MotionEvent.ACTION_DOWN:
-				if(event.getX() < (handle.getX() - 20)) {
+				if(event.getX() < (handle.getX() - 30)) {
 					return false;
 				}
 

@@ -99,10 +99,12 @@ import github.popeen.dsub.service.parser.VideosParser;
 import github.popeen.dsub.service.ssl.SSLSocketFactory;
 import github.popeen.dsub.service.ssl.TrustSelfSignedStrategy;
 import github.popeen.dsub.util.BackgroundTask;
+import github.popeen.dsub.util.Pair;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ProgressListener;
+import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.Util;
 import java.io.*;
 import java.util.zip.GZIPInputStream;
@@ -278,11 +280,6 @@ public class RESTMusicService implements MusicService {
 			dir = extra;
 		} else {
 			dir.addChildren(extra.getChildren());
-		}
-
-		// Apply another sort if we are chaining several together
-		if(dir != extra) {
-			dir.sortChildren(context, getInstance(context));
 		}
 
 		return dir;
@@ -609,11 +606,11 @@ public class RESTMusicService implements MusicService {
 			int decade = Integer.parseInt(extra);
 			// Reverse chronological order only supported in 5.3+
 			if(ServerInfo.checkServerVersion(context, "1.13", instance) && ServerInfo.isStockSubsonic(context, instance)) {
-				values.add(decade + 10);
+				values.add(decade + 9);
 				values.add(decade);
 			} else {
 				values.add(decade);
-				values.add(decade + 10);
+				values.add(decade + 9);
 			}
 		}
 
@@ -1796,11 +1793,16 @@ public class RESTMusicService implements MusicService {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
-			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
-			SearchCritera critera = new SearchCritera(searchCriteria, 0, 0, 1);
-			SearchResult result = searchNew(critera, context, progressListener);
-			if(result.getSongs().size() == 1){
-				id = result.getSongs().get(0).getId();
+			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(Util.getRestUrlHash(context, getInstance(context)), id);
+			if(cachedSongId != null) {
+				id = cachedSongId.getSecond();
+			} else {
+				String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+				SearchCritera critera = new SearchCritera(searchCriteria, 0, 0, 1);
+				SearchResult result = searchNew(critera, context, progressListener);
+				if (result.getSongs().size() == 1) {
+					id = result.getSongs().get(0).getId();
+				}
 			}
 		}
 

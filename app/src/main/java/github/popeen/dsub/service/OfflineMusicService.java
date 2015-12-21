@@ -56,8 +56,10 @@ import github.popeen.dsub.domain.Share;
 import github.popeen.dsub.domain.User;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.FileUtil;
+import github.popeen.dsub.util.Pair;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.SilentBackgroundTask;
+import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.Util;
 import java.io.*;
 import java.util.Comparator;
@@ -99,7 +101,6 @@ public class OfflineMusicService implements MusicService {
         }
 		
         Indexes indexes = new Indexes(0L, Collections.<Artist>emptyList(), artists, entries);
-		indexes.sortChildren(context);
 		return indexes;
     }
 
@@ -556,9 +557,15 @@ public class OfflineMusicService implements MusicService {
 		SharedPreferences.Editor offlineEditor = offline.edit();
 		
 		if(id.indexOf(cacheLocn) != -1) {
-			String scrobbleSearchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
-			offlineEditor.putString(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles, scrobbleSearchCriteria);
-			offlineEditor.remove(Constants.OFFLINE_SCROBBLE_ID + scrobbles);
+			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(id);
+			if(cachedSongId != null) {
+				offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, cachedSongId.getSecond());
+				offlineEditor.remove(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles);
+			} else {
+				String scrobbleSearchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+				offlineEditor.putString(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles, scrobbleSearchCriteria);
+				offlineEditor.remove(Constants.OFFLINE_SCROBBLE_ID + scrobbles);
+			}
 		} else {
 			offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, id);
 			offlineEditor.remove(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles);

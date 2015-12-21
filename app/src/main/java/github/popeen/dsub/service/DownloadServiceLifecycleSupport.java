@@ -43,7 +43,9 @@ import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.util.CacheCleaner;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.FileUtil;
+import github.popeen.dsub.util.Pair;
 import github.popeen.dsub.util.SilentBackgroundTask;
+import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.Util;
 
 import static github.popeen.dsub.domain.PlayerState.PREPARING;
@@ -323,8 +325,12 @@ public class DownloadServiceLifecycleSupport {
 
 						MusicDirectory.Entry currentPlaying = state.songs.get(index);
 						List<MusicDirectory.Entry> songs = new ArrayList<>();
+
+						SongDBHandler dbHandler = SongDBHandler.getHandler(downloadService);
 						for(MusicDirectory.Entry song: state.songs) {
-							if(song.isOnlineId(downloadService)) {
+							Pair<Integer, String> onlineSongIds = dbHandler.getOnlineSongId(song);
+							if(onlineSongIds != null && onlineSongIds.getSecond() != null) {
+								song.setId(onlineSongIds.getSecond());
 								songs.add(song);
 							}
 						}

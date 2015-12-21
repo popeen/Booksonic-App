@@ -96,7 +96,7 @@ public class ImageLoader {
 				if(evicted) {
 					if((oldBitmap != nowPlaying && oldBitmap != nowPlayingSmall) || clearingCache) {
 						oldBitmap.recycle();
-					} else {
+					} else if(oldBitmap != newBitmap) {
 						cache.put(key, oldBitmap);
 					}
 				}
