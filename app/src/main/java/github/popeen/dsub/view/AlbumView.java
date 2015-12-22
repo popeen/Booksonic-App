@@ -68,6 +68,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	}
 
 	protected void setObjectImpl(MusicDirectory.Entry album, ImageLoader imageLoader) {
+        titleView.setText(album.getAlbumDisplay());
 		String artist = "";
 		if(showArtist) {
 			artist = album.getArtist();

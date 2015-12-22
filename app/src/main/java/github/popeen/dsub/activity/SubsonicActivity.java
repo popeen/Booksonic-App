@@ -120,11 +120,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 	@Override
 	protected void onCreate(Bundle bundle) {
-		if(!Constants.PLAY_VERSION) {
-			UpdateApp updateApp = new UpdateApp();
-			updateApp.setContext(this);
-			updateApp.execute();
-		}
 
 		UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
 		if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
@@ -173,10 +168,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			Util.getPreferences(this).registerOnSharedPreferenceChangeListener(preferencesListener);
 		}
 	}
-    public void longToast(String msg){
-        Toast t = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
-        t.show();
-    }
+
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
