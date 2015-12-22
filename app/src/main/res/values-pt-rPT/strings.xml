@@ -44,7 +44,7 @@
 	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Bem-vindo!</string>
-    <string name="main.welcome_text">Bem-vindo ao DSub! De momento a aplicação está configurada para usar o servidor de demonstração do Subsonic. Depois de configurar o seu servidor pessoal (disponível em <b>subsonic.org</b>), vá às <b>Definições</b> e altere as configurações de modo a que possa conectar-se.</string>
+    <string name="main.welcome_text">Bem-vindo ao DSub! De momento a aplicação está configurada para usar o servidor de demonstração do Booksonic. Depois de configurar o seu servidor pessoal (disponível em <b>booksonic.org</b>), vá às <b>Definições</b> e altere as configurações de modo a que possa conectar-se.</string>
 	<string name="main.about_title">Sobre o DSub</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
@@ -118,7 +118,7 @@
 	<string name="playlist.update_info">Atualizar informação</string>
 	<string name="playlist.updated_info">Informação atualizada para a lista de reprodução %s</string>
 	<string name="playlist.updated_info_error">Falha ao atualizar a informação da lista de reprodução %s</string>
-	<string name="playlist.overwrite">Substituir lista de reprodução atual</string>
+	<string name="playlist.overwrite">Bookstituir lista de reprodução atual</string>
 	<string name="playlist.add_to">Adicionar à lista de reprodução</string>
 	<string name="playlist.create_new">Criar nova</string>
 	<string name="playlist.delete">Eliminar lista de reprodução</string>
@@ -147,7 +147,7 @@
     <string name="select_album.no_network">Aviso: Sem ligação à rede.</string>
 	<string name="select_album.no_room">Aviso: apenas tem %s restantes</string>
     <string name="select_album.not_licensed">Servidor sem licença. %d dias de teste restantes.</string>
-    <string name="select_album.donate_dialog_message">Obtenha transferências ilimitadas ao doar para o Subsonic.</string>
+    <string name="select_album.donate_dialog_message">Obtenha transferências ilimitadas ao doar para o Booksonic.</string>
     <string name="select_album.donate_dialog_now">Agora</string>
     <string name="select_album.donate_dialog_later">Depois</string>
     <string name="select_album.donate_dialog_0_trial_days_left">Período de teste terminado</string>
@@ -206,9 +206,9 @@
     <string name="download.jukebox_on">Controlo remoto ligado. A música será reproduzida no computador.</string>
     <string name="download.jukebox_off">Controlo remoto desligado. A música será reproduzida no dispositivo móvel.</string>
     <string name="download.jukebox_volume">Volume remoto</string>
-    <string name="download.jukebox_server_too_old">Controlo remoto não é suportado. Por favor atualize o seu servidor Subsonic.</string>
+    <string name="download.jukebox_server_too_old">Controlo remoto não é suportado. Por favor atualize o seu servidor Booksonic.</string>
     <string name="download.jukebox_offline">Controlo remoto não está disponível em modo offline.</string>
-    <string name="download.jukebox_not_authorized">Controlo remoto não é permitido. Por favor ative o modo jukebox em <b>Utilizadores &gt; Definições</b> no seu servidor Subsonic.</string>
+    <string name="download.jukebox_not_authorized">Controlo remoto não é permitido. Por favor ative o modo jukebox em <b>Utilizadores &gt; Definições</b> no seu servidor Booksonic.</string>
 	<string name="download.timer_length">Temporizador:</string>
 	<string name="download.start_timer">Iniciar temporizador</string>
 	<string name="download.stop_time_remaining">Para em %1$s</string>
@@ -357,7 +357,7 @@
     <string name="settings.search_history_cleared">Histório de pesquisa apagado</string>
     <string name="settings.other_title">Outras definições</string>
     <string name="settings.scrobble_title">Scrobble para Last.FM</string>
-    <string name="settings.scrobble_summary">Lembrar de configurar o utilizador e palavra-passe do Last.FM no servidor Subsonic.</string>
+    <string name="settings.scrobble_summary">Lembrar de configurar o utilizador e palavra-passe do Last.FM no servidor Booksonic.</string>
     <string name="settings.hide_media_title">Ocultar do resto</string>
     <string name="settings.hide_media_summary">Ocultar ficheiros de música das outras aplicações.</string>
     <string name="settings.hide_media_toast">As mudanças terão efeito na próxima vez que o Android procure músicas no seu dispositivo móvel.</string>
@@ -394,8 +394,8 @@
 	<string name="settings.chat_enabled_summary">Mostrar ou não a opção de chat no menu lateral</string>
 	<string name="settings.video_title">Vídeo</string>
 	<string name="settings.video_player">Reprodutor de vídeo</string>
-	<string name="settings.video_raw">Raw (Requer Subsonic 4.8+)</string>
-	<string name="settings.video_hls">HTTP Live Stream (HLS) (Requer Subsonic 4.8+)</string>
+	<string name="settings.video_raw">Raw</string>
+	<string name="settings.video_hls">HTTP Live Stream (HLS)</string>
 	<string name="settings.video_transcode">Transcodificação direta (Requísitos de vídeo -> mp4 ou configuração similar no servidor</string>
 	<string name="settings.video_flash">Flash (Requer plugin)</string>
 	<string name="settings.cache_screen_title">Cache/Ligação</string>
@@ -440,14 +440,14 @@
 	<string name="settings.menu_options.shared_summary">Mostrar \"Partilhar\" nos menus</string>
 	<string name="settings.menu_options.rate_summary">Mostrar \"Classificar\" nos menus</string>
 	<string name="settings.browse_by_tags">Procurar por tags</string>
-	<string name="settings.browse_by_tags_summary">Procurar por tags em vez da estrutura das pastas.  Requer Subsonic 4.7+</string>
+	<string name="settings.browse_by_tags_summary">Procurar por tags em vez da estrutura das pastas.</string>
 	<string name="settings.disable_exit_prompt">Desativar diálogo de saída</string>
 	<string name="settings.disable_exit_prompt_summary">Fecha a aplicação imediatamente após pressionar o botão voltar no ecrã inicial</string>
 	<string name="settings.override_system_language">Sobrepor linguagem do sistema</string>
 	<string name="settings.override_system_language_summary">Mostra a aplicação em inglês mesmo se o DSub tiver uma tradução disponível para a linguagem do sistema.  Talvez seja necessário limpar a aplicação da memória para as alterações terem efeito.</string>
 	<string name="settings.drawer_items_title">Separadores laterais</string>
 	<string name="settings.play_now_after">Reproduzir agora - Depois</string>
-	<string name="settings.play_now_after_summary">A opção \"Reproduzir agora\" do menu de contexto reproduz todos os itens a seguir ao item selecionado (como na interface web do Subsonic)</string>
+	<string name="settings.play_now_after_summary">A opção \"Reproduzir agora\" do menu de contexto reproduz todos os itens a seguir ao item selecionado (como na interface web do Booksonic)</string>
 	<string name="settings.large_album_art">Grandes capas de álbum</string>
 	<string name="settings.large_album_art_summary">Mostra os álbuns com uma grande capa em vez de em lista</string>
 	<string name="settings.admin_enabled">Administração ativa</string>
@@ -549,9 +549,9 @@
     <string name="service.connecting">A contactar o servidor, por favor aguarde.</string>
 
     <string name="parser.upgrade_client">Versões incompatíveis. Por favor atualize o DSub.</string>
-    <string name="parser.upgrade_server">Versões incompatíveis. Por favor atualize o servidor Subsonic.</string>
+    <string name="parser.upgrade_server">Versões incompatíveis. Por favor atualize o servidor Booksonic.</string>
     <string name="parser.not_authenticated">Nome de utilizador ou palavra-passe errados.</string>
-    <string name="parser.not_authorized">Não autorizado. Verifique as permissões no servidor Subsonic.</string>
+    <string name="parser.not_authorized">Não autorizado. Verifique as permissões no servidor Booksonic.</string>
     <string name="parser.artist_count">Obtidos %d artistas.</string>
 	<string name="parser.server_error">Erro no servidor: %s</string>
 	<string name="parser.scan_count">Analisadas %d entradas</string>

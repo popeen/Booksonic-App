@@ -44,8 +44,8 @@
 	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Välkommen!</string>
-    <string name="main.welcome_text">Välkommen till Booksonic! Appen är för tillfället konfigurerad till att använda Subsonics demo server.
-        När du har satt upp din egen server (hämtas på <b>subsonic.org</b>), kan du gå till inställningar och ändra konfigurationen till att ansluta till den.</string>
+    <string name="main.welcome_text">Välkommen till Booksonic! Appen är för tillfället konfigurerad till att använda Booksonics demo server.
+        När du har satt upp din egen server (hämtas på <b>booksonic.org</b>), kan du gå till inställningar och ändra konfigurationen till att ansluta till den.</string>
 	<string name="main.about_title">Om Booksonic</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
@@ -148,10 +148,10 @@
     <string name="select_album.no_network">Varning: Inget nätverk tillgängligt.</string>
 	<string name="select_album.no_room">Varning: Du har bara %s kvar</string>
     <string name="select_album.not_licensed">Servern är inte licenserad. %d testdagar kvar.</string>
-    <string name="select_album.donate_dialog_message">Få oändliga nedladdningar genom att donera till Subsonic.</string>
+    <string name="select_album.donate_dialog_message">Få oändliga nedladdningar genom att donera till Booksonic.</string>
     <string name="select_album.donate_dialog_now">Nu</string>
     <string name="select_album.donate_dialog_later">Senare</string>
-    <string name="select_album.donate_dialog_0_trial_days_left">Testperioden är slut. Donera till Subsonic för att fortsätta</string>
+    <string name="select_album.donate_dialog_0_trial_days_left">Testperioden är slut. Donera till Booksonic för att fortsätta</string>
 
     <string name="offline.sync_dialog_title">Offline spår väntar på att bli synkroniserade</string>
     <string name="offline.sync_dialog_message">Processar %1$d offline scrobbles?
@@ -206,9 +206,9 @@
     <string name="download.jukebox_on">Startade fjärrkontroll. Musiken spelas upp på datorn.</string>
     <string name="download.jukebox_off">Stängde av fjärrkontroll. Musiken spelas upp på telefonen.</string>
     <string name="download.jukebox_volume">Fjärrkontroll volym</string>
-    <string name="download.jukebox_server_too_old">Fjärrkontroll stöds inte. Uppdatera din Subsonic server.</string>
+    <string name="download.jukebox_server_too_old">Fjärrkontroll stöds inte. Uppdatera din Booksonic server.</string>
     <string name="download.jukebox_offline">Fjärrkontroll fungerar inte i offline läge.</string>
-    <string name="download.jukebox_not_authorized">Fjärrkontroll acceptaras inte. Acceptera Jukebox läge i <b>Användare &gt; Inställningar</b> på din Subsonic server.</string>
+    <string name="download.jukebox_not_authorized">Fjärrkontroll acceptaras inte. Acceptera Jukebox läge i <b>Användare &gt; Inställningar</b> på din Booksonic server.</string>
 	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Starta timer</string>
 	<string name="download.stop_time_remaining">Stoppa om %1$s</string>
@@ -355,7 +355,7 @@
     <string name="settings.search_history_cleared">Sökhistoriken har rensats</string>
     <string name="settings.other_title">Andra inställningar</string>
     <string name="settings.scrobble_title">Scrobble till Last.fm</string>
-    <string name="settings.scrobble_summary">Kom ihåg att ställa in Last.fm användarnamn och lösenord på Subsonic servern</string>
+    <string name="settings.scrobble_summary">Kom ihåg att ställa in Last.fm användarnamn och lösenord på Booksonic servern</string>
     <string name="settings.hide_media_title">Dölj för andra</string>
     <string name="settings.hide_media_summary">Dölj spår för andra appar.</string>
     <string name="settings.hide_media_toast">Börjar gälla nästa gång Android skannar din telefon efter musikfiler.</string>
@@ -392,8 +392,8 @@
 	<string name="settings.chat_enabled_summary">Om chatten ska visas i menyn till vänster</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Video spelare</string>
-	<string name="settings.video_raw">Raw (kräver Subsonic 4.8+)</string>
-	<string name="settings.video_hls">HTTP Live Stream (HLS) (kräver Subsonic 4.8+)</string>
+	<string name="settings.video_raw">Raw</string>
+	<string name="settings.video_hls">HTTP Live Stream (HLS)</string>
 	<string name="settings.video_transcode">Direct Transcode (kräver video -> mp4 eller liknande installerat på servern)</string>
 	<string name="settings.video_flash">Flash (kräver plugin)</string>
 	<string name="settings.cache_screen_title">Cache/Nätverk</string>
@@ -438,14 +438,14 @@
 	<string name="settings.menu_options.shared_summary">Visa dela i menyer</string>
 	<string name="settings.menu_options.rate_summary">Visa omdömme i menyer</string>
 	<string name="settings.browse_by_tags">Navigera via taggar</string>
-	<string name="settings.browse_by_tags_summary">Navigera via taggar istället för mappstruktur.  Kräver Subsonic 4.7+</string>
+	<string name="settings.browse_by_tags_summary">Navigera via taggar istället för mappstruktur.</string>
 	<string name="settings.disable_exit_prompt">Avaktivera stäng ner rutan</string>
 	<string name="settings.disable_exit_prompt_summary">Stäng appen direkt när jag trycker bakåt på hemskärmen</string>
 	<string name="settings.override_system_language">Ignorera systemspråket</string>
-	<string name="settings.override_system_language_summary">Visa appen på engelska även om systemet är på ett språk Subsonic har stöd för. Du kan eventuellt behöva rensa appen från minnet för att det ska ta effekt.</string>
+	<string name="settings.override_system_language_summary">Visa appen på engelska även om systemet är på ett språk Booksonic har stöd för. Du kan eventuellt behöva rensa appen från minnet för att det ska ta effekt.</string>
 	<string name="settings.drawer_items_title">Sidoflikar</string>
 	<string name="settings.play_now_after">Spela nu - Efter</string>
-	<string name="settings.play_now_after_summary">Spela nu i context menyn spelar allt efter spåret (som i Subsonic webb GUI)</string>
+	<string name="settings.play_now_after_summary">Spela nu i context menyn spelar allt efter spåret (som i Booksonic webb GUI)</string>
 	<string name="settings.large_album_art">Stora bokomslag</string>
 	<string name="settings.large_album_art_summary">Visa böcker med stora omslag istället för en lista</string>
 	<string name="settings.admin_enabled">Admin aktiverad</string>
@@ -549,7 +549,7 @@
     <string name="parser.upgrade_client">Okompatibel version. Uppgradera Booksonic.</string>
     <string name="parser.upgrade_server">Okompatibel version. Uppgradera din server.</string>
     <string name="parser.not_authenticated">Ogiltigt användarnamn eller lösenord.</string>
-    <string name="parser.not_authorized">Inte auktoriserad. Kontrollera tillstånd på din Subsonic server.</string>
+    <string name="parser.not_authorized">Inte auktoriserad. Kontrollera tillstånd på din Booksonic server.</string>
     <string name="parser.artist_count">Har %d författare.</string>
 	<string name="parser.server_error">Server fel: %s</string>
 	<string name="parser.scan_count">Scannade %d rader</string>

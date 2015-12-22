@@ -39,7 +39,7 @@
 	<string name="button_bar.downloading">Téléchargement</string>
 
     <string name="main.welcome_title">Bienvenue !</string>
-    <string name="main.welcome_text">Bienvenue dans Booksonic ! L\'application est actuellement configurée pour se connecter au serveur de démo Subsonic (<b>demo.subsonic.org</b>). Vous pouvez configurer votre propre serveur dans les paramètres. Choisir <b>Paramètres</b> et mettre à jour la configuration pour vous y connecter.</string>
+    <string name="main.welcome_text">Bienvenue dans Booksonic ! L\'application est actuellement configurée pour se connecter au serveur de démo Booksonic. Vous pouvez configurer votre propre serveur dans les paramètres. Choisir <b>Paramètres</b> et mettre à jour la configuration pour vous y connecter.</string>
     	<string name="main.about_title">A propos de Booksonic</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
@@ -129,7 +129,7 @@
     <string name="select_album.no_sdcard">Erreur : Aucune carte SD card disponible.</string>
     <string name="select_album.no_network">Problème : Aucun réseau disponible.</string>
     <string name="select_album.not_licensed">Serveur sans licence valide. %d jours restant.</string>
-    <string name="select_album.donate_dialog_message">Téléchargement illimité en supportant Subsonic.</string>
+    <string name="select_album.donate_dialog_message">Téléchargement illimité en supportant Booksonic.</string>
     <string name="select_album.donate_dialog_now">Maintenant</string>
     <string name="select_album.donate_dialog_later">Plus tard</string>
     <string name="select_album.donate_dialog_0_trial_days_left">La période d\'essai est terminée</string>
@@ -186,9 +186,9 @@
     <string name="download.jukebox_on">Télécommande activée. La musique est diffusée sur l\'ordinateur.</string>
     <string name="download.jukebox_off">Télécommande désactivée. La musique est diffusée sur le mobile.</string>
     <string name="download.jukebox_volume">Volume distant</string>
-    <string name="download.jukebox_server_too_old">Télécommande non supportée. Mettre à jour le serveur Subsonic.</string>
+    <string name="download.jukebox_server_too_old">Télécommande non supportée. Mettre à jour le serveur Booksonic.</string>
     <string name="download.jukebox_offline">La télécommande n\'est pas disponible en mode déconnecté.</string>
-    <string name="download.jukebox_not_authorized">Mode télécommande non autorisée. Activer le mode jukebox.<b>Users &gt; Settings</b> on your Subsonic server.</string>
+    <string name="download.jukebox_not_authorized">Mode télécommande non autorisée. Activer le mode jukebox.<b>Users &gt; Settings</b> on your Booksonic server.</string>
 	<string name="download.timer_length">Minuteur :</string>
 	<string name="download.start_timer">Démarrer le minuteur</string>
 	<string name="download.need_download">La vidéo doit d\'abord être téléchargée</string>
@@ -332,7 +332,7 @@
     <string name="settings.search_history_cleared">Rechercher dans l\'historique effacé</string>
     <string name="settings.other_title">Autres paramètres</string>
     <string name="settings.scrobble_title">Publier vers Last.fm</string>
-    <string name="settings.scrobble_summary">Penser à paramétrer votre compte Last.fm sur le serveur Subsonic</string>
+    <string name="settings.scrobble_summary">Penser à paramétrer votre compte Last.fm sur le serveur Booksonic</string>
     <string name="settings.hide_media_title">Invisible pour les autres</string>
     <string name="settings.hide_media_summary">Rendre les fichiers de musique indisponibles pour les autres applications.</string>
     <string name="settings.hide_media_toast">Prendra effet au prochain scan de musique d\'Android.</string>
@@ -364,8 +364,8 @@
 	<string name="settings.chat_enabled_summary">Afficher ou non la zone de chat</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Lecteur vidéo</string>
-	<string name="settings.video_raw">Raw (Necessite Subsonic 4.8+)</string>
-	<string name="settings.video_hls">HTTP Live Stream (HLS) (Necessite Subsonic 4.8+)</string>
+	<string name="settings.video_raw">Raw</string>
+	<string name="settings.video_hls">HTTP Live Stream (HLS)</string>
 	<string name="settings.video_transcode">Direct Transcode (Necessite video -&gt; mp4 ou paramétrage identique sur le serveur)</string>
 	<string name="settings.video_flash">Flash Necessite le Plugin)</string>
 	<string name="settings.cache_screen_title">Tampon/Réseau</string>
@@ -407,12 +407,12 @@
 	<string name="settings.menu_options.shared_summary">Afficher Partager dans les menus</string>
 	<string name="settings.menu_options.rate_summary">Montrer les notes dans les menus</string>
 	<string name="settings.browse_by_tags">Naviguer via les tags</string>
-	<string name="settings.browse_by_tags_summary">Naviguer via les tags plutôt que via l\'arborescence de fichier.  Nécessite Subsonic 4.7+</string>
+	<string name="settings.browse_by_tags_summary">Naviguer via les tags plutôt que via l\'arborescence de fichier.</string>
 	<string name="settings.override_system_language">Ne pas utiliser la langue du système</string>
 	<string name="settings.override_system_language_summary">Afficher Booksonic en Anglais même si une traduction existe pour la langue système. Peut nécessiter un vidage du cache de l\'application.</string>
 	<string name="settings.drawer_items_title">Entrées de menu</string>
 	<string name="settings.play_now_after">Jouer maintenant - Plus tard</string>
-	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Subsonic web GUI)</string>
+	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Booksonic web GUI)</string>
 	<string name="settings.large_album_art">Pochettes larges</string>
 	<string name="settings.large_album_art_summary">Afficher les pochettes en grand plutôt qu\'en liste.</string>
 	<string name="settings.admin_enabled">Administration</string>
@@ -494,9 +494,9 @@
     <string name="service.connecting">Interrogation du serveur, veuillez patienter.</string>
 
     <string name="parser.upgrade_client"> Versions incompatible. Mettre à jour Booksonic.</string>
-    <string name="parser.upgrade_server">Versions incompatibles. Mettre à jour le serveur Subsonic.</string>
+    <string name="parser.upgrade_server">Versions incompatibles. Mettre à jour le serveur Booksonic.</string>
     <string name="parser.not_authenticated">Mauvais nom d\'utilisateur ou mot de passe.</string>
-    <string name="parser.not_authorized">Non autorisé. Vérifier les droit de l\'utilisateur sur le serveur Subsonic.</string>
+    <string name="parser.not_authorized">Non autorisé. Vérifier les droit de l\'utilisateur sur le serveur Booksonic.</string>
     <string name="parser.artist_count">%d artistes récupérés.</string>
 	<string name="parser.server_error">Erreur serveur : %s</string>
 	<string name="parser.scan_count">%d entrées trouvées</string>

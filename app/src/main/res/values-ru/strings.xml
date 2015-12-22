@@ -29,7 +29,7 @@
     <string name="button_bar.now_playing">Плеер</string>
 
     <string name="main.welcome_title">Здравствуйте!</string>
-    <string name="main.welcome_text">Добро пожаловать в Booksonicub! Это приложение настроено на работу с демо сервером Subsonic. После настройки Вашего персонального сервера (доступен на <b>subsonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
+    <string name="main.welcome_text">Добро пожаловать в Booksonicub! Это приложение настроено на работу с демо сервером Booksonic. После настройки Вашего персонального сервера (доступен на <b>booksonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
 	
 	<string name="main.about_title">О программе Booksonic</string>
     <string name="main.select_server">Выбрать сервер</string>
@@ -89,7 +89,7 @@
     <string name="select_album.no_sdcard">Ошибка: SD карта недоступна</string>
     <string name="select_album.no_network">Внимание: сеть недоступна.</string>
     <string name="select_album.not_licensed">Сервер не лицензирован. %d дней до окончания пробного периода.</string>
-    <string name="select_album.donate_dialog_message">Осуществите пожертвование для Subsonic и получите возможность неограниченного скачивания.</string>
+    <string name="select_album.donate_dialog_message">Осуществите пожертвование для Booksonic и получите возможность неограниченного скачивания.</string>
     <string name="select_album.donate_dialog_now">Сейчас</string>
     <string name="select_album.donate_dialog_later">Позже</string>
     <string name="select_album.donate_dialog_0_trial_days_left">Пробный период закончился</string>
@@ -118,9 +118,9 @@
     <string name="download.jukebox_on">Удаленное управление включено. Музыка воспроизводится на компьютере.</string>
     <string name="download.jukebox_off">Удаленное управление отключено. Музыка воспроизводится на устройстве.</string>
     <string name="download.jukebox_volume">Удаленное управление громкостью</string>
-    <string name="download.jukebox_server_too_old">Удаленное управление не поддерживается. Пожалуйста, обновите Ваш сервер Subsonic.</string>
+    <string name="download.jukebox_server_too_old">Удаленное управление не поддерживается. Пожалуйста, обновите Ваш сервер Booksonic.</string>
     <string name="download.jukebox_offline">Удаленное управление не поддерживается в оффлайн режиме.</string>
-    <string name="download.jukebox_not_authorized">Удаленное управление запрещено. Пожалуйста, активируйте режим jukebox в разделе <b>Настройки &gt; Проигрыватели</b> на вашем сервере Subsonic.</string>
+    <string name="download.jukebox_not_authorized">Удаленное управление запрещено. Пожалуйста, активируйте режим jukebox в разделе <b>Настройки &gt; Проигрыватели</b> на вашем сервере Booksonic.</string>
 	<string name="download.timer_length">Длительность</string>
 	<string name="download.start_timer">Запустить таймер</string>
     <string name="download.need_download">Необходимо сначала скачать видео</string>
@@ -243,9 +243,9 @@
     <string name="service.connecting">Подключение к серверу. Пожалуйста, подождите.</string>
 
     <string name="parser.upgrade_client">Несовместимые версии. Пожалуйста, обновите приложение Booksonic для Android.</string>
-    <string name="parser.upgrade_server">Несовместимые версии. Пожалуйста, обновите сервер Subsonic.</string>
+    <string name="parser.upgrade_server">Несовместимые версии. Пожалуйста, обновите сервер Booksonic.</string>
     <string name="parser.not_authenticated">Неправильное имя пользователя или пароль.</string>
-    <string name="parser.not_authorized">Не авторизирован. Проверьте права пользователя на сервере Subsonic.</string>
+    <string name="parser.not_authorized">Не авторизирован. Проверьте права пользователя на сервере Booksonic.</string>
     <string name="parser.artist_count">Получено %d исполнителей.</string>
 
     <string name="select_artist.refresh">Обновить</string>

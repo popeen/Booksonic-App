@@ -44,8 +44,8 @@
 	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Üdvözlet!</string>
-    <string name="main.welcome_text">Üdvözli a Booksonic! Az alkalmazás jelenleg egy Subsonic demo kiszolgálóhoz van beállítva. Miután konfigurálta saját kiszolgálóját
-	(elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba és adja meg a kapcsolódási adatokat!</string>
+    <string name="main.welcome_text">Üdvözli a Booksonic! Az alkalmazás jelenleg egy Booksonic demo kiszolgálóhoz van beállítva. Miután konfigurálta saját kiszolgálóját
+	(elérhető: <b>booksonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba és adja meg a kapcsolódási adatokat!</string>
 	<string name="main.about_title">Booksonic információk</string>
 	<string name="main.faq_title">GYIK</string>
 	<string name="main.faq_text">
@@ -148,7 +148,7 @@
     <string name="select_album.no_network">Figyelem: Hálózat nem áll rendelkezésre!</string>
 	<string name="select_album.no_room">Figyelem: Már csak %s hely áll rendelkezésre!</string>
     <string name="select_album.not_licensed">A kiszolgálónak nincs licence! %d próbanap van hátra!</string>
-    <string name="select_album.donate_dialog_message">Korlátlan letöltéshez juthat a Subsonic támogatásával!</string>
+    <string name="select_album.donate_dialog_message">Korlátlan letöltéshez juthat a Booksonic támogatásával!</string>
     <string name="select_album.donate_dialog_now">Most</string>
     <string name="select_album.donate_dialog_later">Később</string>
     <string name="select_album.donate_dialog_0_trial_days_left">A próbaidőszak lejárt!</string>
@@ -207,9 +207,9 @@
     <string name="download.jukebox_on">Távvezérlés bekapcsolása. A zenelejátszás a számítógépen történik.</string>
     <string name="download.jukebox_off">Távvezérlés kikapcsolása. A zenelejátszás az eszközön történik.</string>
     <string name="download.jukebox_volume">Hangerő távvezérlése</string>
-    <string name="download.jukebox_server_too_old">A távvezérlés nem támogatott. Kérjük, frissítse a Subsonic kiszolgálót!</string>
+    <string name="download.jukebox_server_too_old">A távvezérlés nem támogatott. Kérjük, frissítse a Booksonic kiszolgálót!</string>
     <string name="download.jukebox_offline">A távvezérlés nem lehetséges offline módban!</string>
-    <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Engedélyezze a Jukebox módot a <b>Users &gt; Settings</b> menüben a Subsonic kiszolgálón!</string>
+    <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Engedélyezze a Jukebox módot a <b>Users &gt; Settings</b> menüben a Booksonic kiszolgálón!</string>
 	<string name="download.timer_length">Időhossz:</string>
 	<string name="download.start_timer">Időzítő indítása</string>
 	<string name="download.stop_timer">Időzítő megállítása</string>
@@ -358,7 +358,7 @@
     <string name="settings.search_history_cleared">Keresési előzmények törölve</string>
     <string name="settings.other_title">Egyéb beállítások</string>
     <string name="settings.scrobble_title">Továbbítás Last.fm-re (Scrobbling)</string>
-    <string name="settings.scrobble_summary">A Last.fm felhasználónevet és jelszót be kell állítani a Subsonic kiszolgálón!</string>
+    <string name="settings.scrobble_summary">A Last.fm felhasználónevet és jelszót be kell állítani a Booksonic kiszolgálón!</string>
     <string name="settings.hide_media_title">Elrejtés</string>
     <string name="settings.hide_media_summary">Zenefájlok elrejtése egyéb alkalmazások elől.</string>
     <string name="settings.hide_media_toast">A következő alkalomtól lép életbe, amikor az Android zenefájlokat keres az eszközön.</string>
@@ -395,8 +395,8 @@
 	<string name="settings.chat_enabled_summary">Csevegés (Chat) menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.video_title">Videó</string>
 	<string name="settings.video_player">Videó-lejátszó</string>
-	<string name="settings.video_raw">Nyers (Subsonic 4.8-tól)</string>
-	<string name="settings.video_hls">HTTP Live Stream (HLS) (Subsonic 4.8-tól)</string>
+	<string name="settings.video_raw">Nyers</string>
+	<string name="settings.video_hls">HTTP Live Stream (HLS)</string>
 	<string name="settings.video_transcode">Közvetlen transzkódolás (video -> mp4, vagy hasonló beállítás szükséges a kiszolgálón!)</string>
 	<string name="settings.video_flash">Flash (Plugin szükséges!)</string>
 	<string name="settings.cache_screen_title">Gyorsítótár/Hálózat</string>
@@ -441,14 +441,14 @@
 	<string name="settings.menu_options.shared_summary">Megosztás opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.rate_summary">Értékelés opció megjelenítése a menüben.</string>
 	<string name="settings.browse_by_tags">Böngészés ID3 Tag alapján</string>
-	<string name="settings.browse_by_tags_summary">ID3 Tag alapú böngészés a mappastruktúra helyett. Subsonic 4.7+ verzió felett!</string>
+	<string name="settings.browse_by_tags_summary">ID3 Tag alapú böngészés a mappastruktúra helyett.</string>
 	<string name="settings.disable_exit_prompt">Kilépés megerősítésének tiltása</string>
 	<string name="settings.disable_exit_prompt_summary">Főoldalon a vissza gomb megnyomásakor azonnali kilépés az alkalmazásból.</string>
 	<string name="settings.override_system_language">A rendszer nyelvének felülbírálása</string>
 	<string name="settings.override_system_language_summary">A Booksonic megjelenítése angol nyelven abban az esetben is, ha rendelkezik fordítással. Az alkalmazást törölni kell a memóriából, mert a beállítás csak újraindítás után lép érvénybe!</string>
 	<string name="settings.drawer_items_title">Oldalsáv elemei</string>
 	<string name="settings.play_now_after">Lejátszás utána</string>
-	<string name="settings.play_now_after_summary">Egy helyi menü, amivel lehetővé válik minden dal lejátszása a kijelölt elem után (mint a Subsonic webes felületén)</string>
+	<string name="settings.play_now_after_summary">Egy helyi menü, amivel lehetővé válik minden dal lejátszása a kijelölt elem után (mint a Booksonic webes felületén)</string>
 	<string name="settings.large_album_art">Nagyméretű albumborítók</string>
 	<string name="settings.large_album_art_summary">Albumok megjelenítése rácsnézetben és nagyméretű albumborítóval a listanézet helyett.</string>
 	<string name="settings.admin_enabled">Admin engedélyezése</string>
@@ -550,9 +550,9 @@
     <string name="service.connecting">Kapcsolódás a kiszolgálóhoz, kérem várjon...</string>
 
     <string name="parser.upgrade_client">Nem kompatibilis verzió. Kérjük, frissítse a Booksonic Android alkalmazást!</string>
-    <string name="parser.upgrade_server">Nem kompatibilis verzió. Kérjük, frissítse a Subsonic kiszolgálót!</string>
+    <string name="parser.upgrade_server">Nem kompatibilis verzió. Kérjük, frissítse a Booksonic kiszolgálót!</string>
     <string name="parser.not_authenticated">Hibás felhasználónév vagy jelszó!</string>
-    <string name="parser.not_authorized">Nincs engedélyezve! Ellenőrizze a felhasználó jogosultságait a Subsonic kiszolgálón!</string>
+    <string name="parser.not_authorized">Nincs engedélyezve! Ellenőrizze a felhasználó jogosultságait a Booksonic kiszolgálón!</string>
     <string name="parser.artist_count">%d előadó található a médiatárban.</string>
 	<string name="parser.server_error">Kiszolgáló hiba: %s</string>
 	<string name="parser.scan_count">%d tétel átvizsgálva.</string>

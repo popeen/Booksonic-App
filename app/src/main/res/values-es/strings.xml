@@ -39,7 +39,7 @@
 	<string name="button_bar.admin">Admin</string>
 
     <string name="main.welcome_title">Bienvenido!</string>
-    <string name="main.welcome_text">Bienvenido a Booksonic! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
+    <string name="main.welcome_text">Bienvenido a Booksonic! Ahora la aplicación está configurada para usar el servidor de demostración de Booksonic. Cuando configures tu servidor personal (disponible en <b>Booksonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
 	<string name="main.about_title">Acerca de Booksonic</string>
 	<string name="main.select_server">Seleccionar servidor</string>
     <string name="main.shuffle">Reproducción aleatoria</string>
@@ -130,7 +130,7 @@
     <string name="select_album.no_sdcard">Error: No hay tarjeta SD disponible</string>
     <string name="select_album.no_network">Aviso: No hay red disponible</string>
     <string name="select_album.not_licensed">Servidor sin licencia. Quedan %d días de prueba</string>
-    <string name="select_album.donate_dialog_message">Consigue descargas ilimitadas haciendo una donación a Subsonic</string>
+    <string name="select_album.donate_dialog_message">Consigue descargas ilimitadas haciendo una donación a Booksonic</string>
     <string name="select_album.donate_dialog_now">Ahora</string>
     <string name="select_album.donate_dialog_later">Más tarde</string>
     <string name="select_album.donate_dialog_0_trial_days_left">Periodo de prueba terminado</string>
@@ -186,9 +186,9 @@
     <string name="download.jukebox_on">Control remoto encendido. La música se está reproduciendo en el ordenador.</string>
     <string name="download.jukebox_off">Control remoto apagado. La música se está reproduciendo en el dispositivo móvil.</string>
     <string name="download.jukebox_volume">Volumen remoto</string>
-    <string name="download.jukebox_server_too_old">Control remoto no soportado. Por favor, actualice su servidor Subsonic.</string>
+    <string name="download.jukebox_server_too_old">Control remoto no soportado. Por favor, actualice su servidor Booksonic.</string>
     <string name="download.jukebox_offline">Control remoto no disponible en modo offline.</string>
-    <string name="download.jukebox_not_authorized">Control remoto no permitido. Por favor, active el modo jukebox en <b>Users &gt; Settings</b> en su servidor Subsonic.</string>
+    <string name="download.jukebox_not_authorized">Control remoto no permitido. Por favor, active el modo jukebox en <b>Users &gt; Settings</b> en su servidor Booksonic.</string>
 	<string name="download.timer_length">Temporizador</string>
 	<string name="download.start_timer">Iniciar temporizador</string>
 	<string name="download.need_download">El vídeo ha de ser descargado antes</string>
@@ -352,8 +352,8 @@
 	<string name="settings.chat_enabled_summary">Para mostrar o no mostrar la pestaña de chat. Reinicia la aplicación tras el cambio.</string>
 	<string name="settings.video_title">Vídeo</string>
 	<string name="settings.video_player">Reproductor de vídeo</string>
-	<string name="settings.video_raw">Raw (Requiere Subsonic 4.8+)</string>
-	<string name="settings.video_hls">HTTP Live Stream (HLS) (Requiere Subsonic 4.8+)</string>
+	<string name="settings.video_raw">Raw</string>
+	<string name="settings.video_hls">HTTP Live Stream (HLS)</string>
 	<string name="settings.video_transcode">Transcodificación directa (Requisitos de vídeo -> configurar mp4 o similar en el servidor)</string>
 	<string name="settings.video_flash">Flash (Requiere Plugin)</string>
 	<string name="settings.cache_screen_title">Caché/Red</string>
@@ -393,7 +393,7 @@
 	<string name="settings.shares_enabled_summary">Mostrar o no mostrar la lista de compartidos en el menú desplegable</string>
 	<string name="settings.server_internal_address">Dirección de red interna</string>
 	<string name="settings.browse_by_tags">Explorar por tags</string>
-	<string name="settings.browse_by_tags_summary">Explorar por tags en vez de por estructura de carpetas. Requiere Subsonic 4.7+</string>
+	<string name="settings.browse_by_tags_summary">Explorar por tags en vez de por estructura de carpetas.</string>
 	<string name="settings.server_local_network_ssid" >SSID Red local</string>
 	<string name="settings.server_local_network_ssid_hint">SSID Actual: %s</string>
 	<string name="settings.cache_location_reset">No se puede escribir en la ubicación seleccionada para la caché. Si has actualizado recientemente el sistema operativo de tu dispositivo a KitKat 4.4, la manera en la que las apps escriben en la Tarjeta SD ha cambiado, por lo que sólo pueden escribir en una ubicación específica. La ubicación que utiliza Booksonic ha sido automáticamente cambiada por la ubicación correcta. Para eliminar todos los datos de la app anterior, tendrás que introducir la Tarjeta SD en el ordenador y eliminar la carpeta manualmente.</string>
@@ -401,7 +401,7 @@
 	<string name="settings.override_system_language_summary">Mostrar la aplicación en inglés aún teniendo disponible Booksonic en el idioma del sistema. Probablemente necesite borrar la aplicación de la memoria para efectuar los cambios.</string>
 	<string name="settings.drawer_items_title">Pestañas</string>
 	<string name="settings.play_now_after">Reproducir ahora - Después</string>
-	<string name="settings.play_now_after_summary">Pulsar "Reproducir ahora" desde el menú contextual actúa como la interfaz web de Subsonic, reproduciendo todos los items a partir del seleccionado</string>
+	<string name="settings.play_now_after_summary">Pulsar "Reproducir ahora" desde el menú contextual actúa como la interfaz web de Booksonic, reproduciendo todos los items a partir del seleccionado</string>
 	<string name="settings.large_album_art">Carátulas grandes</string>
 	<string name="settings.large_album_art_summary">Mostrar los discos con carátulas grandes en vez de en lista</string>
 	<string name="settings.admin_enabled">Admin Habilitado</string>
@@ -500,9 +500,9 @@
     <string name="service.connecting">Conectando con el servidor, espere por favor.</string>
 
     <string name="parser.upgrade_client">Versiones incompatibles. Por favor, actualice la aplicación Booksonic de Android.</string>
-    <string name="parser.upgrade_server">Versiones incompatibles. Por favor, actualice su servidor Subsonic.</string>
+    <string name="parser.upgrade_server">Versiones incompatibles. Por favor, actualice su servidor Booksonic.</string>
     <string name="parser.not_authenticated">Usuario o contraseña inconrrectos.</string>
-    <string name="parser.not_authorized">Sin autorización. Compruebe los permisos en el servidor Subsonic.</string>
+    <string name="parser.not_authorized">Sin autorización. Compruebe los permisos en el servidor Booksonic.</string>
     <string name="parser.artist_count">Recibidos %d artistas.</string>
 	<string name="parser.scan_count">Escaneados %d entradas</string>
 

@@ -207,9 +207,9 @@
     <string name="download.jukebox_on">Turned on remote control. Music is played on the computer.</string>
     <string name="download.jukebox_off">Turned off remote control. Music is played on the phone.</string>
     <string name="download.jukebox_volume">Remote volume</string>
-    <string name="download.jukebox_server_too_old">Remote control is not supported. Please upgrade your Subsonic server.</string>
+    <string name="download.jukebox_server_too_old">Remote control is not supported. Please upgrade your server.</string>
     <string name="download.jukebox_offline">Remote control is not available in offline mode.</string>
-    <string name="download.jukebox_not_authorized">Remote control is not allowed. Please enable jukebox mode in <b>Users &gt; Settings</b> on your Subsonic server.</string>
+    <string name="download.jukebox_not_authorized">Remote control is not allowed. Please enable jukebox mode in <b>Users &gt; Settings</b> on your server.</string>
 	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Start Timer</string>
 	<string name="download.stop_time_remaining">Stop in %1$s</string>
@@ -358,7 +358,7 @@
     <string name="settings.search_history_cleared">Search history cleared</string>
     <string name="settings.other_title">Other settings</string>
     <string name="settings.scrobble_title">Scrobble to Last.fm</string>
-    <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the Subsonic server</string>
+    <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the server</string>
     <string name="settings.hide_media_title">Hide from other</string>
     <string name="settings.hide_media_summary">Hide music files from other apps.</string>
     <string name="settings.hide_media_toast">Takes effect next time Android scans your phone for music.</string>
@@ -441,14 +441,14 @@
 	<string name="settings.menu_options.shared_summary">Show Share in menus</string>
 	<string name="settings.menu_options.rate_summary">Show Rating in menus</string>
 	<string name="settings.browse_by_tags">Browse By Tags</string>
-	<string name="settings.browse_by_tags_summary">Browse by tags instead of by folder structure.  Requires Subsonic 4.7+</string>
+	<string name="settings.browse_by_tags_summary">Browse by tags instead of by folder structure.</string>
 	<string name="settings.disable_exit_prompt">Disable Exit Prompt</string>
 	<string name="settings.disable_exit_prompt_summary">Exit the app immediately upon pressing back from the home screen</string>
 	<string name="settings.override_system_language">Override System Language</string>
 	<string name="settings.override_system_language_summary">Display app in english even if the system language is something Booksonic has a translation for.  May need to clear the app from memory for changes to take affect.</string>
 	<string name="settings.drawer_items_title">Drawer Tabs</string>
 	<string name="settings.play_now_after">Play Now - After</string>
-	<string name="settings.play_now_after_summary">Play Now context menu for a track plays everything after selected item (like the Subsonic web GUI)</string>
+	<string name="settings.play_now_after_summary">Play Now context menu for a track plays everything after selected item (like the Booksonic web GUI)</string>
 	<string name="settings.large_album_art">Large Book Covers</string>
 	<string name="settings.large_album_art_summary">Display books with large book covers instead of in a list</string>
 	<string name="settings.admin_enabled">Admin Enabled</string>
@@ -550,9 +550,9 @@
     <string name="service.connecting">Contacting server, please wait.</string>
 
     <string name="parser.upgrade_client">Incompatible versions. Please upgrade Booksonic.</string>
-    <string name="parser.upgrade_server">Incompatible versions. Please upgrade Subsonic server.</string>
+    <string name="parser.upgrade_server">Incompatible versions. Please upgrade server.</string>
     <string name="parser.not_authenticated">Wrong username or password.</string>
-    <string name="parser.not_authorized">Not authorized. Check user permissions in Subsonic server.</string>
+    <string name="parser.not_authorized">Not authorized. Check user permissions in the server.</string>
     <string name="parser.artist_count">Got %d authors.</string>
 	<string name="parser.server_error">Server error: %s</string>
 	<string name="parser.scan_count">Scanned %d entries</string>
