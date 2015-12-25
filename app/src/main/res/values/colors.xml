@@ -8,9 +8,14 @@
 	<color name="holo_green_light">#ff99cc00</color>
 	<color name="holo_red_light">#ffff4444</color>
 
-	<color name="lightPrimary">#273236</color>
-	<color name="lightPrimaryDark">#061d23</color>
-	<color name="lightAccent">#029688</color>
+    <color name="lightPrimary">#3083a7</color>
+    <color name="lightPrimaryDark">#3284a8</color>
+    <color name="lightAccent">#4aacd4</color>
+    <color name="lightBg">#eaf9fc</color>
+
+	<color name="lightPrimary_classic">#273236</color>
+	<color name="lightPrimaryDark_classic">#125f81</color>
+	<color name="lightAccent_classic">#56b9dd</color>
 
 	<color name="holoPrimary">#009688</color>
 	<color name="holoPrimaryDark">#00897b</color>
