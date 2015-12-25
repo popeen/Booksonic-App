@@ -30,7 +30,7 @@
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:singleLine="true"
 				android:ellipsize="marquee"
-				android:textColor="?android:textColorPrimary"
+				android:textColor="?android:textColorSecondary"
 				android:paddingLeft="@dimen/Card.TextLeftPadding"/>
 
 			<ImageView
@@ -42,4 +42,5 @@
 				android:paddingRight="2dp"
 				style="@style/BasicButton"/>
 		</LinearLayout>
-	</LinearLayout></github.popeen.dsub.view.CardView>
+	</LinearLayout>
+</github.popeen.dsub.view.CardView>

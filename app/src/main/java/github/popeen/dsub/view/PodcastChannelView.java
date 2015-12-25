@@ -19,6 +19,7 @@
 package github.popeen.dsub.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,9 @@ public class PodcastChannelView extends UpdateView<PodcastChannel> {
 		}
 
 		titleView = (TextView) findViewById(R.id.item_name);
+
+        titleView.setTextColor(Color.BLACK);
+
 		starButton = (ImageButton) findViewById(R.id.item_star);
 		if(starButton != null) {
 			starButton.setFocusable(false);

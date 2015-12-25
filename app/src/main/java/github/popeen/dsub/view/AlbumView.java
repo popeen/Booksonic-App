@@ -20,6 +20,7 @@
 package github.popeen.dsub.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -53,6 +54,10 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		coverArtView = findViewById(R.id.album_coverart);
 		titleView = (TextView) findViewById(R.id.album_title);
 		artistView = (TextView) findViewById(R.id.album_artist);
+
+        //TODO, should use theme color instead of static black
+        titleView.setTextColor(Color.BLACK);
+        artistView.setTextColor(Color.BLACK);
 
 		ratingBar = (RatingBar) findViewById(R.id.album_rating);
 		ratingBar.setFocusable(false);
