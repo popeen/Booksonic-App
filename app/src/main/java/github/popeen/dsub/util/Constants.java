@@ -34,8 +34,8 @@ public final class Constants {
     // Note: Keep it as low as possible to maintain compatibility with older servers.
     public static final String REST_PROTOCOL_VERSION_SUBSONIC = "1.2.0";
 	public static final String REST_PROTOCOL_VERSION_MADSONIC = "2.0.0";
-    public static final String REST_CLIENT_ID = "DSub";
-    public static final String CHROMECAST_CLIENT_ID = "DSubCC";
+    public static final String REST_CLIENT_ID = "Booksonic";
+    public static final String CHROMECAST_CLIENT_ID = "BooksonicCC";
 	public static final String LAST_VERSION = "subsonic.version";
 
     // Names for intent extras.
