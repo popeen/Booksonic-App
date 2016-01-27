@@ -31,6 +31,7 @@ import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.DownloadFile;
 import github.popeen.dsub.util.DrawableTint;
 import github.popeen.dsub.util.SQLiteHandler;
+import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.Util;
 
 import java.io.File;
@@ -95,12 +96,21 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	public void setObjectImpl(MusicDirectory.Entry song, Boolean checkable) {
 		this.checkable = checkable;
         ImageView heard = (ImageView) findViewById(R.id.track_heard);
-        boolean isHeared = true; //TODO Make this acctually check if it has been heard
-        if(this.sqlh.getTrack(song.getId())[0] != null){
-            heard.setVisibility(View.VISIBLE);
-        }else{
-            heard.setVisibility(View.GONE);
-        }
+
+		try{ //Podcast will always catch
+			Long[] dates = SongDBHandler.getHandler(context).getLastPlayed(song);
+			if(dates[1] != null && dates[1] != 0){ //Check if it has been listened to
+				heard.setVisibility(View.VISIBLE);
+			}else{
+				heard.setVisibility(View.GONE);
+			}
+		}catch(Exception e){ //TODO, This will not always register as listened to but will have to do until I add support for podcast inside try
+			if(this.sqlh.getTrack(song.getId())[0] != null){
+				heard.setVisibility(View.VISIBLE);
+			}else{
+				heard.setVisibility(View.GONE);
+			}
+		}
 
 		StringBuilder artist = new StringBuilder(40);
 

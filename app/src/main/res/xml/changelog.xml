@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.4" versioncode="6" releasedate="2016-01-27">
+        <change>Keeping track of played tracks should be much more reliable.</change>
+        <change>Updated DSub sources to 5.1.4</change>
+        <change>Other small bugfixes</change>
+    </release>
     <release version="1.0.3" versioncode="5" releasedate="2015-12-25">
         <change>Design tweaks</change>
         <change>Bugfixes</change>

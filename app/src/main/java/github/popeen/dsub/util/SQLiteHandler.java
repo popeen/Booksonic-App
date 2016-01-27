@@ -62,9 +62,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         try {
             cursor.moveToFirst();
             String[] track = new String[3];
-            track[0] = cursor.getString(0);
-            track[1] = cursor.getString(1);
-            track[2] = cursor.getString(2);
+            track[0] = cursor.getString(0); //id
+            track[1] = cursor.getString(1); //heard
+            track[2] = cursor.getString(2); //date
             return track;
         }catch(Exception e){}
         return new String[3];
