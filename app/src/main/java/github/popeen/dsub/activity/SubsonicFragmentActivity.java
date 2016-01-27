@@ -151,6 +151,14 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				}
 			}
 			currentFragment = getNewFragment(fragmentType);
+			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_ID)) {
+				Bundle currentArguments = currentFragment.getArguments();
+				if(currentArguments == null) {
+					currentArguments = new Bundle();
+				}
+				currentArguments.putString(Constants.INTENT_EXTRA_NAME_ID, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ID));
+				currentFragment.setArguments(currentArguments);
+			}
 			currentFragment.setPrimaryFragment(true);
 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 
@@ -196,6 +204,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 				// Disable custom view before switching
 				getSupportActionBar().setDisplayShowCustomEnabled(false);
+				getSupportActionBar().setDisplayShowTitleEnabled(true);
 
 				bottomBar.setVisibility(View.GONE);
 				nowPlayingToolbar.setVisibility(View.VISIBLE);
@@ -226,6 +235,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 					openNowPlaying();
 				}
 			}, 200);
+
+			getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD);
 		}
 
 		bottomBar = findViewById(R.id.bottom_bar);
@@ -853,7 +864,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex) {
 		if(this.currentPlaying != currentPlaying || this.currentPlaying == null) {
 			onSongChanged(currentPlaying, currentPlayingIndex);
-			onMetadataUpdate(currentPlaying != null ? currentPlaying.getSong() : null, DownloadService.METADATA_UPDATED_ALL);
 		}
 	}
 
@@ -871,7 +881,21 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	}
 
 	@Override
-	public void onMetadataUpdate(MusicDirectory.Entry entry, int fieldChange) {
+	public void onMetadataUpdate(MusicDirectory.Entry song, int fieldChange) {
+		if(song != null && coverArtView != null && fieldChange == DownloadService.METADATA_UPDATED_COVER_ART) {
+			int height = coverArtView.getHeight();
+			if (height <= 0) {
+				int[] attrs = new int[]{R.attr.actionBarSize};
+				TypedArray typedArray = this.obtainStyledAttributes(attrs);
+				height = typedArray.getDimensionPixelSize(0, 0);
+				typedArray.recycle();
+			}
+			getImageLoader().loadImage(coverArtView, song, false, height, false);
 
+			// We need to update it immediately since it won't update if updater is not running for it
+			if(nowPlayingFragment != null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+				nowPlayingFragment.onMetadataUpdate(song, fieldChange);
+			}
+		}
 	}
 }

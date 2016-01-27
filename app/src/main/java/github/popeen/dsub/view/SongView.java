@@ -20,6 +20,7 @@ package github.popeen.dsub.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -42,7 +43,9 @@ import java.io.File;
 public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private static final String TAG = SongView.class.getSimpleName();
 
+	private TextView trackTextView;
 	private TextView titleTextView;
+	private TextView playingTextView;
 	private TextView artistTextView;
 	private TextView durationTextView;
 	private TextView statusTextView;
@@ -74,6 +77,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		super(context);
 		LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
 
+		trackTextView = (TextView) findViewById(R.id.song_track);
 		titleTextView = (TextView) findViewById(R.id.song_title);
 		artistTextView = (TextView) findViewById(R.id.song_artist);
 		durationTextView = (TextView) findViewById(R.id.song_duration);
@@ -149,8 +153,23 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 		String title = song.getTitle();
 		Integer track = song.getTrack();
+		TextView newPlayingTextView;
 		if(track != null && Util.getDisplayTrack(context)) {
-			title = String.format("%02d", track) + " " + title;
+			trackTextView.setText(String.format("%02d", track));
+			trackTextView.setVisibility(View.VISIBLE);
+			newPlayingTextView = trackTextView;
+		} else {
+			trackTextView.setVisibility(View.GONE);
+			newPlayingTextView = titleTextView;
+		}
+
+		if(newPlayingTextView != playingTextView || playingTextView == null) {
+			if(playing) {
+				playingTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+				playing = false;
+			}
+
+			playingTextView = newPlayingTextView;
 		}
 
 		titleTextView.setText(title);
@@ -253,16 +272,16 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			rightImage = false;
 		}
 
-		boolean playing = downloadService.getCurrentPlaying() == downloadFile;
+		boolean playing = Util.equals(downloadService.getCurrentPlaying(), downloadFile);
 		if (playing) {
 			if(!this.playing) {
 				this.playing = playing;
-				titleTextView.setCompoundDrawablesWithIntrinsicBounds(DrawableTint.getDrawableRes(context, R.attr.playing), 0, 0, 0);
+				playingTextView.setCompoundDrawablesWithIntrinsicBounds(DrawableTint.getDrawableRes(context, R.attr.playing), 0, 0, 0);
 			}
 		} else {
 			if(this.playing) {
 				this.playing = playing;
-				titleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+				playingTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 			}
 		}
 

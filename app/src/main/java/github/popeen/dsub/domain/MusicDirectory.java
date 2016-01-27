@@ -32,7 +32,12 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.UpdateHelper;
 import github.popeen.dsub.util.Util;
+import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.Util;
+import github.popeen.dsub.service.DownloadService;
+import github.popeen.dsub.util.Constants;
 
 /**
  * @author Sindre Mehus
@@ -134,13 +139,14 @@ public class MusicDirectory implements Serializable {
 		EntryComparator.sort(children, byYear);
 	}
 
-	public synchronized void updateMetadata(MusicDirectory refreshedDirectory) {
+	public synchronized boolean updateMetadata(MusicDirectory refreshedDirectory) {
+		boolean metadataUpdated = false;
 		Iterator<Entry> it = children.iterator();
 		while(it.hasNext()) {
 			Entry entry = it.next();
 			int index = refreshedDirectory.children.indexOf(entry);
 			if(index != -1) {
-				Entry refreshed = refreshedDirectory.children.get(index);
+				final Entry refreshed = refreshedDirectory.children.get(index);
 
 				entry.setTitle(refreshed.getTitle());
 				entry.setAlbum(refreshed.getAlbum());
@@ -154,8 +160,36 @@ public class MusicDirectory implements Serializable {
 				entry.setStarred(refreshed.isStarred());
 				entry.setRating(refreshed.getRating());
 				entry.setType(refreshed.getType());
+				if(!Util.equals(entry.getCoverArt(), refreshed.getCoverArt())) {
+					metadataUpdated = true;
+					entry.setCoverArt(refreshed.getCoverArt());
+				}
+
+				new UpdateHelper.EntryInstanceUpdater(entry) {
+					@Override
+					public void update(Entry found) {
+						found.setTitle(refreshed.getTitle());
+						found.setAlbum(refreshed.getAlbum());
+						found.setArtist(refreshed.getArtist());
+						found.setTrack(refreshed.getTrack());
+						found.setYear(refreshed.getYear());
+						found.setGenre(refreshed.getGenre());
+						found.setTranscodedContentType(refreshed.getTranscodedContentType());
+						found.setTranscodedSuffix(refreshed.getTranscodedSuffix());
+						found.setDiscNumber(refreshed.getDiscNumber());
+						found.setStarred(refreshed.isStarred());
+						found.setRating(refreshed.getRating());
+						found.setType(refreshed.getType());
+						if(!Util.equals(found.getCoverArt(), refreshed.getCoverArt())) {
+							found.setCoverArt(refreshed.getCoverArt());
+							metadataUpdate = DownloadService.METADATA_UPDATED_COVER_ART;
+						}
+					}
+				}.execute();
 			}
 		}
+
+		return metadataUpdated;
 	}
 	public synchronized boolean updateEntriesList(Context context, int instance, MusicDirectory refreshedDirectory) {
 		boolean changed = false;

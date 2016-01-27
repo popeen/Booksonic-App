@@ -17,6 +17,7 @@
  Copyright 2009 (C) Sindre Mehus
  */
 
+
 package github.popeen.dsub.view;
 
 import android.content.Context;
@@ -27,10 +28,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ImageLoader;
+import github.popeen.dsub.util.Util;
 
 import java.io.File;
 
@@ -41,6 +44,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	private TextView titleView;
 	private TextView artistView;
 	private boolean showArtist = true;
+	private String coverArtId;
 
 	public AlbumView(Context context, boolean cell) {
 		super(context);
@@ -54,10 +58,6 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		coverArtView = findViewById(R.id.album_coverart);
 		titleView = (TextView) findViewById(R.id.album_title);
 		artistView = (TextView) findViewById(R.id.album_artist);
-
-        //TODO, should use theme color instead of static black
-        titleView.setTextColor(Color.BLACK);
-        artistView.setTextColor(Color.BLACK);
 
 		ratingBar = (RatingBar) findViewById(R.id.album_rating);
 		ratingBar.setFocusable(false);
@@ -73,6 +73,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	}
 
 	protected void setObjectImpl(MusicDirectory.Entry album, ImageLoader imageLoader) {
+
         titleView.setText(album.getAlbumDisplay());
 		String artist = "";
 		if(showArtist) {
@@ -87,12 +88,14 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 			artist += album.getYear();
 		}
 		artistView.setText(album.getArtist() == null ? "" : artist);
-		imageTask = imageLoader.loadImage(coverArtView, album, false, true);
+
+		onUpdateImageView();
 		file = null;
 	}
 
 	public void onUpdateImageView() {
 		imageTask = item2.loadImage(coverArtView, item, false, true);
+		coverArtId = item.getCoverArt();
 	}
 
 	@Override
@@ -104,6 +107,15 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		exists = file.exists();
 		isStarred = item.isStarred();
 		isRated = item.getRating();
+	}
+
+	@Override
+	public void update() {
+		super.update();
+
+		if(!Util.equals(item.getCoverArt(), coverArtId)) {
+			onUpdateImageView();
+		}
 	}
 
 	public MusicDirectory.Entry getEntry() {

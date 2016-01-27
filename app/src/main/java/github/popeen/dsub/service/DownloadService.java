@@ -116,6 +116,7 @@ public class DownloadService extends Service {
 	public static final int METADATA_UPDATED_STAR = 1;
 	public static final int METADATA_UPDATED_RATING = 2;
 	public static final int METADATA_UPDATED_BOOKMARK = 4;
+	public static final int METADATA_UPDATED_COVER_ART = 8;
 
 	private RemoteControlClientBase mRemoteControl;
 
@@ -1372,6 +1373,7 @@ public class DownloadService extends Service {
 
 		if (playerState == PAUSED) {
 			lifecycleSupport.serializeDownloadQueue();
+			checkAddBookmark(true);
 		}
 
 		boolean show = playerState == PlayerState.STARTED;
@@ -2423,8 +2425,11 @@ public class DownloadService extends Service {
 			}.execute();
 		}
 	}
-	
+
 	private void checkAddBookmark() {
+		checkAddBookmark(false);
+	}
+	private void checkAddBookmark(final boolean updateMetadata) {
 		// Don't do anything if no current playing
 		if(currentPlaying == null || !ServerInfo.canBookmark(this)) {
 			return;
@@ -2454,6 +2459,9 @@ public class DownloadService extends Service {
 					if(found != null) {
 						found.setBookmark(new Bookmark(position));
 					}
+					if(updateMetadata) {
+						onMetadataUpdate(METADATA_UPDATED_BOOKMARK);
+					}
 					
 					return null;
 				}
@@ -2482,9 +2490,9 @@ public class DownloadService extends Service {
 
 		SharedPreferences prefs = Util.getPreferences(this);
 		try {
-			float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
 			float adjust = 0f;
 			if (prefs.getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, false)) {
+				float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
 				boolean singleAlbum = false;
 				
 				String replayGainType = prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE, "1");
@@ -2571,6 +2579,11 @@ public class DownloadService extends Service {
 					onMetadataUpdate(METADATA_UPDATED_STAR);
 				}
 			}
+
+			@Override
+			public void starCommited(boolean starred) {
+
+			}
 		});
 	}
 	public void toggleRating(int rating) {
@@ -2600,7 +2613,7 @@ public class DownloadService extends Service {
 		UpdateHelper.setRating(this, entry, rating, new UpdateHelper.OnRatingChange() {
 			@Override
 			public void ratingChange(int rating) {
-				if(currentPlaying == DownloadService.this.currentPlaying) {
+				if (currentPlaying == DownloadService.this.currentPlaying) {
 					onMetadataUpdate(METADATA_UPDATED_RATING);
 				}
 			}
@@ -2616,10 +2629,12 @@ public class DownloadService extends Service {
 	public void addOnSongChangedListener(OnSongChangedListener listener) {
 		addOnSongChangedListener(listener, false);
 	}
-	public synchronized void addOnSongChangedListener(OnSongChangedListener listener, boolean run) {
-		int index = onSongChangedListeners.indexOf(listener);
-		if(index == -1) {
-			onSongChangedListeners.add(listener);
+	public void addOnSongChangedListener(OnSongChangedListener listener, boolean run) {
+		synchronized(onSongChangedListeners) {
+			int index = onSongChangedListeners.indexOf(listener);
+			if (index == -1) {
+				onSongChangedListeners.add(listener);
+			}
 		}
 
 		if(run) {
@@ -2630,6 +2645,7 @@ public class DownloadService extends Service {
 						onSongsChanged();
 						onSongProgress();
 						onStateUpdate();
+						onMetadataUpdate(METADATA_UPDATED_ALL);
 					}
 				});
 			} else {
@@ -2637,53 +2653,59 @@ public class DownloadService extends Service {
 			}
 		}
 	}
-	public synchronized void removeOnSongChangeListener(OnSongChangedListener listener) {
-		int index = onSongChangedListeners.indexOf(listener);
-		if(index != -1) {
-			onSongChangedListeners.remove(index);
+	public void removeOnSongChangeListener(OnSongChangedListener listener) {
+		synchronized(onSongChangedListeners) {
+			int index = onSongChangedListeners.indexOf(listener);
+			if (index != -1) {
+				onSongChangedListeners.remove(index);
+			}
 		}
 	}
 
-	private synchronized void onSongChanged() {
+	private void onSongChanged() {
 		final long atRevision = revision;
-		for(final OnSongChangedListener listener: onSongChangedListeners) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					if(revision == atRevision && instance != null) {
-						listener.onSongChanged(currentPlaying, currentPlayingIndex);
+		synchronized(onSongChangedListeners) {
+			for (final OnSongChangedListener listener : onSongChangedListeners) {
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						if (revision == atRevision && instance != null) {
+							listener.onSongChanged(currentPlaying, currentPlayingIndex);
 
-						MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
-						listener.onMetadataUpdate(entry, METADATA_UPDATED_ALL);
+							MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
+							listener.onMetadataUpdate(entry, METADATA_UPDATED_ALL);
+						}
 					}
-				}
-			});
-		}
+				});
+			}
 
-		if(mediaPlayerHandler != null && !onSongChangedListeners.isEmpty()) {
-			mediaPlayerHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					onSongProgress();
-				}
-			});
+			if (mediaPlayerHandler != null && !onSongChangedListeners.isEmpty()) {
+				mediaPlayerHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						onSongProgress();
+					}
+				});
+			}
 		}
 	}
-	private synchronized void onSongsChanged() {
+	private void onSongsChanged() {
 		final long atRevision = revision;
-		for(final OnSongChangedListener listener: onSongChangedListeners) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					if(revision == atRevision && instance != null) {
-						listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex);
+		synchronized(onSongChangedListeners) {
+			for (final OnSongChangedListener listener : onSongChangedListeners) {
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						if (revision == atRevision && instance != null) {
+							listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 	}
 
-	private synchronized void onSongProgress() {
+	private void onSongProgress() {
 		onSongProgress(true);
 	}
 	private synchronized void onSongProgress(boolean manual) {
@@ -2691,15 +2713,18 @@ public class DownloadService extends Service {
 		final Integer duration = getPlayerDuration();
 		final boolean isSeekable = isSeekable();
 		final int position = getPlayerPosition();
-		for(final OnSongChangedListener listener: onSongChangedListeners) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					if(revision == atRevision && instance != null) {
-						listener.onSongProgress(currentPlaying, position, duration, isSeekable);
+
+		synchronized(onSongChangedListeners) {
+			for (final OnSongChangedListener listener : onSongChangedListeners) {
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						if (revision == atRevision && instance != null) {
+							listener.onSongProgress(currentPlaying, position, duration, isSeekable);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 
 		if(manual) {
@@ -2718,39 +2743,45 @@ public class DownloadService extends Service {
 			}
 		}
 	}
-	private synchronized void onStateUpdate() {
+	private void onStateUpdate() {
 		final long atRevision = revision;
-		for(final OnSongChangedListener listener: onSongChangedListeners) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					if(revision == atRevision && instance != null) {
-						listener.onStateUpdate(currentPlaying, playerState);
+		synchronized(onSongChangedListeners) {
+			for (final OnSongChangedListener listener : onSongChangedListeners) {
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						if (revision == atRevision && instance != null) {
+							listener.onStateUpdate(currentPlaying, playerState);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 	}
-	private synchronized void onMetadataUpdate() {
+	public void onMetadataUpdate() {
 		onMetadataUpdate(METADATA_UPDATED_ALL);
 	}
-	private synchronized void onMetadataUpdate(final int updateType) {
-		for(final OnSongChangedListener listener: onSongChangedListeners) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					if(instance != null) {
-						MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
-						listener.onMetadataUpdate(entry, updateType);
+	public void onMetadataUpdate(final int updateType) {
+		synchronized(onSongChangedListeners) {
+			for (final OnSongChangedListener listener : onSongChangedListeners) {
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						if (instance != null) {
+							MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
+							listener.onMetadataUpdate(entry, updateType);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				mRemoteControl.metadataChanged(currentPlaying.getSong());
+				if(currentPlaying != null) {
+					mRemoteControl.metadataChanged(currentPlaying.getSong());
+				}
 			}
 		});
 	}

@@ -69,6 +69,8 @@ public class CachedMusicService implements MusicService {
 
     private static final int MUSIC_DIR_CACHE_SIZE = 20;
     private static final int TTL_MUSIC_DIR = 5 * 60; // Five minutes
+	public static final int CACHE_UPDATE_LIST = 1;
+	public static final int CACHE_UPDATE_METADATA = 2;
 
 	private final RESTMusicService musicService;
     private final TimeLimitedCache<Boolean> cachedLicenseValid = new TimeLimitedCache<Boolean>(120, TimeUnit.SECONDS);
@@ -121,7 +123,7 @@ public class CachedMusicService implements MusicService {
         	if(!refresh) {
         		result = FileUtil.deserialize(context, getCacheName(context, "musicFolders"), ArrayList.class);
         	}
-        	
+
         	if(result == null) {
             	result = musicService.getMusicFolders(refresh, context, progressListener);
             	FileUtil.serialize(context, new ArrayList<MusicFolder>(result), getCacheName(context, "musicFolders"));
@@ -150,7 +152,7 @@ public class CachedMusicService implements MusicService {
 			if(!refresh) {
 				result = FileUtil.deserialize(context, name, Indexes.class);
 			}
-        	
+
         	if(result == null) {
             	result = musicService.getIndexes(musicFolderId, refresh, context, progressListener);
             	FileUtil.serialize(context, result, name);
@@ -169,12 +171,14 @@ public class CachedMusicService implements MusicService {
 
 			new SilentBackgroundTask<Void>(context) {
 				MusicDirectory refreshed;
+				private boolean metadataUpdated;
 
 				@Override
 				protected Void doInBackground() throws Throwable {
 					refreshed = musicService.getMusicDirectory(id, name, true, context, null);
 					updateAllSongs(context, refreshed);
-					cached.updateMetadata(refreshed);
+
+					metadataUpdated = cached.updateMetadata(refreshed);
 					deleteRemovedEntries(context, refreshed, cached);
 					FileUtil.serialize(context, refreshed, getCacheName(context, "directory", id));
 					return null;
@@ -185,7 +189,11 @@ public class CachedMusicService implements MusicService {
 				public void done(Void result) {
 					if(progressListener != null) {
 						if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
-							progressListener.updateCache();
+
+							progressListener.updateCache(CACHE_UPDATE_LIST);
+						}
+						if(metadataUpdated) {
+							progressListener.updateCache(CACHE_UPDATE_METADATA);
 						}
 					}
 				}
@@ -201,7 +209,8 @@ public class CachedMusicService implements MusicService {
 			dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
 			updateAllSongs(context, dir);
 			FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
-			
+
+
 			// If a cached copy exists to check against, look for removes
 			deleteRemovedEntries(context, dir, cached);
 		}
@@ -234,7 +243,8 @@ public class CachedMusicService implements MusicService {
 				public void done(Void result) {
 					if(progressListener != null) {
 						if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
-							progressListener.updateCache();
+
+							progressListener.updateCache(CACHE_UPDATE_LIST);
 						}
 					}
 				}
@@ -267,12 +277,14 @@ public class CachedMusicService implements MusicService {
 
 			new SilentBackgroundTask<Void>(context) {
 				MusicDirectory refreshed;
+				private boolean metadataUpdated;
 
 				@Override
 				protected Void doInBackground() throws Throwable {
 					refreshed = musicService.getAlbum(id, name, refresh, context, null);
 					updateAllSongs(context, refreshed);
-					cached.updateMetadata(refreshed);
+
+					metadataUpdated = cached.updateMetadata(refreshed);
 					deleteRemovedEntries(context, refreshed, cached);
 					FileUtil.serialize(context, refreshed, getCacheName(context, "album", id));
 					return null;
@@ -283,7 +295,11 @@ public class CachedMusicService implements MusicService {
 				public void done(Void result) {
 					if(progressListener != null) {
 						if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
-							progressListener.updateCache();
+
+							progressListener.updateCache(CACHE_UPDATE_LIST);
+						}
+						if(metadataUpdated) {
+							progressListener.updateCache(CACHE_UPDATE_METADATA);
 						}
 					}
 				}

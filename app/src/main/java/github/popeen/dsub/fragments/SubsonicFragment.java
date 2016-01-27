@@ -216,6 +216,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				addToPlaylist(songs);
 				clearSelected();
 				return true;
+			case R.id.menu_star:case R.id.menu_unstar:
+				toggleSelectedStarred();
+				return true;
 		}
 
 		return false;
@@ -1687,7 +1690,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deleteBookmark(entry, context, null);
 
-						new UpdateHelper.EntryInstanceUpdater(entry) {
+						new UpdateHelper.EntryInstanceUpdater(entry, DownloadService.METADATA_UPDATED_BOOKMARK) {
 							@Override
 							public void update(Entry found) {
 								found.setBookmark(null);
@@ -1892,6 +1895,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				downloadService.delete(songs);
 			}
 		}
+	}
+
+	protected void toggleSelectedStarred() {
+		UpdateHelper.toggleStarred(context, getSelectedEntries());
 	}
 
 	public abstract class RecursiveLoader extends LoadingTask<Boolean> {

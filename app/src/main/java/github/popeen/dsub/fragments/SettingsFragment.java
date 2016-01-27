@@ -31,7 +31,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -45,6 +44,7 @@ import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import github.popeen.dsub.view.CacheLocationPreference;
 import github.popeen.dsub.R;
 import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.HeadphoneListenerService;
@@ -68,7 +68,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference maxVideoBitrateWifi;
 	private ListPreference maxVideoBitrateMobile;
 	private ListPreference networkTimeout;
-	private EditTextPreference cacheLocation;
+	private CacheLocationPreference cacheLocation;
 	private ListPreference preloadCountWifi;
 	private ListPreference preloadCountMobile;
 	private ListPreference keepPlayedCount;
@@ -203,7 +203,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		//maxVideoBitrateWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
 		//maxVideoBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
 		networkTimeout = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
-		cacheLocation = (EditTextPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
+		cacheLocation = (CacheLocationPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
 		preloadCountWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI);
 		preloadCountMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_MOBILE);
 		keepPlayedCount = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_KEEP_PLAYED_CNT);
@@ -662,8 +662,11 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, defaultPath);
 				editor.commit();
-				cacheLocation.setSummary(defaultPath);
-				cacheLocation.setText(defaultPath);
+
+				if(cacheLocation != null) {
+					cacheLocation.setSummary(defaultPath);
+					cacheLocation.setText(defaultPath);
+				}
 			}
 
 			// Clear download queue.

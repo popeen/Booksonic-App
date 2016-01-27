@@ -129,7 +129,7 @@ public class PodcastChannelAdapter extends SectionAdapter<Serializable> implemen
 		}
 
 		menu.removeItem(R.id.menu_remove_playlist);
-		menu.removeItem(R.id.menu_unstar);
+		menu.removeItem(R.id.menu_star);
 	}
 
 	@Override

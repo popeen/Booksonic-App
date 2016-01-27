@@ -33,7 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.popeen.dsub.R;
+import github.popeen.dsub.domain.MusicDirectory;
+import github.popeen.dsub.domain.MusicDirectory.Entry;
 import github.popeen.dsub.domain.Playlist;
+import github.popeen.dsub.domain.PodcastChannel;
+import github.popeen.dsub.domain.PodcastEpisode;
 import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.SilentServiceTask;
@@ -47,8 +51,12 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 	private static final String BROWSER_ALBUM_LISTS = "albumLists";
 	private static final String BROWSER_LIBRARY = "library";
 	private static final String BROWSER_PLAYLISTS = "playlists";
+	private static final String BROWSER_PODCASTS = "podcasts";
+	private static final String BROWSER_BOOKMARKS = "bookmarks";
 	private static final String PLAYLIST_PREFIX = "pl-";
+	private static final String PODCAST_PREFIX = "po-";
 	private static final String ALBUM_TYPE_PREFIX = "ty-";
+	private static final String MUSIC_DIRECTORY_PREFIX = "md-";
 
 	private DownloadService downloadService;
 	private Handler handler = new Handler();
@@ -75,12 +83,24 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 		} else if(parentId.startsWith(ALBUM_TYPE_PREFIX)) {
 			int id = Integer.valueOf(parentId.substring(ALBUM_TYPE_PREFIX.length()));
 			getAlbumList(result, id);
+		}  else if(parentId.startsWith(MUSIC_DIRECTORY_PREFIX)) {
+			String id = parentId.substring(MUSIC_DIRECTORY_PREFIX.length());
+			getPlayOptions(result, id, Constants.INTENT_EXTRA_NAME_ID);
 		} else if(BROWSER_LIBRARY.equals(parentId)) {
 			getLibrary(result);
 		} else if(BROWSER_PLAYLISTS.equals(parentId)) {
 			getPlaylists(result);
 		} else if(parentId.startsWith(PLAYLIST_PREFIX)) {
-			getPlayOptions(result, parentId.substring(PLAYLIST_PREFIX.length()), Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
+
+			String id = parentId.substring(PLAYLIST_PREFIX.length());
+			getPlayOptions(result, id, Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
+		} else if(BROWSER_PODCASTS.equals(parentId)) {
+			getPodcasts(result);
+		} else if(parentId.startsWith(PODCAST_PREFIX)) {
+			String id = parentId.substring(PODCAST_PREFIX.length());
+			getPodcastEpisodes(result, id);
+		} else if(BROWSER_BOOKMARKS.equals(parentId)) {
+			getBookmarks(result);
 		} else {
 			// No idea what it is, send empty result
 			result.sendResult(new ArrayList<MediaBrowser.MediaItem>());
@@ -90,12 +110,14 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 	private void getRootFolders(Result<List<MediaBrowser.MediaItem>> result) {
 		List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
 
-		/*MediaDescription.Builder albumLists = new MediaDescription.Builder();
+
+		MediaDescription.Builder albumLists = new MediaDescription.Builder();
 		albumLists.setTitle(downloadService.getString(R.string.main_albums_title))
 				.setMediaId(BROWSER_ALBUM_LISTS);
 		mediaItems.add(new MediaBrowser.MediaItem(albumLists.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
 
-		MediaDescription.Builder library = new MediaDescription.Builder();
+
+		/*MediaDescription.Builder library = new MediaDescription.Builder();
 		library.setTitle(downloadService.getString(R.string.button_bar_browse))
 			.setMediaId(BROWSER_LIBRARY);
 		mediaItems.add(new MediaBrowser.MediaItem(library.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));*/
@@ -105,6 +127,20 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 				.setMediaId(BROWSER_PLAYLISTS);
 		mediaItems.add(new MediaBrowser.MediaItem(playlists.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
 
+		if(Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true)) {
+			MediaDescription.Builder podcasts = new MediaDescription.Builder();
+			podcasts.setTitle(downloadService.getString(R.string.button_bar_podcasts))
+					.setMediaId(BROWSER_PODCASTS);
+			mediaItems.add(new MediaBrowser.MediaItem(podcasts.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
+		}
+
+		if(Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true)) {
+			MediaDescription.Builder podcasts = new MediaDescription.Builder();
+			podcasts.setTitle(downloadService.getString(R.string.button_bar_bookmarks))
+					.setMediaId(BROWSER_BOOKMARKS);
+			mediaItems.add(new MediaBrowser.MediaItem(podcasts.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
+		}
+
 		result.sendResult(mediaItems);
 	}
 
@@ -112,15 +148,11 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 		List<Integer> albums = new ArrayList<>();
 		albums.add(R.string.main_albums_newest);
 		albums.add(R.string.main_albums_random);
-		if(ServerInfo.checkServerVersion(downloadService, "1.8")) {
-			albums.add(R.string.main_albums_alphabetical);
-		}
+
 		if(!Util.isTagBrowsing(downloadService)) {
 			albums.add(R.string.main_albums_highest);
 		}
-		// albums.add(R.string.main_albums_starred);
-		// albums.add(R.string.main_albums_genres);
-		// albums.add(R.string.main_albums_year);
+		albums.add(R.string.main_albums_starred);
 		albums.add(R.string.main_albums_recent);
 		albums.add(R.string.main_albums_frequent);
 
@@ -137,8 +169,56 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 		result.sendResult(mediaItems);
 	}
-	private void getAlbumList(Result<List<MediaBrowser.MediaItem>> result, int id) {
+	private void getAlbumList(final Result<List<MediaBrowser.MediaItem>> result, final int id) {
+		new SilentServiceTask<MusicDirectory>(downloadService) {
+			@Override
+			protected MusicDirectory doInBackground(MusicService musicService) throws Throwable {
+				String albumListType;
+				switch(id) {
+					case R.string.main_albums_newest:
+						albumListType = "newest";
+						break;
+					case R.string.main_albums_random:
+						albumListType = "random";
+						break;
+					case R.string.main_albums_highest:
+						albumListType = "highest";
+						break;
+					case R.string.main_albums_starred:
+						albumListType = "starred";
+						break;
+					case R.string.main_albums_recent:
+						albumListType = "recent";
+						break;
+					case R.string.main_albums_frequent:
+						albumListType = "frequent";
+						break;
+					default:
+						albumListType = "newest";
+				}
 
+				return musicService.getAlbumList(albumListType, 40, 0, true, downloadService, null);
+			}
+
+			@Override
+			protected void done(MusicDirectory albumSet) {
+				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+				for(Entry album: albumSet.getChildren(true, false)) {
+					MediaDescription description = new MediaDescription.Builder()
+							.setTitle(album.getAlbumDisplay())
+							.setSubtitle(album.getArtist())
+							.setMediaId(MUSIC_DIRECTORY_PREFIX + album.getId())
+							.build();
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
 	}
 
 	private void getLibrary(Result<List<MediaBrowser.MediaItem>> result) {
@@ -171,6 +251,100 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 		result.detach();
 	}
+
+	private void getPodcasts(final Result<List<MediaBrowser.MediaItem>> result) {
+		new SilentServiceTask<List<PodcastChannel>>(downloadService) {
+			@Override
+			protected List<PodcastChannel> doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getPodcastChannels(false, downloadService, null);
+			}
+
+			@Override
+			protected void done(List<PodcastChannel> podcasts) {
+				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+				for(PodcastChannel podcast: podcasts) {
+					MediaDescription description = new MediaDescription.Builder()
+							.setTitle(podcast.getName())
+							.setMediaId(PODCAST_PREFIX + podcast.getId())
+							.build();
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+	private void getPodcastEpisodes(final Result<List<MediaBrowser.MediaItem>> result, final String podcastId) {
+		new SilentServiceTask<MusicDirectory>(downloadService) {
+			@Override
+			protected MusicDirectory doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getPodcastEpisodes(false, podcastId, downloadService, null);
+			}
+
+			@Override
+			protected void done(MusicDirectory podcasts) {
+				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+				for(Entry entry: podcasts.getChildren(false, true)) {
+					PodcastEpisode podcast = (PodcastEpisode) entry;
+					Bundle podcastExtras = new Bundle();
+					podcastExtras.putSerializable(Constants.INTENT_EXTRA_ENTRY, podcast);
+					podcastExtras.putString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, podcast.getId());
+
+					MediaDescription description = new MediaDescription.Builder()
+							.setTitle(podcast.getTitle())
+							.setSubtitle(Util.formatDate(downloadService, podcast.getDate()))
+							.setMediaId(PODCAST_PREFIX + podcast.getId())
+							.setExtras(podcastExtras)
+							.build();
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+
+	private void getBookmarks(final Result<List<MediaBrowser.MediaItem>> result) {
+		new SilentServiceTask<MusicDirectory>(downloadService) {
+			@Override
+			protected MusicDirectory doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getBookmarks(false, downloadService, null);
+			}
+
+			@Override
+			protected void done(MusicDirectory bookmarkList) {
+				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+				for(Entry entry: bookmarkList.getChildren(false, true)) {
+					Bundle extras = new Bundle();
+					extras.putSerializable(Constants.INTENT_EXTRA_ENTRY, entry);
+					extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+
+					MediaDescription description = new MediaDescription.Builder()
+							.setTitle(entry.getTitle())
+							.setSubtitle(Util.formatDuration(entry.getBookmark().getPosition() / 1000))
+							.setMediaId(entry.getId())
+							.setExtras(extras)
+							.build();
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+	
 	private void getPlayOptions(Result<List<MediaBrowser.MediaItem>> result, String id, String idConstant) {
 		List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
           package="github.popeen.dsub"
           android:installLocation="internalOnly"
-          android:versionCode="5"
-          android:versionName="1.0.3">
+          android:versionCode="6"
+          android:versionName="1.0.4">
           
     <instrumentation android:name="android.test.InstrumentationTestRunner"
 		android:targetPackage="github.popeen.dsub"
@@ -88,7 +89,7 @@
 			</intent-filter>
 		</activity>
 
-        <service android:name="github.popeen.dsub.service.DownloadService"
+        <service android:name=".service.DownloadService"
                  android:label="DSub Playback Service"/>
 
 		<service android:name=".service.AutoMediaBrowserService"

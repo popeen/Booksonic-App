@@ -55,8 +55,6 @@ public class PodcastChannelView extends UpdateView<PodcastChannel> {
 
 		titleView = (TextView) findViewById(R.id.item_name);
 
-        titleView.setTextColor(Color.BLACK);
-
 		starButton = (ImageButton) findViewById(R.id.item_star);
 		if(starButton != null) {
 			starButton.setFocusable(false);

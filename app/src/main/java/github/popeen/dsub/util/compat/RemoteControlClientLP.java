@@ -36,13 +36,16 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.media.MediaRouter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.activity.SubsonicActivity;
 import github.popeen.dsub.activity.SubsonicFragmentActivity;
+import github.popeen.dsub.domain.Bookmark;
 import github.popeen.dsub.domain.MusicDirectory;
+import github.popeen.dsub.domain.MusicDirectory.Entry;
 import github.popeen.dsub.domain.Playlist;
 import github.popeen.dsub.domain.SearchCritera;
 import github.popeen.dsub.domain.SearchResult;
@@ -189,7 +192,8 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	}
 
 	@Override
-	public void updateAlbumArt(MusicDirectory.Entry currentSong, Bitmap bitmap) {
+
+	public void updateAlbumArt(Entry currentSong, Bitmap bitmap) {
 		setMetadata(currentSong, bitmap);
 	}
 
@@ -208,7 +212,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		List<MediaSession.QueueItem> queue = new ArrayList<>();
 
 		for(DownloadFile file: playlist) {
-			MusicDirectory.Entry entry = file.getSong();
+			Entry entry = file.getSong();
 
 			MediaDescription description = new MediaDescription.Builder()
 					.setMediaId(entry.getId())
@@ -244,7 +248,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		return actions;
 	}
-	protected void addCustomActions(MusicDirectory.Entry currentSong, PlaybackState.Builder builder) {
+	protected void addCustomActions(Entry currentSong, PlaybackState.Builder builder) {
 		Bundle showOnWearExtras = new Bundle();
 		showOnWearExtras.putBoolean(SHOW_ON_WEAR, true);
 
@@ -296,7 +300,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 				SearchResult results = musicService.search(searchCritera, downloadService, null);
 
 				if(results.hasArtists()) {
-					playFromParent(new MusicDirectory.Entry(results.getArtists().get(0)));
+					playFromParent(new Entry(results.getArtists().get(0)));
 				} else if(results.hasAlbums()) {
 					playFromParent(results.getAlbums().get(0));
 				} else if(results.hasSongs()) {
@@ -308,12 +312,12 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 				return null;
 			}
 			
-			private void playFromParent(MusicDirectory.Entry parent) throws Exception {
-				List<MusicDirectory.Entry> songs = new ArrayList<>();
+			private void playFromParent(Entry parent) throws Exception {
+				List<Entry> songs = new ArrayList<>();
 				getSongsRecursively(parent, songs);
 				playSongs(songs);
 			}
-			private void getSongsRecursively(MusicDirectory.Entry parent, List<MusicDirectory.Entry> songs) throws Exception {
+			private void getSongsRecursively(Entry parent, List<Entry> songs) throws Exception {
 				MusicDirectory musicDirectory;
 				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
 					musicDirectory = musicService.getAlbum(parent.getId(), parent.getTitle(), false, downloadService, this);
@@ -321,7 +325,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 					musicDirectory = musicService.getMusicDirectory(parent.getId(), parent.getTitle(), false, downloadService, this);
 				}
 
-				for (MusicDirectory.Entry dir : musicDirectory.getChildren(true, false)) {
+				for (Entry dir : musicDirectory.getChildren(true, false)) {
 					if (dir.getRating() == 1) {
 						continue;
 					}
@@ -329,7 +333,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 					getSongsRecursively(dir, songs);
 				}
 
-				for (MusicDirectory.Entry song : musicDirectory.getChildren(false, true)) {
+				for (Entry song : musicDirectory.getChildren(false, true)) {
 					if (!song.isVideo() && song.getRating() != 1) {
 						songs.add(song);
 					}
@@ -349,20 +353,69 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}.execute();
 	}
-
-	private void playSong(MusicDirectory.Entry entry) {
-		List<MusicDirectory.Entry> entries = new ArrayList<>();
-		entries.add(entry);
-		playSongs(entries);
+	private void playMusicDirectory(Entry dir, boolean shuffle, boolean append, boolean playFromBookmark) {
+		playMusicDirectory(dir.getId(), shuffle, append, playFromBookmark);
 	}
-	private void playSongs(List<MusicDirectory.Entry> entries) {
+	private void playMusicDirectory(final String dirId, final boolean shuffle, final boolean append, final boolean playFromBookmark) {
+		new SilentServiceTask<Void>(downloadService) {
+			@Override
+			protected Void doInBackground(MusicService musicService) throws Throwable {
+				MusicDirectory musicDirectory;
+				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
+					musicDirectory = musicService.getAlbum(dirId, "dir", false, downloadService, null);
+				} else {
+					musicDirectory = musicService.getMusicDirectory(dirId, "dir", false, downloadService, null);
+				}
+
+				List<Entry> playEntries = new ArrayList<>();
+				List<Entry> allEntries = musicDirectory.getChildren(false, true);
+				for(Entry song: allEntries) {
+					if (!song.isVideo() && song.getRating() != 1) {
+						playEntries.add(song);
+					}
+				}
+				playSongs(playEntries, shuffle, append, playFromBookmark);
+
+				return null;
+			}
+		}.execute();
+	}
+
+	private void playSong(Entry entry) {
+
+	}
+	private void playSong(Entry entry, boolean resumeFromBookmark) {
+		List<Entry> entries = new ArrayList<>();
+		entries.add(entry);
+		playSongs(entries, false, false, resumeFromBookmark);
+	}
+	private void playSongs(List<Entry> entries) {
 		playSongs(entries, false, false);
 	}
-	private void playSongs(List<MusicDirectory.Entry> entries, boolean shuffle, boolean append) {
+	private void playSongs(List<Entry> entries, boolean shuffle, boolean append) {
+		playSongs(entries, shuffle, append, false);
+	}
+	private void playSongs(List<Entry> entries, boolean shuffle, boolean append, boolean resumeFromBookmark) {
 		if(!append) {
 			downloadService.clear();
 		}
-		downloadService.download(entries, false, true, false, shuffle);
+
+		int startIndex = 0;
+		int startPosition = 0;
+		if(resumeFromBookmark) {
+			int bookmarkIndex = 0;
+			for(Entry entry: entries) {
+				if(entry.getBookmark() != null) {
+					Bookmark bookmark = entry.getBookmark();
+					startIndex = bookmarkIndex;
+					startPosition = bookmark.getPosition();
+					break;
+				}
+				bookmarkIndex++;
+			}
+		}
+
+		downloadService.download(entries, false, true, false, shuffle, startIndex, startPosition);
 	}
 
 	private void noResults() {
@@ -467,6 +520,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}
 
+		@Override
 		public void onPlayFromMediaId (String mediaId, Bundle extras) {
 			if(extras == null) {
 				return;
@@ -474,10 +528,32 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 			boolean shuffle = extras.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false);
 			boolean playLast = extras.getBoolean(Constants.INTENT_EXTRA_PLAY_LAST, false);
+			Entry entry = (Entry) extras.getSerializable(Constants.INTENT_EXTRA_ENTRY);
+
 			String playlistId = extras.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, null);
 			if(playlistId != null) {
 				Playlist playlist = new Playlist(playlistId, null);
 				playPlaylist(playlist, shuffle, playLast);
+			}
+			String musicDirectoryId = extras.getString(Constants.INTENT_EXTRA_NAME_ID);
+			if(musicDirectoryId != null) {
+				Entry dir = new Entry(musicDirectoryId);
+				playMusicDirectory(dir, shuffle, playLast, true);
+			}
+
+			String podcastId = extras.getString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, null);
+			if(podcastId != null) {
+				playSong(entry, true);
+			}
+
+			// Currently only happens when playing bookmarks so we should be looking up parent
+			String childId = extras.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID, null);
+			if(childId != null) {
+				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
+					playMusicDirectory(entry.getAlbumId(), shuffle, playLast, true);
+				} else {
+					playMusicDirectory(entry.getParent(), shuffle, playLast, true);
+				}
 			}
 		}
 

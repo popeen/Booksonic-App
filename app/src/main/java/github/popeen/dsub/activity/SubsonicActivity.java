@@ -192,9 +192,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 
 	protected void createCustomActionBarView() {
-		View customActionbar = getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
-		actionBarSpinner = (Spinner)customActionbar.findViewById(R.id.spinner);
-		if(Util.getThemeRes(this) == R.style.Theme_DSub_Light_No_Actionbar) {
+		actionBarSpinner = (Spinner) getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
+		if((this instanceof SubsonicFragmentActivity || this instanceof SettingsActivity) && (Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true) || Util.getThemeRes(this) != R.style.Theme_DSub_Light_No_Color)) {
 			actionBarSpinner.setBackgroundResource(R.drawable.abc_spinner_mtrl_am_alpha);
 		}
 		spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
@@ -202,7 +201,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		actionBarSpinner.setOnItemSelectedListener(this);
 		actionBarSpinner.setAdapter(spinnerAdapter);
 
-		getSupportActionBar().setCustomView(customActionbar);
+		getSupportActionBar().setCustomView(actionBarSpinner);
 	}
 
 	@Override
@@ -541,7 +540,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		int top = spinnerAdapter.getCount() - 1;
 		if(position < top) {
-			for(int i = top; i > position; i--) {
+			for(int i = top; i > position && i >= 0; i--) {
 				removeCurrent();
 			}
 		}
@@ -755,6 +754,11 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		recreateSpinner();
 	}
 	public void removeCurrent() {
+		// Don't try to remove current if there is no backstack to remove from
+		if(backStack.isEmpty()) {
+			return;
+		}
+
 		if(currentFragment != null) {
 			currentFragment.setPrimaryFragment(false);
 		}
@@ -856,6 +860,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			spinnerAdapter.notifyDataSetChanged();
 			actionBarSpinner.setSelection(spinnerAdapter.getCount() - 1);
 			if(!isTv()) {
+				getSupportActionBar().setDisplayShowTitleEnabled(false);
 				getSupportActionBar().setDisplayShowCustomEnabled(true);
 			}
 
@@ -865,6 +870,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			}
 		} else if(!isTv()) {
+			getSupportActionBar().setDisplayShowTitleEnabled(true);
 			getSupportActionBar().setTitle(currentFragment.getTitle());
 			getSupportActionBar().setDisplayShowCustomEnabled(false);
 			drawerToggle.setDrawerIndicatorEnabled(true);

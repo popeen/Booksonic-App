@@ -24,5 +24,5 @@ package github.popeen.dsub.util;
 public interface ProgressListener {
     void updateProgress(String message);
     void updateProgress(int messageId);
-	void updateCache();
+	void updateCache(int changeCode);
 }

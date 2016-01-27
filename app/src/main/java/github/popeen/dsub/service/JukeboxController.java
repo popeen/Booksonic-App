@@ -18,10 +18,12 @@ package github.popeen.dsub.service;
 import android.os.Handler;
 import android.util.Log;
 
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.RemoteStatus;
 import github.popeen.dsub.domain.PlayerState;
 import github.popeen.dsub.domain.RemoteControlState;
+import github.popeen.dsub.domain.RepeatMode;
 import github.popeen.dsub.service.parser.SubsonicRESTException;
 import github.popeen.dsub.util.Util;
 
@@ -200,11 +202,15 @@ public class JukeboxController extends RemoteController {
 		
 		// Track change?
 		Integer index = jukeboxStatus.getCurrentPlayingIndex();
+		int currentPlayingIndex = downloadService.getCurrentPlayingIndex();
 		if (index != null && index != -1 && index != downloadService.getCurrentPlayingIndex()) {
 			downloadService.setPlayerState(PlayerState.COMPLETED);
 			downloadService.setCurrentPlaying(index, true);
 			if(jukeboxStatus.isPlaying()) {
 				downloadService.setPlayerState(PlayerState.STARTED);
+			} else if(index == 0 && currentPlayingIndex == downloadService.size() - 1 && downloadService.getRepeatMode() == RepeatMode.ALL) {
+				// Jukebox does not support any form of auto repeat
+				start();
 			}
 		}
 	}

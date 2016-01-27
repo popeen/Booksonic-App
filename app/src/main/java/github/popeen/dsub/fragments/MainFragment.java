@@ -1,17 +1,23 @@
 package github.popeen.dsub.fragments;
 
-import android.content.res.Resources;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.res.Resources;
+
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
+
+import android.content.SharedPreferences;
+
+
+import android.os.Bundle;
 import android.os.StatFs;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import github.popeen.dsub.util.EnvironmentVariables;
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.MainAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
@@ -24,13 +30,23 @@ import github.popeen.dsub.util.UserUtil;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
-import github.popeen.dsub.view.ChangeLog;
 import github.popeen.dsub.view.UpdateView;
 
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class MainFragment extends SelectRecyclerFragment<Integer> {
 	private static final String TAG = MainFragment.class.getSimpleName();
@@ -69,10 +85,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			case R.id.menu_about:
 				showAboutDialog();
 				return true;
-            case R.id.menu_changelog:
-                ChangeLog changeLog = new ChangeLog(context, Util.getPreferences(context));
-                changeLog.getFullLogDialog().show();
-                return true;
 			case R.id.menu_faq:
 				showFAQDialog();
 				return true;
@@ -237,9 +249,9 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	private void getLogs() {
 		try {
 			final String version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-			new LoadingTask<File>(context) {
+			new LoadingTask<String>(context) {
 				@Override
-				protected File doInBackground() throws Throwable {
+				protected String doInBackground() throws Throwable {
 					updateProgress("Gathering Logs");
 					File logcat = new File(Environment.getExternalStorageDirectory(), "dsub-logcat.txt");
 					Util.delete(logcat);
@@ -257,30 +269,92 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[progs.size()]));
 						logcatProc.waitFor();
-					} catch(Exception e) {
-						Util.toast(context, "Failed to gather logs");
 					} finally {
 						if(logcatProc != null) {
 							logcatProc.destroy();
 						}
 					}
 
-					return logcat;
+					URL url = new URL("https://pastebin.com/api/api_post.php");
+					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+					try {
+						urlConnection.setReadTimeout(10000);
+						urlConnection.setConnectTimeout(15000);
+						urlConnection.setRequestMethod("POST");
+						urlConnection.setDoInput(true);
+						urlConnection.setDoOutput(true);
+
+						OutputStream os = urlConnection.getOutputStream();
+						BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, Constants.UTF_8));
+						writer.write("api_dev_key=" + URLEncoder.encode(EnvironmentVariables.PASTEBIN_DEV_KEY, Constants.UTF_8) + "&api_option=paste&api_paste_private=1&api_paste_code=");
+
+						BufferedReader reader = null;
+						try {
+							reader = new BufferedReader(new InputStreamReader(new FileInputStream(logcat)));
+							String line;
+							while ((line = reader.readLine()) != null) {
+								writer.write(URLEncoder.encode(line + "\n", Constants.UTF_8));
+							}
+						} finally {
+							Util.close(reader);
+						}
+
+						File stacktrace = new File(Environment.getExternalStorageDirectory(), "dsub-stacktrace.txt");
+						if(stacktrace.exists() && stacktrace.isFile()) {
+							writer.write("\n\nMost Recent Stacktrace:\n\n");
+
+							reader = null;
+							try {
+								reader = new BufferedReader(new InputStreamReader(new FileInputStream(stacktrace)));
+								String line;
+								while ((line = reader.readLine()) != null) {
+									writer.write(URLEncoder.encode(line + "\n", Constants.UTF_8));
+								}
+							} finally {
+								Util.close(reader);
+							}
+						}
+
+						writer.flush();
+						writer.close();
+						os.close();
+					} finally {
+						urlConnection.disconnect();
+					}
+
+					BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+					String inputLine;
+					StringBuffer responseBuffer = new StringBuffer();
+					while ((inputLine = in.readLine()) != null) {
+						responseBuffer.append(inputLine);
+					}
+					in.close();
+
+					String response = responseBuffer.toString();
+					if(response.indexOf("http") == 0) {
+						return response.replace("http:", "https:");
+					} else {
+						throw new Exception("Pastebin Error: " + response);
+					}
 				}
 
 				@Override
-				protected void done(File logcat) {
+				protected void error(Throwable error) {
+					Util.toast(context, "Failed to gather logs");
+				}
+
+				@Override
+				protected void done(String logcat) {
 					String footer = "Android SDK: " + Build.VERSION.SDK;
 					footer += "\nDevice Model: " + Build.MODEL;
 					footer += "\nDevice Name: " + Build.MANUFACTURER + " "  + Build.PRODUCT;
 					footer += "\nROM: " + Build.DISPLAY;
+					footer += "\nLogs: " + logcat;
 
 					Intent email = new Intent(Intent.ACTION_SENDTO,
 							Uri.fromParts("mailto", "patrik@ptjwebben.se", null));
 					email.putExtra(Intent.EXTRA_SUBJECT, "Booksonic " + version + " Error Logs");
 					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n\n" + footer);
-					Uri attachment = Uri.fromFile(logcat);
-					email.putExtra(Intent.EXTRA_STREAM, attachment);
 					startActivity(email);
 				}
 			}.execute();

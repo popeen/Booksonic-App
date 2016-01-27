@@ -303,6 +303,9 @@ public final class Notifications {
 	}
 
 	public static void showSyncNotification(final Context context, int stringId, String extra) {
+		showSyncNotification(context, stringId, extra, null);
+	}
+	public static void showSyncNotification(final Context context, int stringId, String extra, String extraId) {
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION, true)) {
 			if(extra == null) {
 				extra = "";
@@ -342,6 +345,9 @@ public final class Notifications {
 			}
 			if(type != null) {
 				notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
+			}
+			if(extraId != null) {
+				notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_ID, extraId);
 			}
 
 			builder.setContentIntent(PendingIntent.getActivity(context, stringId, notificationIntent, 0));

@@ -1,3 +1,4 @@
+
 package github.popeen.dsub.view;
 
 import android.annotation.TargetApi;
@@ -8,11 +9,16 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
 
+
 import github.popeen.dsub.R;
+import github.popeen.dsub.util.DrawableTint;
 
 public class CardView extends FrameLayout{
+	private static final String TAG = CardView.class.getSimpleName();
+
 	public CardView(Context context) {
 		super(context);
 		init(context);
@@ -36,19 +42,29 @@ public class CardView extends FrameLayout{
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		Path clipPath = new Path();
-
-		float roundedDp = getResources().getDimension(R.dimen.Card_Radius);
-		clipPath.addRoundRect(new RectF(canvas.getClipBounds()), roundedDp, roundedDp, Path.Direction.CW);
-		canvas.clipPath(clipPath);
+		try {
+			Path clipPath = new Path();
+			float roundedDp = getResources().getDimension(R.dimen.Card_Radius);
+			clipPath.addRoundRect(new RectF(canvas.getClipBounds()), roundedDp, roundedDp, Path.Direction.CW);
+			canvas.clipPath(clipPath);
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to clip path on canvas", e);
+		}
 		super.onDraw(canvas);
 	}
 
 	private void init(Context context) {
 		setClipChildren(true);
-		setBackgroundResource(R.drawable.card_rounded_corners);
+		setBackgroundResource(DrawableTint.getDrawableRes(context, R.attr.cardBackgroundDrawable));
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			setElevation(10.0f);
+			setElevation(getResources().getInteger(R.integer.Card_Elevation));
+		}
+
+		// clipPath is not supported with Hardware Acceleration before API 18
+		// http://stackoverflow.com/questions/8895677/work-around-canvas-clippath-that-is-not-supported-in-android-any-more/8895894#8895894
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 && isHardwareAccelerated()) {
+			Log.d(TAG, "Change to software");
+			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
 	}
 }

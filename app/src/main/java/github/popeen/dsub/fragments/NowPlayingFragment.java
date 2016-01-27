@@ -619,6 +619,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				context.supportInvalidateOptionsMenu();
 				return true;
 			case R.id.menu_shuffle:
+
 				if(getDownloadService().getSleepTimer()) {
 					getDownloadService().stopSleepTimer();
 					context.supportInvalidateOptionsMenu();
@@ -691,13 +692,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 	}
 	private void onResumeHandlers() {
-		final Handler handler = new Handler();
 		executorService = Executors.newSingleThreadScheduledExecutor();
 		setControlsVisible(true);
 
 		final DownloadService downloadService = getDownloadService();
 		if (downloadService == null || downloadService.getCurrentPlaying() == null || startFlipped) {
 			playlistFlipper.setDisplayedChild(1);
+			startFlipped = false;
 		}
 		if (downloadService != null && downloadService.getKeepScreenOn()) {
 			context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -712,16 +713,17 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		context.runWhenServiceAvailable(new Runnable() {
-            @Override
-            public void run() {
-                if (primaryFragment) {
-                    DownloadService downloadService = getDownloadService();
-                    downloadService.startRemoteScan();
-                    downloadService.addOnSongChangedListener(NowPlayingFragment.this, true);
-                }
-                updateRepeatButton();
-            }
-        });
+
+			@Override
+			public void run() {
+				if (primaryFragment) {
+					DownloadService downloadService = getDownloadService();
+					downloadService.startRemoteScan();
+					downloadService.addOnSongChangedListener(NowPlayingFragment.this, true);
+				}
+				updateRepeatButton();
+			}
+		});
 	}
 
 	@Override
@@ -1170,14 +1172,15 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 	@Override
 	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex) {
-        try {
-            String track[] = new String[3];
-            track[0] = this.currentPlaying.getSong().getId();
-            track[1] = "true";
-            Long temp = System.currentTimeMillis() / 1000L;
-            track[2] = temp.toString();
-            this.sqlh.addTrack(track);
-        }catch(Exception e){}
+		try {
+			String track[] = new String[3];
+			track[0] = this.currentPlaying.getSong().getId();
+			track[1] = "true";
+			Long temp = System.currentTimeMillis() / 1000L;
+			track[2] = temp.toString();
+			this.sqlh.addTrack(track);
+		} catch (Exception e) {
+		}
 		this.currentPlaying = currentPlaying;
 		if (currentPlaying != null) {
 			Entry song = currentPlaying.getSong();
@@ -1189,8 +1192,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
 			setSubtitle(null);
 		}
-
-    }
+	}
 
 	@Override
 	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex) {
@@ -1263,7 +1265,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onStateUpdate(DownloadFile downloadFile, PlayerState playerState) {
+	public void onStateUpdate(DownloadFile downloadFile, PlayerState playerState){
 		switch (playerState) {
 			case DOWNLOADING:
 				if(currentPlaying != null) {
@@ -1355,6 +1357,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
 			}
 			bookmarkButton.setImageResource(bookmark);
+		}
+
+		if(song != null && albumArtImageView != null && fieldChange == DownloadService.METADATA_UPDATED_COVER_ART) {
+			getImageLoader().loadImage(albumArtImageView, song, true, true);
 		}
 	}
 
