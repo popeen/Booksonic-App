@@ -48,6 +48,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import github.popeen.dsub.R;
 
@@ -82,6 +83,7 @@ import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.service.OfflineException;
 import github.popeen.dsub.service.ServerTooOldException;
 import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.FileChooser;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ImageLoader;
 import github.popeen.dsub.util.LoadingTask;
@@ -183,6 +185,19 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				return true;
 			case R.id.menu_exit:
 				exit();
+				return true;
+			case R.id.menu_export:
+				SongDBHandler.getHandler(context).exportHeard();
+				return true;
+			case R.id.menu_import:
+				new FileChooser(context).setFileListener(new FileChooser.FileSelectedListener() {
+					@Override
+					public void fileSelected(final File file) {
+						SongDBHandler.getHandler(context).importHeard(file.getPath().toString());
+						Toast toast = Toast.makeText(context, R.string.imported, Toast.LENGTH_LONG);
+						toast.show();
+					}
+				}).showDialog();
 				return true;
 			case R.id.menu_refresh:
 				refresh();

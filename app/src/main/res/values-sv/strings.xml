@@ -667,5 +667,7 @@
 	<string name="album.book.length">Längd</string>
 	<string name="album.book.reader">Uppläsare</string>
 	<string name="playlist.reverse">Omvänt</string>
+	<string name="imported">Lyssnat status importerad</string>
+	<string name="exported">Lyssnat status exporterad till</string>
 
 </resources>

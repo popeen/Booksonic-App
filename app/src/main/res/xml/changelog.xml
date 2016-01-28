@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="1.0.4" versioncode="6" releasedate="2016-01-27">
+    <release version="1.0.4" versioncode="6" releasedate="2016-01-29">
+        <change>Heard status can now be imported/exported</change>
         <change>Keeping track of played tracks should be much more reliable.</change>
         <change>Updated DSub sources to 5.1.4</change>
         <change>Other small bugfixes</change>

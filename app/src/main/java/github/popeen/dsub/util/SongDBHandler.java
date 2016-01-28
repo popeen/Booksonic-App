@@ -21,10 +21,28 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
+import android.util.Log;
+import android.widget.Toast;
 
+import org.eclipse.jetty.util.ajax.JSON;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
+import github.popeen.dsub.R;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.service.DownloadFile;
 
@@ -66,6 +84,83 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_SONGS);
 		this.onCreate(db);
+	}
+
+	public void exportHeard() {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String[] columns = {SONGS_ID, SONGS_SERVER_KEY, SONGS_SERVER_ID, SONGS_COMPLETE_PATH, SONGS_LAST_PLAYED, SONGS_LAST_COMPLETED};
+		Cursor cursor = db.query(TABLE_SONGS, columns, SONGS_LAST_PLAYED + " != ''", null, null, null, null, null);
+
+		JSONArray json = new JSONArray();
+
+		try {
+			while (cursor.moveToNext()) {
+				JSONObject tempJson = new JSONObject();
+				tempJson.put("SONGS_ID", cursor.getInt(0));
+				tempJson.put("SONGS_SERVER_KEY", cursor.getInt(1));
+				tempJson.put("SONGS_SERVER_ID", cursor.getString(2));
+				tempJson.put("SONGS_COMPLETE_PATH", cursor.getString(3));
+				tempJson.put("SONGS_LAST_PLAYED", cursor.getInt(4));
+				tempJson.put("SONGS_LAST_COMPLETED", cursor.getInt(5));
+				json.put(tempJson);
+			}
+			cursor.close();
+		}catch(Exception e){ }
+
+		try {
+			File file = new File(Environment.getExternalStorageDirectory(), "booksonic_backup.json");
+			FileOutputStream fileos = new FileOutputStream(file.getPath());
+			fileos.write(json.toString().getBytes());
+			fileos.close();
+		}catch(Exception e){ }
+
+		Toast toast = Toast.makeText(context, context.getString(R.string.exported) + " " + Environment.getExternalStorageDirectory() + "/booksonic_backup.json", Toast.LENGTH_LONG);
+		toast.show();
+	}
+
+	protected String convertStreamToString(InputStream is) throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			sb.append(line).append("\n");
+		}
+		reader.close();
+		return sb.toString();
+	}
+
+	protected String getStringFromFile (String filePath) throws Exception {
+		File fl = new File(filePath);
+		FileInputStream fin = new FileInputStream(fl);
+		String ret = convertStreamToString(fin);
+		//Make sure you close all streams.
+		fin.close();
+		return ret;
+	}
+
+	public void importHeard(String path) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		try {
+			String jsonString = getStringFromFile(path);
+			JSONArray array = new JSONArray(jsonString);
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject row = array.getJSONObject(i);
+				ContentValues values = new ContentValues();
+				values.put(SONGS_ID, row.getInt("SONGS_ID"));
+				values.put(SONGS_SERVER_KEY, row.getInt("SONGS_SERVER_KEY"));
+				values.put(SONGS_SERVER_ID, row.getString("SONGS_SERVER_ID"));
+				values.put(SONGS_COMPLETE_PATH, row.getString("SONGS_COMPLETE_PATH"));
+				values.put(SONGS_LAST_PLAYED, row.getInt("SONGS_LAST_PLAYED"));
+				values.put(SONGS_LAST_COMPLETED, row.getInt("SONGS_LAST_COMPLETED"));
+
+
+				db.insertWithOnConflict(TABLE_SONGS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+
+			}
+
+		}catch(Exception e){ }
 	}
 
 	public synchronized void addSong(DownloadFile downloadFile) {

@@ -16,25 +16,25 @@
 			android:title="@string/settings.bookmarks_enabled"
 			android:summary="@string/settings.bookmarks_enabled_summary"
 			android:key="bookmarksEnabled"
-			android:defaultValue="true"/>
+			android:defaultValue="false"/>
 
 		<CheckBoxPreference
 			android:title="@string/settings.shares_enabled"
 			android:summary="@string/settings.shares_enabled_summary"
 			android:key="sharedEnabled"
-			android:defaultValue="true"/>
+			android:defaultValue="false"/>
 
 		<CheckBoxPreference
 			android:title="@string/settings.chat_enabled"
 			android:summary="@string/settings.chat_enabled_summary"
 			android:key="chatEnabled"
-			android:defaultValue="true"/>
+			android:defaultValue="false"/>
 
 		<CheckBoxPreference
 			android:title="@string/settings.admin_enabled"
 			android:summary="@string/settings.admin_enabled_summary"
 			android:key="adminEnabled"
-			android:defaultValue="true"/>
+			android:defaultValue="false"/>
 	</PreferenceCategory>
 
 	<PreferenceCategory

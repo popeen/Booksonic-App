@@ -683,5 +683,7 @@
 	<string name="album.book.reader">Narrator</string>
 	<string name="playlist.reverse">Reverse</string>
     <string name="details.fork">Forked from</string>
+	<string name="imported">Heard status imported</string>
+	<string name="exported">Heard status exported to</string>
 
 </resources>

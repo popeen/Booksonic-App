@@ -37,6 +37,14 @@
         android:title="@string/changelog_full_title"/>
 
 	<item
+		android:id="@+id/menu_export"
+		android:title="Export heard status"/>
+
+	<item
+		android:id="@+id/menu_import"
+		android:title="Import heard status"/>
+
+	<item
 		android:id="@+id/menu_exit"
 		android:title="@string/menu.exit"/>
 </menu>
