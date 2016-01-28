@@ -1,5 +1,6 @@
 package github.popeen.dsub.util;
 
+import android.app.Activity;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.LinkedList;
@@ -9,6 +10,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 /**
@@ -51,6 +55,42 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         db.insert(TABLE_HEARD_TRACKS, null, values);
         db.close();
+    }
+
+    public void importData(JSONArray array){
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject row = array.getJSONObject(i);
+                ContentValues values = new ContentValues();
+                values.put(TRACK_ID, row.getInt("TRACK_ID"));
+                values.put(TRACK_HEARD, row.getString("TRACK_HEARD"));
+                values.put(TRACK_DATE, row.getString("TRACK_DATE"));
+                db.insertWithOnConflict(TABLE_HEARD_TRACKS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+        }catch(Exception e){ }
+    }
+
+    public JSONArray export(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {TRACK_ID, TRACK_HEARD, TRACK_DATE};
+        Cursor cursor = db.query(TABLE_HEARD_TRACKS, columns, null, null, null, null, null, null);
+
+
+        try {
+            JSONArray json = new JSONArray();
+            while (cursor.moveToNext()) {
+                JSONObject tempJson = new JSONObject();
+                tempJson.put("TRACK_ID", cursor.getInt(0));
+                tempJson.put("TRACK_HEARD", cursor.getString(1));
+                tempJson.put("TRACK_DATE", cursor.getString(2));
+                json.put(tempJson);
+            }
+            cursor.close();
+            return json;
+        }catch(Exception e){ }
+        return new JSONArray();
     }
 
     public String[] getTrack(String id) {

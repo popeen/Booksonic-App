@@ -88,13 +88,15 @@ public class SongDBHandler extends SQLiteOpenHelper {
 
 	public void exportHeard() {
 		SQLiteDatabase db = this.getReadableDatabase();
+		SQLiteHandler sqlh = new SQLiteHandler(context);
 
 		String[] columns = {SONGS_ID, SONGS_SERVER_KEY, SONGS_SERVER_ID, SONGS_COMPLETE_PATH, SONGS_LAST_PLAYED, SONGS_LAST_COMPLETED};
 		Cursor cursor = db.query(TABLE_SONGS, columns, SONGS_LAST_PLAYED + " != ''", null, null, null, null, null);
 
-		JSONArray json = new JSONArray();
+		JSONObject json = new JSONObject();
 
 		try {
+			JSONArray jsonSongDb = new JSONArray();
 			while (cursor.moveToNext()) {
 				JSONObject tempJson = new JSONObject();
 				tempJson.put("SONGS_ID", cursor.getInt(0));
@@ -103,9 +105,11 @@ public class SongDBHandler extends SQLiteOpenHelper {
 				tempJson.put("SONGS_COMPLETE_PATH", cursor.getString(3));
 				tempJson.put("SONGS_LAST_PLAYED", cursor.getInt(4));
 				tempJson.put("SONGS_LAST_COMPLETED", cursor.getInt(5));
-				json.put(tempJson);
+				jsonSongDb.put(tempJson);
 			}
 			cursor.close();
+			json.put("SongDB", jsonSongDb);
+			json.put("Booksonic", sqlh.export());
 		}catch(Exception e){ }
 
 		try {
@@ -141,10 +145,11 @@ public class SongDBHandler extends SQLiteOpenHelper {
 
 	public void importHeard(String path) {
 		SQLiteDatabase db = this.getReadableDatabase();
+		SQLiteHandler sqlh = new SQLiteHandler(context);
 
 		try {
 			String jsonString = getStringFromFile(path);
-			JSONArray array = new JSONArray(jsonString);
+			JSONArray array = new JSONArray(new JSONObject(jsonString).get("SongDB").toString());
 			for (int i = 0; i < array.length(); i++) {
 				JSONObject row = array.getJSONObject(i);
 				ContentValues values = new ContentValues();
@@ -160,6 +165,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 
 			}
 
+			sqlh.importData(new JSONArray(new JSONObject(jsonString).get("Booksonic").toString()));
 		}catch(Exception e){ }
 	}
 
