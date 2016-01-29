@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -108,6 +109,23 @@ public class SongDBHandler extends SQLiteOpenHelper {
 				jsonSongDb.put(tempJson);
 			}
 			cursor.close();
+
+
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			JSONArray jsonPrefs = new JSONArray();
+			for(int i=0; i<prefs.getInt("serverCount", 0); i++){
+				JSONObject tempJson = new JSONObject();
+				tempJson.put("serverName", prefs.getString("serverName"+Integer.toString(i + 1), ""));
+				tempJson.put("username", prefs.getString("username"+Integer.toString(i + 1), ""));
+				tempJson.put("password", prefs.getString("password"+Integer.toString(i + 1), ""));
+				tempJson.put("serverUrl", prefs.getString("serverUrl"+Integer.toString(i + 1), ""));
+				tempJson.put("serverInternalUrl", prefs.getString("serverInternalUrl"+Integer.toString(i + 1), ""));
+				tempJson.put("mostRecentCount", prefs.getInt("mostRecentCount"+Integer.toString(i + 1), 0));
+				jsonPrefs.put(tempJson);
+			}
+
+
+			json.put("Prefs", jsonPrefs);
 			json.put("SongDB", jsonSongDb);
 			json.put("Booksonic", sqlh.export());
 		}catch(Exception e){ }
@@ -165,7 +183,25 @@ public class SongDBHandler extends SQLiteOpenHelper {
 
 			}
 
+
+
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			SharedPreferences.Editor editor = prefs.edit();
+			array = new JSONArray(new JSONObject(jsonString).get("Prefs").toString());
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject row = array.getJSONObject(i);
+				editor.putString("serverName" + Integer.toString(i + 1), row.getString("serverName"));
+				editor.putString("username" + Integer.toString(i + 1), row.getString("username"));
+				editor.putString("password" + Integer.toString(i + 1), row.getString("password"));
+				editor.putString("serverUrl" + Integer.toString(i + 1), row.getString("serverUrl"));
+				editor.putString("serverInternalUrl" + Integer.toString(i + 1), row.getString("serverInternalUrl"));
+				editor.putInt("mostRecentCount" + Integer.toString(i + 1), row.getInt("mostRecentCount"));
+				editor.putInt("serverCount", i + 1);
+			}
+
+			editor.commit();
 			sqlh.importData(new JSONArray(new JSONObject(jsonString).get("Booksonic").toString()));
+
 		}catch(Exception e){ }
 	}
 

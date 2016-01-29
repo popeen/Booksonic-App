@@ -683,10 +683,11 @@
 	<string name="album.book.reader">Narrator</string>
 	<string name="playlist.reverse">Reverse</string>
     <string name="details.fork">Forked from</string>
-	<string name="imported">Heard status imported</string>
-	<string name="exported">Heard status exported to</string>
-	<string name="menu.import">Import heard status</string>
-	<string name="menu.export">Export heard status</string>
+	<string name="imported">Imported</string>
+	<string name="exported">Exported to</string>
+	<string name="exported.password.warning">Warning, you password to the server is in the backup. Keep it safe!</string>
+	<string name="menu.import">Import</string>
+	<string name="menu.export">Export</string>
 
 
 </resources>

@@ -29,6 +29,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StatFs;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -188,6 +189,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				return true;
 			case R.id.menu_export:
 				SongDBHandler.getHandler(context).exportHeard();
+				Toast toast = Toast.makeText(context, R.string.exported_password_warning, Toast.LENGTH_LONG);
+				toast.show();
 				return true;
 			case R.id.menu_import:
 				new FileChooser(context).setFileListener(new FileChooser.FileSelectedListener() {
