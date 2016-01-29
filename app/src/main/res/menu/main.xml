@@ -38,11 +38,11 @@
 
 	<item
 		android:id="@+id/menu_export"
-		android:title="Export heard status"/>
+		android:title="@string/menu.export"/>
 
 	<item
 		android:id="@+id/menu_import"
-		android:title="Import heard status"/>
+		android:title="@string/menu.import"/>
 
 	<item
 		android:id="@+id/menu_exit"

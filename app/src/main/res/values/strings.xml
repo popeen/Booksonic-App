@@ -685,5 +685,8 @@
     <string name="details.fork">Forked from</string>
 	<string name="imported">Heard status imported</string>
 	<string name="exported">Heard status exported to</string>
+	<string name="menu.import">Import heard status</string>
+	<string name="menu.export">Export heard status</string>
+
 
 </resources>

@@ -669,5 +669,7 @@
 	<string name="playlist.reverse">Omvänt</string>
 	<string name="imported">Lyssnat status importerad</string>
 	<string name="exported">Lyssnat status exporterad till</string>
+	<string name="menu.import">Importera lyssnat status</string>
+	<string name="menu.export">Exportera lyssnat status</string>
 
 </resources>
