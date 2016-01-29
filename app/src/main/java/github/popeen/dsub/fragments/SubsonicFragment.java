@@ -95,6 +95,7 @@ import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.UpdateHelper;
 import github.popeen.dsub.util.UserUtil;
 import github.popeen.dsub.util.Util;
+import github.popeen.dsub.util.importExport;
 import github.popeen.dsub.view.GridSpacingDecoration;
 import github.popeen.dsub.view.PlaylistSongView;
 import github.popeen.dsub.view.UpdateView;
@@ -188,19 +189,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				exit();
 				return true;
 			case R.id.menu_export:
-				SongDBHandler.getHandler(context).exportHeard();
-				Toast toast = Toast.makeText(context, R.string.exported_password_warning, Toast.LENGTH_LONG);
-				toast.show();
-				toast.show();
-				toast.show();
+				importExport.exportData(context);
 				return true;
 			case R.id.menu_import:
 				new FileChooser(context).setFileListener(new FileChooser.FileSelectedListener() {
 					@Override
 					public void fileSelected(final File file) {
-						SongDBHandler.getHandler(context).importHeard(file.getPath().toString());
-						Toast toast = Toast.makeText(context, R.string.imported, Toast.LENGTH_LONG);
-						toast.show();
+						importExport.importData(context, file.getPath().toString());
 					}
 				}).showDialog();
 				return true;

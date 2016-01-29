@@ -21,29 +21,10 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
-
-import org.eclipse.jetty.util.ajax.JSON;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
-
-import github.popeen.dsub.R;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.service.DownloadFile;
 
@@ -87,15 +68,10 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		this.onCreate(db);
 	}
 
-	public void exportHeard() {
+	public JSONArray exportData() {
 		SQLiteDatabase db = this.getReadableDatabase();
-		SQLiteHandler sqlh = new SQLiteHandler(context);
-
 		String[] columns = {SONGS_ID, SONGS_SERVER_KEY, SONGS_SERVER_ID, SONGS_COMPLETE_PATH, SONGS_LAST_PLAYED, SONGS_LAST_COMPLETED};
 		Cursor cursor = db.query(TABLE_SONGS, columns, SONGS_LAST_PLAYED + " != ''", null, null, null, null, null);
-
-		JSONObject json = new JSONObject();
-
 		try {
 			JSONArray jsonSongDb = new JSONArray();
 			while (cursor.moveToNext()) {
@@ -109,66 +85,14 @@ public class SongDBHandler extends SQLiteOpenHelper {
 				jsonSongDb.put(tempJson);
 			}
 			cursor.close();
-
-
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-			JSONArray jsonPrefs = new JSONArray();
-			for(int i=0; i<prefs.getInt("serverCount", 0); i++){
-				JSONObject tempJson = new JSONObject();
-				tempJson.put("serverName", prefs.getString("serverName"+Integer.toString(i + 1), ""));
-				tempJson.put("username", prefs.getString("username"+Integer.toString(i + 1), ""));
-				//OBS, Base 64 IS NOT ENCRYPTION, it is only used so the password will not be in clear text readable to humans but a potential attacker would get the password from it in less then a second.
-				tempJson.put("password", KakaduaUtil.randomChar()+KakaduaUtil.base64Encode(prefs.getString("password" + Integer.toString(i + 1), "")).replace("=", ""));
-				tempJson.put("serverUrl", prefs.getString("serverUrl"+Integer.toString(i + 1), ""));
-				tempJson.put("serverInternalUrl", prefs.getString("serverInternalUrl"+Integer.toString(i + 1), ""));
-				tempJson.put("mostRecentCount", prefs.getInt("mostRecentCount"+Integer.toString(i + 1), 0));
-				jsonPrefs.put(tempJson);
-			}
-
-
-			json.put("Prefs", jsonPrefs);
-			json.put("SongDB", jsonSongDb);
-			json.put("Booksonic", sqlh.export());
+			return jsonSongDb;
 		}catch(Exception e){ }
-
-		try {
-			File file = new File(Environment.getExternalStorageDirectory(), "booksonic_backup.json");
-			FileOutputStream fileos = new FileOutputStream(file.getPath());
-			fileos.write(json.toString().getBytes());
-			fileos.close();
-		}catch(Exception e){ }
-
-		Toast toast = Toast.makeText(context, context.getString(R.string.exported) + " " + Environment.getExternalStorageDirectory() + "/booksonic_backup.json", Toast.LENGTH_LONG);
-		toast.show();
+		return new JSONArray();
 	}
 
-	protected String convertStreamToString(InputStream is) throws Exception {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		StringBuilder sb = new StringBuilder();
-		String line = null;
-		while ((line = reader.readLine()) != null) {
-			sb.append(line).append("\n");
-		}
-		reader.close();
-		return sb.toString();
-	}
-
-	protected String getStringFromFile (String filePath) throws Exception {
-		File fl = new File(filePath);
-		FileInputStream fin = new FileInputStream(fl);
-		String ret = convertStreamToString(fin);
-		//Make sure you close all streams.
-		fin.close();
-		return ret;
-	}
-
-	public void importHeard(String path) {
+	public void importData(JSONArray array) {
 		SQLiteDatabase db = this.getReadableDatabase();
-		SQLiteHandler sqlh = new SQLiteHandler(context);
-
 		try {
-			String jsonString = getStringFromFile(path);
-			JSONArray array = new JSONArray(new JSONObject(jsonString).get("SongDB").toString());
 			for (int i = 0; i < array.length(); i++) {
 				JSONObject row = array.getJSONObject(i);
 				ContentValues values = new ContentValues();
@@ -178,31 +102,8 @@ public class SongDBHandler extends SQLiteOpenHelper {
 				values.put(SONGS_COMPLETE_PATH, row.getString("SONGS_COMPLETE_PATH"));
 				values.put(SONGS_LAST_PLAYED, row.getInt("SONGS_LAST_PLAYED"));
 				values.put(SONGS_LAST_COMPLETED, row.getInt("SONGS_LAST_COMPLETED"));
-
-
 				db.insertWithOnConflict(TABLE_SONGS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-
 			}
-
-
-
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-			SharedPreferences.Editor editor = prefs.edit();
-			array = new JSONArray(new JSONObject(jsonString).get("Prefs").toString());
-			for (int i = 0; i < array.length(); i++) {
-				JSONObject row = array.getJSONObject(i);
-				editor.putString("serverName" + Integer.toString(i + 1), row.getString("serverName"));
-				editor.putString("username" + Integer.toString(i + 1), row.getString("username"));
-				editor.putString("password" + Integer.toString(i + 1), KakaduaUtil.base64Decode(row.getString("password").substring(1)));
-				editor.putString("serverUrl" + Integer.toString(i + 1), row.getString("serverUrl"));
-				editor.putString("serverInternalUrl" + Integer.toString(i + 1), row.getString("serverInternalUrl"));
-				editor.putInt("mostRecentCount" + Integer.toString(i + 1), row.getInt("mostRecentCount"));
-				editor.putInt("serverCount", i + 1);
-			}
-
-			editor.commit();
-			sqlh.importData(new JSONArray(new JSONObject(jsonString).get("Booksonic").toString()));
-
 		}catch(Exception e){ }
 	}
 

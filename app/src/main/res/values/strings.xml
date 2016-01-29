@@ -688,6 +688,10 @@
 	<string name="exported.password.warning">Warning, you password to the server is in the backup. Keep it safe!</string>
 	<string name="menu.import">Import</string>
 	<string name="menu.export">Export</string>
+	<string name="button.yes">YES</string>
+	<string name="button.no">NO</string>
+	<string name="export.server.title">NO</string>
+	<string name="export.server.text">Should the server details be exported? This will include your password</string>
 
 
 </resources>

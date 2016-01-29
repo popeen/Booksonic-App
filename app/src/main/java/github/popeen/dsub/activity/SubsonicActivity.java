@@ -26,6 +26,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,6 +44,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -77,12 +82,13 @@ import github.popeen.dsub.updates.UpdateApp;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.DrawableTint;
 import github.popeen.dsub.util.ImageLoader;
+import github.popeen.dsub.util.KakaduaUtil;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.view.UpdateView;
 import github.popeen.dsub.util.UserUtil;
 
-public class SubsonicActivity extends AppCompatActivity implements OnItemSelectedListener {
+public class SubsonicActivity extends AppCompatActivity implements OnItemSelectedListener, SensorEventListener {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
@@ -117,9 +123,17 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	boolean showingTabs = true;
 	boolean drawerOpen = false;
 	SharedPreferences.OnSharedPreferenceChangeListener preferencesListener;
+	private SensorManager sensorManager;
+	float x,y,z;
+	boolean checkShake = false;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
+
+
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		sensorManager.registerListener(this, sensorManager.getDefaultSensor
+				(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
 		UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
 		if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
@@ -167,6 +181,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			};
 			Util.getPreferences(this).registerOnSharedPreferenceChangeListener(preferencesListener);
 		}
+
+
+
 	}
 
 	@Override
@@ -1196,6 +1213,47 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				if (defaultHandler != null) {
 					defaultHandler.uncaughtException(thread, throwable);
 				}
+
+			}
+		}
+	}
+
+
+	@Override
+	public void onAccuracyChanged(Sensor arg0, int arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		checkShake = true;
+		if(checkShake) {
+			if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
+				boolean reset = false;
+				double sensitivity = 3.0;
+				if (event.values[0] > x + sensitivity || event.values[0] < x - sensitivity) {
+					reset = true;
+				}
+				if (event.values[1] > y + sensitivity || event.values[1] < y - sensitivity) {
+					reset = true;
+				}
+				if (event.values[2] > z + sensitivity || event.values[2] < z - sensitivity) {
+					reset = true;
+				}
+
+				if (reset) {
+					DownloadService downloadService = getDownloadService();
+					if (downloadService != null && downloadService.getSleepTimer()) {
+						downloadService.stopSleepTimer();
+						downloadService.startSleepTimer();
+					}
+				}
+
+				x = event.values[0];
+				y = event.values[1];
+				z = event.values[2];
 
 			}
 		}

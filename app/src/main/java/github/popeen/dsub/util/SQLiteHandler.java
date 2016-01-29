@@ -19,6 +19,7 @@ import org.json.JSONObject;
  * Created by P on 2015-11-19.
  */
 public class SQLiteHandler extends SQLiteOpenHelper {
+    private static SQLiteHandler dbHandler;
 
     private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "BooksonicDB";
@@ -71,7 +72,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         }catch(Exception e){ }
     }
 
-    public JSONArray export(){
+    public JSONArray exportData(){
         SQLiteDatabase db = this.getReadableDatabase();
 
         String[] columns = {TRACK_ID, TRACK_HEARD, TRACK_DATE};
@@ -118,5 +119,13 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         int i = db.update(TABLE_HEARD_TRACKS, values, TRACK_ID + " = ?", new String[] { track[0] });
         db.close();
+    }
+
+    public static SQLiteHandler getHandler(Context context) {
+        if(dbHandler == null) {
+            dbHandler = new SQLiteHandler(context);
+        }
+
+        return dbHandler;
     }
 }
