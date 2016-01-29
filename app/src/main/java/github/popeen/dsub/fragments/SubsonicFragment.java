@@ -191,6 +191,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				SongDBHandler.getHandler(context).exportHeard();
 				Toast toast = Toast.makeText(context, R.string.exported_password_warning, Toast.LENGTH_LONG);
 				toast.show();
+				toast.show();
+				toast.show();
 				return true;
 			case R.id.menu_import:
 				new FileChooser(context).setFileListener(new FileChooser.FileSelectedListener() {

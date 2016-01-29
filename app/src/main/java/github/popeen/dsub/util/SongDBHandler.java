@@ -117,7 +117,8 @@ public class SongDBHandler extends SQLiteOpenHelper {
 				JSONObject tempJson = new JSONObject();
 				tempJson.put("serverName", prefs.getString("serverName"+Integer.toString(i + 1), ""));
 				tempJson.put("username", prefs.getString("username"+Integer.toString(i + 1), ""));
-				tempJson.put("password", prefs.getString("password"+Integer.toString(i + 1), ""));
+				//OBS, Base 64 IS NOT ENCRYPTION, it is only used so the password will not be in clear text readable to humans but a potential attacker would get the password from it in less then a second.
+				tempJson.put("password", KakaduaUtil.randomChar()+KakaduaUtil.base64Encode(prefs.getString("password" + Integer.toString(i + 1), "")).replace("=", ""));
 				tempJson.put("serverUrl", prefs.getString("serverUrl"+Integer.toString(i + 1), ""));
 				tempJson.put("serverInternalUrl", prefs.getString("serverInternalUrl"+Integer.toString(i + 1), ""));
 				tempJson.put("mostRecentCount", prefs.getInt("mostRecentCount"+Integer.toString(i + 1), 0));
@@ -192,7 +193,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 				JSONObject row = array.getJSONObject(i);
 				editor.putString("serverName" + Integer.toString(i + 1), row.getString("serverName"));
 				editor.putString("username" + Integer.toString(i + 1), row.getString("username"));
-				editor.putString("password" + Integer.toString(i + 1), row.getString("password"));
+				editor.putString("password" + Integer.toString(i + 1), KakaduaUtil.base64Decode(row.getString("password").substring(1)));
 				editor.putString("serverUrl" + Integer.toString(i + 1), row.getString("serverUrl"));
 				editor.putString("serverInternalUrl" + Integer.toString(i + 1), row.getString("serverInternalUrl"));
 				editor.putInt("mostRecentCount" + Integer.toString(i + 1), row.getInt("mostRecentCount"));
