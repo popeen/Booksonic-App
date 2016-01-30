@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.text.InputType;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -68,26 +70,30 @@ public class importExport {
     public static void exportData(Context context){
         final Context con = context;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(R.string.export_server_title));
-        builder.setMessage(context.getString(R.string.export_server_text));
+        final EditText txtUrl = new EditText(con);
+        txtUrl.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        builder.setPositiveButton(context.getString(R.string.button_yes), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                importExport.doExport(con, true);
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton(context.getString(R.string.button_no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                importExport.doExport(con, false);
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
+        new AlertDialog.Builder(con)
+                .setTitle(context.getString(R.string.export_title))
+                .setMessage(context.getString(R.string.export_server_text))
+                .setView(txtUrl)
+                .setPositiveButton(context.getString(R.string.button_yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        if (txtUrl.getText().toString().equals(prefs.getString("password1", "")) && txtUrl.getText().toString() != "") {
+                            importExport.doExport(con, true);
+                        } else {
+                            KakaduaUtil.toastLong(con, con.getString(R.string.export_wrong_password));
+                            importExport.doExport(con, false);
+                        }
+                    }
+                })
+                .setNegativeButton(context.getString(R.string.button_no), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        importExport.doExport(con, false);
+                    }
+                })
+                .show();
     }
 
     private static void doExport(Context context, boolean shouldExportServers){

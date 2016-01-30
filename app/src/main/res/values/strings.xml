@@ -690,8 +690,9 @@
 	<string name="menu.export">Export</string>
 	<string name="button.yes">YES</string>
 	<string name="button.no">NO</string>
-	<string name="export.server.title">NO</string>
-	<string name="export.server.text">Should the server details be exported? This will include your password</string>
+	<string name="export.title">Export</string>
+	<string name="export.server.text">Should the server details and accounts be exported?\n\nIf yes you need to enter the password for your top server here.</string>
+	<string name="export.wrong.password">Password incorrect. Servers and accounts will be skipped</string>
 
 
 </resources>
