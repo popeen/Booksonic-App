@@ -280,6 +280,8 @@ public final class Util {
 					return R.style.Theme_DSub_Dark_No_Actionbar;
 				} else if ("black".equals(theme)) {
 					return R.style.Theme_DSub_Black_No_Actionbar;
+				} else if ("classic".equals(theme)) {
+					return R.style.Theme_DSub_Classic_No_Actionbar;
 				} else if ("holo".equals(theme)) {
 					return R.style.Theme_DSub_Holo_No_Actionbar;
 				} else {
@@ -290,6 +292,8 @@ public final class Util {
 					return R.style.Theme_DSub_Dark_No_Color;
 				} else if ("black".equals(theme)) {
 					return R.style.Theme_DSub_Black_No_Color;
+				} else if ("classic".equals(theme)) {
+					return R.style.Theme_DSub_Classic_No_Color;
 				} else if ("holo".equals(theme)) {
 					return R.style.Theme_DSub_Holo_No_Color;
 				} else {
@@ -301,6 +305,8 @@ public final class Util {
 				return R.style.Theme_DSub_Dark;
 			} else if ("black".equals(theme)) {
 				return R.style.Theme_DSub_Black;
+			} else if ("classic".equals(theme)) {
+				return R.style.Theme_DSub_Classic;
 			} else if ("holo".equals(theme)) {
 				return R.style.Theme_DSub_Holo;
 			} else {

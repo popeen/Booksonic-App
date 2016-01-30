@@ -133,6 +133,15 @@
 	</style>
 	<style name="Theme.DSub.Dark" parent="Theme.DSub.Dark.Base">
 	</style>
+	<style name="Theme.DSub.Classic.Base" parent="Theme.DSub.Light.Base">
+		<item name="colorPrimary">@color/lightPrimary_classic</item>
+		<item name="colorPrimaryDark">@color/lightPrimaryDark_classic</item>
+		<item name="colorAccent">@color/lightAccent_classic</item>
+		<item name="actionbarBackgroundColor">@color/lightPrimary_classic</item>
+		<item name="drawerHeaderBackground">@drawable/drawer_header_classic</item>
+	</style>
+	<style name="Theme.DSub.Classic" parent="Theme.DSub.Classic.Base">
+	</style>
 	<style name="Theme.DSub.Black.Base" parent="Theme.DSub.Dark.Base">
 		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_black</item>
 		<item name="android:windowBackground">@android:color/black</item>
@@ -152,6 +161,10 @@
 	</style>
 
 	<style name="Theme.DSub.Light.No_Actionbar" parent="Theme.DSub.Light">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
+	<style name="Theme.DSub.Classic.No_Actionbar" parent="Theme.DSub.Classic">
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
 	</style>
@@ -194,6 +207,32 @@
 		<item name="actionModeStyle">@style/LightActionMode</item>
 		<item name="actionModeCloseButtonStyle">@style/DarkCloseButton</item>
 	</style>
+	<style name="Theme.DSub.Classic.No_Color.Base" parent="Theme.DSub.Classic.No_Actionbar">
+		<item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.ActionBar</item>
+		<item name="actionbarBackgroundColor">@android:color/transparent</item>
+		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
+		<item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
+		<item name="android:spinnerItemStyle">@style/LightSpinnerItem</item>
+		<item name="drawerTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
+		<item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
+		<item name="actionbar_backward">@drawable/media_backward_light</item>
+		<item name="actionbar_forward">@drawable/media_forward_light</item>
+		<item name="actionbar_pause">@drawable/media_pause_light</item>
+		<item name="actionbar_start">@drawable/media_start_light</item>
+		<item name="actionbar_stop">@drawable/media_stop_light</item>
+		<item name="add">@drawable/ic_action_add_light</item>
+		<item name="shuffle">@drawable/ic_menu_shuffle_light</item>
+		<item name="refresh">@drawable/ic_menu_refresh_light</item>
+		<item name="search">@drawable/ic_menu_search_light</item>
+		<item name="remove">@drawable/ic_menu_remove_light</item>
+		<item name="save">@drawable/ic_menu_save_light</item>
+		<item name="add_person">@drawable/ic_menu_add_person_light</item>
+		<item name="password">@drawable/ic_menu_password_light</item>
+		<item name="radio">@drawable/ic_menu_radio_light</item>
+		<item name="actionModeBackground">@color/background_material_light</item>
+		<item name="actionModeStyle">@style/LightActionMode</item>
+		<item name="actionModeCloseButtonStyle">@style/DarkCloseButton</item>
+	</style>
 	<style name="Theme.DSub.Black.No_Color.Base" parent="Theme.DSub.Black.No_Actionbar">
 		<item name="actionbarBackgroundColor">@android:color/transparent</item>
 		<item name="actionModeBackground">@android:color/black</item>
@@ -208,6 +247,8 @@
 	</style>
 
 	<style name="Theme.DSub.Light.No_Color" parent="Theme.DSub.Light.No_Color.Base">
+	</style>
+	<style name="Theme.DSub.Classic.No_Color" parent="Theme.DSub.Classic.No_Color.Base">
 	</style>
 	<style name="Theme.DSub.Black.No_Color" parent="Theme.DSub.Black.No_Color.Base">
 	</style>

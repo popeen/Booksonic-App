@@ -36,6 +36,7 @@
     <string-array name="themeValues">
         <item>light</item>
         <item>dark</item>
+		<item>classic</item>
 		<item>black</item>
 		<item>holo</item>
     </string-array>
@@ -43,6 +44,7 @@
     <string-array name="themeNames">
         <item>@string/settings.theme_light</item>
         <item>@string/settings.theme_dark</item>
+		<item>@string/settings.theme_classic</item>
 		<item>@string/settings.theme_black</item>
 		<item>@string/settings.theme_holo</item>
     </string-array>

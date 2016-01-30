@@ -14,8 +14,8 @@
     <color name="lightBg">#eaf9fc</color>
 
 	<color name="lightPrimary_classic">#273236</color>
-	<color name="lightPrimaryDark_classic">#125f81</color>
-	<color name="lightAccent_classic">#56b9dd</color>
+	<color name="lightPrimaryDark_classic">#061d23</color>
+	<color name="lightAccent_classic">#029688</color>
 
 	<color name="holoPrimary">#009688</color>
 	<color name="holoPrimaryDark">#00897b</color>
