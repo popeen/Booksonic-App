@@ -668,9 +668,15 @@
 	<string name="album.book.reader">Uppläsare</string>
 	<string name="playlist.reverse">Omvänt</string>
 	<string name="imported">Importerat</string>
-	<string name="exported">Exporterat</string>
-	<string name="exported.password.warning">Varning, ditt lösenord till servern finns med i backupen. Förvara den säkert!</string>
+	<string name="exported">Exporterat till</string>
+	<string name="exported.password.warning">Varning, ditt lösenord finns i backupen. Förvara den säkert!</string>
 	<string name="menu.import">Importera</string>
 	<string name="menu.export">Exportera</string>
+	<string name="button.yes">JA</string>
+	<string name="button.no">NEJ</string>
+	<string name="export.title">Exportera</string>
+	<string name="export.server.text">Ska server och användardetaljer exporteras?\n\nOm ja så måste du fylla i lösenordet för din topp server här.</string>
+	<string name="export.wrong.password">Ogiltigt lösenord. Servrar och konton sparas inte.</string>
+	<string name="settings.theme_classic">Klassisk</string>
 
 </resources>
