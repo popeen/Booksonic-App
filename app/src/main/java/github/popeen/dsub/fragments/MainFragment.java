@@ -24,12 +24,14 @@ import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.FileUtil;
+import github.popeen.dsub.util.KakaduaUtil;
 import github.popeen.dsub.util.LoadingTask;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.UserUtil;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
+import github.popeen.dsub.view.ChangeLog;
 import github.popeen.dsub.view.UpdateView;
 
 
@@ -84,6 +86,10 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				return true;
 			case R.id.menu_about:
 				showAboutDialog();
+				return true;
+			case R.id.menu_changelog:
+				ChangeLog changeLog = new ChangeLog(context, Util.getPreferences(context));
+				changeLog.getFullLogDialog().show();
 				return true;
 			case R.id.menu_faq:
 				showFAQDialog();
