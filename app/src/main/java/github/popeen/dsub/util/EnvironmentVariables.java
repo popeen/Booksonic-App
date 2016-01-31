@@ -17,4 +17,5 @@ package github.popeen.dsub.util;
 
 public final class EnvironmentVariables {
 	public static final String PASTEBIN_DEV_KEY = "";
+	public static final String BOKTIPSET_API_KEY = "";
 }

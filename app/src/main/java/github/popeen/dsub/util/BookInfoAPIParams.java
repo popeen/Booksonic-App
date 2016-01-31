@@ -7,16 +7,16 @@ public class BookInfoAPIParams{
     public String url;
     public String author;
     public String title;
+    public int year;
 
-    public BookInfoAPIParams(String url, String author, String title){
+    public BookInfoAPIParams(String url, String author, String title, int year){
         this.url = url;
         this.author = author;
         this.title = title;
+        this.year = year;
     }
 
-    public String getURL(){
-        return url;
-    }
+    public String getURL() { return url; }
 
     public String getAuthor(){
         return author;
@@ -25,4 +25,6 @@ public class BookInfoAPIParams{
     public String getTitle(){
         return title;
     }
+
+    public int getYear() { return year; }
 }

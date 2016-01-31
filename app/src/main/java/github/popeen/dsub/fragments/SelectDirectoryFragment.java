@@ -1281,7 +1281,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					"&f=json";
 
 			Log.w("GetInfo", url);
-			BookInfoAPIParams params = new BookInfoAPIParams(url, artistName, titleView.getText().toString());
+			BookInfoAPIParams params = new BookInfoAPIParams(url, artists.iterator().next(), titleView.getText().toString(), years.iterator().next());
 			bookInfo = new BookInfoAPI(context).execute(params).get();
 			bookDescription = bookInfo[0];
 			bookReader = bookInfo[1];
