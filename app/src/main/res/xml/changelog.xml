@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.5" versioncode="7" releasedate="2016-02-01">
+        <change>If app is in Swedish it will look at boktipset.se before checking Google Books if the server has no book description</change>
+        <change>Added a classic theme to bring back the old Booksonic design</change>
+        <change>Design tweaks to drawer (sidebar)</change>
+        <change>Sleeptimer will reset if you shake the phone</change>
+        <change>Server and account info can be included in import/export</change>
+        <change>Bugfixes</change>
+    </release>
     <release version="1.0.4" versioncode="6" releasedate="2016-01-29">
         <change>Heard status can now be imported/exported</change>
         <change>Keeping track of played tracks should be much more reliable.</change>
