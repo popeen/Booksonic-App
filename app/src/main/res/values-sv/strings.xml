@@ -679,7 +679,7 @@
 	<string name="export.wrong.password">Ogiltigt lösenord. Servrar och konton sparas inte.</string>
 	<string name="settings.theme_classic">Klassisk</string>
 	<string name="msg.server.outdated">Din server är föråldrad</string>
-	<string name="msg.server.outdated_beta">Din server kör en föråldrad beta version</string>
+	<string name="msg.server.outdated_beta">Din server är en föråldrad beta version</string>
 	<string name="msg.server.notBooksonic">Din server är föråldrad eller kör inte Booksonic</string>
 
 </resources>

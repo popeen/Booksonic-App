@@ -66,6 +66,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -206,6 +208,53 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			serviceIntent.setClassName(this.getPackageName(), HeadphoneListenerService.class.getName());
 			this.startService(serviceIntent);
 		}
+		checkIfServerOutdated();
+	}
+
+	private void checkIfServerOutdated(){
+		final Context context = this;
+		new Thread(new Runnable(){
+			public void run()
+			{
+				SharedPreferences prefs = Util.getPreferences(context);
+				String url =  prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + Util.getActiveServer(context), null) +
+						"/rest/ping.view?u=" + prefs.getString(Constants.PREFERENCES_KEY_USERNAME + Util.getActiveServer(context), null) +
+						"&p=" + prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null) +
+						"&v=" + Constants.REST_PROTOCOL_VERSION_SUBSONIC +
+						"&c=booksonic" +
+						"&f=json";
+				final String input = KakaduaUtil.http_get_contents(url);
+				Log.w("ping", input);
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+
+						try {
+							JSONObject json = new JSONObject(input);
+							String resp = json.getJSONObject("subsonic-response").getString("booksonic");
+							Log.w("outdated?", resp);
+							TextView t = (TextView) findViewById(R.id.msg);
+							if (resp.equals("outdated")) {
+								Log.w(":/", ":/");
+								t.setText(context.getText(R.string.msg_server_outdated));
+								t.setVisibility(View.VISIBLE);
+							} else if (resp.equals("outdated_beta") || resp.equals("true")) { //early beta versions only returned "true"
+								Log.w(":(", ":(");
+								t.setText(context.getText(R.string.msg_server_outdated_beta));
+								t.setVisibility(View.VISIBLE);
+							} else {
+								Log.w(":)", ":)");
+								t.setVisibility(View.INVISIBLE);
+							}
+						} catch (Exception er) {
+							TextView t = (TextView) findViewById(R.id.msg);
+							t.setText(context.getText(R.string.msg_server_notBooksonic));
+							t.setVisibility(View.VISIBLE);
+						}
+					}
+				});
+			}
+		}).start();
 	}
 
 	protected void createCustomActionBarView() {
@@ -1032,6 +1081,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			UserUtil.refreshCurrentUser(this, false, true);
 			updateDrawerHeader();
 		}
+		checkIfServerOutdated();
 	}
 	public void updateDrawerHeader() {
 		if(Util.isOffline(this)) {

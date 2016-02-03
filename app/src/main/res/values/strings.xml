@@ -695,7 +695,7 @@
 	<string name="export.wrong.password">Password incorrect. Servers and accounts will be skipped</string>
 	<string name="settings.theme_classic">Classic</string>
 	<string name="msg.server.outdated">Your server is outdated</string>
-	<string name="msg.server.outdated_beta">Your server is running an outdated beta version</string>
+	<string name="msg.server.outdated_beta">Your server is an outdated beta version</string>
 	<string name="msg.server.notBooksonic">Your server is outdated or not running Booksonic</string>
 
 
