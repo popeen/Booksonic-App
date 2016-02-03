@@ -74,29 +74,33 @@ public class importExport {
         txtUrl.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        new AlertDialog.Builder(con)
-                .setTitle(context.getString(R.string.export_title))
-                .setMessage(context.getString(R.string.export_server_text))
-                .setView(txtUrl)
-                .setPositiveButton(context.getString(R.string.button_yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (txtUrl.getText().toString().equals(prefs.getString("password1", "")) && txtUrl.getText().toString() != "") {
-                            importExport.doExport(con, true);
-                        } else {
-                            KakaduaUtil.toastLong(con, con.getString(R.string.export_wrong_password));
+        if(Constants.EXPORT_REQUIRES_PASS) {
+            new AlertDialog.Builder(con)
+                    .setTitle(context.getString(R.string.export_title))
+                    .setMessage(context.getString(R.string.export_server_text))
+                    .setView(txtUrl)
+                    .setPositiveButton(context.getString(R.string.button_yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            if (txtUrl.getText().toString().equals(prefs.getString("password1", "")) && txtUrl.getText().toString() != "") {
+                                importExport.doExport(con, true);
+                            } else {
+                                KakaduaUtil.toastLong(con, con.getString(R.string.export_wrong_password));
+                                importExport.doExport(con, false);
+                            }
+                        }
+                    })
+                    .setNegativeButton(context.getString(R.string.button_no), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
                             importExport.doExport(con, false);
                         }
-                    }
-                })
-                .setNegativeButton(context.getString(R.string.button_no), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        importExport.doExport(con, false);
-                    }
-                })
-                .show();
+                    })
+                    .show();
+        }else{
+            importExport.doExport(con, true);
+        }
     }
 
-    private static void doExport(Context context, boolean shouldExportServers){
+    public static void doExport(Context context, boolean shouldExportServers){
         SQLiteHandler sqlh = SQLiteHandler.getHandler(context);
         SongDBHandler sdbh = SongDBHandler.getHandler(context);
 
