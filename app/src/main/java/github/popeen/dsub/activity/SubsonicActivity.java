@@ -234,22 +234,26 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 							String resp = json.getJSONObject("subsonic-response").getString("booksonic");
 							Log.w("outdated?", resp);
 							TextView t = (TextView) findViewById(R.id.msg);
-							if (resp.equals("outdated")) {
-								Log.w(":/", ":/");
-								t.setText(context.getText(R.string.msg_server_outdated));
-								t.setVisibility(View.VISIBLE);
-							} else if (resp.equals("outdated_beta") || resp.equals("true")) { //early beta versions only returned "true"
-								Log.w(":(", ":(");
-								t.setText(context.getText(R.string.msg_server_outdated_beta));
-								t.setVisibility(View.VISIBLE);
-							} else {
-								Log.w(":)", ":)");
-								t.setVisibility(View.INVISIBLE);
+							if(t != null) {
+								if (resp.equals("outdated")) {
+									Log.w(":/", ":/");
+									t.setText(context.getText(R.string.msg_server_outdated));
+									t.setVisibility(View.VISIBLE);
+								} else if (resp.equals("outdated_beta") || resp.equals("true")) { //early beta versions only returned "true"
+									Log.w(":(", ":(");
+									t.setText(context.getText(R.string.msg_server_outdated_beta));
+									t.setVisibility(View.VISIBLE);
+								} else {
+									Log.w(":)", ":)");
+									t.setVisibility(View.INVISIBLE);
+								}
 							}
 						} catch (Exception er) {
 							TextView t = (TextView) findViewById(R.id.msg);
-							t.setText(context.getText(R.string.msg_server_notBooksonic));
-							t.setVisibility(View.VISIBLE);
+							if(t != null) {
+								t.setText(context.getText(R.string.msg_server_notBooksonic));
+								t.setVisibility(View.VISIBLE);
+							}
 						}
 					}
 				});
