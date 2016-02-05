@@ -290,6 +290,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		populateTabs();
 		getImageLoader().onUIVisible();
 		UpdateView.addActiveActivity();
+
+        checkIfServerOutdated();
 	}
 
 	@Override
@@ -471,6 +473,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		if(secondaryContainer != null) {
 			primaryContainer = findViewById(R.id.fragment_container);
 		}
+        checkIfServerOutdated();
 	}
 
 	@Override
@@ -543,6 +546,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			}
 		}
 		recreateSpinner();
+        checkIfServerOutdated();
 	}
 
 	@Override
