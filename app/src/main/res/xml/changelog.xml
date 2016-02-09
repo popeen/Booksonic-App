@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.6" versioncode="8" releasedate="2016-02-09">
+        <change>Bugfixes</change>
+    </release>
     <release version="1.0.5" versioncode="7" releasedate="2016-02-05">
         <change>The app will tell you if the server is outdated</change>
         <change>If app is in Swedish it will look at boktipset.se before checking Google Books if the server has no book description</change>
