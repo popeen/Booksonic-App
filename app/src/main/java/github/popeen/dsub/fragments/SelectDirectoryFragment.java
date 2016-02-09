@@ -1074,25 +1074,25 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		builder.setMessage(R.string.select_album_donate_dialog_message);
 
 		builder.setPositiveButton(R.string.select_album_donate_dialog_now,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DONATION_URL)));
-					}
-				});
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DONATION_URL)));
+                    }
+                });
 
 		builder.setNegativeButton(R.string.select_album_donate_dialog_later,
 
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						dialogInterface.dismiss();
-						if (onValid != null) {
-							onValid.execute();
-						}
-					}
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        if (onValid != null) {
+                            onValid.execute();
+                        }
+                    }
 
-				});
+                });
 
 		builder.create().show();
 	}
@@ -1281,7 +1281,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					"&f=json";
 
 			Log.w("GetInfo", url);
-			BookInfoAPIParams params = new BookInfoAPIParams(url, artists.iterator().next(), titleView.getText().toString(), years.iterator().next());
+            String artist, title;
+            int year = 0;
+            artist = title = "";
+
+            try{ artist = artists.iterator().next(); }catch(Exception e){ Log.w("GetInfoArtist", e.toString()); }
+            try{ title = titleView.getText().toString(); }catch(Exception e){ Log.w("GetInfoTitle", e.toString()); }
+            try{ year = years.iterator().next(); }catch(Exception e){ Log.w("GetInfoYear", e.toString()); }
+
+			BookInfoAPIParams params = new BookInfoAPIParams(url, artist, title, year);
 			bookInfo = new BookInfoAPI(context).execute(params).get();
 			bookDescription = bookInfo[0];
 			bookReader = bookInfo[1];
