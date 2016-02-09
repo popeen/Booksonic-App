@@ -1266,19 +1266,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		String artistName = "";
 		bookDescription = "Could not collect any info about the book at this time";
 		try{
+
 			artistName = artists.iterator().next();
 			String endpoint = "getBookDirectory";
 			if(Util.isTagBrowsing(context)){
 				endpoint = "getBook";
 			}
 			SharedPreferences prefs = Util.getPreferences(context);
-			String url =  prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + Util.getActiveServer(context), null) +
-					"/rest/" + endpoint + ".view?u=" + prefs.getString(Constants.PREFERENCES_KEY_USERNAME + Util.getActiveServer(context), null) +
-					"&p=" + prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null) +
-					"&v=" + Constants.REST_PROTOCOL_VERSION_SUBSONIC +
-					"&c=booksonic" +
-					"&id=" + directory.getId() +
-					"&f=json";
+			String url =  Util.getRestUrl(context, endpoint) +
+					"&id=" + directory.getId() + "&f=json";
 
 			Log.w("GetInfo", url);
             String artist, title;
@@ -1316,7 +1312,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 			Spanned spanned = null;
 			if(text != null) {
-
 				String newText = "";
 				try{ if(!artistName.equals("")){ newText += "<b>" + context.getResources().getString(R.string.main_artist) + "</b>: " + artistName + "<br/>"; } } catch(Exception e){}
 				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_reader) + "</b>: " + bookReader + "<br/>"; } } catch(Exception e){}
@@ -1324,6 +1319,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				try{ newText += text+"<br/>";} catch(Exception e){}
 				spanned = Html.fromHtml(newText);
 			}
+
 			artistView.setText(spanned);
 			artistView.setSingleLine(false);
 			final int minLines = context.getResources().getInteger(R.integer.TextDescriptionLength);

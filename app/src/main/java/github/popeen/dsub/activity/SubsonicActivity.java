@@ -217,12 +217,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			public void run()
 			{
 				SharedPreferences prefs = Util.getPreferences(context);
-				String url =  prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + Util.getActiveServer(context), null) +
-						"/rest/ping.view?u=" + prefs.getString(Constants.PREFERENCES_KEY_USERNAME + Util.getActiveServer(context), null) +
-						"&p=" + prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null) +
-						"&v=" + Constants.REST_PROTOCOL_VERSION_SUBSONIC +
-						"&c=booksonic" +
-						"&f=json";
+				String url =  Util.getRestUrl(context, "ping") + "&f=json";
 				final String input = KakaduaUtil.http_get_contents(url);
 				Log.w("ping", input);
 				runOnUiThread(new Runnable() {
