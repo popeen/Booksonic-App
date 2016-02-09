@@ -324,9 +324,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 						writer.flush();
 						writer.close();
 						os.close();
-					} finally {
-						urlConnection.disconnect();
-					}
+					}finally{}
 
 					BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 					String inputLine;
@@ -337,6 +335,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 					in.close();
 
 					String response = responseBuffer.toString();
+                    urlConnection.disconnect();
 					if(response.indexOf("http") == 0) {
 						return response.replace("http:", "https:");
 					} else {
