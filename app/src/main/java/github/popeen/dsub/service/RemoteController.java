@@ -24,7 +24,10 @@ import android.util.Log;
 import java.util.Iterator;
 import java.util.concurrent.LinkedBlockingQueue;
 
+
 import github.popeen.dsub.domain.RemoteStatus;
+import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.Util;
 import github.daneren2005.serverproxy.WebProxy;
 
 public abstract class RemoteController {
@@ -43,7 +46,12 @@ public abstract class RemoteController {
 	// Really is abstract, just don't want to require RemoteController's support it
 	public void changeNextTrack(DownloadFile song) {}
 	public boolean isNextSupported() {
-		return this.nextSupported;
+
+		if(Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_CAST_GAPLESS_PLAYBACK, true)) {
+			return this.nextSupported;
+		} else {
+			return false;
+		}
 	}
 	public abstract void setVolume(int volume);
 	public abstract void updateVolume(boolean up);

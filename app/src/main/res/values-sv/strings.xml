@@ -32,8 +32,7 @@
 
     <string name="button_bar.home">Hem</string>
     <string name="button_bar.browse">Bibliotek</string>
-    <string name="button_bar.search">Sök</string>
-    <string name="button_bar.playlists">Spellista</string>
+	<string name="button_bar.playlists">Spellista</string>
     <string name="button_bar.now_playing">Spelar nu</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Bokmärken</string>
@@ -51,18 +50,21 @@
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Permanent Cache</font>:
+
 		<br/>När filer laddas ner av Booksonic kan de senare raderas för att lämna rum åt nya filer.  Permanent cache kan aldrig raderas utan ett aktivt val av dig.
 		<p/><font color="red">ChromeCast misslyckande</font>:
 		<br/>Prova att använda alternativet Inställningar -> Uppspelning -> Använd enhets proxy.  Det är ett "hack" för att Chromecast inte godtar självsignerade certifikat.
+
 		<p/><font color="red">Första steget i biblioteket är grupper med författare</font>:
 		<br/>Avmarkera "Första steget författare" i inställningsmenyn.  Det kommer göra så att hela första steget kommer att hanteras som forfattar grupper istället för som enstaka författare.
 	]]>
 	</string>
-    <string name="main.select_server">Välj server</string>
-    <string name="main.shuffle">Slumpad uppspelning</string>
+
+	<string name="main.shuffle">Slumpad uppspelning</string>
     <string name="main.offline">Gå Offline</string>
 	<string name="main.online">Gå Online</string>
     <string name="main.settings">Inställningar</string>
+
     <string name="main.albums_title">Listor</string>
 	<string name="main.albums_per_folder">Per bok</string>
     <string name="main.albums_newest">Nyligen tillagt</string>
@@ -78,6 +80,7 @@
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Tryck bakåt igen för att avsluta</string>
 	<string name="main.scan_complete">Skanning av server klar</string>
+
 	<string name="main.artist">Författare</string>
 	<string name="main.title">Titel</string>
 
@@ -101,6 +104,7 @@
 	<string name="menu.keep_synced">Håll synkroniserad</string>
 	<string name="menu.stop_sync">Sluta synkronisera</string>
 	<string name="menu.show_all">Visa all media</string>
+
 	<string name="menu.show_artist">Visa Författare</string>
 	<string name="menu.share">Dela</string>
 	<string name="menu.delete_cache">Rensa cache</string>
@@ -110,9 +114,11 @@
 	<string name="menu.rescan">Skanna servern igen</string>
 	<string name="menu.rate">Sätt betyg </string>
 	<string name="menu.top_tracks">Last.FM topp spår</string>
+
 	<string name="menu.similar_artists">Liknande författare</string>
-	<string name="menu.show_missing">Visa saknade</string>
+
 	<string name="menu.start_radio">Starta radio</string>
+
 	<string name="menu.first_level_artist">Första steget författare</string>
 
     <string name="playlist.label">Spellistor</string>
@@ -128,29 +134,25 @@
     <string name="search.title">Sök</string>
     <string name="search.search">Klicka för att söka</string>
     <string name="search.no_match">Inga träffar, försök igen</string>
+
     <string name="search.artists">Författare</string>
     <string name="search.albums">Bok</string>
     <string name="search.songs">Spår</string>
-    <string name="search.more">Visa mer</string>
 
-    <string name="progress.wait">Vänta...</string>
+	<string name="progress.wait">Vänta...</string>
 	<string name="progress.artist_info">Laddar information om författare</string>
 
-    <string name="music_library.label">Media bibliotek</string>
-    <string name="music_library.label_offline">Offline media</string>
-
-    <string name="select_album.select">Markera allt</string>
-    <string name="select_album.n_selected">%d vald.</string>
-	<string name="select_album.more">Mer</string>
-    <string name="select_album.offline">Offline</string>
-    <string name="select_album.searching">Söker...</string>
-    <string name="select_album.no_sdcard">Error: Inget SD-kort tillgängligt.</string>
+	<string name="select_album.n_selected">%d vald.</string>
+	<string name="select_album.offline">Offline</string>
+	<string name="select_album.no_sdcard">Error: Inget SD-kort tillgängligt.</string>
     <string name="select_album.no_network">Varning: Inget nätverk tillgängligt.</string>
 	<string name="select_album.no_room">Varning: Du har bara %s kvar</string>
     <string name="select_album.not_licensed">Servern är inte licenserad. %d testdagar kvar.</string>
+
     <string name="select_album.donate_dialog_message">Få oändliga nedladdningar genom att donera till Booksonic.</string>
     <string name="select_album.donate_dialog_now">Nu</string>
     <string name="select_album.donate_dialog_later">Senare</string>
+
     <string name="select_album.donate_dialog_0_trial_days_left">Testperioden är slut. Donera till Booksonic för att fortsätta</string>
 
     <string name="offline.sync_dialog_title">Offline spår väntar på att bli synkroniserade</string>
@@ -164,6 +166,7 @@
 
 	<string name="select_genre.blank">Blank</string>
 	<string name="select_genre.songs">%d spår</string>
+
 	<string name="select_genre.albums">%d böcker</string>
 
 	<string name="select_podcasts.error">Den här podcasten stötte på ett fel när servern laddade ner den.  Servern måste ladda ner den först.</string>
@@ -209,7 +212,6 @@
     <string name="download.jukebox_server_too_old">Fjärrkontroll stöds inte. Uppdatera din Booksonic server.</string>
     <string name="download.jukebox_offline">Fjärrkontroll fungerar inte i offline läge.</string>
     <string name="download.jukebox_not_authorized">Fjärrkontroll acceptaras inte. Acceptera Jukebox läge i <b>Användare &gt; Inställningar</b> på din Booksonic server.</string>
-	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Starta timer</string>
 	<string name="download.stop_time_remaining">Stoppa om %1$s</string>
 	<string name="download.need_download">Videon måste laddas ner först</string>
@@ -227,6 +229,7 @@
 
 	<string name="sync.new_podcasts">Nya podcasts tillgängliga</string>
 	<string name="sync.new_playlists">Nya spår i spellistan</string>
+
 	<string name="sync.new_albums">Nya böcker tillgängliga</string>
 	<string name="sync.new_starred">Nya favoritspår tillgängliga</string>
     
@@ -263,6 +266,7 @@
 
     <string name="lyrics.nomatch">Inga texter hittades</string>
 
+
     <string name="error.label">Error</string>
 
     <string name="settings.title">Inställningar</string>
@@ -287,6 +291,7 @@
     <string name="settings.cache_size">Cache storlek</string>
     <string name="settings.cache_location">Cache plats</string>
     <string name="settings.cache_location_error">Ogiltig cache placering. Använder standard.</string>
+
     <string name="settings.cache_location_reset">Din cache placering är inte skrivbar. Om du nyligen uppdaterade Android till KitKat 4.4 så har sättet appar skriver till SD-kortet ändrats så de bara kan skriva till en specifik plats. Platsen som Booksonic använder har automatiskt ändrats till den korrekta platsen. För att radera gammal data måste du sätta in SD-kortet i din dator och radera mappen manuellt</string>
 	<string name="settings.cache_clear">Rensa cachen</string>
 	<string name="settings.cache_clear_complete">Cachen har rensats</string>
@@ -307,10 +312,12 @@
 	<string name="settings.track_title">Visa spårnummer #</string>
 	<string name="settings.track_summary">Visa spårnummer # framför spåret om det finns</string>
 	<string name="settings.custom_sort">Sortera per år</string>
+
 	<string name="settings.custom_sort_summary">Sortera böcker per år eller alfabetiskt</string>
 	<string name="settings.open_to_tab">Öppna i flik</string>
 	<string name="settings.open_to_tab_summary">Öppna direkt i den här fliken</string>
     <string name="settings.network_title">Nätverk</string>
+
     <string name="settings.max_bitrate_wifi">Max bithastighet (bitrate) - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max bithastighet (bitrate) - Mobil data</string>
     <string name="settings.max_bitrate_32">32 Kbps</string>
@@ -355,6 +362,7 @@
     <string name="settings.search_history_cleared">Sökhistoriken har rensats</string>
     <string name="settings.other_title">Andra inställningar</string>
     <string name="settings.scrobble_title">Scrobble till Last.fm</string>
+
     <string name="settings.scrobble_summary">Kom ihåg att ställa in Last.fm användarnamn och lösenord på Booksonic servern</string>
     <string name="settings.hide_media_title">Dölj för andra</string>
     <string name="settings.hide_media_summary">Dölj spår för andra appar.</string>
@@ -392,6 +400,7 @@
 	<string name="settings.chat_enabled_summary">Om chatten ska visas i menyn till vänster</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Video spelare</string>
+
 	<string name="settings.video_raw">Raw</string>
 	<string name="settings.video_hls">HTTP Live Stream (HLS)</string>
 	<string name="settings.video_transcode">Direct Transcode (kräver video -> mp4 eller liknande installerat på servern)</string>
@@ -421,8 +430,10 @@
 	<string name="settings.sync_wifi">Synkronisera bara på Wi-Fi</string>
 	<string name="settings.sync_wifi_summary">Synkronisera bara på Wi-Fi</string>
 	<string name="settings.sync_most_recent">Synkronisera nyligen tillagda</string>
+
 	<string name="settings.sync_most_recent_summary">Lägg automatiskt till nya böcker i cachen</string>
 	<string name="settings.sync_starred">Synkronisera favoriter</string>
+
 	<string name="settings.sync_starred_summary">Lägg automatiskt till spår, böcker och författare som är favoriter i cachen</string>
 	<string name="settings.sync_notification">Visa synkroniserings notifikation</string>
 	<string name="settings.sync_notification_summary">Visa notifikation efter att ny media har blivit synkroniserad</string>
@@ -438,22 +449,27 @@
 	<string name="settings.menu_options.shared_summary">Visa dela i menyer</string>
 	<string name="settings.menu_options.rate_summary">Visa omdömme i menyer</string>
 	<string name="settings.browse_by_tags">Navigera via taggar</string>
+
 	<string name="settings.browse_by_tags_summary">Navigera via taggar istället för mappstruktur.</string>
 	<string name="settings.disable_exit_prompt">Avaktivera stäng ner rutan</string>
 	<string name="settings.disable_exit_prompt_summary">Stäng appen direkt när jag trycker bakåt på hemskärmen</string>
 	<string name="settings.override_system_language">Ignorera systemspråket</string>
+
 	<string name="settings.override_system_language_summary">Visa appen på engelska även om systemet är på ett språk Booksonic har stöd för. Du kan eventuellt behöva rensa appen från minnet för att det ska ta effekt.</string>
 	<string name="settings.drawer_items_title">Sidoflikar</string>
 	<string name="settings.play_now_after">Spela nu - Efter</string>
+
 	<string name="settings.play_now_after_summary">Spela nu i context menyn spelar allt efter spåret (som i Booksonic webb GUI)</string>
 	<string name="settings.large_album_art">Stora bokomslag</string>
 	<string name="settings.large_album_art_summary">Visa böcker med stora omslag istället för en lista</string>
 	<string name="settings.admin_enabled">Admin aktiverad</string>
 	<string name="settings.admin_enabled_summary">Om admin ska visas eller inte i menyn till vänster</string>
 	<string name="settings.replay_gain">Replay Gain</string>
+
 	<string name="settings.replay_gain_summary">Om volymen ska skalas efter boken/spårets replay gain tagg</string>
 	<string name="settings.replay_gain_type">Läs från taggar</string>
 	<string name="settings.replay_gain_type.smart">Smart upptäckande</string>
+
 	<string name="settings.replay_gain_type.album">Bok taggar</string>
 	<string name="settings.replay_gain_type.track">Spår taggar</string>
 	<string name="settings.replay_gain_bump">Replay Gain Pre-amp</string>
@@ -464,9 +480,11 @@
 	<string name="settings.rename_duplicates">Döp om tvillingspår</string>
 	<string name="settings.rename_duplicates_summary">Döp om tvillingspår till originalnamnet så att jag kan se skillnad på dem.</string>
 	<string name="settings.start_on_headphones">Starta när hörlurar sätts in</string>
+
 	<string name="settings.start_on_headphones_summary">Starta när hörlurar sätts in.  Det här kräver en service som startat när telefonen bootar upp så den kan kolla om hörlurarna är i även när Booksonic inte körs.</string>
 	<string name="settings.color_action_bar">Färgad action bar</string>
 	<string name="settings.color_action_bar.summary">Om action baren ska färgas eller inte</string>
+
 	<string name="settings.shuffle_by_album">Slumba per bok</string>
 	<string name="settings.shuffle_by_album.true">Slumpa ordningen av böcker</string>
 	<string name="settings.shuffle_by_album.false">Slumpa alla spår tillsammans</string>
@@ -477,15 +495,7 @@
 	<string name="shuffle.genre">Genre:</string>
 	<string name="shuffle.pick_genre">Välj en genre</string>
 
-	<string name="share.info">Ägare: %1$s
-		\nBeskrivning: %2$s
-		\nURL: %3$s
-		\nSkapad: %4$s
-		\nSenast besökt: %5$s
-		\nGår ut: %6$s
-		\nAntal besök: %7$s
 
-	</string>
 	<string name="share.expires">Går ut: %s</string>
 	<string name="share.expires_never">Går aldrig ut</string>
 	<string name="share.deleted">Tog bort delning %s</string>
@@ -537,25 +547,25 @@
 
     <string name="music_service.retry">Ett nätverksproblem har uppstått. Försök %1$d av %2$d.</string>
 
-    <string name="background_task.wait">Vänta...</string>
-    <string name="background_task.loading">Laddar.</string>
-    <string name="background_task.no_network">Appen kräver nätverk. Slå på Wi-Fi eller mkobil data för att kunna använda den.</string>
+
+	<string name="background_task.no_network">Appen kräver nätverk. Slå på Wi-Fi eller mkobil data för att kunna använda den.</string>
     <string name="background_task.network_error">Ett nätverksproblem uppstod. Kontrollera server adressen och försök igen.</string>
     <string name="background_task.not_found">Resurs kunde inte hittas. Kontrollera server adressen och försök igen.</string>
     <string name="background_task.parse_error">Problem med kommunikationen med servern. Kontrollera server adressen och att du kan ansluta till servern via webbläsaren.</string>
 
     <string name="service.connecting">Ansluter till servern, vänta.</string>
 
+
     <string name="parser.upgrade_client">Okompatibel version. Uppgradera Booksonic.</string>
     <string name="parser.upgrade_server">Okompatibel version. Uppgradera din server.</string>
     <string name="parser.not_authenticated">Ogiltigt användarnamn eller lösenord.</string>
+
     <string name="parser.not_authorized">Inte auktoriserad. Kontrollera tillstånd på din Booksonic server.</string>
     <string name="parser.artist_count">Har %d författare.</string>
 	<string name="parser.server_error">Server fel: %s</string>
 	<string name="parser.scan_count">Scannade %d rader</string>
 
-    <string name="select_artist.refresh">Ladda om</string>
-    <string name="select_artist.folder">Välj mapp</string>
+	<string name="select_artist.folder">Välj mapp</string>
     <string name="select_artist.all_folders">Alla mappar</string>
 
     <string name="equalizer.label">Equalizer</string>
@@ -586,25 +596,29 @@
 
 	<string name="chat.send_a_message">Skicka ett meddelande</string>
 
-    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
-
 	<string name="tasker.start_playing">Börja spela</string>
 	<string name="tasker.start_playing_shuffled">Börja spela i slumpat läge</string>
+
 	<string name="tasker.start_playing_title">Tasker -> Starta Booksonic</string>
 	<string name="tasker.edit_shuffle_mode">Starta i slumpat läge: </string>
 	<string name="tasker.edit_shuffle_start_year">Slumpa start år:</string>
 	<string name="tasker.edit_shuffle_end_year">Slumpa slut år:</string>
+
+
 	<string name="tasker.edit_shuffle_genre">Slupa från genre:</string>
 	<string name="tasker.edit_server_offline">Växla offline: </string>
 	<string name="tasker.edit_do_nothing">Gör ingenting</string>
 
 	<string name="details.title.song">Spår detaljer</string>
+
 	<string name="details.title.album">Bokdetaljer</string>
 	<string name="details.title.podcast">Podcast detaljer</string>
 	<string name="details.title.playlist">Playlist detaljer</string>
+
 	<string name="details.title.artist">Författardetaljer</string>
 	<string name="details.podcast">Podcasts</string>
 	<string name="details.status">Status</string>
+
 	<string name="details.artist">Författare</string>
 	<string name="details.album">Bok</string>
 	<string name="details.track">Spår</string>

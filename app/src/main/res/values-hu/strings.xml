@@ -32,8 +32,7 @@
 
     <string name="button_bar.home">Főoldal</string>
     <string name="button_bar.browse">Médiatár</string>
-    <string name="button_bar.search">Keresés</string>
-    <string name="button_bar.playlists">Lejátszási listák</string>
+	<string name="button_bar.playlists">Lejátszási listák</string>
     <string name="button_bar.now_playing">Várólista</string>
 	<string name="button_bar.podcasts">Podcastok</string>
 	<string name="button_bar.bookmarks">Könyvjelzők</string>
@@ -58,8 +57,7 @@
 		<br/>Ha a Beállítások menüben kikapcsolja az "Részletes megjelenítés" opciót, akkor a mappák teljes első szintje ugyanúgy lesz megjelenítve, mint az előadók listája.
 	]]>
 	</string>
-    <string name="main.select_server">Kiszolgáló kiválasztása</string>
-    <string name="main.shuffle">Lejátszás kevert sorrendben</string>
+	<string name="main.shuffle">Lejátszás kevert sorrendben</string>
     <string name="main.offline">Offline mód</string>
 	<string name="main.online">Online mód</string>
     <string name="main.settings">Beállítások</string>
@@ -76,6 +74,10 @@
 	<string name="main.albums_alphabetical">Betűrendben</string>
 	<string name="main.videos">Videók</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
+	<string name="main.songs_newest">@string/main.albums_newest</string>
+	<string name="main.songs_top_played">Top Played</string>
+	<string name="main.songs_recent">@string/main.albums_recent</string>
+	<string name="main.songs_frequent">@string/main.albums_frequent</string>
 	<string name="main.back_confirm">Nyomja meg még egyszer a kilépéshez!</string>
 	<string name="main.scan_complete">A médiatár frissítése befejeződött a kiszolgálón!</string>
 	<string name="main.artist">Előadó</string>
@@ -131,20 +133,12 @@
     <string name="search.artists">Előadók</string>
     <string name="search.albums">Albumok</string>
     <string name="search.songs">Dalok</string>
-    <string name="search.more">Továbbiak</string>
-
-    <string name="progress.wait">Kérem várjon...</string>
+	<string name="progress.wait">Kérem várjon...</string>
 	<string name="progress.artist_info">Az előadó életrajzának betöltése...</string>
 
-    <string name="music_library.label">Médiatár</string>
-    <string name="music_library.label_offline">Kapcsolat nélküli médiák</string>
-
-    <string name="select_album.select">Összes jelölése be/ki</string>
-    <string name="select_album.n_selected">%d kijelölve.</string>
-	<string name="select_album.more">Továbbiak</string>
-    <string name="select_album.offline">Offline</string>
-    <string name="select_album.searching">Keresés...</string>
-    <string name="select_album.no_sdcard">Hiba: SD kártya nem áll rendelkezésre!</string>
+	<string name="select_album.n_selected">%d kijelölve.</string>
+	<string name="select_album.offline">Offline</string>
+	<string name="select_album.no_sdcard">Hiba: SD kártya nem áll rendelkezésre!</string>
     <string name="select_album.no_network">Figyelem: Hálózat nem áll rendelkezésre!</string>
 	<string name="select_album.no_room">Figyelem: Már csak %s hely áll rendelkezésre!</string>
     <string name="select_album.not_licensed">A kiszolgálónak nincs licence! %d próbanap van hátra!</string>
@@ -187,6 +181,7 @@
 	<string name="download.playerstate_mobile_disabled">Letöltés, várakozás a Wi-Fi hálózatra...</string>
     <string name="download.playerstate_buffering">Pufferelés</string>
     <string name="download.playerstate_playing_shuffle">Dalsorrend keverése</string>
+	<string name="download.playerstate_playing_artist_radio">Előadó rádió</string>
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
     <string name="download.menu_lyrics">Dalszöveg</string>
 	<string name="download.menu_remove_all">Összes eltávolítása</string>
@@ -204,13 +199,13 @@
     <string name="download.repeat_off">Ismétlés ki</string>
     <string name="download.repeat_all">Összes ismétlése</string>
     <string name="download.repeat_single">Dal ismétlése</string>
+
     <string name="download.jukebox_on">Távvezérlés bekapcsolása. A zenelejátszás a számítógépen történik.</string>
     <string name="download.jukebox_off">Távvezérlés kikapcsolása. A zenelejátszás az eszközön történik.</string>
     <string name="download.jukebox_volume">Hangerő távvezérlése</string>
     <string name="download.jukebox_server_too_old">A távvezérlés nem támogatott. Kérjük, frissítse a Booksonic kiszolgálót!</string>
     <string name="download.jukebox_offline">A távvezérlés nem lehetséges offline módban!</string>
     <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Engedélyezze a Jukebox módot a <b>Users &gt; Settings</b> menüben a Booksonic kiszolgálón!</string>
-	<string name="download.timer_length">Időhossz:</string>
 	<string name="download.start_timer">Időzítő indítása</string>
 	<string name="download.stop_timer">Időzítő megállítása</string>
 	<string name="download.need_download">A videót először le kell tölteni!</string>
@@ -227,6 +222,7 @@
 	<string name="download.restore_play_queue">Folytatás onnan, ahol egy másik eszközön abbahagyta.</string>
 	<string name="download.thumbs_up">Jó</string>
 	<string name="download.thumbs_down">Nem jó</string>
+	<string name="download.batch_mode">Kötegelt mód</string>
 
 	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
 	<string name="sync.new_playlists">Új lejátszási listák: \"%s\"</string>
@@ -291,6 +287,8 @@
     <string name="settings.cache_location">Gyorsítótár helye</string>
     <string name="settings.cache_location_error">Hibás gyorsítótár hely! Az alapértelmezett használata.</string>
     <string name="settings.cache_location_reset">A beállított gyorsítótár-hely már nem írható! Ha a közelmúltban frissítette telefonja Android rendszerét 4.4.x KitKat verzióra, abban az SD kártya kezelése megváltozott, és az alkalmazások csak egy speciális helyre tudnak írni. A Booksonic már automatikusan átállt a megfelelő helyre. Ahhoz, hogy a régi adatokat törölni tudja, csatlakoztassa az SD kártyát a számítógépéhez, és törölje a régi mappát!</string>
+	<string name="settings.cache_location_internal">Belső</string>
+	<string name="settings.cache_location_external">Külső</string>
 	<string name="settings.cache_clear">Gyorsítótár törlése</string>
 	<string name="settings.cache_clear_complete">Gyorsítótár törlése kész.</string>
     <string name="settings.testing_connection">Kapcsolat tesztelése...</string>
@@ -473,6 +471,12 @@
 	<string name="settings.shuffle_by_album">Keverés albumok szerint</string>
 	<string name="settings.shuffle_by_album.true">Dalsorrend keverése albumonként szétválasztva.</string>
 	<string name="settings.shuffle_by_album.false">Dalsorrend keverése az összes dalt együtt kezelve.</string>
+	<string name="settings.casting_stream_original">Eredeti stream</string>
+	<string name="settings.casting_stream_original_summary">Az eredeti fájl streamelése, ha a Cast-kompatibilis eszköz támogatja a fájltípust.</string>
+	<string name="settings.heads_up_notification">Felugró értesítések (5.0+)</string>
+	<string name="settings.heads_up_notification_summary">Lejátszási értesítések megjelenítése felugró értesítésekként (Android Lollipop+).</string>
+	<string name="settings.casting_cache">Casting közbeni gyorsítótárazás</string>
+	<string name="settings.casting_cache_summary">Az éppen lejátszott dal gyorsítótárazása a tartalomátküldés (Casting) alatt.</string>
 
 	<string name="shuffle.title">Dalsorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -480,15 +484,6 @@
 	<string name="shuffle.genre">Műfaj:</string>
 	<string name="shuffle.pick_genre">Műfaj kiválasztása</string>
 
-	<string name="share.info">Tulajdonos: %1$s
-		\nLeírás: %2$s
-		\nURL: %3$s
-		\nLétrehozva: %4$s
-		\nUtolsó látogatás: %5$s
-		\nLejárati idő: %6$s
-		\nLátogatások száma: %7$s
-
-	</string>
 	<string name="share.expires">Lejárati idő: %s</string>
 	<string name="share.expires_never">Nincs lejárati idő</string>
 	<string name="share.deleted">\"%s\" megosztás törölve</string>
@@ -517,6 +512,7 @@
 	<string name="admin.change_password">Jelszó csere</string>
 	<string name="admin.change_password_success">\"%1$s\" jelszavának módosítása kész.</string>
 	<string name="admin.change_password_error">\"%1$s\" jelszavának módosítása sikertelen!</string>
+	<string name="admin.change_password_current_label">Jelenlegi jelszó:</string>
 	<string name="admin.change_password_label">Új jelszó:</string>
 	<string name="admin.change_password_invalid">Adjon meg egy érvényes jelszót!</string>
 	<string name="admin.delete_user">Felhasználó törlése</string>
@@ -524,6 +520,8 @@
 	<string name="admin.delete_user_error">\"%1$s\" felhasználó törlése sikertelen!</string>
 	<string name="admin.confirm_password">Jelszó megerősítése</string>
 	<string name="admin.confirm_password_bad">A beírt jelszó nem egyezik!</string>
+	<string name="admin.permissions">Engedélyek</string>
+	<string name="admin.musicFolders">Zenekönyvtárak</string>
 	
 	<string name="admin.scrobblingEnabled">Scrobbling használata</string>
 	<string name="admin.role.admin">Adminisztrátor</string>
@@ -536,13 +534,12 @@
 	<string name="admin.role.stream">Zene streamelése</string>
 	<string name="admin.role.jukebox">Jukebox vezérlése</string>
 	<string name="admin.role.share">Megosztások kezelése</string>
+	<string name="admin.role.video_conversion">Videók konvertálása</string>
 	<string name="admin.role.lastfm">Last.fm funkció használata</string>
 
     <string name="music_service.retry">Hálózati hiba történt! Újrapróbálkozás %1$d/%2$d.</string>
 
-    <string name="background_task.wait">Kérem várjon...</string>
-    <string name="background_task.loading">Betöltés...</string>
-    <string name="background_task.no_network">Az alkalmazás hálózati hozzáférést igényel. Kérjük, kapcsolja be a Wi-Fi-t vagy a mobilhálózatot!</string>
+	<string name="background_task.no_network">Az alkalmazás hálózati hozzáférést igényel. Kérjük, kapcsolja be a Wi-Fi-t vagy a mobilhálózatot!</string>
     <string name="background_task.network_error">Hálózati hiba történt! Kérjük, ellenőrizze a kiszolgáló címét, vagy próbálja később!</string>
     <string name="background_task.not_found">Az erőforrás nem található! Kérjük, ellenőrizze a kiszolgáló címét!</string>
     <string name="background_task.parse_error">Hiba történt a kiszolgálóval történő kommunikációban. Kérjük, ellenőrizze a kiszolgáló címét, és próbáljon meg web böngészővel kapcsolódni a kiszolgálóhoz!</string>
@@ -557,8 +554,7 @@
 	<string name="parser.server_error">Kiszolgáló hiba: %s</string>
 	<string name="parser.scan_count">%d tétel átvizsgálva.</string>
 
-    <string name="select_artist.refresh">Frissítés</string>
-    <string name="select_artist.folder">Mappa kiválasztása</string>
+	<string name="select_artist.folder">Mappa kiválasztása</string>
     <string name="select_artist.all_folders">Összes mappa</string>
 
     <string name="equalizer.label">Equalizer</string>
@@ -587,9 +583,7 @@
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Továbbiak…</string>
 
-	<string name="chat.send_a_message">Üzenet küldése</string> 
-
-    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
+	<string name="chat.send_a_message">Üzenet küldése</string>
 
 	<string name="tasker.start_playing">Lejátszás indítása</string>
 	<string name="tasker.start_playing_shuffled">Lejátszás indítása kevert sorrendben</string>
@@ -643,6 +637,8 @@
 	<string name="details.updated">Frissítve</string>
 	<string name="details.starred">Csillagozott</string>
 	<string name="details.last_played">Utoljára lejátszott</string>
+	<string name="details.expiration">Lejárati idő</string>
+	<string name="details.played_count">Lejátszások száma</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Nincsenek dalok</item>

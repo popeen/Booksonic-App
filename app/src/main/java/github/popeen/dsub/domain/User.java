@@ -15,6 +15,8 @@
 
 package github.popeen.dsub.domain;
 
+import android.util.Pair;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +33,9 @@ public class User implements Serializable {
 	public static final String STREAM = "streamRole";
 	public static final String JUKEBOX = "jukeboxRole";
 	public static final String SHARE = "shareRole";
+	public static final String VIDEO_CONVERSION = "videoConversionRole";
 	public static final String LASTFM = "lastFMRole";
-	public static final List<String> ROLES = new ArrayList<String>();
+	public static final List<String> ROLES = new ArrayList<>();
 	
 	static {
 		ROLES.add(ADMIN);
@@ -45,6 +48,7 @@ public class User implements Serializable {
 		ROLES.add(PODCAST);
 		ROLES.add(JUKEBOX);
 		ROLES.add(SHARE);
+		ROLES.add(VIDEO_CONVERSION);
 	}
 	
 	private String username;
@@ -52,6 +56,7 @@ public class User implements Serializable {
 	private String email;
 
 	private List<Setting> settings = new ArrayList<Setting>();
+	private List<Setting> musicFolders;
 
 	public User() {
 
@@ -92,9 +97,27 @@ public class User implements Serializable {
 		settings.add(new Setting(name, value));
 	}
 
+	public void addMusicFolder(MusicFolder musicFolder) {
+		if(musicFolders == null) {
+			musicFolders = new ArrayList<>();
+		}
+
+		musicFolders.add(new MusicFolderSetting(musicFolder.getId(), musicFolder.getName(), false));
+	}
+	public void addMusicFolder(MusicFolderSetting musicFolderSetting, boolean defaultValue) {
+		if(musicFolders == null) {
+			musicFolders = new ArrayList<>();
+		}
+
+		musicFolders.add(new MusicFolderSetting(musicFolderSetting.getName(), musicFolderSetting.getLabel(), defaultValue));
+	}
+	public List<Setting> getMusicFolderSettings() {
+		return musicFolders;
+	}
+
 	public static class Setting implements Serializable {
-		String name;
-		Boolean value;
+		private String name;
+		private Boolean value;
 
 		public Setting() {
 			
@@ -112,6 +135,22 @@ public class User implements Serializable {
 		}
 		public void setValue(Boolean value) {
 			this.value = value;
+		}
+	}
+
+	public static class MusicFolderSetting extends Setting {
+		private String label;
+
+		public MusicFolderSetting() {
+
+		}
+		public MusicFolderSetting(String name, String label, Boolean value) {
+			super(name, value);
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
 		}
 	}
 }

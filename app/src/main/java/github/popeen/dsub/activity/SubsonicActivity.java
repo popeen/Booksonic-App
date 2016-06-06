@@ -37,7 +37,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -72,10 +71,11 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.ServerInfo;
+import github.popeen.dsub.fragments.AdminFragment;
 import github.popeen.dsub.fragments.SubsonicFragment;
+import github.popeen.dsub.fragments.UserFragment;
 import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.HeadphoneListenerService;
 import github.popeen.dsub.service.MusicService;
@@ -895,7 +895,11 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				removeCurrent();
 			}
 
-			currentFragment.invalidate();
+			if(currentFragment instanceof UserFragment || currentFragment instanceof AdminFragment) {
+				restart(false);
+			} else {
+				currentFragment.invalidate();
+			}
 			populateTabs();
 		}
 
@@ -947,10 +951,19 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 
 	protected void restart() {
-		Intent intent = new Intent(this, ((Object) this).getClass());
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		restart(true);
+	}
+	protected void restart(boolean resumePosition) {
+		Intent intent = new Intent(this, this.getClass());
 		intent.putExtras(getIntent());
-		intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
+		if(resumePosition) {
+			intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
+		} else {
+			String fragmentType = Util.openToTab(this);
+			intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
+			intent.putExtra(Constants.FRAGMENT_POSITION, getDrawerItemId(fragmentType));
+		}
+		finish();
 		Util.startActivityWithoutTransition(this, intent);
 	}
 
@@ -1123,6 +1136,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 		UserUtil.seedCurrentUser(this);
 		this.updateDrawerHeader();
+		drawer.closeDrawers();
 	}
 
 	private void showOfflineSyncDialog(final int scrobbleCount, final int starsCount) {

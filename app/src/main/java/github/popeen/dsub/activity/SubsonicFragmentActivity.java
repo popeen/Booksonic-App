@@ -92,6 +92,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 	private SlidingUpPanelLayout slideUpPanel;
 	private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
+	private boolean isPanelClosing = false;
 	private NowPlayingFragment nowPlayingFragment;
 	private SubsonicFragment secondaryFragment;
 	private Toolbar mainToolbar;
@@ -105,6 +106,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	private long lastBackPressTime = 0;
 	private DownloadFile currentPlaying;
 	private PlayerState currentState;
+	private ImageButton previousButton;
+	private ImageButton nextButton;
+	private ImageButton rewindButton;
+	private ImageButton fastforwardButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -152,7 +157,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				if(item != null) {
 					item.setChecked(true);
 				}
+			} else {
+				lastSelectedPosition = getDrawerItemId(fragmentType);
 			}
+
 			currentFragment = getNewFragment(fragmentType);
 			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_ID)) {
 				Bundle currentArguments = currentFragment.getArguments();
@@ -194,15 +202,19 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 			@Override
 			public void onPanelCollapsed(View panel) {
-				bottomBar.setVisibility(View.VISIBLE);
-				nowPlayingToolbar.setVisibility(View.GONE);
-				nowPlayingFragment.setPrimaryFragment(false);
-				setSupportActionBar(mainToolbar);
-				recreateSpinner();
+				isPanelClosing = false;
+				if(bottomBar.getVisibility() == View.GONE) {
+					bottomBar.setVisibility(View.VISIBLE);
+					nowPlayingToolbar.setVisibility(View.GONE);
+					nowPlayingFragment.setPrimaryFragment(false);
+					setSupportActionBar(mainToolbar);
+					recreateSpinner();
+				}
 			}
 
 			@Override
 			public void onPanelExpanded(View panel) {
+				isPanelClosing = false;
 				currentFragment.stopActionMode();
 
 				// Disable custom view before switching
@@ -257,7 +269,25 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			trans.commit();
 		}
 
-		ImageButton previousButton = (ImageButton) findViewById(R.id.download_previous);
+		rewindButton = (ImageButton) findViewById(R.id.download_rewind);
+		rewindButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						if (getDownloadService() == null) {
+							return null;
+						}
+
+						getDownloadService().rewind();
+						return null;
+					}
+				}.execute();
+			}
+		});
+
+		previousButton = (ImageButton) findViewById(R.id.download_previous);
 		previousButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -295,7 +325,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			}
 		});
 
-		ImageButton nextButton = (ImageButton) findViewById(R.id.download_next);
+		nextButton = (ImageButton) findViewById(R.id.download_next);
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -307,6 +337,24 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 						}
 
 						getDownloadService().next();
+						return null;
+					}
+				}.execute();
+			}
+		});
+
+		fastforwardButton = (ImageButton) findViewById(R.id.download_fastforward);
+		fastforwardButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						if (getDownloadService() == null) {
+							return null;
+						}
+
+						getDownloadService().fastForward();
 						return null;
 					}
 				}.execute();
@@ -339,17 +387,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		super.onNewIntent(intent);
 
 		if(currentFragment != null && intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
+			if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+				closeNowPlaying();
+			}
+
 			if(currentFragment instanceof SearchFragment) {
 				String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 				boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
-				boolean requestsearch = intent.getBooleanExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, false);
 
 				if (query != null) {
 					((SearchFragment)currentFragment).search(query, autoplay);
-				} else {
-					if (requestsearch) {
-						onSearchRequested();
-					}
 				}
 				getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 			} else {
@@ -358,7 +405,14 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				SearchFragment fragment = new SearchFragment();
 				replaceFragment(fragment, fragment.getSupportTag());
 			}
+		} else if(intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, false)) {
+			if(slideUpPanel.getPanelState() != SlidingUpPanelLayout.PanelState.EXPANDED) {
+				openNowPlaying();
+			}
 		} else {
+			if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+				closeNowPlaying();
+			}
 			setIntent(intent);
 		}
 		if(drawer != null) {
@@ -481,7 +535,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 	@Override
 	public void replaceFragment(SubsonicFragment fragment, int tag, boolean replaceCurrent) {
-		if(slideUpPanel != null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+		if(slideUpPanel != null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED && !isPanelClosing) {
 			secondaryFragment = fragment;
 			nowPlayingFragment.setPrimaryFragment(false);
 			secondaryFragment.setPrimaryFragment(true);
@@ -571,6 +625,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	@Override
 	public void closeNowPlaying() {
 		slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+		isPanelClosing = true;
 	}
 
 	private SubsonicFragment getNewFragment(String fragmentType) {
@@ -857,6 +912,20 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				typedArray.recycle();
 			}
 			getImageLoader().loadImage(coverArtView, song, false, height, false);
+		}
+
+		if(currentPlaying != null && currentPlaying.getSong() != null && (currentPlaying.getSong().isPodcast() || currentPlaying.getSong().isAudioBook())) {
+			previousButton.setVisibility(View.GONE);
+			nextButton.setVisibility(View.GONE);
+
+			rewindButton.setVisibility(View.VISIBLE);
+			fastforwardButton.setVisibility(View.VISIBLE);
+		} else {
+			previousButton.setVisibility(View.VISIBLE);
+			nextButton.setVisibility(View.VISIBLE);
+
+			rewindButton.setVisibility(View.GONE);
+			fastforwardButton.setVisibility(View.GONE);
 		}
 	}
 

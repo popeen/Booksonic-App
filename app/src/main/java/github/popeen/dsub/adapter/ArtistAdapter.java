@@ -23,27 +23,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.List;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.Artist;
+import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.MusicFolder;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.view.ArtistView;
 import github.popeen.dsub.view.FastScroller;
+import github.popeen.dsub.view.SongView;
 import github.popeen.dsub.view.UpdateView;
 
-public class ArtistAdapter extends SectionAdapter<Artist> implements FastScroller.BubbleTextGetter {
+
+
+public class ArtistAdapter extends SectionAdapter<Serializable> implements FastScroller.BubbleTextGetter {
+	public static int VIEW_TYPE_SONG = 3;
 	public static int VIEW_TYPE_ARTIST = 4;
 
 	private List<MusicFolder> musicFolders;
 	private OnMusicFolderChanged onMusicFolderChanged;
 
-	public ArtistAdapter(Context context, List<Artist> artists, OnItemClickedListener listener) {
+	public ArtistAdapter(Context context, List<Serializable> artists, OnItemClickedListener listener) {
 		this(context, artists, null, listener, null);
 	}
 
-	public ArtistAdapter(Context context, List<Artist> artists, List<MusicFolder> musicFolders, OnItemClickedListener onItemClickedListener, OnMusicFolderChanged onMusicFolderChanged) {
+	public ArtistAdapter(Context context, List<Serializable> artists, List<MusicFolder> musicFolders, OnItemClickedListener onItemClickedListener, OnMusicFolderChanged onMusicFolderChanged) {
 		super(context, artists);
 		this.musicFolders = musicFolders;
 		this.onItemClickedListener = onItemClickedListener;
@@ -92,7 +98,7 @@ public class ArtistAdapter extends SectionAdapter<Artist> implements FastScrolle
 		return new UpdateView.UpdateViewHolder(header, false);
 	}
 	@Override
-	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header) {
+	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {
 		TextView folderName = (TextView) holder.getView().findViewById(R.id.select_artist_folder_2);
 
 		String musicFolderId = Util.getSelectedMusicFolderId(context);
@@ -110,17 +116,35 @@ public class ArtistAdapter extends SectionAdapter<Artist> implements FastScrolle
 
 	@Override
 	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
-		return new UpdateView.UpdateViewHolder(new ArtistView(context));
+		UpdateView updateView = null;
+		if(viewType == VIEW_TYPE_ARTIST) {
+			updateView = new ArtistView(context);
+		} else if(viewType == VIEW_TYPE_SONG) {
+			updateView = new SongView(context);
+		}
+
+		return new UpdateView.UpdateViewHolder(updateView);
 	}
 
 	@Override
-	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, Artist item, int viewType) {
-		holder.getUpdateView().setObject(item);
+	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, Serializable item, int viewType) {
+		UpdateView view = holder.getUpdateView();
+		if(viewType == VIEW_TYPE_ARTIST) {
+			view.setObject(item);
+		} else if(viewType == VIEW_TYPE_SONG) {
+			SongView songView = (SongView) view;
+			MusicDirectory.Entry entry = (MusicDirectory.Entry) item;
+			songView.setObject(entry, checkable && !entry.isVideo());
+		}
 	}
 
 	@Override
-	public int getItemViewType(Artist item) {
-		return VIEW_TYPE_ARTIST;
+	public int getItemViewType(Serializable item) {
+		if(item instanceof Artist) {
+			return VIEW_TYPE_ARTIST;
+		} else {
+			return VIEW_TYPE_SONG;
+		}
 	}
 
 	@Override

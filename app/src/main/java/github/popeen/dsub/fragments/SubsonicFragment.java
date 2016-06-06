@@ -17,8 +17,12 @@
  Copyright 2009 (C) Sindre Mehus
  */
 package github.popeen.dsub.fragments;
-
 import android.app.Activity;
+
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,6 +40,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -124,6 +129,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected boolean artistOverride = false;
 	protected SwipeRefreshLayout refreshLayout;
 	protected boolean firstRun;
+	protected MenuItem searchItem;
+	protected SearchView searchView;
 
 	public SubsonicFragment() {
 		super();
@@ -176,14 +183,35 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		this.context = context;
 	}
 
+	protected void onFinishSetupOptionsMenu(final Menu menu) {
+		searchItem = menu.findItem(R.id.menu_global_search);
+		if(searchItem != null) {
+			searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+			SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
+			SearchableInfo searchableInfo = searchManager.getSearchableInfo(context.getComponentName());
+			if(searchableInfo == null) {
+				Log.w(TAG, "Failed to get SearchableInfo");
+			} else {
+				searchView.setSearchableInfo(searchableInfo);
+			}
+
+			String currentQuery = getCurrentQuery();
+			if(currentQuery != null) {
+				searchView.setOnSearchClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						searchView.setQuery(getCurrentQuery(), false);
+					}
+				});
+			}
+		}
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_global_shuffle:
 				onShuffleRequested();
-				return true;
-			case R.id.menu_global_search:
-				context.onSearchRequested();
 				return true;
 			case R.id.menu_exit:
 				exit();
@@ -282,7 +310,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						menu.removeItem(R.id.menu_rate);
 					}
 				}
-				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
+			
 			} else if(!entry.isVideo()) {
 				if(Util.isOffline(context)) {
 					menuInflater.inflate(R.menu.select_song_context_offline, menu);
@@ -294,7 +322,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						menu.removeItem(R.id.bookmark_menu_delete);
 					}
 				}
-				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else {
 				if(Util.isOffline(context)) {
 					menuInflater.inflate(R.menu.select_video_context_offline, menu);
@@ -302,6 +329,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				else {
 					menuInflater.inflate(R.menu.select_video_context, menu);
 				}
+			}
+
+			MenuItem starMenu = menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star);
+			if(starMenu != null) {
+				starMenu.setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
+			}
+
+			if(!isShowArtistEnabled() || (!Util.isTagBrowsing(context) && entry.getParent() == null) || (Util.isTagBrowsing(context) && entry.getArtistId() == null)) {
+				menu.setGroupVisible(R.id.hide_show_artist, false);
 			}
 		} else if(selected instanceof Artist) {
 			Artist artist = (Artist) selected;
@@ -336,6 +372,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
 		Artist artist = selectedItem instanceof Artist ? (Artist) selectedItem : null;
 		Entry entry = selectedItem instanceof Entry ? (Entry) selectedItem : null;
+		if(selectedItem instanceof DownloadFile) {
+			entry = ((DownloadFile) selectedItem).getSong();
+		}
 		List<Entry> songs = new ArrayList<Entry>(1);
 		songs.add(entry);
 
@@ -669,7 +708,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		final int columns = getRecyclerColumnCount();
 		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
 
-		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup();
+
+		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup(gridLayoutManager);
 		if(spanSizeLookup != null) {
 			gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
 		}
@@ -684,15 +724,18 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		return layoutManager;
 	}
-	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
+
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final GridLayoutManager gridLayoutManager) {
 		return new GridLayoutManager.SpanSizeLookup() {
 			@Override
 			public int getSpanSize(int position) {
 				SectionAdapter adapter = getCurrentAdapter();
 				if(adapter != null) {
-					int viewType = getCurrentAdapter().getItemViewType(position);
+
+					int viewType = adapter.getItemViewType(position);
 					if (viewType == SectionAdapter.VIEW_TYPE_HEADER) {
-						return getRecyclerColumnCount();
+
+						return gridLayoutManager.getSpanCount();
 					} else {
 						return 1;
 					}
@@ -735,6 +778,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			if(downloadService == null) {
 				return;
 			}
+			downloadService.clear();
 			downloadService.setShufflePlayEnabled(true);
 			context.openNowPlaying();
 			return;
@@ -838,6 +882,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						if (downloadService == null) {
 							return;
 						}
+
+						downloadService.clear();
 						downloadService.setShufflePlayEnabled(true);
 						context.openNowPlaying();
 					}
@@ -1586,7 +1632,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				.setPositiveButton(R.string.bookmark_action_resume, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						playNow(songs, song, position);
+
+						playNow(songs, song, position, playlistName, playlistId);
 					}
 				})
 				.setNegativeButton(R.string.bookmark_action_start_over, new DialogInterface.OnClickListener() {
@@ -1619,7 +1666,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 							}
 						}.execute();
 
-						playNow(songs, 0);
+
+						playNow(songs, 0, playlistName, playlistId);
 					}
 				});
 		AlertDialog dialog = builder.create();
@@ -1673,15 +1721,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		new LoadingTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
-				DownloadService downloadService = getDownloadService();
-				if(downloadService == null) {
-					return null;
-				}
 
-				downloadService.clear();
-				downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
-				downloadService.setSuggestedPlaylistName(playlistName, playlistId);
-
+				playNowInTask(entries, song, position, playlistName, playlistId);
 				return null;
 			}
 
@@ -1690,6 +1731,19 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				context.openNowPlaying();
 			}
 		}.execute();
+	}
+	protected void playNowInTask(final List<Entry> entries, final Entry song, final int position) {
+		playNowInTask(entries, song, position, null, null);
+	}
+	protected void playNowInTask(final List<Entry> entries, final Entry song, final int position, final String playlistName, final String playlistId) {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService == null) {
+			return;
+		}
+
+		downloadService.clear();
+		downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
+		downloadService.setSuggestedPlaylistName(playlistName, playlistId);
 	}
 
 	protected void deleteBookmark(final MusicDirectory.Entry entry, final SectionAdapter adapter) {
@@ -1916,6 +1970,14 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		UpdateHelper.toggleStarred(context, getSelectedEntries());
 	}
 
+	protected boolean isShowArtistEnabled() {
+		return false;
+	}
+
+	protected String getCurrentQuery() {
+		return null;
+	}
+
 	public abstract class RecursiveLoader extends LoadingTask<Boolean> {
 		protected MusicService musicService;
 		protected static final int MAX_SONGS = 500;
@@ -1927,6 +1989,23 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			musicService = MusicServiceFactory.getMusicService(context);
 		}
 
+		protected void getSiblingsRecursively(Entry entry) throws Exception {
+			MusicDirectory parent = new MusicDirectory();
+			if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+				parent.setId(entry.getAlbumId());
+			} else {
+				parent.setId(entry.getParent());
+			}
+
+			if(parent.getId() == null) {
+				songs.add(entry);
+			} else {
+				MusicDirectory.Entry dir = new Entry(parent.getId());
+				dir.setDirectory(true);
+				parent.addChild(dir);
+				getSongsRecursively(parent, songs);
+			}
+		}
 		protected void getSongsRecursively(List<Entry> entry) throws Exception {
 			getSongsRecursively(entry, false);
 		}

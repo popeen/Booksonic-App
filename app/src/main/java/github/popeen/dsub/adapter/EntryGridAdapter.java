@@ -94,7 +94,7 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 	public UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
 		return new UpdateViewHolder(header, false);
 	}
-	public void onBindHeaderHolder(UpdateViewHolder holder, String header) {
+	public void onBindHeaderHolder(UpdateViewHolder holder, String header, int sectionIndex) {
 
 	}
 

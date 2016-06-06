@@ -52,6 +52,11 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class MainFragment extends SelectRecyclerFragment<Integer> {
 	private static final String TAG = MainFragment.class.getSimpleName();
+	public static final String SONGS_LIST_PREFIX = "songs-";
+	public static final String SONGS_NEWEST = SONGS_LIST_PREFIX + "newest";
+	public static final String SONGS_TOP_PLAYED = SONGS_LIST_PREFIX + "topPlayed";
+	public static final String SONGS_RECENT = SONGS_LIST_PREFIX + "recent";
+	public static final String SONGS_FREQUENT = SONGS_LIST_PREFIX + "frequent";
 
 	public MainFragment() {
 		super();
@@ -64,6 +69,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.main, menu);
+		onFinishSetupOptionsMenu(menu);
 
 		try {
 			if (!ServerInfo.isMadsonic(context) || !UserUtil.isCurrentAdmin()) {
@@ -126,6 +132,27 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		sections.add(albums);
 		headers.add("albums");
 
+		if(ServerInfo.isMadsonic6(context)) {
+			List<Integer> songs = new ArrayList<>();
+
+			songs.add(R.string.main_songs_newest);
+			if(ServerInfo.checkServerVersion(context, "2.0.1")) {
+				songs.add(R.string.main_songs_top_played);
+			}
+			songs.add(R.string.main_songs_recent);
+			if(ServerInfo.checkServerVersion(context, "2.0.1")) {
+				songs.add(R.string.main_songs_frequent);
+			}
+
+			sections.add(songs);
+			headers.add("songs");
+		}
+
+		if(ServerInfo.checkServerVersion(context, "1.8")) {
+			List<Integer> videos = Arrays.asList(R.string.main_videos);
+			sections.add(videos);
+			headers.add("videos");
+		}
 
 		return new MainAdapter(context, headers, sections, this);
 	}
@@ -283,6 +310,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 					URL url = new URL("https://pastebin.com/api/api_post.php");
 					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+					StringBuffer responseBuffer = new StringBuffer();
 					try {
 						urlConnection.setReadTimeout(10000);
 						urlConnection.setConnectTimeout(15000);
@@ -324,15 +352,16 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 						writer.flush();
 						writer.close();
 						os.close();
-					}finally{}
 
-					BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-					String inputLine;
-					StringBuffer responseBuffer = new StringBuffer();
-					while ((inputLine = in.readLine()) != null) {
-						responseBuffer.append(inputLine);
+						BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+						String inputLine;
+						while ((inputLine = in.readLine()) != null) {
+							responseBuffer.append(inputLine);
+						}
+						in.close();
+					} finally {
+						urlConnection.disconnect();
 					}
-					in.close();
 
 					String response = responseBuffer.toString();
                     urlConnection.disconnect();
@@ -345,6 +374,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 				@Override
 				protected void error(Throwable error) {
+					Log.e(TAG, "Failed to gather logs", error);
 					Util.toast(context, "Failed to gather logs");
 				}
 
@@ -390,6 +420,14 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			showAlbumList("author");
 		} else if(item == R.string.button_bar_podcasts) {
 			showAlbumList("podcast");
+		} else if (item == R.string.main_songs_newest) {
+			showAlbumList(SONGS_NEWEST);
+		} else if (item == R.string.main_songs_top_played) {
+			showAlbumList(SONGS_TOP_PLAYED);
+		} else if (item == R.string.main_songs_recent) {
+			showAlbumList(SONGS_RECENT);
+		} else if (item == R.string.main_songs_frequent) {
+			showAlbumList(SONGS_FREQUENT);
 		}
 	}
 

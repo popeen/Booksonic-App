@@ -16,6 +16,7 @@
 package github.popeen.dsub.service.parser;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -23,10 +24,17 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import github.popeen.dsub.domain.MusicFolder;
 import github.popeen.dsub.domain.User;
+import github.popeen.dsub.util.ProgressListener;
+import github.popeen.dsub.domain.User.MusicFolderSetting;
+import github.popeen.dsub.domain.User.Setting;
+import github.popeen.dsub.service.MusicService;
+import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.util.ProgressListener;
 
 public class UserParser extends AbstractParser {
+	private static final String TAG = UserParser.class.getSimpleName();
 
 	public UserParser(Context context, int instance) {
 		super(context, instance);
@@ -35,14 +43,18 @@ public class UserParser extends AbstractParser {
 	public List<User> parse(Reader reader, ProgressListener progressListener) throws Exception {
 		init(reader);
 		List<User> result = new ArrayList<User>();
+		List<MusicFolder> musicFolders = null;
+		User user = null;
 		int eventType;
 
+		String tagName = null;
 		do {
 			eventType = nextParseEvent();
 			if (eventType == XmlPullParser.START_TAG) {
-				String name = getElementName();
-				if ("user".equals(name)) {
-					User user = new User();
+
+				tagName = getElementName();
+				if ("user".equals(tagName)) {
+					user = new User();
 
 					user.setUsername(get("username"));
 					user.setEmail(get("email"));
@@ -53,8 +65,31 @@ public class UserParser extends AbstractParser {
 					parseSetting(user, User.LASTFM);
 
 					result.add(user);
-				} else if ("error".equals(name)) {
+
+				} else if ("error".equals(tagName)) {
 					handleError();
+				}
+			} else if(eventType == XmlPullParser.TEXT) {
+				if("folder".equals(tagName)) {
+					String id = getText();
+					if(musicFolders == null) {
+						musicFolders = getMusicFolders();
+					}
+
+					if(user != null) {
+						if(user.getMusicFolderSettings() == null) {
+							for (MusicFolder musicFolder : musicFolders) {
+								user.addMusicFolder(musicFolder);
+							}
+						}
+
+						for(Setting musicFolder: user.getMusicFolderSettings()) {
+							if(musicFolder.getName().equals(id)) {
+								musicFolder.setValue(true);
+								break;
+							}
+						}
+					}
 				}
 			}
 		} while (eventType != XmlPullParser.END_DOCUMENT);
@@ -62,6 +97,11 @@ public class UserParser extends AbstractParser {
 		validate();
 
 		return result;
+	}
+
+	private List<MusicFolder> getMusicFolders() throws Exception{
+		MusicService musicService = MusicServiceFactory.getMusicService(context);
+		return musicService.getMusicFolders(false, context, null);
 	}
 	
 	private void parseSetting(User user, String name) {

@@ -26,6 +26,7 @@ import github.popeen.dsub.R;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.MusicDirectory.Entry;
 import github.popeen.dsub.domain.ServerInfo;
+import github.popeen.dsub.fragments.MainFragment;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.util.ImageLoader;
@@ -88,6 +89,10 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 		this.type = type;
 		this.extra = extra;
 		this.size = size;
+
+		if(super.getItemCount() < size) {
+			allLoaded = true;
+		}
 	}
 
 	public void loadMore() {
@@ -110,7 +115,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 				appendCachedData(newData);
 				loading = false;
 
-				if(newData.isEmpty()) {
+				if(newData.size() < size) {
 					allLoaded = true;
 					notifyDataSetChanged();
 				}
@@ -126,6 +131,8 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 			result = service.getAlbumList(type, extra, size, offset, false, context, null);
 		} else if("genres".equals(type) || "genres-songs".equals(type)) {
 			result = service.getSongsByGenre(extra, size, offset, context, null);
+		}else if(type.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
+			result = service.getSongList(type, size, offset, context, null);
 		} else {
 			result = service.getAlbumList(type, size, offset, false, context, null);
 		}

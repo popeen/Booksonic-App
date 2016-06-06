@@ -89,7 +89,6 @@ import github.popeen.dsub.activity.SubsonicActivity;
 public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener, SectionAdapter.OnItemClickedListener<DownloadFile>, OnSongChangedListener {
 	private static final String TAG = NowPlayingFragment.class.getSimpleName();
 	private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 10;
-	private static final int INCREMENT_TIME = 5000;
 
 	private static final int ACTION_PREVIOUS = 1;
 	private static final int ACTION_NEXT = 2;
@@ -107,6 +106,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private SeekBar progressBar;
 	private AutoRepeatButton previousButton;
 	private AutoRepeatButton nextButton;
+	private AutoRepeatButton rewindButton;
+	private AutoRepeatButton fastforwardButton;
 	private View pauseButton;
 	private View stopButton;
 	private View startButton;
@@ -176,6 +177,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		progressBar = (SeekBar)rootView.findViewById(R.id.download_progress_bar);
 		previousButton = (AutoRepeatButton)rootView.findViewById(R.id.download_previous);
 		nextButton = (AutoRepeatButton)rootView.findViewById(R.id.download_next);
+		rewindButton = (AutoRepeatButton) rootView.findViewById(R.id.download_rewind);
+		fastforwardButton = (AutoRepeatButton) rootView.findViewById(R.id.download_fastforward);
 		pauseButton =rootView.findViewById(R.id.download_pause);
 		stopButton =rootView.findViewById(R.id.download_stop);
 		startButton =rootView.findViewById(R.id.download_start);
@@ -198,6 +201,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				@Override
 				public void onClick(View v) {
 					getDownloadService().toggleStarred();
+					setControlsVisible(true);
 				}
 			});
 		} else {
@@ -217,7 +221,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		rateBadButton.setOnTouchListener(touchListener);
 		rateGoodButton.setOnTouchListener(touchListener);
 		emptyTextView.setOnTouchListener(touchListener);
-		albumArtImageView.setOnTouchListener(new View.OnTouchListener() {
+/*		albumArtImageView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent me) {
 				if (me.getAction() == MotionEvent.ACTION_DOWN) {
@@ -225,7 +229,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 				return gestureScanner.onTouchEvent(me);
 			}
-		});
+		});*/
 
 		previousButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -243,7 +247,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 		previousButton.setOnRepeatListener(new Runnable() {
 			public void run() {
-				changeProgress(-INCREMENT_TIME);
+				changeProgress(true);
 			}
 		});
 
@@ -263,9 +267,34 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 		nextButton.setOnRepeatListener(new Runnable() {
 			public void run() {
-				changeProgress(INCREMENT_TIME);
+				changeProgress(false);
 			}
 		});
+
+		rewindButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				changeProgress(true);
+			}
+		});
+		rewindButton.setOnRepeatListener(new Runnable() {
+			public void run() {
+				changeProgress(true);
+			}
+		});
+
+		fastforwardButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				changeProgress(false);
+			}
+		});
+		fastforwardButton.setOnRepeatListener(new Runnable() {
+			public void run() {
+				changeProgress(false);
+			}
+		});
+
 
 		pauseButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -334,6 +363,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			public void onClick(View view) {
 				createBookmark();
+				setControlsVisible(true);
 			}
 		});
 
@@ -346,6 +376,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 
 				downloadService.toggleRating(1);
+				setControlsVisible(true);
 			}
 		});
 		rateGoodButton.setOnClickListener(new View.OnClickListener() {
@@ -357,6 +388,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 
 				downloadService.toggleRating(5);
+				setControlsVisible(true);
 			}
 		});
 
@@ -370,7 +402,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 		View overlay = rootView.findViewById(R.id.download_overlay_buttons);
 		final int overlayHeight = overlay != null ? overlay.getHeight() : -1;
-		albumArtImageView.setOnClickListener(new View.OnClickListener() {
+/*		albumArtImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (overlayHeight == -1 || lastY < (view.getBottom() - overlayHeight)) {
@@ -378,7 +410,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					setControlsVisible(true);
 				}
 			}
-		});
+		});*/
 
 		progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -423,11 +455,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 			}
 		});
-
-		if(Build.MODEL.equals("Nexus 4") || Build.MODEL.equals("GT-I9100")) {
-			View slider = rootView.findViewById(R.id.download_slider);
-			slider.setPadding(0, 0, 0, 0);
-		}
 
 		return rootView;
 	}
@@ -476,6 +503,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
 			}
 		}
+
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false)) {
+			menu.findItem(R.id.menu_batch_mode).setChecked(true);
+		}
 	}
 
 	@Override
@@ -493,7 +524,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			menuInflater.inflate(R.menu.nowplaying_context_offline, menu);
 		} else {
 			menuInflater.inflate(R.menu.nowplaying_context, menu);
-			menu.findItem(R.id.menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
+			menu.findItem(R.id.song_menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
 		}
 
 		if (downloadFile.getSong().getParent() == null) {
@@ -634,9 +665,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 				createNewPlaylist(entries, true);
 				return true;
-			case R.id.menu_star:
-				UpdateHelper.toggleStarred(context, song.getSong());
-				return true;
 			case R.id.menu_rate:
 				UpdateHelper.setRating(context, song.getSong());
 				return true;
@@ -647,11 +675,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				} else {
 					startTimer();
 				}
-				return true;
-			case R.id.menu_add_playlist:
-				songs = new ArrayList<Entry>(1);
-				songs.add(song.getSong());
-				addToPlaylist(songs);
 				return true;
 			case R.id.menu_info:
 				displaySongInfo(song.getSong());
@@ -677,7 +700,18 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				// Any failed condition will get here
 				Util.toast(context, "Failed to start equalizer.  Try restarting.");
 				return true;
-			} default:
+			}case R.id.menu_batch_mode:
+				if(Util.isBatchMode(context)) {
+					Util.setBatchMode(context, false);
+					songListAdapter.notifyDataSetChanged();
+				} else {
+					Util.setBatchMode(context, true);
+					songListAdapter.notifyDataSetChanged();
+				}
+				context.supportInvalidateOptionsMenu();
+
+				return true;
+			default:
 				return false;
 		}
 	}
@@ -914,10 +948,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private int getMinutes(int progress) {
 		if(progress < 30) {
 			return progress + 1;
-		} else if(progress < 61) {
+		} else if(progress < 49) {
 			return (progress - 30) * 5 + getMinutes(29);
+		} else if(progress < 57) {
+			return (progress - 48) * 30 + getMinutes(48);
+		} else if(progress < 81) {
+			return (progress - 56) * 60 + getMinutes(56);
 		} else {
-			return (progress - 61) * 15 + getMinutes(60);
+			return (progress - 80) * 150 + getMinutes(80);
 		}
 	}
 
@@ -953,31 +991,22 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 	}
 
-	private void changeProgress(final int ms) {
+	private void changeProgress(final boolean rewind) {
 		final DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
 			return;
 		}
 
 		new SilentBackgroundTask<Void>(context) {
-			boolean isJukeboxEnabled;
-			int msPlayed;
-			Integer duration;
-			PlayerState playerState;
 			int seekTo;
 
 			@Override
 			protected Void doInBackground() throws Throwable {
-				msPlayed = Math.max(0, downloadService.getPlayerPosition());
-				duration = downloadService.getPlayerDuration();
-				playerState = getDownloadService().getPlayerState();
-				int msTotal = duration == null ? 0 : duration;
-				if(msPlayed + ms > msTotal) {
-					seekTo = msTotal;
+				if(rewind) {
+					seekTo = downloadService.rewind();
 				} else {
-					seekTo = msPlayed + ms;
+					seekTo = downloadService.fastForward();
 				}
-				downloadService.seekTo(seekTo);
 				return null;
 			}
 
@@ -1182,11 +1211,37 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		} catch (Exception e) {
 		}
 		this.currentPlaying = currentPlaying;
+		setupSubtitle(currentPlayingIndex);
+
+		if(currentPlaying != null && currentPlaying.getSong() != null && (currentPlaying.getSong().isPodcast() || currentPlaying.getSong().isAudioBook())) {
+			previousButton.setVisibility(View.GONE);
+			nextButton.setVisibility(View.GONE);
+
+			rewindButton.setVisibility(View.VISIBLE);
+			fastforwardButton.setVisibility(View.VISIBLE);
+		} else {
+			previousButton.setVisibility(View.VISIBLE);
+			nextButton.setVisibility(View.VISIBLE);
+
+			rewindButton.setVisibility(View.GONE);
+			fastforwardButton.setVisibility(View.GONE);
+		}
+	}
+
+	private void setupSubtitle(int currentPlayingIndex) {
 		if (currentPlaying != null) {
 			Entry song = currentPlaying.getSong();
 			songTitleTextView.setText(song.getTitle());
 			getImageLoader().loadImage(albumArtImageView, song, true, true);
-			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
+
+			DownloadService downloadService = getDownloadService();
+			if(downloadService.isShufflePlayEnabled()) {
+				setSubtitle(context.getResources().getString(R.string.download_playerstate_playing_shuffle));
+			} else if(downloadService.isArtistRadio()) {
+				setSubtitle(context.getResources().getString(R.string.download_playerstate_playing_artist_radio));
+			} else {
+				setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
+			}
 		} else {
 			songTitleTextView.setText(null);
 			getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
@@ -1223,10 +1278,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			scrollWhenLoaded = false;
 		}
 
-		setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
 		if(this.currentPlaying != currentPlaying) {
 			onSongChanged(currentPlaying, currentPlayingIndex);
 			onMetadataUpdate(currentPlaying != null ? currentPlaying.getSong() : null, DownloadService.METADATA_UPDATED_ALL);
+		} else {
+			setupSubtitle(currentPlayingIndex);
 		}
 	}
 
@@ -1379,5 +1435,19 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			default:
 				break;
 		}
+	}
+
+	@Override
+	protected List<Entry> getSelectedEntries() {
+		List<DownloadFile> selected = getCurrentAdapter().getSelected();
+		List<Entry> entries = new ArrayList<>();
+
+		for(DownloadFile downloadFile: selected) {
+			if(downloadFile.getSong() != null) {
+				entries.add(downloadFile.getSong());
+			}
+		}
+
+		return entries;
 	}
 }

@@ -220,14 +220,14 @@ public class DownloadService extends Service {
 					}
 				});
 
-				try {
+				/*try {
 					Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
 					i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId);
 					i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
 					sendBroadcast(i);
 				} catch(Throwable e) {
 					// Froyo or lower
-				}
+				}*/
 
 				effectsController = new AudioEffectsController(DownloadService.this, audioSessionId);
 				if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
@@ -574,7 +574,6 @@ public class DownloadService extends Service {
 	public synchronized void setShufflePlayEnabled(boolean enabled) {
 		shufflePlay = enabled;
 		if (shufflePlay) {
-			clear();
 			checkDownloads();
 		}
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
@@ -600,6 +599,9 @@ public class DownloadService extends Service {
 			editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_MODE_EXTRA, artistId);
 		}
 		editor.commit();
+	}
+	public boolean isArtistRadio() {
+		return artistRadio;
 	}
 
 	public synchronized void shuffle() {
@@ -740,7 +742,7 @@ public class DownloadService extends Service {
 		int position = getPlayerPosition();
 		int duration = getPlayerDuration();
 		boolean cutoff = isPastCutoff(position, duration, true);
-		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
+		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode && !currentPlaying.isSaved()) {
 			if(cutoff) {
 				currentPlaying.delete();
 			}
@@ -758,7 +760,7 @@ public class DownloadService extends Service {
 			checkAddBookmark();
 		}
 		if(currentPlaying != null) {
-			scrobbler.conditionalScrobble(this, currentPlaying, position, duration);
+			scrobbler.conditionalScrobble(this, currentPlaying, position, duration, cutoff);
 		}
 
 		reset();
@@ -782,6 +784,10 @@ public class DownloadService extends Service {
 
 		suggestedPlaylistName = null;
 		suggestedPlaylistId = null;
+
+		setShufflePlayEnabled(false);
+		setArtistRadio(null);
+		checkDownloads();
 	}
 
 	public synchronized void remove(int which) {
@@ -808,6 +814,8 @@ public class DownloadService extends Service {
 		if(downloadFile == nextPlaying) {
 			setNextPlaying();
 		}
+
+		checkDownloads();
 	}
 	public synchronized void removeBackground(DownloadFile downloadFile) {
 		if (downloadFile == currentDownloading && downloadFile != currentPlaying && downloadFile != nextPlaying) {
@@ -854,7 +862,10 @@ public class DownloadService extends Service {
 
 		if (currentPlaying != null && currentPlaying.getSong() != null) {
 			Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
-			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
+
+			if(mRemoteControl != null) {
+				mRemoteControl.updateMetadata(this, currentPlaying.getSong());
+			}
 		} else {
 			Util.broadcastNewTrackInfo(this, null);
 			Notifications.hidePlayingNotification(this, this, handler);
@@ -1034,6 +1045,8 @@ public class DownloadService extends Service {
 				bufferAndPlay(position, start);
 				checkDownloads();
 				setNextPlaying();
+			} else {
+				checkDownloads();
 			}
 		}
 	}
@@ -1121,6 +1134,27 @@ public class DownloadService extends Service {
 			handleError(x);
 		}
 	}
+	public synchronized int rewind() {
+		return seekToWrapper(-REWIND);
+	}
+	public synchronized int fastForward() {
+		return seekToWrapper(FAST_FORWARD);
+	}
+	protected int seekToWrapper(int difference) {
+		int msPlayed = Math.max(0, getPlayerPosition());
+		Integer duration = getPlayerDuration();
+		int msTotal = duration == null ? 0 : duration;
+
+		int seekTo;
+		if(msPlayed + difference > msTotal) {
+			seekTo = msTotal;
+		} else {
+			seekTo = msPlayed + difference;
+		}
+		seekTo(seekTo);
+
+		return seekTo;
+	}
 
 	public synchronized void previous() {
 		int index = getCurrentPlayingIndex();
@@ -1171,7 +1205,7 @@ public class DownloadService extends Service {
 		} else {
 			cutoff = isPastCutoff(position, duration);
 		}
-		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
+		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode && !currentPlaying.isSaved()) {
 			if(cutoff) {
 				toDelete.add(currentPlaying);
 			}
@@ -1180,7 +1214,7 @@ public class DownloadService extends Service {
 			clearCurrentBookmark(true);
 		}
 		if(currentPlaying != null) {
-			scrobbler.conditionalScrobble(this, currentPlaying, position, duration);
+			scrobbler.conditionalScrobble(this, currentPlaying, position, duration, cutoff);
 		}
 
 		int index = getCurrentPlayingIndex();
@@ -1373,7 +1407,9 @@ public class DownloadService extends Service {
 
 		if (playerState == PAUSED) {
 			lifecycleSupport.serializeDownloadQueue();
-			checkAddBookmark(true);
+			if(!isPastCutoff()) {
+				checkAddBookmark(true);
+			}
 		}
 
 		boolean show = playerState == PlayerState.STARTED;
@@ -1404,9 +1440,9 @@ public class DownloadService extends Service {
 		}
 
 		if (playerState == STARTED) {
-			scrobbler.scrobble(this, currentPlaying, false);
+			scrobbler.scrobble(this, currentPlaying, false, false);
 		} else if (playerState == COMPLETED) {
-			scrobbler.scrobble(this, currentPlaying, true);
+			scrobbler.scrobble(this, currentPlaying, true, true);
 		}
 
 		if(playerState == STARTED && positionCache == null) {
@@ -1452,7 +1488,7 @@ public class DownloadService extends Service {
 			positionCache.stop();
 			positionCache = null;
 		}
-		scrobbler.scrobble(this, currentPlaying, true);
+		scrobbler.scrobble(this, currentPlaying, true, true);
 
 		onStateUpdate();
 	}
@@ -1701,11 +1737,12 @@ public class DownloadService extends Service {
 				nextPlayingTask.cancel();
 				nextPlayingTask = null;
 			}
-		}
 
-		if(remoteState == LOCAL) {
-			checkDownloads();
+			if(nextPlayerState != IDLE) {
+				setNextPlayerState(IDLE);
+			}
 		}
+		checkDownloads();
 
 		if(routeId != null) {
 			final Runnable delayedReconnect = new Runnable() {
@@ -2140,7 +2177,7 @@ public class DownloadService extends Service {
 
 			int preloaded = 0;
 
-			if(n != 0 && remoteState == LOCAL) {
+			if(n != 0 && (remoteState == LOCAL || Util.shouldCacheDuringCasting(this))) {
 				int start = currentPlaying == null ? 0 : getCurrentPlayingIndex();
 				if(start == -1) {
 					start = 0;
@@ -2344,7 +2381,7 @@ public class DownloadService extends Service {
 		}
 
 		// Make cutoff a maximum of 10 minutes
-		int cutoffPoint = Math.min((int) (duration * DELETE_CUTOFF), 10 * 60 * 1000);
+		int cutoffPoint = Math.max((int) (duration * DELETE_CUTOFF), duration - 10 * 60 * 1000);
 		boolean isPastCutoff = duration > 0 && position > cutoffPoint;
 		
 		// Check to make sure song isn't within 10 seconds of where it was created
@@ -2731,7 +2768,9 @@ public class DownloadService extends Service {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+					if(mRemoteControl != null) {
+						mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+					}
 				}
 			});
 		}

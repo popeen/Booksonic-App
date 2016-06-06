@@ -21,6 +21,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
+import android.content.ClipboardManager;
+import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,7 +47,9 @@ import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.Gravity;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,6 +107,7 @@ public final class Util {
     private static DecimalFormat BYTE_LOCALIZED_FORMAT = null;
 	private static SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
 	private static SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
+	private static SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
 	private static int CURRENT_YEAR = new Date().getYear();
 
     public static final String EVENT_META_CHANGED = "github.popeen.dsub.EVENT_META_CHANGED";
@@ -378,6 +383,12 @@ public final class Util {
         int cacheSize = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_CACHE_SIZE, "-1"));
         return cacheSize == -1 ? Integer.MAX_VALUE : cacheSize;
     }
+	public static boolean isBatchMode(Context context) {
+		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false);
+	}
+	public static void setBatchMode(Context context, boolean batchMode) {
+		Util.getPreferences(context).edit().putBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, batchMode).commit();
+	}
 
     public static String getRestUrl(Context context, String method) {
         return getRestUrl(context, method, true);
@@ -685,6 +696,10 @@ public final class Util {
 		editor.commit();
 	}
 
+	public static boolean shouldCacheDuringCasting(Context context) {
+		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CAST_CACHE, false);
+	}
+
 	public static boolean shouldStartOnHeadphones(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_START_ON_HEADPHONES, false);
@@ -903,26 +918,40 @@ public final class Util {
     }
 
 	public static String formatDate(Context context, String dateString) {
+		return formatDate(context, dateString, true);
+	}
+	public static String formatDate(Context context, String dateString, boolean includeTime) {
 		try {
+			dateString = dateString.replace(' ', 'T');
 			boolean isDateNormalized = ServerInfo.checkServerVersion(context, "1.11");
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
 			if (isDateNormalized) {
 				dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 			}
 
-			return formatDate(dateFormat.parse(dateString));
+			return formatDate(dateFormat.parse(dateString), includeTime);
 		} catch(ParseException e) {
+			Log.e(TAG, "Failed to parse date string", e);
 			return dateString;
 		}
 	}
 	public static String formatDate(Date date) {
+		return formatDate(date, true);
+	}
+	public static String formatDate(Date date, boolean includeTime) {
 		if(date == null) {
 			return "Never";
 		} else {
-			if(date.getYear() != CURRENT_YEAR) {
-				return DATE_FORMAT_LONG.format(date);
+
+			if(includeTime) {
+				if (date.getYear() != CURRENT_YEAR) {
+					return DATE_FORMAT_LONG.format(date);
+				} else {
+					return DATE_FORMAT_SHORT.format(date);
+				}
 			} else {
-				return DATE_FORMAT_SHORT.format(date);
+
+				return DATE_FORMAT_NO_TIME.format(date);
 			}
 		}
 	}
@@ -1224,11 +1253,36 @@ public final class Util {
 		}
 		showDetailsDialog(context, context.getResources().getString(title), headerStrings, details);
 	}
-	public static void showDetailsDialog(Context context, String title, List<String> headers, List<String> details) {
+
+	public static void showDetailsDialog(Context context, String title, List<String> headers, final List<String> details) {
 		ListView listView = new ListView(context);
 		listView.setAdapter(new DetailsAdapter(context, R.layout.details_item, headers, details));
 		listView.setDivider(null);
 		listView.setScrollbarFadingEnabled(false);
+
+		// Let the user long-click on a row to copy its value to the clipboard
+		final Context contextRef = context;
+		listView.setOnItemLongClickListener(new ListView.OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
+				TextView nameView = (TextView) view.findViewById(R.id.detail_name);
+				TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+				if(nameView == null || detailsView == null) {
+					return false;
+				}
+
+				CharSequence name = nameView.getText();
+				CharSequence value = detailsView.getText();
+
+				ClipboardManager clipboard = (ClipboardManager) contextRef.getSystemService(Context.CLIPBOARD_SERVICE);
+				ClipData clip = ClipData.newPlainText(name, value);
+				clipboard.setPrimaryClip(clip);
+
+				toast(contextRef, "Copied " + name + " to clipboard");
+
+				return true;
+			}
+		});
 
 		new AlertDialog.Builder(context)
 				// .setIcon(android.R.drawable.ic_dialog_info)
@@ -1369,72 +1423,87 @@ public final class Util {
      * <p>Broadcasts the given song info as the new song being played.</p>
      */
     public static void broadcastNewTrackInfo(Context context, MusicDirectory.Entry song) {
-		DownloadService downloadService = (DownloadService)context;
-        Intent intent = new Intent(EVENT_META_CHANGED);
-		Intent avrcpIntent = new Intent(AVRCP_METADATA_CHANGED);
 
-        if (song != null) {
-            intent.putExtra("title", song.getTitle());
-            intent.putExtra("artist", song.getArtist());
-            intent.putExtra("album", song.getAlbum());
+		try {
+			Intent intent = new Intent(EVENT_META_CHANGED);
+			Intent avrcpIntent = new Intent(AVRCP_METADATA_CHANGED);
 
-            File albumArtFile = FileUtil.getAlbumArtFile(context, song);
-            intent.putExtra("coverart", albumArtFile.getAbsolutePath());
-			avrcpIntent.putExtra("playing", true);
-        } else {
-            intent.putExtra("title", "");
-            intent.putExtra("artist", "");
-            intent.putExtra("album", "");
-            intent.putExtra("coverart", "");
-			avrcpIntent.putExtra("playing", false);
-        }
-		addTrackInfo(context, song, avrcpIntent);
 
-        context.sendBroadcast(intent);
-		context.sendBroadcast(avrcpIntent);
+			if (song != null) {
+				intent.putExtra("title", song.getTitle());
+				intent.putExtra("artist", song.getArtist());
+				intent.putExtra("album", song.getAlbum());
+
+
+				File albumArtFile = FileUtil.getAlbumArtFile(context, song);
+				intent.putExtra("coverart", albumArtFile.getAbsolutePath());
+				avrcpIntent.putExtra("playing", true);
+			} else {
+				intent.putExtra("title", "");
+				intent.putExtra("artist", "");
+				intent.putExtra("album", "");
+				intent.putExtra("coverart", "");
+				avrcpIntent.putExtra("playing", false);
+			}
+			addTrackInfo(context, song, avrcpIntent);
+
+
+			context.sendBroadcast(intent);
+			context.sendBroadcast(avrcpIntent);
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to broadcastNewTrackInfo", e);
+		}
     }
 
     /**
      * <p>Broadcasts the given player state as the one being set.</p>
      */
     public static void broadcastPlaybackStatusChange(Context context, MusicDirectory.Entry song, PlayerState state) {
-        Intent intent = new Intent(EVENT_PLAYSTATE_CHANGED);
-		Intent avrcpIntent = new Intent(AVRCP_PLAYSTATE_CHANGED);
 
-        switch (state) {
-            case STARTED:
-                intent.putExtra("state", "play");
-				avrcpIntent.putExtra("playing", true);
-                break;
-            case STOPPED:
-                intent.putExtra("state", "stop");
-				avrcpIntent.putExtra("playing", false);
-                break;
-            case PAUSED:
-                intent.putExtra("state", "pause");
-				avrcpIntent.putExtra("playing", false);
-                break;
-			case PREPARED:
-				// Only send quick pause event for samsung devices, causes issues for others
-				if(Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
+		try {
+			Intent intent = new Intent(EVENT_PLAYSTATE_CHANGED);
+			Intent avrcpIntent = new Intent(AVRCP_PLAYSTATE_CHANGED);
+
+			switch (state) {
+				case STARTED:
+					intent.putExtra("state", "play");
+					avrcpIntent.putExtra("playing", true);
+					break;
+				case STOPPED:
+					intent.putExtra("state", "stop");
 					avrcpIntent.putExtra("playing", false);
-				} else {
-					return; // Don't broadcast anything
-				}
-				break;
-            case COMPLETED:
-                intent.putExtra("state", "complete");
-				avrcpIntent.putExtra("playing", false);
-                break;
-            default:
-                return; // No need to broadcast.
-        }
-		addTrackInfo(context, song, avrcpIntent);
 
-		if(state != PlayerState.PREPARED) {
-			context.sendBroadcast(intent);
+					break;
+				case PAUSED:
+					intent.putExtra("state", "pause");
+					avrcpIntent.putExtra("playing", false);
+					break;
+				case PREPARED:
+					// Only send quick pause event for samsung devices, causes issues for others
+					if (Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
+						avrcpIntent.putExtra("playing", false);
+					} else {
+						return; // Don't broadcast anything
+					}
+					break;
+				case COMPLETED:
+					intent.putExtra("state", "complete");
+					avrcpIntent.putExtra("playing", false);
+					break;
+				default:
+					return; // No need to broadcast.
+			}
+			addTrackInfo(context, song, avrcpIntent);
+
+
+			if (state != PlayerState.PREPARED) {
+				context.sendBroadcast(intent);
+			}
+			context.sendBroadcast(avrcpIntent);
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to broadcastPlaybackStatusChange", e);
 		}
-		context.sendBroadcast(avrcpIntent);
+
     }
 
 	private static void addTrackInfo(Context context, MusicDirectory.Entry song, Intent intent) {

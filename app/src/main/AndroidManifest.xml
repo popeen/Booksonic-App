@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
           package="github.popeen.dsub"
           android:installLocation="internalOnly"
           android:versionCode="9"
@@ -31,6 +30,7 @@
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
 	<uses-feature android:name="android.hardware.microphone" android:required="false" />
 	<uses-feature android:name="android.hardware.wifi" android:required="false" />
+	<uses-feature android:name="android.software.leanback" android:required="false"/>
 
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22"/>
 
@@ -45,7 +45,7 @@
 
 		<activity android:name="github.popeen.dsub.activity.SubsonicFragmentActivity"
 				  android:configChanges="orientation|keyboardHidden"
-				  android:launchMode="standard">
+				  android:launchMode="singleTask">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
@@ -189,7 +189,6 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x1"/>
         </receiver>
 		<receiver
-
 			android:name="github.popeen.dsub.provider.DSubWidget4x2"
 			android:label="@string/widget.4x2">
             <intent-filter>
@@ -217,7 +216,6 @@
         </receiver>
 
 		<receiver
-
 			android:name="github.popeen.dsub.receiver.PlayActionReceiver">
 
 			<intent-filter>

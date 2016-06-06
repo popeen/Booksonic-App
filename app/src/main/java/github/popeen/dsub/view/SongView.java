@@ -20,7 +20,6 @@ package github.popeen.dsub.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -52,6 +51,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private TextView statusTextView;
 	private ImageView statusImageView;
 	private ImageView bookmarkButton;
+	private ImageView playedButton;
 	private View bottomRowView;
 
 	private DownloadService downloadService;
@@ -68,8 +68,10 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private boolean partialFileExists = false;
 	private boolean loaded = false;
 	private boolean isBookmarked = false;
-	private boolean bookmarked = false;
+	private boolean isBookmarkedShown = false;
 	private boolean showPodcast = false;
+	private boolean isPlayed = false;
+	private boolean isPlayedShown = false;
 
     private SQLiteHandler sqlh = new SQLiteHandler(context);
 
@@ -89,6 +91,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		starButton.setFocusable(false);
 		bookmarkButton = (ImageButton) findViewById(R.id.song_bookmark);
 		bookmarkButton.setFocusable(false);
+		playedButton = (ImageButton) findViewById(R.id.song_played);
 		moreButton = (ImageView) findViewById(R.id.item_more);
 		bottomRowView = findViewById(R.id.song_bottom);
 	}
@@ -127,8 +130,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 					if(artist.length() != 0) {
 						artist.append(" - ");
 					}
-					int index = date.indexOf(" ");
-					artist.append(date.substring(0, index != -1 ? index : date.length()));
+					artist.append(Util.formatDate(context, date, false));
 				}
 			}
 			else if(song.getArtist() != null) {
@@ -231,6 +233,10 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			item.loadMetadata(downloadFile.getCompleteFile());
 			loaded = true;
 		}
+
+		if(item instanceof PodcastEpisode || item.isAudioBook() || item.isPodcast()) {
+			isPlayed = SongDBHandler.getHandler(context).hasBeenCompleted(item);
+		}
 	}
 
 	@Override
@@ -296,18 +302,34 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		}
 
 		if(isBookmarked) {
-			if(!bookmarked) {
+			if(!isBookmarkedShown) {
 				if(bookmarkButton.getDrawable() == null) {
 					bookmarkButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_menu_bookmark_selected));
 				}
 
 				bookmarkButton.setVisibility(View.VISIBLE);
-				bookmarked = true;
+				isBookmarkedShown = true;
 			}
 		} else {
-			if(bookmarked) {
+			if(isBookmarkedShown) {
 				bookmarkButton.setVisibility(View.GONE);
-				bookmarked = false;
+				isBookmarkedShown = false;
+			}
+		}
+
+		if(isPlayed) {
+			if(!isPlayedShown) {
+				if(playedButton.getDrawable() == null) {
+					playedButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_played));
+				}
+
+				playedButton.setVisibility(View.VISIBLE);
+				isPlayedShown = true;
+			}
+		} else {
+			if(isPlayedShown) {
+				playedButton.setVisibility(View.GONE);
+				isPlayedShown = false;
 			}
 		}
 
@@ -328,7 +350,15 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			// Still highlight red if a 1-star
 			if(isRated == 1) {
 				this.setBackgroundColor(Color.RED);
-				this.getBackground().setAlpha(20);
+
+				String theme = Util.getTheme(context);
+				if("black".equals(theme)) {
+					this.getBackground().setAlpha(80);
+				} else if("dark".equals(theme) || "holo".equals(theme)) {
+					this.getBackground().setAlpha(60);
+				} else {
+					this.getBackground().setAlpha(20);
+				}
 			} else if(rating == 1) {
 				this.setBackgroundColor(0x00000000);
 			}

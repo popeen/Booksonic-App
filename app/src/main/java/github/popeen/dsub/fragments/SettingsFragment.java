@@ -135,6 +135,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			xml = R.xml.settings_playback;
 		} else if("servers".equals(name)) {
 			xml = R.xml.settings_servers;
+		} else if ("cast".equals(name)) {
+			xml = R.xml.settings_cast;
 		}
 
 		if(xml != 0) {
@@ -348,6 +350,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 		if(theme != null) {
 			theme.setSummary(theme.getEntry());
+		}
+		if(openToTab != null) {
 			openToTab.setSummary(openToTab.getEntry());
 		}
 
@@ -631,7 +635,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			} catch(Exception e) {
 				Log.w(TAG, "Failed to create " + musicNoMedia, e);
 			}
-		} else if (nomediaDir.exists()) {
+		} else if (!hide && nomediaDir.exists()) {
 			if (!nomediaDir.delete()) {
 				Log.w(TAG, "Failed to delete " + nomediaDir);
 			}

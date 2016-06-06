@@ -28,8 +28,7 @@
 
     <string name="button_bar.home">Übersicht</string>
     <string name="button_bar.browse">Bibliothek</string>
-    <string name="button_bar.search">Suchen</string>
-    <string name="button_bar.playlists">Wiedergabeliste</string>
+	<string name="button_bar.playlists">Wiedergabeliste</string>
     <string name="button_bar.now_playing">Aktuelle Wiedergabe</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Lesezeichen</string>
@@ -46,15 +45,16 @@
         <string name="main.faq_text">
         <![CDATA[
                 <font color="red">Cache vs Permanenter Cache</font>:
+
                 <br/>Von Booksonic heruntergelade Titel im Cache können automatisch gelöscht werden, um Platz für neue Titel zu schaffen. Titel im permanenten Cache werden dagegen nie automatisch gelöscht.
                 <p/><font color="red">ChromeCast funktioniert nicht</font>:
+
 		<br/>Versuchen Sie die Option Einstellungen -> Wiedergabe -> Nutze Booksonic als Proxy.  Dies ist eine provisorische Lösung, weil Chromecast keine selbstsignierten Zertifikate akzeptiert.
 		<p/><font color="red">Erste Ebene in der Bibliothek sind Künstlergruppen</font>:
 		<br/>Im Optionsmenü deselektiere "Erste Ebene sind Künstler".  Dann wird die erste Verzeichnisebene wie Künstlergruppen anstelle von Künstler behandelt.
         ]]>
         </string>
-    <string name="main.select_server">Wähle Server</string>
-    <string name="main.shuffle">Zufallswiedergabe</string>
+	<string name="main.shuffle">Zufallswiedergabe</string>
     <string name="main.offline">Gehe Offline</string>
 	<string name="main.online">Gehe Online</string>
     <string name="main.settings">Einstellungen</string>
@@ -106,7 +106,6 @@
 	<string name="menu.rate">Setze Bewertung</string>
 	<string name="menu.top_tracks">Last.FM Top Medien</string>
 	<string name="menu.similar_artists">Ähnliche Künstler</string>
-	<string name="menu.show_missing">Zeige fehlende</string>
 	<string name="menu.start_radio">Starte Radio</string>
 	<string name="menu.first_level_artist">Erste Ebene sind Künstler</string>
 
@@ -126,20 +125,13 @@
     <string name="search.artists">Künstler</string>
     <string name="search.albums">Alben</string>
     <string name="search.songs">Lieder</string>
-    <string name="search.more">Zeige mehr</string>
 
-    <string name="progress.wait">Bitte warten...</string>
+	<string name="progress.wait">Bitte warten...</string>
     <string name="progress.artist_info">Lade Informationen zum Künstler</string>
 
-    <string name="music_library.label">Medienbibliothek</string>
-    <string name="music_library.label_offline">Offline Medien</string>
-
-    <string name="select_album.select">Alle auswählen</string>
-    <string name="select_album.n_selected">%d Lieder ausgewählt.</string>
-	<string name="select_album.more">Mehr</string>
-    <string name="select_album.offline">Offline</string>
-    <string name="select_album.searching">Suche...</string>
-    <string name="select_album.no_sdcard">Fehler: Keine SD-Karte verfügbar.</string>
+	<string name="select_album.n_selected">%d Lieder ausgewählt.</string>
+	<string name="select_album.offline">Offline</string>
+	<string name="select_album.no_sdcard">Fehler: Keine SD-Karte verfügbar.</string>
     <string name="select_album.no_network">Warnung: Kein Netzwerk verfügbar.</string>
     <string name="select_album.no_room">Warnung: Es sind nur %s verfügbar</string>
     <string name="select_album.not_licensed">Server ist nicht lizensiert. Testzeitraum läuft ab in %d Tagen.</string>
@@ -204,7 +196,6 @@
     <string name="download.jukebox_server_too_old">Fernbedienung wird nicht unterstützt. Aktualisierung des Booksonic-Servers notwendig.</string>
     <string name="download.jukebox_offline">Fernbedienung im Offline-Modus nicht verfügbar.</string>
     <string name="download.jukebox_not_authorized">Fernbedienung ist nicht erlaubt. Bitte aktivieren Sie den Jukebox-Modus unter <b>Nutzer &gt; Einstellungen</b> auf Ihrem Booksonic-Server.</string>
-	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Starte Timer</string>
 	<string name="download.need_download">Video muss zuerst heruntergeladen werden</string>
 	<string name="download.no_streaming_player">Stream kann nicht wiedergegeben werden.</string>
@@ -439,15 +430,6 @@
 	<string name="shuffle.genre">Genre:</string>
 	<string name="shuffle.pick_genre">Wähle ein Genre</string>
 
-	<string name="share.info">Eigentümer: %1$s
-		\nBeschreibung: %2$s
-		\nURL: %3$s
-		\nErzeugt: %4$s
-		\nZuletzt besucht: %5$s
-		\nAblauf: %6$s
-		\nBesuchszähler: %7$s
-
-	</string>
 	<string name="share.expires">Ablauf: %s</string>
 	<string name="share.expires_never">nie</string>
 	<string name="share.deleted">Lösche Freigabe %s</string>
@@ -499,8 +481,6 @@
 
     <string name="music_service.retry">Ein Netzwerkfehler ist aufgetreten. Versuch %1$d von %2$d.</string>
 
-    <string name="background_task.wait">Bitte warten...</string>
-    <string name="background_task.loading">Lade.</string>
     <string name="background_task.no_network">Diese Programm benötigt Netzwerkzugriff. Bitte schalten Sie Wi-Fi oder Mobiles Netzwerk ein.</string>
     <string name="background_task.network_error">Ein Netzwerkfehler ist aufgetreten. Bitte prüfen Sie die Serveradresse oder versuchen Sie es später nochmal.</string>
     <string name="background_task.not_found">Quelle wurde nicht gefunden. Bitte prüfen Sie die Serveradresse.</string>
@@ -516,7 +496,6 @@
 	<string name="parser.server_error">Serverfehler: %s</string>
 	<string name="parser.scan_count">%d Einträge gefunden</string>
 
-    <string name="select_artist.refresh">Aktualisieren</string>
     <string name="select_artist.folder">Wähle Ordner</string>
     <string name="select_artist.all_folders">Alle Ordner</string>
 
@@ -537,11 +516,9 @@
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Mehr…</string>
 
-	<string name="chat.send_a_message">Nachricht senden</string> 
+	<string name="chat.send_a_message">Nachricht senden</string>
 
-    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
-
-	<string name="tasker.start_playing">Starte Wiedergabe</string>
+   <string name="tasker.start_playing">Starte Wiedergabe</string>
 	<string name="tasker.start_playing_shuffled">Starte Zufallswiedergabe</string>
 	<string name="tasker.start_playing_title">Tasker -> Starte Booksonic</string>
 	<string name="tasker.edit_shuffle_mode">Starte im Zufallsmodus: </string>
@@ -664,5 +641,18 @@
 	<string name="select_podcasts.channels">Podcastkanäle</string>
 	<string name="settings.cache_location_external">Externer Speicher</string>
 	<string name="settings.cache_location_internal">Interner Speicher</string>
+	<string name="admin.change_password_current_label">Aktuelles Passwort:</string>
+	<string name="admin.musicFolders">Musikordner</string>
+	<string name="admin.permissions">Berechtigungen</string>
+	<string name="details.played_count">Abspielzähler</string>
+	<string name="details.expiration">Ablauf</string>
+	<string name="download.playerstate_playing_artist_radio">Künstlerradio</string>
+	<string name="main.songs_top_played">Am meisten gespielt</string>
+	<string name="main.songs_frequent">@string/main.albums_frequent</string>
+	<string name="main.songs_newest">@string/main.albums_newest</string>
+	<string name="main.songs_recent">@string/main.albums_recent</string>
+	<string name="menu.similar_artists.missing">Fehlende Künstler</string>
+	<string name="settings.casting_stream_original">Original streamen</string>
+	<string name="settings.casting_stream_original_summary">Zum streamen möglichst das Originalformat verwenden.</string>
 
 </resources>

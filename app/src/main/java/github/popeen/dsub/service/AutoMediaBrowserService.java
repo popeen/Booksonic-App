@@ -197,7 +197,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 						albumListType = "newest";
 				}
 
-				return musicService.getAlbumList(albumListType, 40, 0, true, downloadService, null);
+				return musicService.getAlbumList(albumListType, 20, 0, true, downloadService, null);
 			}
 
 			@Override
@@ -297,7 +297,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 					MediaDescription description = new MediaDescription.Builder()
 							.setTitle(podcast.getTitle())
-							.setSubtitle(Util.formatDate(downloadService, podcast.getDate()))
+							.setSubtitle(Util.formatDate(downloadService, podcast.getDate(), false))
 							.setMediaId(PODCAST_PREFIX + podcast.getId())
 							.setExtras(podcastExtras)
 							.build();
@@ -367,7 +367,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 				.setExtras(shuffleExtras);
 		mediaItems.add(new MediaBrowser.MediaItem(shuffle.build(), MediaBrowser.MediaItem.FLAG_PLAYABLE));
 
-		/*Bundle playLastExtras = new Bundle();
+		Bundle playLastExtras = new Bundle();
 		playLastExtras.putString(idConstant, id);
 		playLastExtras.putBoolean(Constants.INTENT_EXTRA_PLAY_LAST, true);
 
@@ -375,7 +375,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 		playLast.setTitle(downloadService.getString(R.string.menu_play_last))
 				.setMediaId("playLast-" + id)
 				.setExtras(playLastExtras);
-		mediaItems.add(new MediaBrowser.MediaItem(playLast.build(), MediaBrowser.MediaItem.FLAG_PLAYABLE));*/
+		mediaItems.add(new MediaBrowser.MediaItem(playLast.build(), MediaBrowser.MediaItem.FLAG_PLAYABLE));
 
 		result.sendResult(mediaItems);
 	}

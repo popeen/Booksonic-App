@@ -95,7 +95,7 @@ public class OfflineMusicService implements MusicService {
                 artist.setIndex(file.getName().substring(0, 1));
                 artist.setName(file.getName());
                 artists.add(artist);
-            } else {
+            } else if(!file.getName().equals("albumart.jpg") && !file.getName().equals(".nomedia")) {
 				entries.add(createEntry(context, file));
 			}
         }
@@ -307,7 +307,15 @@ public class OfflineMusicService implements MusicService {
 				}
 			}
 		});
-		
+
+		// Respect counts in search criteria
+		int artistCount = Math.min(artists.size(), criteria.getArtistCount());
+		int albumCount = Math.min(albums.size(), criteria.getAlbumCount());
+		int songCount = Math.min(songs.size(), criteria.getSongCount());
+		artists = artists.subList(0, artistCount);
+		albums = albums.subList(0, albumCount);
+		songs = songs.subList(0, songCount);
+
 		return new SearchResult(artists, albums, songs);
     }
 
@@ -359,20 +367,13 @@ public class OfflineMusicService implements MusicService {
 		}
 	}
 	private int matchCriteria(SearchCritera criteria, String name) {
-		String query = criteria.getQuery().toLowerCase();
-		String[] queryParts = query.split(" ");
-		String[] nameParts = name.toLowerCase().split(" ");
-		
-		int closeness = 0;
-		for(String queryPart : queryParts) {
-			for(String namePart : nameParts) {
-				if(namePart.equals(queryPart)) {
-					closeness++;
-				}
-			}
+		if (criteria.getPattern().matcher(name).matches()) {
+			return Util.getStringDistance(
+				criteria.getQuery().toLowerCase(),
+				name.toLowerCase());
+		} else {
+			return 0;
 		}
-		
-		return closeness;
 	}
 
     @Override
@@ -587,6 +588,11 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
+	public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
 	public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
@@ -769,7 +775,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getNewestPodcastEpisodes(int count, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getNewestPodcastEpisodes(boolean refresh, Context context, ProgressListener progressListener, int count) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -235,27 +236,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		recyclerView.setHasFixedSize(true);
 		fastScroller = (FastScroller) rootView.findViewById(R.id.fragment_fast_scroller);
 		setupScrollList(recyclerView);
-
-		if(largeAlbums) {
-			GridLayoutManager gridLayoutManager = new GridLayoutManager(context, getRecyclerColumnCount());
-			gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-				@Override
-				public int getSpanSize(int position) {
-					int viewType = entryGridAdapter.getItemViewType(position);
-					if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER || viewType == EntryInfiniteGridAdapter.VIEW_TYPE_LOADING) {
-						return getRecyclerColumnCount();
-					} else {
-						return 1;
-					}
-				}
-			});
-			recyclerView.addItemDecoration(new GridSpacingDecoration());
-			recyclerView.setLayoutManager(gridLayoutManager);
-		} else {
-			LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-			layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-			recyclerView.setLayoutManager(layoutManager);
-		}
+		setupLayoutManager(recyclerView, largeAlbums);
 
 		if(entries == null) {
 			if(primaryFragment || secondaryFragment) {
@@ -300,7 +281,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			if(!ServerInfo.hasTopSongs(context)) {
 				menu.removeItem(R.id.menu_top_tracks);
 			}
-			if(!ServerInfo.checkServerVersion(context, "1.11") || (id != null && "root".equals(id))) {
+			if(!ServerInfo.checkServerVersion(context, "1.11") || id != null) {
 				menu.removeItem(R.id.menu_radio);
 				menu.removeItem(R.id.menu_similar_artists);
 			} else if(!ServerInfo.hasSimilarArtists(context)) {
@@ -382,10 +363,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(!entry.isVideo() && !Util.isOffline(context) && (playlistId == null || !playlistOwner) && (podcastId == null  || Util.isOffline(context) && podcastId != null)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
-		// Remove show artists if parent is not set and if not on a album list
-		if((albumListType == null || (entry.getParent() == null && entry.getArtistId() == null)) && !Util.isOffline(context)) {
-			menu.removeItem(R.id.album_menu_show_artist);
-		}
 
 		recreateContextMenu(menu);
 	}
@@ -437,24 +414,28 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		} else {
 			List<Entry> songs = new ArrayList<Entry>();
 
-			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true)) {
-				Iterator it = entries.listIterator(entries.indexOf(entry));
-				while(it.hasNext()) {
-					songs.add((Entry) it.next());
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true) && (albumListType == null || "starred".equals(albumListType))) {
+				for(Entry song: entries) {
+					if(!song.isDirectory() && !song.isVideo()) {
+						songs.add(song);
+					}
 				}
+				playNow(songs, entry, 0);
 			} else {
 				songs.add(entry);
+				playNow(songs);
 			}
-
-			playNow(songs);
 		}
 	}
 
 	@Override
 	protected void refresh(boolean refresh) {
-		if(!"root".equals(id)) {
-			load(refresh);
-		}
+		load(refresh);
+	}
+
+	@Override
+	protected boolean isShowArtistEnabled() {
+		return albumListType != null;
 	}
 
 	private void load(boolean refresh) {
@@ -630,6 +611,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			setTitle(albumListExtra);
 		} else if("alphabeticalByName".equals(albumListType)) {
 			setTitle(R.string.main_albums_alphabetical);
+		} if (MainFragment.SONGS_NEWEST.equals(albumListType)) {
+			setTitle(R.string.main_songs_newest);
+		} else if (MainFragment.SONGS_TOP_PLAYED.equals(albumListType)) {
+			setTitle(R.string.main_songs_top_played);
+		} else if (MainFragment.SONGS_RECENT.equals(albumListType)) {
+			setTitle(R.string.main_songs_recent);
+		} else if (MainFragment.SONGS_FREQUENT.equals(albumListType)) {
+			setTitle(R.string.main_songs_frequent);
 		}
 
 		new LoadTask(true) {
@@ -646,6 +635,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					}
 				} else if("genres".equals(albumListType) || "genres-songs".equals(albumListType)) {
 					result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
+				} else if(albumListType.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
+					result = service.getSongList(albumListType, size, 0, context, this);
 				} else {
 					result = service.getAlbumList(albumListType, size, 0, refresh, context, this);
 				}
@@ -732,7 +723,22 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		return entryGridAdapter;
 	}
 
-	private void finishLoading() {
+	@Override
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final GridLayoutManager gridLayoutManager) {
+		return new GridLayoutManager.SpanSizeLookup() {
+			@Override
+			public int getSpanSize(int position) {
+				int viewType = entryGridAdapter.getItemViewType(position);
+				if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER || viewType == EntryInfiniteGridAdapter.VIEW_TYPE_LOADING) {
+					return gridLayoutManager.getSpanCount();
+				} else {
+					return 1;
+				}
+			}
+		};
+	}
+
+    private void finishLoading() {
 		boolean validData = !entries.isEmpty() || !albums.isEmpty();
 		if(!validData) {
 			setEmpty(true);
@@ -794,7 +800,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		// Show header if not album list type and not root and not artist
 		// For Subsonic 5.1+ display a header for artists with getArtistInfo data if it exists
 		boolean addedHeader = false;
-		if(albumListType == null && !"root".equals(id) && (!artist || artistInfo != null || artistInfoDelayed != null) && (share == null || entries.size() != albums.size())) {
+		if(albumListType == null && (!artist || artistInfo != null || artistInfoDelayed != null) && (share == null || entries.size() != albums.size())) {
 			View header = createHeader();
 
 			if(header != null) {
@@ -1129,11 +1135,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			@Override
 			protected Void doInBackground() throws Throwable {
 				DownloadService downloadService = getDownloadService();
+				downloadService.clear();
 				downloadService.setArtistRadio(artistId);
-				if(downloadService.size() == 0) {
-					Log.e(TAG, "Failed to create artist radio");
-					throw new Exception("Failed to create artist radio");
-				}
 				return null;
 			}
 

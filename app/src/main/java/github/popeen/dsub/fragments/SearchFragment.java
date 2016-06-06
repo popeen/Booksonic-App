@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -110,13 +111,13 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	}
 
 	@Override
-	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final GridLayoutManager gridLayoutManager) {
 		return new GridLayoutManager.SpanSizeLookup() {
 			@Override
 			public int getSpanSize(int position) {
 				int viewType = adapter.getItemViewType(position);
 				if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER || viewType == ArtistAdapter.VIEW_TYPE_ARTIST) {
-					return getRecyclerColumnCount();
+					return gridLayoutManager.getSpanCount();
 				} else {
 					return 1;
 				}
@@ -127,18 +128,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.search, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.menu_search:
-				context.startSearch(currentQuery, false, null, false);
-				return true;
-		}
-
-		return super.onOptionsItemSelected(item);
-
+		onFinishSetupOptionsMenu(menu);
 	}
 
 	@Override
@@ -189,6 +179,11 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 		return selectedMedia;
 	}
 
+	@Override
+	protected boolean isShowArtistEnabled() {
+		return true;
+	}
+
 	public void search(final String query, final boolean autoplay) {
 		if(skipSearch) {
 			skipSearch = false;
@@ -215,6 +210,14 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 			}
 		};
 		task.execute();
+
+		if(searchItem != null) {
+			MenuItemCompat.collapseActionView(searchItem);
+		}
+	}
+
+	protected String getCurrentQuery() {
+		return currentQuery;
 	}
 
 	private void onArtistSelected(Artist artist, boolean autoplay) {

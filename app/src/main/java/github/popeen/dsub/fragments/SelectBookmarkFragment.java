@@ -18,6 +18,7 @@
 */
 package github.popeen.dsub.fragments;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import github.popeen.dsub.domain.Bookmark;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.MusicService;
+import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.MenuUtil;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.SilentBackgroundTask;
@@ -89,19 +91,28 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 			return;
 		}
 
-		new SilentBackgroundTask<Void>(context) {
-			@Override
-			protected Void doInBackground() throws Throwable {
-				downloadService.clear();
-				downloadService.download(Arrays.asList(bookmark), false, true, false, false, 0, bookmark.getBookmark().getPosition());
-				return null;
-			}
-			
-			@Override
-			protected void done(Void result) {
-				context.openNowPlaying();
-			}
-		}.execute();
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true) && ((!Util.isTagBrowsing(context) && bookmark.getParent() != null) || (Util.isTagBrowsing(context) && bookmark.getAlbumId() != null)) && !bookmark.isPodcast()) {
+			new RecursiveLoader(context) {
+				@Override
+				protected Boolean doInBackground() throws Throwable {
+					getSiblingsRecursively(bookmark);
+
+					if(songs.isEmpty() || !songs.contains(bookmark)) {
+						playNowInTask(Arrays.asList(bookmark), bookmark, bookmark.getBookmark().getPosition());
+					} else {
+						playNowInTask(songs, bookmark, bookmark.getBookmark().getPosition());
+					}
+					return null;
+				}
+
+				@Override
+				protected void done(Boolean result) {
+					context.openNowPlaying();
+				}
+			}.execute();
+		} else {
+			playNow(Arrays.asList(bookmark), bookmark, bookmark.getBookmark().getPosition());
+		}
 	}
 
 	private void displayBookmarkInfo(final MusicDirectory.Entry entry) {

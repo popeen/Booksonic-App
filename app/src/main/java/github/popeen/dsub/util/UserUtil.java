@@ -157,8 +157,11 @@ public final class UserUtil {
 
 		return defaultValue;
 	}
-	
-	public static void confirmCredentials(final Activity context, final Runnable onSuccess) {
+
+	public static void confirmCredentials(Activity context, Runnable onSuccess) {
+		confirmCredentials(context, onSuccess, null);
+	}
+	public static void confirmCredentials(final Activity context, final Runnable onSuccess, final Runnable onCancel) {
 		final long currentTime = System.currentTimeMillis();
 		// If already ran this check within last x time, just go ahead and auth
 		if((currentTime - lastVerifiedTime) < MIN_VERIFY_DURATION) {
@@ -173,12 +176,7 @@ public final class UserUtil {
 				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						String password = passwordView.getText().toString();
-						
-						SharedPreferences prefs = Util.getPreferences(context);
-						String correctPassword = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null);
-						
-						if(password != null && password.equals(correctPassword)) {
+						if(isPasswordCorrect(context, passwordView)) {
 							lastVerifiedTime = currentTime;
 							onSuccess.run();
 						} else {
@@ -186,7 +184,14 @@ public final class UserUtil {
 						}
 					}
 				})
-				.setNegativeButton(R.string.common_cancel, null)
+				.setNegativeButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if(onCancel != null) {
+							onCancel.run();
+						}
+					}
+				})
 				.setCancelable(true);
 			
 			AlertDialog dialog = builder.create();
@@ -197,7 +202,13 @@ public final class UserUtil {
 
 	public static void changePassword(final Activity context, final User user) {
 		View layout = context.getLayoutInflater().inflate(R.layout.change_password, null);
+		View currentPasswordLayout = layout.findViewById(R.id.current_password_layout);
+		final TextView currentPasswordView = (TextView) layout.findViewById(R.id.current_password);
 		final TextView passwordView = (TextView) layout.findViewById(R.id.new_password);
+
+		if(isCurrentAdmin()) {
+			currentPasswordLayout.setVisibility(View.GONE);
+		}
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.admin_change_password)
@@ -213,8 +224,12 @@ public final class UserUtil {
 			@Override
 			public void onClick(View v) {
 				final String password = passwordView.getText().toString();
+				if(!isCurrentAdmin() && !isPasswordCorrect(context, currentPasswordView)) {
+					Util.toast(context, R.string.admin_confirm_password_bad);
+					return;
+				}
 				// Don't allow blank passwords
-				if ("".equals(password)) {
+				else if ("".equals(password)) {
 					Util.toast(context, R.string.admin_change_password_invalid);
 					return;
 				}
@@ -248,6 +263,16 @@ public final class UserUtil {
 				dialog.dismiss();
 			}
 		});
+	}
+
+	private static boolean isPasswordCorrect(Context context, TextView passwordView) {
+		return isPasswordCorrect(context, passwordView.getText().toString());
+	}
+	private static boolean isPasswordCorrect(Context context, String password) {
+		SharedPreferences prefs = Util.getPreferences(context);
+		String correctPassword = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null);
+
+		return password != null && password.equals(correctPassword);
 	}
 
 	public static void updateSettings(final Context context, final User user) {
@@ -371,13 +396,20 @@ public final class UserUtil {
 		});
 	}
 
-	public static void addNewUser(final Activity context, final SubsonicFragment fragment) {
+	public static void addNewUser(final Activity context, final SubsonicFragment fragment, User sampleUser) {
 		final User user = new User();
 		for(String role: User.ROLES) {
 			if(role.equals(User.SETTINGS) || role.equals(User.STREAM)) {
 				user.addSetting(role, true);
 			} else {
 				user.addSetting(role, false);
+			}
+		}
+
+		if(sampleUser.getMusicFolderSettings() != null) {
+			for(User.Setting setting: sampleUser.getMusicFolderSettings()) {
+				User.MusicFolderSetting musicFolderSetting = (User.MusicFolderSetting) setting;
+				user.addMusicFolder(musicFolderSetting, true);
 			}
 		}
 
@@ -389,7 +421,7 @@ public final class UserUtil {
 		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setLayoutManager(layoutManager);
-		recyclerView.setAdapter(new SettingsAdapter(context, user, null, true, new SectionAdapter.OnItemClickedListener<User.Setting>() {
+		recyclerView.setAdapter(SettingsAdapter.getSettingsAdapter(context, user, null, true, new SectionAdapter.OnItemClickedListener<User.Setting>() {
 			@Override
 			public void onItemClicked(UpdateView<User.Setting> updateView, User.Setting item) {
 				if(updateView.isCheckable()) {

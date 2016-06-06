@@ -8,9 +8,17 @@ android {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 14
 		targetSdkVersion 22
+		versionCode 178
+		versionName '5.1.7'
+		setProperty("archivesBaseName", "DSub $versionName")
 	}
 	buildTypes {
 		release {
+			minifyEnabled true
+			proguardFiles 'proguard.cfg'
+			zipAlignEnabled true
+		}
+		fix {
 			minifyEnabled true
 			proguardFiles 'proguard.cfg'
 		}

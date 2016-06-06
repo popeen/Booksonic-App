@@ -92,6 +92,8 @@ public interface MusicService {
 
 	MusicDirectory getAlbumList(String type, String extra, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
+	MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception;
+
 	MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception;
     MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception;
 
@@ -145,7 +147,7 @@ public interface MusicService {
 	
 	MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception;
 
-	MusicDirectory getNewestPodcastEpisodes(int count, Context context, ProgressListener progressListener) throws Exception;
+	MusicDirectory getNewestPodcastEpisodes(boolean refresh, Context context, ProgressListener progressListener, int count) throws Exception;
 	
 	void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception;
 	

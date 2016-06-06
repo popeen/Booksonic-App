@@ -77,7 +77,7 @@ public class MainAdapter extends SectionAdapter<Integer> {
 		return new UpdateView.UpdateViewHolder(new BasicHeaderView(context, R.layout.album_list_header));
 	}
 	@Override
-	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header) {
+	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {
 		UpdateView view = holder.getUpdateView();
 		CheckBox checkBox = (CheckBox) view.findViewById(R.id.item_checkbox);
         checkBox.setVisibility(View.GONE);
@@ -87,6 +87,9 @@ public class MainAdapter extends SectionAdapter<Integer> {
 			display = context.getResources().getString(R.string.main_albums_title);
 		} else if("videos".equals(header)) {
 			display = context.getResources().getString(R.string.main_videos);
+		} else if("songs".equals(header)) {
+			display = context.getResources().getString(R.string.search_songs);
+			checkBox.setVisibility(View.GONE);
 		} else {
 			display = header;
 		}

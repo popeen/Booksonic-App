@@ -69,12 +69,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Looper;
 import android.util.Log;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.*;
-import github.popeen.dsub.service.parser.AlbumListParser;
+import github.popeen.dsub.fragments.MainFragment;
 import github.popeen.dsub.service.parser.ArtistInfoParser;
 import github.popeen.dsub.service.parser.BookmarkParser;
 import github.popeen.dsub.service.parser.ChatMessageParser;
+import github.popeen.dsub.service.parser.EntryListParser;
 import github.popeen.dsub.service.parser.ErrorParser;
 import github.popeen.dsub.service.parser.GenreParser;
 import github.popeen.dsub.service.parser.IndexesParser;
@@ -94,6 +96,7 @@ import github.popeen.dsub.service.parser.SearchResult2Parser;
 import github.popeen.dsub.service.parser.SearchResultParser;
 import github.popeen.dsub.service.parser.ShareParser;
 import github.popeen.dsub.service.parser.StarredListParser;
+import github.popeen.dsub.service.parser.TopSongsParser;
 import github.popeen.dsub.service.parser.UserParser;
 import github.popeen.dsub.service.parser.VideosParser;
 import github.popeen.dsub.service.ssl.SSLSocketFactory;
@@ -570,7 +573,7 @@ public class RESTMusicService implements MusicService {
 
         Reader reader = getReader(context, progressListener, method, null, names, values, true);
         try {
-            return new AlbumListParser(context, getInstance(context)).parse(reader, progressListener);
+            return new EntryListParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -636,13 +639,49 @@ public class RESTMusicService implements MusicService {
 
 		Reader reader = getReader(context, progressListener, method, null, names, values, true);
 		try {
-			return new AlbumListParser(context, instance).parse(reader, progressListener);
+			return new EntryListParser(context, instance).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
 	}
 
-	@Override
+    @Override
+    public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+        List<String> names = new ArrayList<String>();
+        List<Object> values = new ArrayList<Object>();
+
+        names.add("size");
+        values.add(size);
+        names.add("offset");
+        values.add(offset);
+
+        String method;
+        switch(type) {
+			case MainFragment.SONGS_NEWEST:
+				method = "getNewaddedSongs";
+				break;
+			case MainFragment.SONGS_TOP_PLAYED:
+				method = "getTopplayedSongs";
+				break;
+			case MainFragment.SONGS_RECENT:
+				method = "getLastplayedSongs";
+				break;
+			case MainFragment.SONGS_FREQUENT:
+				method = "getMostplayedSongs";
+				break;
+			default:
+				method = "getNewaddedSongs";
+		}
+
+        Reader reader = getReader(context, progressListener, method, null, names, values, true);
+        try {
+            return new EntryListParser(context, getInstance(context)).parse(reader, progressListener);
+        } finally {
+            Util.close(reader);
+        }
+    }
+
+    @Override
 	public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.11", "Artist radio is not supported");
 
@@ -908,10 +947,10 @@ public class RESTMusicService implements MusicService {
 		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
 		builder.append("&id=").append(song.getId());
 
-		// If we are doing mp3 to mp3, just specify raw so that stuff works better
-		if("mp3".equals(song.getSuffix()) && (song.getTranscodedSuffix() == null || "mp3".equals(song.getTranscodedSuffix())) && ServerInfo.checkServerVersion(context, "1.9", getInstance(context))) {
+		// Allow user to specify to stream raw formats if available
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CAST_STREAM_ORIGINAL, true) && ("mp3".equals(song.getSuffix()) || "flac".equals(song.getSuffix()) || "wav".equals(song.getSuffix()) || "aac".equals(song.getSuffix())) && ServerInfo.checkServerVersion(context, "1.9", getInstance(context))) {
 			builder.append("&format=raw");
-			builder.append("&estimateContentLength=true");
+
 		} else {
 			builder.append("&maxBitRate=").append(maxBitrate);
 		}
@@ -1257,7 +1296,8 @@ public class RESTMusicService implements MusicService {
 		String method = ServerInfo.isMadsonic(context, getInstance(context)) ? "getTopTrackSongs" : "getTopSongs";
 		Reader reader = getReader(context, progressListener, method, null, parameterNames, parameterValues);
 		try {
-			return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
+
+			return new TopSongsParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
@@ -1298,8 +1338,9 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getNewestPodcastEpisodes(int count, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getNewestPodcasts", null, Arrays.asList("count"), Arrays.<Object>asList(count));
+
+	public MusicDirectory getNewestPodcastEpisodes(boolean refresh, Context context, ProgressListener progressListener, int count) throws Exception {
+		Reader reader = getReader(context, progressListener, "getNewestPodcasts", null, Arrays.asList("count"), Arrays.<Object>asList(count), true);
 
 		try {
 			return new PodcastEntryParser(context, getInstance(context)).parse(null, reader, progressListener);
@@ -1461,6 +1502,15 @@ public class RESTMusicService implements MusicService {
 			values.add(setting.getValue());
 		}
 
+		if(user.getMusicFolderSettings() != null) {
+			for(User.Setting setting: user.getMusicFolderSettings()) {
+				if(setting.getValue()) {
+					names.add("musicFolderId");
+					values.add(setting.getName());
+				}
+			}
+		}
+
 		Reader reader = getReader(context, progressListener, "createUser", null, names, values);
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
@@ -1483,6 +1533,15 @@ public class RESTMusicService implements MusicService {
 			if(setting.getName().indexOf("Role") != -1) {
 				names.add(setting.getName());
 				values.add(setting.getValue());
+			}
+		}
+
+		if(user.getMusicFolderSettings() != null) {
+			for(User.Setting setting: user.getMusicFolderSettings()) {
+				if(setting.getValue()) {
+					names.add("musicFolderId");
+					values.add(setting.getName());
+				}
 			}
 		}
 
@@ -1713,13 +1772,14 @@ public class RESTMusicService implements MusicService {
 		int count = offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
 		int retry = 0;
 		for(int i = 1; i <= count; i++) {
-			String id = offline.getString(Constants.OFFLINE_SCROBBLE_ID + i, null);
-			long time = offline.getLong(Constants.OFFLINE_SCROBBLE_TIME + i, 0);
-			if(id != null) {
-				scrobble(id, true, time, context, progressListener);
-			} else {
-				String search = offline.getString(Constants.OFFLINE_SCROBBLE_SEARCH + i, "");
-				try{
+
+			try {
+				String id = offline.getString(Constants.OFFLINE_SCROBBLE_ID + i, null);
+				long time = offline.getLong(Constants.OFFLINE_SCROBBLE_TIME + i, 0);
+				if(id != null) {
+					scrobble(id, true, time, context, progressListener);
+				} else {
+					String search = offline.getString(Constants.OFFLINE_SCROBBLE_SEARCH + i, "");
 					SearchCritera critera = new SearchCritera(search, 0, 0, 1);
 					SearchResult result = searchNew(critera, context, progressListener);
 					if(result.getSongs().size() == 1){
@@ -1731,10 +1791,11 @@ public class RESTMusicService implements MusicService {
 						throw new Exception("Song not found on server");
 					}
 				}
-				catch(Exception e){
-					Log.e(TAG, e.toString());
-					retry++;
-				}
+
+			}
+			catch(Exception e){
+				Log.e(TAG, e.toString());
+				retry++;
 			}
 		}
 
@@ -2009,7 +2070,7 @@ public class RESTMusicService implements MusicService {
     private void detectRedirect(String originalUrl, Context context, HttpContext httpContext) throws Exception {
         HttpUriRequest request = (HttpUriRequest) httpContext.getAttribute(ExecutionContext.HTTP_REQUEST);
         HttpHost host = (HttpHost) httpContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-		
+
 		// Sometimes the request doesn't contain the "http://host" part
 		String redirectedUrl;
 		if (request.getURI().getScheme() == null) {

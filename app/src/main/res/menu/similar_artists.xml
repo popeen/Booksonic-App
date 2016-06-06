@@ -15,7 +15,4 @@
 		compat:showAsAction="ifRoom|withText"
 		android:visible="false"/>
 
-	<item
-		android:id="@+id/menu_show_missing"
-		android:title="@string/menu.show_missing"/>
 </menu>

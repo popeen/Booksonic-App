@@ -111,7 +111,7 @@ public class DownloadFile implements BufferFile {
 			}
 		} else if(song.getSuffix() != null && (song.getTranscodedSuffix() == null || song.getSuffix().equals(song.getTranscodedSuffix()))) {
 			// If just downsampling, don't try to upsample (ie: 128 kpbs -> 192 kpbs)
-			if(song.getBitRate() != null && br > song.getBitRate()) {
+			if(song.getBitRate() != null && (br == 0 || br > song.getBitRate())) {
 				br = song.getBitRate();
 			}
 		}
@@ -379,7 +379,8 @@ public class DownloadFile implements BufferFile {
         return "DownloadFile (" + song + ")";
     }
 
-	@Override
+	// Don't do this.  Causes infinite loop if two instances of same song
+	/*@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -390,7 +391,7 @@ public class DownloadFile implements BufferFile {
 
 		DownloadFile downloadFile = (DownloadFile) o;
 		return Util.equals(this.getSong(), downloadFile.getSong());
-	}
+	}*/
 
     private class DownloadTask extends SilentBackgroundTask<Void> {
 		private MusicService musicService;
@@ -528,8 +529,9 @@ public class DownloadFile implements BufferFile {
 			}
 			
 			// Only run these if not interrupted, ie: cancelled
-			if(!isCancelled()) {
-				new CacheCleaner(context, DownloadService.getInstance()).cleanSpace();
+			DownloadService downloadService = DownloadService.getInstance();
+			if(downloadService != null && !isCancelled()) {
+				new CacheCleaner(context, downloadService).cleanSpace();
 				checkDownloads();
 			}
 

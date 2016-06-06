@@ -66,7 +66,6 @@ public class ArtistRadioBuffer {
 			buffer.clear();
 		}
 
-		context.clear();
 		this.artistId = artistId;
 		awaitingResults = true;
 		refill();
@@ -108,7 +107,7 @@ public class ArtistRadioBuffer {
 	}
 
 	private void refill() {
-		if (buffer != null && (buffer.size() > refillThreshold || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
+		if (buffer != null && executorService != null && (buffer.size() > refillThreshold || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
 			executorService.shutdown();
 			return;
 		}

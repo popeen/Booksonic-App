@@ -90,7 +90,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		Intent activityIntent = new Intent(context, SubsonicFragmentActivity.class);
 		activityIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
-		activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		activityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent activityPendingIntent = PendingIntent.getActivity(context, 0, activityIntent, 0);
 		mediaSession.setSessionActivity(activityPendingIntent);
 
@@ -415,7 +415,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}
 
-		downloadService.download(entries, false, true, false, shuffle, startIndex, startPosition);
+		downloadService.download(entries, false, !append, false, shuffle, startIndex, startPosition);
 	}
 
 	private void noResults() {
@@ -468,6 +468,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		public void onPlayFromSearch (String query, Bundle extras) {
 			// User just asked to playing something
 			if("".equals(query)) {
+				downloadService.clear();
 				downloadService.setShufflePlayEnabled(true);
 			} else {
 				String mediaFocus = extras.getString(MediaStore.EXTRA_MEDIA_FOCUS);
@@ -488,6 +489,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
 					editor.commit();
 
+					downloadService.clear();
 					downloadService.setShufflePlayEnabled(true);
 				}
 				else {
