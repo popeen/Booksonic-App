@@ -221,7 +221,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		rateBadButton.setOnTouchListener(touchListener);
 		rateGoodButton.setOnTouchListener(touchListener);
 		emptyTextView.setOnTouchListener(touchListener);
-/*		albumArtImageView.setOnTouchListener(new View.OnTouchListener() {
+		albumArtImageView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent me) {
 				if (me.getAction() == MotionEvent.ACTION_DOWN) {
@@ -229,7 +229,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 				return gestureScanner.onTouchEvent(me);
 			}
-		});*/
+		});
 
 		previousButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -402,7 +402,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 		View overlay = rootView.findViewById(R.id.download_overlay_buttons);
 		final int overlayHeight = overlay != null ? overlay.getHeight() : -1;
-/*		albumArtImageView.setOnClickListener(new View.OnClickListener() {
+		albumArtImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (overlayHeight == -1 || lastY < (view.getBottom() - overlayHeight)) {
@@ -410,7 +410,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					setControlsVisible(true);
 				}
 			}
-		});*/
+		});
 
 		progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -820,7 +820,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						setControlsVisible(false);
+						//TODO, make a setting to turn this on & off
+						// setControlsVisible(false);
 					}
 				});
 			}
@@ -1213,19 +1214,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		this.currentPlaying = currentPlaying;
 		setupSubtitle(currentPlayingIndex);
 
-		if(currentPlaying != null && currentPlaying.getSong() != null && (currentPlaying.getSong().isPodcast() || currentPlaying.getSong().isAudioBook())) {
-			previousButton.setVisibility(View.GONE);
-			nextButton.setVisibility(View.GONE);
-
-			rewindButton.setVisibility(View.VISIBLE);
-			fastforwardButton.setVisibility(View.VISIBLE);
-		} else {
-			previousButton.setVisibility(View.VISIBLE);
-			nextButton.setVisibility(View.VISIBLE);
-
-			rewindButton.setVisibility(View.GONE);
-			fastforwardButton.setVisibility(View.GONE);
-		}
 	}
 
 	private void setupSubtitle(int currentPlayingIndex) {

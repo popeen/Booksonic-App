@@ -148,12 +148,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			headers.add("songs");
 		}
 
-		if(ServerInfo.checkServerVersion(context, "1.8")) {
-			List<Integer> videos = Arrays.asList(R.string.main_videos);
-			sections.add(videos);
-			headers.add("videos");
-		}
-
 		return new MainAdapter(context, headers, sections, this);
 	}
 
