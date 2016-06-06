@@ -849,16 +849,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 		if(Util.isOffline(context)) {
 			bookmarkButton.setVisibility(View.GONE);
-			rateBadButton.setVisibility(View.GONE);
-			rateGoodButton.setVisibility(View.GONE);
 		} else {
 			if(ServerInfo.canBookmark(context)) {
 				bookmarkButton.setVisibility(View.VISIBLE);
 			} else {
 				bookmarkButton.setVisibility(View.GONE);
 			}
-			rateBadButton.setVisibility(View.VISIBLE);
-			rateGoodButton.setVisibility(View.VISIBLE);
 		}
 	}
 

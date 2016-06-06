@@ -26,13 +26,11 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="#00F">
+                    android:layout_weight="1">
 
                     <FrameLayout android:orientation="vertical"
                                  android:layout_width="match_parent"
-                                 android:layout_height="wrap_content"
-                                 android:background="#0F0">
+                                 android:layout_height="wrap_content">
 
                         <github.popeen.dsub.view.RecyclingImageView
                             android:id="@+id/download_album_art_image"

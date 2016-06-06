@@ -522,13 +522,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverPasswordPreference.setSummary("***");
 		serverPasswordPreference.setTitle(R.string.settings_server_password);
 
-		final CheckBoxPreference serverTagPreference = new CheckBoxPreference(context);
-		serverTagPreference.setKey(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance);
-		serverTagPreference.setChecked(Util.isTagBrowsing(context, instance));
-		serverTagPreference.setSummary(R.string.settings_browse_by_tags_summary);
-		serverTagPreference.setTitle(R.string.settings_browse_by_tags);
-		serverPasswordPreference.setDialogTitle(R.string.settings_server_password);
-
 		final CheckBoxPreference serverSyncPreference = new CheckBoxPreference(context);
 		serverSyncPreference.setKey(Constants.PREFERENCES_KEY_SERVER_SYNC + instance);
 		serverSyncPreference.setChecked(Util.isSyncEnabled(context, instance));
@@ -607,7 +600,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		screen.addPreference(serverLocalNetworkSSIDPreference);
 		screen.addPreference(serverUsernamePreference);
 		screen.addPreference(serverPasswordPreference);
-		screen.addPreference(serverTagPreference);
 		screen.addPreference(serverSyncPreference);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);

@@ -285,7 +285,7 @@
 	<string name="settings.server_open_browser">Öppna i webbläsare</string>
 	<string name="settings.server_sync_summary">Om synkronisering ska vara aktiverat på den här servern</string>
 	<string name="settings.server_sync">Synkronisering aktiverad</string>
-    <string name="settings.cache_title">Musik cache</string>
+    <string name="settings.cache_title">Cache</string>
     <string name="settings.preload_wifi">Spår att ladda in i förväg (Wifi)</string>
 	<string name="settings.preload_mobile">Spår att ladda in i förväg (Mobil data)</string>
     <string name="settings.cache_size">Cache storlek</string>

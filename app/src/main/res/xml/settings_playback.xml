@@ -6,13 +6,6 @@
 	<PreferenceCategory
 		android:title="@string/settings.playback_title">
 
-		<github.popeen.dsub.view.SeekBarPreference
-			android:title="@string/settings.playlist_random_size_title"
-			android:key="randomSize"
-			android:defaultValue="20"
-			android:dialogLayout="@layout/seekbar_preference"
-			myns:max="100"/>
-
 		<ListPreference
 			android:title="@string/settings.keep_played_count_title"
 			android:key="keepPlayedCount"
@@ -92,13 +85,6 @@
 
 	<PreferenceCategory
 		android:title="@string/settings.other_title">
-
-		<CheckBoxPreference
-			android:title="@string/settings.shuffle_by_album"
-			android:key="shuffleByAlbum"
-			android:defaultValue="true"
-			android:summaryOn="@string/settings.shuffle_by_album.true"
-			android:summaryOff="@string/settings.shuffle_by_album.false"/>
 
 		<CheckBoxPreference
 			android:title="@string/settings.scrobble_title"

@@ -280,7 +280,7 @@
 	<string name="settings.server_open_browser">Open in browser</string>
 	<string name="settings.server_sync_summary">Whether or not syncing is enabled for this server</string>
 	<string name="settings.server_sync">Sync Enabled</string>
-    <string name="settings.cache_title">Music cache</string>
+    <string name="settings.cache_title">Cache</string>
 
     <string name="settings.preload_wifi">Tracks to preload (Wifi)</string>
 	<string name="settings.preload_mobile">Tracks to preload (Mobile)</string>
@@ -363,7 +363,7 @@
 
     <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the server</string>
     <string name="settings.hide_media_title">Hide from other</string>
-    <string name="settings.hide_media_summary">Hide music files from other apps.</string>
+    <string name="settings.hide_media_summary">Hide tracks from other apps.</string>
     <string name="settings.hide_media_toast">Takes effect next time Android scans your phone for music.</string>
     <string name="settings.media_button_title">Media buttons</string>
     <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>

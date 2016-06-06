@@ -82,34 +82,16 @@
 			android:defaultValue="true"/>
 
 		<CheckBoxPreference
-			android:title="@string/common.play_shuffled"
-			android:summary="@string/settings.menu_options.play_shuffled_summary"
-			android:key="showPlayShuffled"
-			android:defaultValue="true"/>
-
-		<CheckBoxPreference
-			android:title="@string/common.play_next"
-			android:summary="@string/settings.menu_options.play_next_summary"
-			android:key="showPlayNext"
-			android:defaultValue="false"/>
-
-		<CheckBoxPreference
-			android:title="@string/common.play_last"
-			android:summary="@string/settings.menu_options.play_last_summary"
-			android:key="showPlayLast"
-			android:defaultValue="true"/>
-
-		<CheckBoxPreference
 			android:title="@string/common.download"
 			android:summary="@string/settings.menu_options.download_summary"
 			android:key="showDownload"
-			android:defaultValue="false"/>
+			android:defaultValue="true"/>
 
 		<CheckBoxPreference
 			android:title="@string/common.pin"
 			android:summary="@string/settings.menu_options.pin_summary"
 			android:key="showPin"
-			android:defaultValue="false"/>
+			android:defaultValue="true"/>
 
 		<CheckBoxPreference
 			android:title="@string/common.delete"
@@ -127,7 +109,7 @@
 			android:title="@string/menu.share"
 			android:summary="@string/settings.menu_options.shared_summary"
 			android:key="showShared"
-			android:defaultValue="true"/>
+			android:defaultValue="false" />
 
 		<CheckBoxPreference
 			android:title="@string/menu.rate"
