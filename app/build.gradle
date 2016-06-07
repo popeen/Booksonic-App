@@ -8,9 +8,9 @@ android {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 14
 		targetSdkVersion 22
-		versionCode 178
-		versionName '5.1.7'
-		setProperty("archivesBaseName", "DSub $versionName")
+		versionCode 11
+		versionName '1.0.9'
+		setProperty("archivesBaseName", "Booksonic $versionName")
 	}
 	buildTypes {
 		release {

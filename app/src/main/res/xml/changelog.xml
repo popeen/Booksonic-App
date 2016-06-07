@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="1.0.8" versioncode="10" releasedate="2016-06-16">
+    <release version="1.0.9" versioncode="11" releasedate="2016-06-07">
+        <change>Bugfixes</change>
+    </release>
+    <release version="1.0.8" versioncode="10" releasedate="2016-06-06">
         <change>Bugfixes</change>
         <change>Menu and Now Playing tweaks</change>
         <change>Updated DSub Sources</change>
