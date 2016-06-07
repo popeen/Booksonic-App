@@ -72,7 +72,8 @@
 							<ImageButton
 								android:id="@+id/download_rating_bad"
 								style="@style/DownloadActionImageButton"
-								android:src="?attr/rating_bad"/>
+								android:src="?attr/rating_bad"
+                                android:visibility="gone"/>
 
 							<ImageButton
 								android:id="@+id/download_star"
@@ -87,7 +88,8 @@
 							<ImageButton
 								android:id="@+id/download_rating_good"
 								style="@style/DownloadActionImageButton"
-								android:src="?attr/rating_good"/>
+								android:src="?attr/rating_good"
+                                android:visibility="gone"/>
 						</LinearLayout>
 					</RelativeLayout>
 
