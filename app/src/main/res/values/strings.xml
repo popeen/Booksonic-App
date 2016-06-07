@@ -705,6 +705,7 @@
 	<string name="msg.server.outdated">Your server is outdated</string>
 	<string name="msg.server.outdated_beta">Your server is an outdated beta version</string>
 	<string name="msg.server.notBooksonic">Your server is outdated or not running Booksonic</string>
+    <string name="msg.server.offline">The server is offline or there is no internet connection</string>
 
 
 </resources>

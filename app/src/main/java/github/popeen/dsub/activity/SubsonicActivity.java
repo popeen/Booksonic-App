@@ -213,48 +213,54 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 	private void checkIfServerOutdated(){
 		final Context context = this;
-		new Thread(new Runnable(){
-			public void run()
-			{
-				SharedPreferences prefs = Util.getPreferences(context);
-				String url =  Util.getRestUrl(context, "ping") + "&f=json";
-				final String input = KakaduaUtil.http_get_contents(url);
-				Log.w("ping", input);
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
+        if(!Util.isOffline(context)) {
+            new Thread(new Runnable() {
+                public void run() {
+                    SharedPreferences prefs = Util.getPreferences(context);
+                    String url = Util.getRestUrl(context, "ping") + "&f=json";
+                    final String input = KakaduaUtil.http_get_contents(url);
+                    Log.w("ping", input);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
 
-						try {
-							JSONObject json = new JSONObject(input);
-							String resp = json.getJSONObject("subsonic-response").getString("booksonic");
-							Log.w("outdated?", resp);
-							TextView t = (TextView) findViewById(R.id.msg);
-							if(t != null) {
-								if (resp.equals("outdated")) {
-									Log.w(":/", ":/");
-									t.setText(context.getText(R.string.msg_server_outdated));
-									t.setVisibility(View.VISIBLE);
-								} else if (resp.equals("outdated_beta") || resp.equals("true")) { //early beta versions only returned "true"
-									Log.w(":(", ":(");
-									t.setText(context.getText(R.string.msg_server_outdated_beta));
-									t.setVisibility(View.VISIBLE);
-								} else {
-									Log.w(":)", ":)");
-									t.setVisibility(View.INVISIBLE);
-								}
-							}
-						} catch (Exception er) {
-							TextView t = (TextView) findViewById(R.id.msg);
-							if(t != null) {
-								t.setText(context.getText(R.string.msg_server_notBooksonic));
-								t.setVisibility(View.VISIBLE);
-							}
-						}
-					}
-				});
-			}
-		}).start();
-	}
+                            try {
+                                JSONObject json = new JSONObject(input);
+                                String resp = json.getJSONObject("subsonic-response").getString("booksonic");
+                                Log.w("outdated?", resp);
+                                TextView t = (TextView) findViewById(R.id.msg);
+                                if (t != null) {
+                                    if (resp.equals("outdated")) {
+                                        Log.w(":/", ":/");
+                                        t.setText(context.getText(R.string.msg_server_outdated));
+                                        t.setVisibility(View.VISIBLE);
+                                    } else if (resp.equals("outdated_beta") || resp.equals("true")) { //early beta versions only returned "true"
+                                        Log.w(":(", ":(");
+                                        t.setText(context.getText(R.string.msg_server_outdated_beta));
+                                        t.setVisibility(View.VISIBLE);
+                                    } else {
+                                        Log.w(":)", ":)");
+                                        t.setVisibility(View.INVISIBLE);
+                                    }
+                                }
+                            } catch (Exception er) {
+                                TextView t = (TextView) findViewById(R.id.msg);
+                                if (t != null) {
+                                    if(er.toString().contains("End of input at character 0")){
+                                        t.setText(context.getText(R.string.msg_server_offline));
+                                        t.setVisibility(View.VISIBLE);
+                                    }else {
+                                        t.setText(context.getText(R.string.msg_server_notBooksonic));
+                                        t.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }).start();
+        }
+    }
 
 	protected void createCustomActionBarView() {
 		actionBarSpinner = (Spinner) getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
