@@ -15,12 +15,6 @@
 		compat:showAsAction="always|withText"
 		android:visible="false"/>
 		
-	<item 
-		android:id="@+id/menu_global_search"
-		android:icon="?attr/search"
-		android:title="@string/menu.search"
-		compat:showAsAction="ifRoom|withText"/>
-
 	<group android:id="@+id/not_touchscreen">
 		<item
 			android:id="@+id/menu_refresh"
