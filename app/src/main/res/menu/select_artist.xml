@@ -14,7 +14,7 @@
 		android:title="@string/menu.shuffle"
 		compat:showAsAction="always|withText"
 		android:visible="false"/>
-		
+
 	<group android:id="@+id/not_touchscreen">
 		<item
 			android:id="@+id/menu_refresh"

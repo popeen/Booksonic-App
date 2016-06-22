@@ -650,7 +650,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				context.supportInvalidateOptionsMenu();
 				return true;
 			case R.id.menu_shuffle:
-
 				if(getDownloadService().getSleepTimer()) {
 					getDownloadService().stopSleepTimer();
 					context.supportInvalidateOptionsMenu();
@@ -1209,6 +1208,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 		this.currentPlaying = currentPlaying;
 		setupSubtitle(currentPlayingIndex);
+
+
 
 	}
 

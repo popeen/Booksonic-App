@@ -281,7 +281,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			if(!ServerInfo.hasTopSongs(context)) {
 				menu.removeItem(R.id.menu_top_tracks);
 			}
-			if(!ServerInfo.checkServerVersion(context, "1.11") || id != null) {
+			if(!ServerInfo.checkServerVersion(context, "1.11")) {
 				menu.removeItem(R.id.menu_radio);
 				menu.removeItem(R.id.menu_similar_artists);
 			} else if(!ServerInfo.hasSimilarArtists(context)) {
@@ -795,6 +795,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		// Always show artist if this is not a artist we are viewing
 		if(!artist) {
 			entryGridAdapter.setShowArtist(true);
+		}
+		if(topTracks) {
+			entryGridAdapter.setShowAlbum(true);
 		}
 
 		// Show header if not album list type and not root and not artist

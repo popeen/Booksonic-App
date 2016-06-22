@@ -1,6 +1,7 @@
 package github.popeen.dsub.fragments;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.res.Resources;
 
 import android.net.Uri;
@@ -16,7 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import github.popeen.dsub.util.EnvironmentVariables;
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.MainAdapter;
@@ -275,7 +275,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 	private void getLogs() {
 		try {
-			final String version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+			final PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 			new LoadingTask<String>(context) {
 				@Override
 				protected String doInBackground() throws Throwable {
@@ -379,10 +379,11 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 					footer += "\nDevice Name: " + Build.MANUFACTURER + " "  + Build.PRODUCT;
 					footer += "\nROM: " + Build.DISPLAY;
 					footer += "\nLogs: " + logcat;
+					footer += "\nBuild Number: " + packageInfo.versionCode;
 
 					Intent email = new Intent(Intent.ACTION_SENDTO,
 							Uri.fromParts("mailto", "patrik@ptjwebben.se", null));
-					email.putExtra(Intent.EXTRA_SUBJECT, "Booksonic " + version + " Error Logs");
+					email.putExtra(Intent.EXTRA_SUBJECT, "Booksonic " + packageInfo.versionName + " Error Logs");
 					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n\n" + footer);
 					startActivity(email);
 				}
