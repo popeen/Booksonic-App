@@ -31,6 +31,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -68,7 +70,14 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import github.popeen.dsub.R;
@@ -219,6 +228,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
                     SharedPreferences prefs = Util.getPreferences(context);
                     String url = Util.getRestUrl(context, "ping") + "&f=json";
                     final String input = KakaduaUtil.http_get_contents(url);
+                    final String ip = KakaduaUtil.http_get_contents("https://ip.popeen.com/api/");
                     Log.w("ping", input);
                     runOnUiThread(new Runnable() {
                         @Override
@@ -246,9 +256,18 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
                             } catch (Exception er) {
                                 TextView t = (TextView) findViewById(R.id.msg);
                                 if (t != null) {
+                                    Log.w("Network Error", er.toString());
                                     if(er.toString().contains("End of input at character 0")){
-                                        t.setText(context.getText(R.string.msg_server_offline));
+                                        try{
+                                            JSONObject ipJson = new JSONObject(ip);
+                                            String ipResp = ipJson.getString("ip");
+                                            t.setText(context.getText(R.string.msg_server_offline));
+                                        }catch(Exception e){
+                                            t.setText(context.getText(R.string.msg_noInternet));
+                                        }
+
                                         t.setVisibility(View.VISIBLE);
+
                                     }else {
                                         t.setText(context.getText(R.string.msg_server_notBooksonic));
                                         t.setVisibility(View.VISIBLE);
