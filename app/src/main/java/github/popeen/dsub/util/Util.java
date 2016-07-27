@@ -414,13 +414,15 @@ public final class Util {
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
 		if(allowAltAddress && Util.isWifiConnected(context)) {
 			String SSID = prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "");
-			String currentSSID = Util.getSSID(context);
-			
-			String[] ssidParts = SSID.split(",");
-			if("".equals(SSID) || SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {
-				String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
-				if(internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
-					serverUrl = internalUrl;
+			if(!SSID.isEmpty()) {
+				String currentSSID = Util.getSSID(context);
+
+				String[] ssidParts = SSID.split(",");
+				if ("".equals(SSID) || SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {
+					String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+					if (internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
+						serverUrl = internalUrl;
+					}
 				}
 			}
 		}
@@ -1523,6 +1525,7 @@ public final class Util {
 			intent.putExtra("duration", (long) downloadService.getPlayerDuration());
 			intent.putExtra("position", (long) downloadService.getPlayerPosition());
 			intent.putExtra("coverart", albumArtFile.getAbsolutePath());
+			intent.putExtra("package","github.daneren2005.dsub");
 		} else {
 			intent.putExtra("track", "");
 			intent.putExtra("artist", "");
@@ -1532,6 +1535,7 @@ public final class Util {
 			intent.putExtra("duration", (long) 0);
 			intent.putExtra("position", (long) 0);
 			intent.putExtra("coverart", "");
+			intent.putExtra("package","github.daneren2005.dsub");
 		}
 	}
 	

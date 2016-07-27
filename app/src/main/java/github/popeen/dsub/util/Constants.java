@@ -179,6 +179,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_CAST_STREAM_ORIGINAL = "castStreamOriginal";
 	public static final String PREFERENCES_KEY_HEADS_UP_NOTIFICATION = "headsUpNotification";
 	public static final String PREFERENCES_KEY_CAST_CACHE = "castCache";
+	public static final String PREFERENCES_KEY_PLAYBACK_SPEED = "playbackSpeed";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
@@ -195,6 +196,7 @@ public final class Constants {
 	public static final String MAIN_BACK_STACK = "backStackIds";
 	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";
 	public static final String MAIN_NOW_PLAYING = "nowPlayingId";
+	public static final String MAIN_NOW_PLAYING_SECONDARY = "nowPlayingSecondaryId";
 	public static final String MAIN_SLIDE_PANEL_STATE = "slidePanelState";
 	public static final String FRAGMENT_LIST = "fragmentList";
 	public static final String FRAGMENT_LIST2 = "fragmentList2";

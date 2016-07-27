@@ -71,6 +71,11 @@
                                 android:visibility="gone"/>
 
                             <ImageButton
+                                android:id="@+id/download_playback_speed"
+                                style="@style/DownloadActionImageButton"
+                                android:src="@drawable/ic_action_playback_speed_dark"/>
+
+                            <ImageButton
                                 android:id="@+id/download_star"
                                 style="@style/DownloadActionImageButton"
                                 android:src="@drawable/ic_toggle_star_outline_dark"/>
