@@ -75,15 +75,15 @@
 								android:src="?attr/rating_bad"
                                 android:visibility="gone"/>
 
+                            <ImageButton
+                                android:id="@+id/download_playback_speed"
+                                style="@style/DownloadActionImageButton"
+                                android:src="?attr/playback_speed"/>
+
 							<ImageButton
 								android:id="@+id/download_star"
 								style="@style/DownloadActionImageButton"
 								android:src="@android:drawable/star_big_off"/>
-
-							<ImageButton
-								android:id="@+id/download_playback_speed"
-								style="@style/DownloadActionImageButton"
-								android:src="?attr/playback_speed"/>
 
 							<ImageButton
 								android:id="@+id/download_bookmark"

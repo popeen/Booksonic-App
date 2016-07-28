@@ -9,14 +9,14 @@
 		android:title="@string/download.playback_speed_normal"/>
 
 	<item
-		android:id="@+id/playback_speed_one_half"
-		android:title="@string/download.playback_speed_one_half"/>
+		android:id="@+id/playback_speed_one_p_two"
+		android:title="@string/download_playback_speed_one_p_two"/>
+
+	<item
+		android:id="@+id/playback_speed_one_p_five"
+		android:title="@string/download_playback_speed_one_p_five"/>
 
 	<item
 		android:id="@+id/playback_speed_double"
-		android:title="@string/download.playback_speed_double"/>
-
-	<item
-		android:id="@+id/playback_speed_tripple"
-		android:title="@string/download.playback_speed_tripple"/>
+		android:title="@string/download_playback_speed_double"/>
 </menu>

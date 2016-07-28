@@ -15,7 +15,6 @@
 
 package github.popeen.dsub.fragments;
 
-import java.security.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -86,7 +85,7 @@ import github.popeen.dsub.util.*;
 import github.popeen.dsub.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
-import github.popeen.dsub.activity.SubsonicActivity;
+
 import github.popeen.dsub.view.compat.CustomMediaRouteDialogFactory;
 
 public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener, SectionAdapter.OnItemClickedListener<DownloadFile>, OnSongChangedListener {
@@ -416,14 +415,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 								case R.id.playback_speed_half:
 									playbackSpeed = 0.5f;
 									break;
-								case R.id.playback_speed_one_half:
+								case R.id.playback_speed_one_p_two:
+									playbackSpeed = 1.2f;
+									break;
+								case R.id.playback_speed_one_p_five:
 									playbackSpeed = 1.5f;
 									break;
 								case R.id.playback_speed_double:
 									playbackSpeed = 2.0f;
-									break;
-								case R.id.playback_speed_tripple:
-									playbackSpeed = 3.0f;
 									break;
 							}
 
@@ -1483,12 +1482,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		int stringRes = -1;
 		if(playbackSpeed == 0.5f) {
 			stringRes = R.string.download_playback_speed_half;
+		} else if(playbackSpeed == 1.2f) {
+			stringRes = R.string.download_playback_speed_one_p_two;
 		} else if(playbackSpeed == 1.5f) {
-			stringRes = R.string.download_playback_speed_one_half;
+			stringRes = R.string.download_playback_speed_one_p_five;
 		} else if(playbackSpeed == 2.0f) {
 			stringRes = R.string.download_playback_speed_double;
-		} else if(playbackSpeed == 3.0f) {
-			stringRes = R.string.download_playback_speed_tripple;
 		}
 
 		if(stringRes != -1) {
