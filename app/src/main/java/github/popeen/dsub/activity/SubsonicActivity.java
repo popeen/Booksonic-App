@@ -251,6 +251,12 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
                                     } else {
                                         Log.w(":)", ":)");
                                         t.setVisibility(View.INVISIBLE);
+
+                                        try {
+                                            resp = json.getJSONObject("subsonic-response").getString("emulator");
+                                            t.setText("Server Emulator: "+resp.toString());
+                                            t.setVisibility(View.VISIBLE);
+                                        }catch(Exception e){}
                                     }
                                 }
                             } catch (Exception er) {
