@@ -1091,6 +1091,7 @@ public class DownloadService extends Service {
 		setCurrentPlaying(nextPlaying, true);
 		setPlayerState(PlayerState.STARTED);
 		setupHandlers(currentPlaying, false, start);
+		applyPlaybackParamsMain(); //Added based on DSUB
 		setNextPlaying();
 
 		// Proxy should not be being used here since the next player was already setup to play
@@ -1300,6 +1301,7 @@ public class DownloadService extends Service {
 				// Only start if done preparing
 				if(playerState != PREPARING) {
 					mediaPlayer.start();
+					applyPlaybackParamsMain(); //Added based on DSUB
 				} else {
 					// Otherwise, we need to set it up to start when done preparing
 					autoPlayStart = true;
@@ -1887,10 +1889,11 @@ public class DownloadService extends Service {
 							cachedPosition = position;
 
 							applyReplayGain(mediaPlayer, downloadFile);
-							applyPlaybackParams(mediaPlayer);
+							//applyPlaybackParams(mediaPlayer);
 
 							if (start || autoPlayStart) {
 								mediaPlayer.start();
+								applyPlaybackParamsMain(); //As seen in DSUB.
 								setPlayerState(STARTED);
 
 								// Disable autoPlayStart after done
@@ -1958,7 +1961,7 @@ public class DownloadService extends Service {
 						}
 
 						applyReplayGain(nextMediaPlayer, downloadFile);
-						applyPlaybackParamsNext();
+						//applyPlaybackParamsNext();
 					} catch (Exception x) {
 						handleErrorNext(x);
 					}
@@ -2614,10 +2617,14 @@ public class DownloadService extends Service {
 
 	public void setPlaybackSpeed(float playbackSpeed) {
 		Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
-		applyPlaybackParamsMain();
-		if(nextMediaPlayer != null && nextPlayerState == PREPARED) {
-			applyPlaybackParamsNext();
+		//Following three lines as seen in DSUB.
+		if(mediaPlayer != null && (playerState == PREPARED || playerState == STARTED || playerState == PAUSED || playerState == PAUSED_TEMP)) {
+			applyPlaybackParamsMain();
 		}
+		//This is all removed in DSUB.
+		//if(nextMediaPlayer != null && nextPlayerState == PREPARED) {
+		//	applyPlaybackParamsNext();
+		//}
 
 		delayUpdateProgress = Math.round(DEFAULT_DELAY_UPDATE_PROGRESS / playbackSpeed);
 	}
@@ -2633,9 +2640,10 @@ public class DownloadService extends Service {
 		applyPlaybackParams(mediaPlayer);
 	}
 	private synchronized void applyPlaybackParamsNext() {
-		if(isNextPlayingSameAlbum()) {
-			applyPlaybackParams(nextMediaPlayer);
-		}
+		//This entire function is removed in DSUB. I'm not game to do that though. This function will do nothing though.
+		//if(isNextPlayingSameAlbum()) {
+			//applyPlaybackParams(nextMediaPlayer);
+		//}
 	}
 	private synchronized boolean isNextPlayingSameAlbum() {
 		return isNextPlayingSameAlbum(currentPlaying, nextPlaying);
@@ -2652,7 +2660,7 @@ public class DownloadService extends Service {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			float playbackSpeed = getPlaybackSpeed();
 
-			if(playbackSpeed != 1.0f || mediaPlayer.getPlaybackParams() != null) {
+			if(Math.abs(playbackSpeed - 1.0) > 0.01 || mediaPlayer.getPlaybackParams() != null) {
 				PlaybackParams playbackParams = new PlaybackParams();
 				playbackParams.setSpeed(playbackSpeed);
 				mediaPlayer.setPlaybackParams(playbackParams);
