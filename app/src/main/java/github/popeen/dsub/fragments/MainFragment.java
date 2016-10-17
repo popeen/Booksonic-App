@@ -42,6 +42,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -302,7 +303,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 						}
 					}
 
-					URL url = new URL("https://pastebin.com/api/api_post.php");
+					URL url = new URL("https://ptjwebben.se/logs/index.php");
 					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
 					StringBuffer responseBuffer = new StringBuffer();
 					try {
@@ -362,7 +363,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 					if(response.indexOf("http") == 0) {
 						return response.replace("http:", "https:");
 					} else {
-						throw new Exception("Pastebin Error: " + response);
+						throw new Exception("Paste Error: " + response);
 					}
 				}
 
