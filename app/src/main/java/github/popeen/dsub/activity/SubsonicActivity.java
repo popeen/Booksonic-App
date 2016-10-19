@@ -89,6 +89,7 @@ import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.HeadphoneListenerService;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
+import github.popeen.dsub.service.RESTMusicService;
 import github.popeen.dsub.updates.UpdateApp;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.DrawableTint;
@@ -227,9 +228,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
                 public void run() {
                     SharedPreferences prefs = Util.getPreferences(context);
                     String url = Util.getRestUrl(context, "ping") + "&f=json";
-                    final String input = KakaduaUtil.http_get_contents(url);
+                    final String input = KakaduaUtil.http_get_contents_all_cert(url);
                     final String ip = KakaduaUtil.http_get_contents("https://ip.popeen.com/api/");
-                    Log.w("ping", input);
+                    Log.w("pinging", input);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -251,7 +252,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
                                     } else {
                                         Log.w(":)", ":)");
                                         t.setVisibility(View.INVISIBLE);
-
                                         try {
                                             resp = json.getJSONObject("subsonic-response").getString("emulator");
                                             t.setText("Server Emulator: "+resp.toString());
