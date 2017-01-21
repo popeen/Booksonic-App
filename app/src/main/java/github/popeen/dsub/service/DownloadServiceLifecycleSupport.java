@@ -36,7 +36,8 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
-import github.popeen.dsub.domain.MusicDirectory;
+
+import github.popeen.dsub.domain.InternetRadioStation;import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PlayerQueue;
 import github.popeen.dsub.domain.PlayerState;
 import github.popeen.dsub.domain.ServerInfo;
@@ -155,6 +156,8 @@ public class DownloadServiceLifecycleSupport {
 
 		// Pause temporarily on incoming phone calls.
 		phoneStateListener = new MyPhoneStateListener();
+
+		// Android 6.0 removes requirement for android.Manifest.permission.READ_PHONE_STATE;
 		TelephonyManager telephonyManager = (TelephonyManager) downloadService.getSystemService(Context.TELEPHONY_SERVICE);
 		telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
@@ -308,7 +311,7 @@ public class DownloadServiceLifecycleSupport {
 		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
 
 		// If we are on Subsonic 5.2+, save play queue
-		if(serializeRemote && ServerInfo.canSavePlayQueue(downloadService) && !Util.isOffline(downloadService) && state.songs.size() > 0) {
+		if(serializeRemote && ServerInfo.canSavePlayQueue(downloadService) && !Util.isOffline(downloadService) && state.songs.size() > 0 && !(state.songs.get(0) instanceof InternetRadioStation)) {
 			// Cancel any currently running tasks
 			if(currentSavePlayQueueTask != null) {
 				currentSavePlayQueueTask.cancel();

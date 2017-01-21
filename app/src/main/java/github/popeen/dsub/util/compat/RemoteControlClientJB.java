@@ -4,6 +4,11 @@ import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.media.RemoteControlClient;
+import github.popeen.dsub.activity.SubsonicActivity;
+import github.popeen.dsub.service.DownloadService;
+import github.popeen.dsub.util.SilentBackgroundTask;
+
+import github.popeen.dsub.util.SilentBackgroundTask;
 
 import github.popeen.dsub.util.SilentBackgroundTask;
 
@@ -29,13 +34,13 @@ public class RemoteControlClientJB extends RemoteControlClientICS {
 						return null;
 					}
 				}.execute();
-				setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+				setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING, 0, 0);
 			}
 		});
 	}
 	
 	@Override
-	public void setPlaybackState(final int state) {
+	public void setPlaybackState(final int state, int index, int queueSize) {
 		if(mRemoteControl == null) {
 			return;
 		}

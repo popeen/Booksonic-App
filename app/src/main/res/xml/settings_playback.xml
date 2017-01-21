@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:myns="http://schemas.android.com/apk/res/github.popeen.dsub"
+	xmlns:myns="http://schemas.android.com/apk/res-auto"
 	android:title="@string/settings.playback_title">
 
 	<PreferenceCategory
@@ -39,11 +39,12 @@
 			android:key="headsUpNotification"
 			android:defaultValue="false"/>
 
-		<CheckBoxPreference
-			android:title="@string/settings.play_now_after"
-			android:summary="@string/settings.play_now_after_summary"
-			android:key="playNowAfter"
-			android:defaultValue="true"/>
+		<ListPreference
+			android:title="@string/settings.song_press_action"
+			android:key="songPressAction"
+			android:defaultValue="all"
+			android:entryValues="@array/songPressActionValues"
+			android:entries="@array/songPressActionNames"/>
 	</PreferenceCategory>
 
 	<PreferenceCategory

@@ -15,12 +15,14 @@
 
 package github.popeen.dsub.fragments;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -29,6 +31,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +48,7 @@ import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import github.popeen.dsub.activity.SubsonicActivity;
 import github.popeen.dsub.view.CacheLocationPreference;
 import github.popeen.dsub.R;
 import github.popeen.dsub.service.DownloadService;
@@ -76,6 +81,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference pauseDisconnect;
 	private Preference addServerPreference;
 	private PreferenceCategory serversCategory;
+	private ListPreference songPressAction;
 	private ListPreference videoPlayer;
 	private ListPreference syncInterval;
 	private CheckBoxPreference syncEnabled;
@@ -184,6 +190,13 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			} else {
 				context.stopService(serviceIntent);
 			}
+		} else if(Constants.PREFERENCES_KEY_THEME.equals(key)) {
+			String value = sharedPreferences.getString(key, null);
+			if("day/night".equals(value) || "day/black".equals(value)) {
+				if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+					ActivityCompat.requestPermissions(context, new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION }, SubsonicActivity.PERMISSIONS_REQUEST_LOCATION);
+				}
+			}
 		}
 
 		scheduleBackup();
@@ -201,7 +214,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 		theme = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_THEME);
 		maxBitrateWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI);
-		maxBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE);
+		maxBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE);;
 		//maxVideoBitrateWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
 		//maxVideoBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
 		networkTimeout = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
@@ -214,6 +227,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serversCategory = (PreferenceCategory) this.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
 		addServerPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
 		//videoPlayer = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
+		songPressAction = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION);
 		syncInterval = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
 		syncEnabled = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
 		syncWifi = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
@@ -357,7 +371,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 		if(cacheSize != null) {
 			maxBitrateWifi.setSummary(maxBitrateWifi.getEntry());
-			maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());
+			maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());;
 			//maxVideoBitrateWifi.setSummary(maxVideoBitrateWifi.getEntry());
 			//maxVideoBitrateMobile.setSummary(maxVideoBitrateMobile.getEntry());
 			networkTimeout.setSummary(networkTimeout.getEntry());
@@ -425,6 +439,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		for (ServerSettings ss : serverSettings.values()) {
 			if(!ss.update()) {
 				serversCategory.removePreference(ss.getScreen());
+				serverCount--;
 			}
 		}
 	}

@@ -139,6 +139,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_HIDE_WIDGET = "hideWidget";
 	public static final String PREFERENCES_KEY_PODCASTS_ENABLED = "podcastsEnabled";
 	public static final String PREFERENCES_KEY_BOOKMARKS_ENABLED = "bookmarksEnabled";
+	public static final String PREFERENCES_KEY_INTERNET_RADIO_ENABLED = "internetRadioEnabled";
 	public static final String PREFERENCES_KEY_CUSTOM_SORT_ENABLED = "customSortEnabled";
 	public static final String PREFERENCES_KEY_MENU_PLAY_NOW = "showPlayNow";
 	public static final String PREFERENCES_KEY_MENU_PLAY_SHUFFLED = "showPlayShuffled";
@@ -153,7 +154,8 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_BROWSE_TAGS = "browseTags";
 	public static final String PREFERENCES_KEY_OPEN_TO_TAB = "openToTab";
 	public static final String PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE = "overrideSystemLanguage";
-	public static final String PREFERENCES_KEY_PLAY_NOW_AFTER = "playNowAfter";
+	// public static final String PREFERENCES_KEY_PLAY_NOW_AFTER = "playNowAfter";
+	public static final String PREFERENCES_KEY_SONG_PRESS_ACTION = "songPressAction";
 	public static final String PREFERENCES_KEY_LARGE_ALBUM_ART = "largeAlbumArt";
 	public static final String PREFERENCES_KEY_ADMIN_ENABLED = "adminEnabled";
 	public static final String PREFERENCES_KEY_PLAYLIST_NAME = "suggestedPlaylistName";
@@ -180,6 +182,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_HEADS_UP_NOTIFICATION = "headsUpNotification";
 	public static final String PREFERENCES_KEY_CAST_CACHE = "castCache";
 	public static final String PREFERENCES_KEY_PLAYBACK_SPEED = "playbackSpeed";
+	public static final String PREFERENCES_KEY_CUSTOM_PLAYBACK_SPEED = "customPlaybackSpeed";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
@@ -192,6 +195,8 @@ public final class Constants {
 	
 	public static final String CACHE_KEY_IGNORE = "ignoreArticles";
 	public static final String CACHE_AUDIO_SESSION_ID = "audioSessionId";
+	public static final String CACHE_AUDIO_SESSION_VERSION_CODE = "audioSessionVersionCode";
+	public static final String CACHE_BLOCK_TOKEN_USE = "blockTokenUse";
 	
 	public static final String MAIN_BACK_STACK = "backStackIds";
 	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";

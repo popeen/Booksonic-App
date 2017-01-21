@@ -243,7 +243,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 				return;
 			}
 
-			playNow(Arrays.asList((MusicDirectory.Entry) episode));
+			onSongPress(Arrays.asList((MusicDirectory.Entry) episode), episode, false);
 		}
 	}
 

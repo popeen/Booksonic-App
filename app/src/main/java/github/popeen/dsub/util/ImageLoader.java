@@ -40,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.ArtistInfo;
+import github.popeen.dsub.domain.InternetRadioStation;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.Playlist;
 import github.popeen.dsub.domain.PodcastChannel;
@@ -48,6 +49,8 @@ import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.util.compat.RemoteControlClientBase;
 
+
+import java.lang.ref.WeakReference;
 /**
  * Asynchronous loading of images, with caching.
  * <p/>
@@ -218,8 +221,11 @@ public class ImageLoader {
 		return loadImage(view, entry, large, size, crossfade);
 	}
 	public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, int size, boolean crossfade) {
-		// TODO: If we know this a artist, try to load artist info instead
-		if(entry != null && !entry.isAlbum() && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
+		if(entry != null && entry instanceof InternetRadioStation) {
+			// Continue on and load a null bitmap
+		}
+		// If we know this a artist, try to load artist info instead
+		else if(entry != null && !entry.isAlbum() && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
 			SilentBackgroundTask task = new ArtistImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
 			task.execute();
 			return task;

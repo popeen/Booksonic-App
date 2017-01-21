@@ -4,7 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 
-import github.popeen.dsub.domain.PodcastEpisode;
+import github.popeen.dsub.domain.InternetRadioStation;
+import github.popeen.dsub.domain.MusicDirectory;import github.popeen.dsub.domain.PodcastEpisode;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.Util;
@@ -74,7 +75,7 @@ public class Scrobbler {
 					return null;
 				}
 				// Ignore podcasts
-				else if(song.getSong() instanceof PodcastEpisode) {
+				else if(song.getSong() instanceof PodcastEpisode || song.getSong() instanceof InternetRadioStation) {
 					return null;
 				}
 

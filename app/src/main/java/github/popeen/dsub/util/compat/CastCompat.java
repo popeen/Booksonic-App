@@ -23,13 +23,9 @@ import com.google.android.gms.cast.CastMediaControlIntent;
 import github.popeen.dsub.service.ChromeCastController;
 import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.RemoteController;
+import github.popeen.dsub.util.EnvironmentVariables;
 
-/**
- * Created by owner on 2/9/14.
- */
 public final class CastCompat {
-	public static final String APPLICATION_ID =  "5F85EBEB";
-
 	static {
 		try {
 			Class.forName("com.google.android.gms.cast.CastDevice");
@@ -52,6 +48,6 @@ public final class CastCompat {
 	}
 
 	public static String getCastControlCategory() {
-		return CastMediaControlIntent.categoryForCast(APPLICATION_ID);
+		return CastMediaControlIntent.categoryForCast(EnvironmentVariables.CAST_APPLICATION_ID);
 	}
 }

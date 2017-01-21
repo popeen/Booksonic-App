@@ -50,29 +50,27 @@
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Permanent Cache</font>:
-
 		<br/>När filer laddas ner av Booksonic kan de senare raderas för att lämna rum åt nya filer.  Permanent cache kan aldrig raderas utan ett aktivt val av dig.
 		<p/><font color="red">ChromeCast misslyckande</font>:
 		<br/>Prova att använda alternativet Inställningar -> Uppspelning -> Använd enhets proxy.  Det är ett "hack" för att Chromecast inte godtar självsignerade certifikat.
-
+		
 		<p/><font color="red">Första steget i biblioteket är grupper med författare</font>:
 		<br/>Avmarkera "Första steget författare" i inställningsmenyn.  Det kommer göra så att hela första steget kommer att hanteras som forfattar grupper istället för som enstaka författare.
 	]]>
 	</string>
 
 	<string name="main.shuffle">Slumpad uppspelning</string>
-    <string name="main.offline">Gå Offline</string>
+	<string name="main.offline">Gå Offline</string>
 	<string name="main.online">Gå Online</string>
-    <string name="main.settings">Inställningar</string>
-
-    <string name="main.albums_title">Listor</string>
+	<string name="main.settings">Inställningar</string>
+	<string name="main.albums_title">Listor</string>
 	<string name="main.albums_per_folder">Per bok</string>
-    <string name="main.albums_newest">Nyligen tillagt</string>
-    <string name="main.albums_recent">Nyligen spelat</string>
-    <string name="main.albums_frequent">Mest spelat</string>
-    <string name="main.albums_highest">Toppbetyg</string>
-    <string name="main.albums_starred">Favoriter</string>
-    <string name="main.albums_random">Slumpade</string>
+	<string name="main.albums_newest">Nyligen tillagt</string>
+	<string name="main.albums_recent">Nyligen spelat</string>
+	<string name="main.albums_frequent">Mest spelat</string>
+	<string name="main.albums_highest">Toppbetyg</string>
+	<string name="main.albums_starred">Favoriter</string>
+	<string name="main.albums_random">Slumpade</string>
 	<string name="main.albums_genres">Genrer</string>
 	<string name="main.albums_year">Årtionden</string>
 	<string name="main.albums_alphabetical">Alfabetiskt</string>
@@ -80,7 +78,6 @@
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Tryck bakåt igen för att avsluta</string>
 	<string name="main.scan_complete">Skanning av server klar</string>
-
 	<string name="main.artist">Författare</string>
 	<string name="main.title">Titel</string>
 
@@ -104,7 +101,6 @@
 	<string name="menu.keep_synced">Håll synkroniserad</string>
 	<string name="menu.stop_sync">Sluta synkronisera</string>
 	<string name="menu.show_all">Visa all media</string>
-
 	<string name="menu.show_artist">Visa Författare</string>
 	<string name="menu.share">Dela</string>
 	<string name="menu.delete_cache">Rensa cache</string>
@@ -114,11 +110,9 @@
 	<string name="menu.rescan">Skanna servern igen</string>
 	<string name="menu.rate">Sätt betyg </string>
 	<string name="menu.top_tracks">Last.FM topp spår</string>
-
 	<string name="menu.similar_artists">Liknande författare</string>
 
 	<string name="menu.start_radio">Starta radio</string>
-
 	<string name="menu.first_level_artist">Första steget författare</string>
 
     <string name="playlist.label">Spellistor</string>
@@ -134,7 +128,6 @@
     <string name="search.title">Sök</string>
     <string name="search.search">Klicka för att söka</string>
     <string name="search.no_match">Inga träffar, försök igen</string>
-
     <string name="search.artists">Författare</string>
     <string name="search.albums">Bok</string>
     <string name="search.songs">Spår</string>
@@ -148,11 +141,9 @@
     <string name="select_album.no_network">Varning: Inget nätverk tillgängligt.</string>
 	<string name="select_album.no_room">Varning: Du har bara %s kvar</string>
     <string name="select_album.not_licensed">Servern är inte licenserad. %d testdagar kvar.</string>
-
     <string name="select_album.donate_dialog_message">Få oändliga nedladdningar genom att donera till Booksonic.</string>
     <string name="select_album.donate_dialog_now">Nu</string>
     <string name="select_album.donate_dialog_later">Senare</string>
-
     <string name="select_album.donate_dialog_0_trial_days_left">Testperioden är slut. Donera till Booksonic för att fortsätta</string>
 
     <string name="offline.sync_dialog_title">Offline spår väntar på att bli synkroniserade</string>
@@ -265,7 +256,6 @@
 	<string name="song_details.downloading">Laddar ner</string>
 
     <string name="lyrics.nomatch">Inga texter hittades</string>
-
 
     <string name="error.label">Error</string>
 

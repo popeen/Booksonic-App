@@ -21,6 +21,7 @@ package github.popeen.dsub.service;
 import java.io.File;
 import java.io.Reader;
 import java.io.FileReader;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,13 +35,12 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import org.apache.http.HttpResponse;
-
 import github.popeen.dsub.domain.Artist;
 import github.popeen.dsub.domain.ArtistInfo;
 import github.popeen.dsub.domain.ChatMessage;
 import github.popeen.dsub.domain.Genre;
 import github.popeen.dsub.domain.Indexes;
+import github.popeen.dsub.domain.InternetRadioStation;
 import github.popeen.dsub.domain.MusicDirectory.Entry;
 import github.popeen.dsub.domain.PlayerQueue;
 import github.popeen.dsub.domain.PodcastEpisode;
@@ -226,7 +226,7 @@ public class OfflineMusicService implements MusicService {
     }
 
 	@Override
-	public HttpResponse getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
+	public HttpURLConnection getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
@@ -886,6 +886,11 @@ public class OfflineMusicService implements MusicService {
 
 	@Override
 	public PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public List<InternetRadioStation> getInternetRadioStations(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

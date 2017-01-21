@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -63,8 +62,6 @@ import github.popeen.dsub.domain.RepeatMode;
 import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.receiver.MediaButtonIntentReceiver;
 import github.popeen.dsub.service.DownloadService;
-
-import org.apache.http.HttpEntity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -271,71 +268,7 @@ public final class Util {
 		editor.commit();
 	}
 
-    public static String getTheme(Context context) {
-        SharedPreferences prefs = getPreferences(context);
-        return prefs.getString(Constants.PREFERENCES_KEY_THEME, null);
-    }
-	public static int getThemeRes(Context context) {
-		return getThemeRes(context, getTheme(context));
-	}
-	public static int getThemeRes(Context context, String theme) {
-		if(context instanceof SubsonicFragmentActivity || context instanceof SettingsActivity) {
-			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
-				if ("dark".equals(theme)) {
-					return R.style.Theme_DSub_Dark_No_Actionbar;
-				} else if ("black".equals(theme)) {
-					return R.style.Theme_DSub_Black_No_Actionbar;
-				} else if ("classic".equals(theme)) {
-					return R.style.Theme_DSub_Classic_No_Actionbar;
-				} else if ("holo".equals(theme)) {
-					return R.style.Theme_DSub_Holo_No_Actionbar;
-				} else {
-					return R.style.Theme_DSub_Light_No_Actionbar;
-				}
-			} else {
-				if ("dark".equals(theme)) {
-					return R.style.Theme_DSub_Dark_No_Color;
-				} else if ("black".equals(theme)) {
-					return R.style.Theme_DSub_Black_No_Color;
-				} else if ("classic".equals(theme)) {
-					return R.style.Theme_DSub_Classic_No_Color;
-				} else if ("holo".equals(theme)) {
-					return R.style.Theme_DSub_Holo_No_Color;
-				} else {
-					return R.style.Theme_DSub_Light_No_Color;
-				}
-			}
-		} else {
-			if ("dark".equals(theme)) {
-				return R.style.Theme_DSub_Dark;
-			} else if ("black".equals(theme)) {
-				return R.style.Theme_DSub_Black;
-			} else if ("classic".equals(theme)) {
-				return R.style.Theme_DSub_Classic;
-			} else if ("holo".equals(theme)) {
-				return R.style.Theme_DSub_Holo;
-			} else {
-				return R.style.Theme_DSub_Light;
-			}
-		}
-	}
-	public static void setTheme(Context context, String theme) {
-		SharedPreferences.Editor editor = getPreferences(context).edit();
-		editor.putString(Constants.PREFERENCES_KEY_THEME, theme);
-		editor.commit();
-	}
 
-	public static void applyTheme(Context context, String theme) {
-		context.setTheme(getThemeRes(context, theme));
-
-		SharedPreferences prefs = Util.getPreferences(context);
-		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {
-			Configuration config = new Configuration();
-			config.locale = Locale.ENGLISH;
-			context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-		}
-	}
-	
 	public static boolean getDisplayTrack(Context context) {
 		SharedPreferences prefs = getPreferences(context);
         return prefs.getBoolean(Constants.PREFERENCES_KEY_DISPLAY_TRACK, true);
@@ -480,6 +413,18 @@ public final class Util {
 		builder.append(prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null));
 
 		return builder.toString().hashCode();
+	}
+
+	public static String getBlockTokenUsePref(Context context, int instance) {
+		return Constants.CACHE_BLOCK_TOKEN_USE + Util.getRestUrl(context, null, instance, false);
+	}
+	public static boolean getBlockTokenUse(Context context, int instance) {
+		return getPreferences(context).getBoolean(getBlockTokenUsePref(context, instance), false);
+	}
+	public static void setBlockTokenUse(Context context, int instance, boolean block) {
+		SharedPreferences.Editor editor = getPreferences(context).edit();
+		editor.putBoolean(getBlockTokenUsePref(context, instance), block);
+		editor.commit();
 	}
 
 	public static String replaceInternalUrl(Context context, String url) {
@@ -652,13 +597,6 @@ public final class Util {
 		}
 	}
 
-    public static String getContentType(HttpEntity entity) {
-        if (entity == null || entity.getContentType() == null) {
-            return null;
-        }
-        return entity.getContentType().getValue();
-    }
-
     public static int getRemainingTrialDays(Context context) {
         SharedPreferences prefs = getPreferences(context);
         long installTime = prefs.getLong(Constants.PREFERENCES_KEY_INSTALL_TIME, 0L);
@@ -705,6 +643,10 @@ public final class Util {
 	public static boolean shouldStartOnHeadphones(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_START_ON_HEADPHONES, false);
+	}
+
+	public static String getSongPressAction(Context context) {
+		return getPreferences(context).getString(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION, "all");
 	}
 
     /**
@@ -1172,7 +1114,7 @@ public final class Util {
     }
 
 	public static boolean isAllowedToDownload(Context context) {
-		return !isWifiRequiredForDownload(context) || isWifiConnected(context);
+		return isNetworkConnected(context, true) && !isOffline(context);
 	}
     public static boolean isWifiRequiredForDownload(Context context) {
         SharedPreferences prefs = getPreferences(context);
@@ -1198,22 +1140,22 @@ public final class Util {
 		showDialog(context, android.R.drawable.ic_dialog_info, title, message, linkify);
 	}
 
-	private static void showDialog(Context context, int icon, int titleId, int messageId) {
+	public static void showDialog(Context context, int icon, int titleId, int messageId) {
 		showDialog(context, icon, titleId, messageId, true);
 	}
-	private static void showDialog(Context context, int icon, int titleId, String message) {
+	public static void showDialog(Context context, int icon, int titleId, String message) {
 		showDialog(context, icon, titleId, message, true);
 	}
-	private static void showDialog(Context context, int icon, String title, String message) {
+	public static void showDialog(Context context, int icon, String title, String message) {
 		showDialog(context, icon, title, message, true);
 	}
-	private static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
+	public static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
 		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId), linkify);
 	}
-	private static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
+	public static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
 		showDialog(context, icon, context.getResources().getString(titleId), message, linkify);
 	}
-	private static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
+	public static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
 		SpannableString ss = new SpannableString(message);
 		if(linkify) {
 			Linkify.addLinks(ss, Linkify.ALL);

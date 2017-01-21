@@ -20,14 +20,13 @@ package github.popeen.dsub.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -39,6 +38,7 @@ import github.popeen.dsub.domain.Bookmark;
 import github.popeen.dsub.domain.ChatMessage;
 import github.popeen.dsub.domain.Genre;
 import github.popeen.dsub.domain.Indexes;
+import github.popeen.dsub.domain.InternetRadioStation;
 import github.popeen.dsub.domain.PlayerQueue;
 import github.popeen.dsub.domain.PodcastEpisode;
 import github.popeen.dsub.domain.RemoteStatus;
@@ -738,11 +738,16 @@ public class CachedMusicService implements MusicService {
 
 	@Override
     public Bitmap getCoverArt(Context context, Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
-        return musicService.getCoverArt(context, entry, size, progressListener, task);
+		Bitmap bitmap = FileUtil.getAlbumArtBitmap(context, entry, size);
+		if (bitmap != null) {
+			return bitmap;
+		} else {
+			return musicService.getCoverArt(context, entry, size, progressListener, task);
+		}
     }
 
     @Override
-    public HttpResponse getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
+    public HttpURLConnection getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
         return musicService.getDownloadInputStream(context, song, offset, maxBitrate, task);
     }
 
@@ -1162,7 +1167,12 @@ public class CachedMusicService implements MusicService {
 
 	@Override
 	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
-		return musicService.getAvatar(username, size, context, progressListener, task);
+		Bitmap bitmap = FileUtil.getAvatarBitmap(context, username, size);
+		if(bitmap != null) {
+			return bitmap;
+		} else {
+			return musicService.getAvatar(username, size, context, progressListener, task);
+		}
 	}
 
 	@Override
@@ -1193,7 +1203,12 @@ public class CachedMusicService implements MusicService {
 
 	@Override
 	public Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
-		return musicService.getBitmap(url, size, context, progressListener, task);
+		Bitmap bitmap = FileUtil.getMiscBitmap(context, url, size);
+		if(bitmap != null) {
+			return bitmap;
+		} else {
+			return musicService.getBitmap(url, size, context, progressListener, task);
+		}
 	}
 
 	@Override
@@ -1221,6 +1236,22 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception {
 		return musicService.getPlayQueue(context, progressListener);
+	}
+
+	@Override
+	public List<InternetRadioStation> getInternetRadioStations(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		List<InternetRadioStation> result = null;
+
+		if(!refresh) {
+			result = FileUtil.deserialize(context, getCacheName(context, "internetRadioStations"), ArrayList.class);
+		}
+
+		if(result == null) {
+			result = musicService.getInternetRadioStations(refresh, context, progressListener);
+			FileUtil.serialize(context, new ArrayList<>(result), getCacheName(context, "internetRadioStations"));
+		}
+
+		return result;
 	}
 
 	@Override

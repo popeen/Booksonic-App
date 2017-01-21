@@ -125,19 +125,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
 			if (entry.isVideo()) {
 				playVideo(entry);
 			} else {
-				List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
-
-				if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true)) {
-					for (MusicDirectory.Entry song : entries) {
-						if (!song.isDirectory() && !song.isVideo()) {
-							songs.add(song);
-						}
-					}
-					playNow(songs, entry, 0);
-				} else {
-					songs.add(entry);
-					playNow(songs);
-				}
+				onSongPress(entries, entry);
 			}
 		}
 	}

@@ -36,6 +36,7 @@
     <string name="button_bar.now_playing">Now Playing</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Bookmarks</string>
+	<string name="button_bar.internet_radio">Internet Radio</string>
 	<string name="button_bar.shares">Shares</string>
 	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Admin</string>
@@ -43,8 +44,8 @@
 	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Welcome!</string>
-    <string name="main.welcome_text">Welcome to Booksonic! The app is currently configured to use the Subsonic demo server. After you\'ve
-        set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
+    <string name="main.welcome_text">Welcome to Booksonic! The app is currently configured to use the Subsonic demo server.</string>
+
 	<string name="main.about_title">About Booksonic</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
@@ -102,7 +103,7 @@
 	<string name="menu.add_podcast">Add Channel</string>
 	<string name="menu.keep_synced">Keep Synced</string>
 	<string name="menu.stop_sync">Stop syncing</string>
-	<string name="menu.show_all">Show all media</string>
+	<string name="menu.show_all">Show all songs</string>
 	<string name="menu.show_artist">Show Author</string>
 	<string name="menu.share">Share</string>
 	<string name="menu.delete_cache">Delete Cache</string>
@@ -227,13 +228,14 @@
 	<string name="download.playback_speed_normal">1x</string>
 	<string name="download_playback_speed_one_p_two">1.2x</string>
 	<string name="download_playback_speed_one_p_five">1.5x</string>
-	<string name="download_playback_speed_double">2x</string>
+	<string name="download_playback_speed_two">2x</string>
+	<string name="download.playback_speed_custom">Custom</string>
 
 	<string name="sync.new_podcasts">New podcasts available</string>
 	<string name="sync.new_playlists">New tracks in playlists</string>
 	<string name="sync.new_albums">New books available</string>
 	<string name="sync.new_starred">New starred tracks available</string>
-    
+
 	<string name="starring_content_starred">Starred \"%s\"</string>
 	<string name="starring_content_unstarred">Unstarred \"%s\"</string>
     <string name="starring_content_error">Failed to update \"%s\", please try later.</string>
@@ -244,7 +246,7 @@
 	<string name="updated_playlist">Added %1$s tracks to \"%2$s\"</string>
     <string name="updated_playlist_error">Failed to update \"%s\", please try later.</string>
 	<string name="removed_playlist">Removed %1$s tracks from \"%2$s\"</string>
-	
+
 	<string name="bookmark.delete">Delete bookmark</string>
 	<string name="bookmark.delete_title">Delete the bookmark for</string>
 	<string name="bookmark.deleted">Deleted the bookmark for \"%s\"</string>
@@ -309,6 +311,8 @@
     <string name="settings.theme_dark">Dark</string>
 	<string name="settings.theme_black">Black</string>
 	<string name="settings.theme_holo">Holo</string>
+	<string name="settings.theme_day_night">Day/Night</string>
+	<string name="settings.theme_day_black_night">Day/Black Night</string>
 	<string name="settings.theme_fullscreen">Fullscreen</string>
 	<string name="settings.theme_fullscreen_summary">Hide as many UI elements as Android will allow</string>
 	<string name="settings.track_title">Display Track #</string>
@@ -415,6 +419,8 @@
 	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
 	<string name="settings.bookmarks_enabled">Bookmarks Enabled</string>
 	<string name="settings.bookmarks_enabled_summary">Whether or not to display the bookmarks listing in the pull out drawer</string>
+	<string name="settings.internet_radio_enabled">Internet Radio Enabled</string>
+	<string name="settings.internet_radio_enabled_summary">Whether or not to display the internet radio listing in the pull out drawer</string>
 	<string name="settings.shares_enabled">Shares Enabled</string>
 	<string name="settings.shares_enabled_summary">Whether or not to display the shares listing in the pull out drawer</string>
 	<string name="settings.sync_title">Sync</string>
@@ -457,10 +463,13 @@
 	<string name="settings.override_system_language">Override System Language</string>
 	<string name="settings.override_system_language_summary">Display app in english even if the system language is something Booksonic has a translation for.  May need to clear the app from memory for changes to take affect.</string>
 	<string name="settings.drawer_items_title">Drawer Tabs</string>
-	<string name="settings.play_now_after">Play Now - After</string>
-	<string name="settings.play_now_after_summary">Play Now context menu for a track plays everything after selected item (like the Booksonic web GUI)</string>
-	<string name="settings.large_album_art">Large Book Covers</string>
-	<string name="settings.large_album_art_summary">Display books with large book covers instead of in a list</string>
+	<string name="settings.song_press_action">Track Press Action</string>
+	<string name="settings.song_press_play_single">Play only that track</string>
+	<string name="settings.song_press_play_all">Adds everything in the book to the Now Playing Queue</string>
+	<string name="settings.song_press_play_next">Adds track as next track</string>
+	<string name="settings.song_press_play_last">Adds track to end of Now Playing Queue</string>
+	<string name="settings.large_album_art">Large Cover Art</string>
+	<string name="settings.large_album_art_summary">Display books with large cover art instead of in a list</string>
 	<string name="settings.admin_enabled">Admin Enabled</string>
 	<string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
 	<string name="settings.replay_gain">Replay Gain</string>
@@ -535,7 +544,7 @@
 	<string name="admin.confirm_password_bad">Entered password is wrong</string>
 	<string name="admin.permissions">Permissions</string>
 	<string name="admin.musicFolders">Music Folders</string>
-	
+
 	<string name="admin.scrobblingEnabled">Scrobbling allowed</string>
 	<string name="admin.role.admin">Administrator</string>
 	<string name="admin.role.settings">Change settings</string>
@@ -623,6 +632,7 @@
 	<string name="details.title.playlist">Playlist Details</string>
 
 	<string name="details.title.artist">Author Details</string>
+	<string name="details.title.internet_radio_station">Internet Radio Details</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Status</string>
 
@@ -665,6 +675,10 @@
 	<string name="details.last_played">Last Played</string>
 	<string name="details.expiration">Expiration</string>
 	<string name="details.played_count">Played Count</string>
+	<string name="details.stream_url">Stream URL</string>
+	<string name="details.home_page">Home Page</string>
+
+	<string name="permission.external_storage.failed">DSub cannot function without the ability to write to storage</string>
 
     <plurals name="select_album_n_songs">
 

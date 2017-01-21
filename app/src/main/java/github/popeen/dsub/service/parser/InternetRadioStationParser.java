@@ -1,50 +1,55 @@
 /*
 	This file is part of Subsonic.
+
 	Subsonic is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
+
 	Subsonic is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
+
 	You should have received a copy of the GNU General Public License
-	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
+	along with Subsonic.  If not, see <http://www.gnu.org/licenses/>.
+
 	Copyright 2016 (C) Scott Jackson
 */
 package github.popeen.dsub.service.parser;
 
 import android.content.Context;
-
+import github.popeen.dsub.domain.InternetRadioStation;
+import github.popeen.dsub.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
-import github.popeen.dsub.domain.MusicDirectory;
-import github.popeen.dsub.util.ProgressListener;
-
-public class TopSongsParser extends MusicDirectoryEntryParser {
-
-	public TopSongsParser(Context context, int instance) {
+public class InternetRadioStationParser extends ErrorParser {
+	public InternetRadioStationParser(Context context, int instance) {
 		super(context, instance);
 	}
 
-	public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {
+	public List<InternetRadioStation> parse(Reader reader, ProgressListener progressListener) throws Exception {
 		init(reader);
 
-		MusicDirectory dir = new MusicDirectory();
+		List<InternetRadioStation> result = new ArrayList<>();
 		int eventType;
-		int customOrder = 1;
 		do {
 			eventType = nextParseEvent();
 			if (eventType == XmlPullParser.START_TAG) {
 				String name = getElementName();
-				if ("song".equals(name)) {
-					MusicDirectory.Entry entry = parseEntry("");
-					entry.setCustomOrder(customOrder);
-					dir.addChild(entry);
+				if ("internetRadioStation".equals(name)) {
+					InternetRadioStation station = new InternetRadioStation();
 
-					customOrder++;
+					station.setId(get("id"));
+					station.setTitle(get("name"));
+					station.setStreamUrl(get("streamUrl"));
+					station.setHomePageUrl(get("homePageUrl"));
+
+					result.add(station);
 				} else if ("error".equals(name)) {
 					handleError();
 				}
@@ -52,7 +57,7 @@ public class TopSongsParser extends MusicDirectoryEntryParser {
 		} while (eventType != XmlPullParser.END_DOCUMENT);
 
 		validate();
-
-		return dir;
+		return result;
 	}
+
 }

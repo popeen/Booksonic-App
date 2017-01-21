@@ -31,6 +31,7 @@ import github.popeen.dsub.service.DownloadFile;
 import github.popeen.dsub.util.DrawableTint;
 import github.popeen.dsub.util.SQLiteHandler;
 import github.popeen.dsub.util.SongDBHandler;
+import github.popeen.dsub.util.ThemeUtil;
 import github.popeen.dsub.util.Util;
 
 import java.io.File;
@@ -74,7 +75,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private boolean isPlayedShown = false;
 	private boolean showAlbum = false;
 
-    private SQLiteHandler sqlh = new SQLiteHandler(context);
+	private SQLiteHandler sqlh = new SQLiteHandler(context);
 
 
 	public SongView(Context context) {
@@ -99,7 +100,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 	public void setObjectImpl(MusicDirectory.Entry song, Boolean checkable) {
 		this.checkable = checkable;
-        ImageView heard = (ImageView) findViewById(R.id.track_heard);
+		ImageView heard = (ImageView) findViewById(R.id.track_heard);
 
 		try{ //Podcast will always catch
 			Long[] dates = SongDBHandler.getHandler(context).getLastPlayed(song);
@@ -170,6 +171,9 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 		String title = song.getTitle();
 		Integer track = song.getTrack();
+		if(song.getCustomOrder() != null) {
+			track = song.getCustomOrder();
+		}
 		TextView newPlayingTextView;
 		if(track != null && Util.getDisplayTrack(context)) {
 			trackTextView.setText(String.format("%02d", track));
@@ -356,7 +360,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			if(isRated == 1) {
 				this.setBackgroundColor(Color.RED);
 
-				String theme = Util.getTheme(context);
+				String theme = ThemeUtil.getTheme(context);
 				if("black".equals(theme)) {
 					this.getBackground().setAlpha(80);
 				} else if("dark".equals(theme) || "holo".equals(theme)) {

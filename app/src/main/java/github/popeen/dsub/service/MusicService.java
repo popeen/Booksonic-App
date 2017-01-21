@@ -18,9 +18,9 @@
  */
 package github.popeen.dsub.service;
 
+import java.net.HttpURLConnection;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -29,6 +29,7 @@ import github.popeen.dsub.domain.ArtistInfo;
 import github.popeen.dsub.domain.ChatMessage;
 import github.popeen.dsub.domain.Genre;
 import github.popeen.dsub.domain.Indexes;
+import github.popeen.dsub.domain.InternetRadioStation;
 import github.popeen.dsub.domain.PlayerQueue;
 import github.popeen.dsub.domain.RemoteStatus;
 import github.popeen.dsub.domain.Lyrics;
@@ -101,7 +102,7 @@ public interface MusicService {
 
     Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 
-    HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception;
+    HttpURLConnection getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception;
 
 	String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception;
 
@@ -192,6 +193,8 @@ public interface MusicService {
 	void savePlayQueue(List<MusicDirectory.Entry> songs, MusicDirectory.Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception;
 
 	PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception;
+
+	List<InternetRadioStation> getInternetRadioStations(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 	

@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -36,8 +37,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
+
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,6 +64,7 @@ import github.popeen.dsub.fragments.SearchFragment;
 import github.popeen.dsub.fragments.SelectArtistFragment;
 import github.popeen.dsub.fragments.SelectBookmarkFragment;
 import github.popeen.dsub.fragments.SelectDirectoryFragment;
+import github.popeen.dsub.fragments.SelectInternetRadioStationFragment;
 import github.popeen.dsub.fragments.SelectPlaylistFragment;
 import github.popeen.dsub.fragments.SelectPodcastsFragment;
 import github.popeen.dsub.fragments.SelectShareFragment;
@@ -74,6 +75,7 @@ import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.updates.Updater;
 import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.DrawableTint;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.KakaduaUtil;
 import github.popeen.dsub.util.SilentBackgroundTask;
@@ -136,6 +138,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			stopService(new Intent(this, DownloadService.class));
 			finish();
 			getImageLoader().clearCache();
+			DrawableTint.clearCache();
 		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
 			getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, "Download");
 			lastSelectedPosition = R.id.drawer_downloading;
@@ -320,6 +323,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 						PlayerState state = getDownloadService().getPlayerState();
 						if(state == PlayerState.STARTED) {
 							getDownloadService().pause();
+						} else if(state == PlayerState.IDLE) {
+							getDownloadService().play();
 						} else {
 							getDownloadService().start();
 						}
@@ -399,9 +404,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			if(currentFragment instanceof SearchFragment) {
 				String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 				boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
+				String artist = intent.getStringExtra(MediaStore.EXTRA_MEDIA_ARTIST);
+				String album = intent.getStringExtra(MediaStore.EXTRA_MEDIA_ALBUM);
+				String title = intent.getStringExtra(MediaStore.EXTRA_MEDIA_TITLE);
 
 				if (query != null) {
-					((SearchFragment)currentFragment).search(query, autoplay);
+					((SearchFragment)currentFragment).search(query, autoplay, artist, album, title);
 				}
 				getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 			} else {
@@ -660,6 +668,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			return new SelectPodcastsFragment();
 		} else if("Bookmark".equals(fragmentType)) {
 			return new SelectBookmarkFragment();
+		} else if("Internet Radio".equals(fragmentType)) {
+			return new SelectInternetRadioStationFragment();
 		} else if("Share".equals(fragmentType)) {
 			return new SelectShareFragment();
 		} else if("Admin".equals(fragmentType)) {
@@ -918,7 +928,13 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		if (currentPlaying != null) {
 			song = currentPlaying.getSong();
 			trackView.setText(song.getTitle());
-			artistView.setText(song.getArtist());
+
+			if(song.getArtist() != null) {
+				artistView.setVisibility(View.VISIBLE);
+				artistView.setText(song.getArtist());
+			} else {
+				artistView.setVisibility(View.GONE);
+			}
 		} else {
 			trackView.setText(R.string.main_title);
 			artistView.setText(R.string.main_artist);
@@ -935,12 +951,26 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			getImageLoader().loadImage(coverArtView, song, false, height, false);
 		}
 
-		if(currentPlaying != null && currentPlaying.getSong() != null) {
+		if(getDownloadService().isCurrentPlayingSingle()) {
 			previousButton.setVisibility(View.GONE);
 			nextButton.setVisibility(View.GONE);
 
-			rewindButton.setVisibility(View.VISIBLE);
-			fastforwardButton.setVisibility(View.VISIBLE);
+			rewindButton.setVisibility(View.GONE);
+			fastforwardButton.setVisibility(View.GONE);
+		} else {
+			if (currentPlaying != null && currentPlaying.getSong() != null && (currentPlaying.getSong().isPodcast() || currentPlaying.getSong().isAudioBook())) {
+				previousButton.setVisibility(View.GONE);
+				nextButton.setVisibility(View.GONE);
+
+				rewindButton.setVisibility(View.VISIBLE);
+				fastforwardButton.setVisibility(View.VISIBLE);
+			} else {
+				previousButton.setVisibility(View.VISIBLE);
+				nextButton.setVisibility(View.VISIBLE);
+
+				rewindButton.setVisibility(View.GONE);
+				fastforwardButton.setVisibility(View.GONE);
+			}
 		}
 	}
 

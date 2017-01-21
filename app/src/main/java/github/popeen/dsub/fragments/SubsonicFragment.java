@@ -62,6 +62,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -321,6 +322,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
 					}
+
+
+					String songPressAction = Util.getSongPressAction(context);
+					if(!"next".equals(songPressAction) && !"last".equals(songPressAction)) {
+						menu.setGroupVisible(R.id.hide_play_now, false);
+					}
 				}
 			} else {
 				if(Util.isOffline(context)) {
@@ -441,6 +448,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				break;
 			case R.id.album_menu_share:
 				createShare(songs);
+				break;
+			case R.id.song_menu_play_now:
+				playNow(songs);
 				break;
 			case R.id.song_menu_play_next:
 				getDownloadService().download(songs, false, false, true, false);
@@ -663,7 +673,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 			});
 
-			refreshLayout.setColorScheme(
+			refreshLayout.setColorSchemeResources(
 					R.color.holo_blue_light,
 					R.color.holo_orange_light,
 					R.color.holo_green_light,
@@ -686,7 +696,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 			});
 
-			refreshLayout.setColorScheme(
+			refreshLayout.setColorSchemeResources(
 					R.color.holo_blue_light,
 					R.color.holo_orange_light,
 					R.color.holo_green_light,
@@ -969,7 +979,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 
-	protected void downloadRecursively(final List<Entry> albums, final boolean shuffle, final boolean append) {
+	protected void downloadRecursively(final List<Entry> albums, final boolean shuffle, final boolean append, final boolean playNext) {
 		new RecursiveLoader(context) {
 			@Override
 			protected Boolean doInBackground() throws Throwable {
@@ -997,7 +1007,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						downloadService.clear();
 					}
 
-					downloadService.download(songs, false, true, false, false);
+					downloadService.download(songs, false, true, playNext, false);
 					if(!append) {
 						transition = true;
 					}
@@ -1121,7 +1131,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 			@Override
 			protected void done(Void result) {
-				Util.toast(context, context.getResources().getString(R.string.updated_playlist, songs.size(), playlist.getName()));
+				Util.toast(context, context.getResources().getString(R.string.updated_playlist, String.valueOf(songs.size()), playlist.getName()));
 			}
 
 			@Override
@@ -1143,16 +1153,24 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
 		final CheckBox overwriteCheckBox = (CheckBox) layout.findViewById(R.id.save_playlist_overwrite);
 		if(getSuggestion) {
-			String playlistName = (getDownloadService() != null) ? getDownloadService().getSuggestedPlaylistName() : null;
+			DownloadService downloadService = getDownloadService();
+			String playlistName = null;
+			String playlistId = null;
+			if(downloadService != null) {
+				playlistName = downloadService.getSuggestedPlaylistName();
+				playlistId = downloadService.getSuggestedPlaylistId();
+			}
 			if (playlistName != null) {
 				playlistNameView.setText(playlistName);
-				try {
-					if(ServerInfo.checkServerVersion(context, "1.8.0") && Integer.parseInt(getDownloadService().getSuggestedPlaylistId()) != -1) {
-						overwriteCheckBox.setChecked(true);
-						overwriteCheckBox.setVisibility(View.VISIBLE);
+				if(playlistId != null) {
+					try {
+						if (ServerInfo.checkServerVersion(context, "1.8.0") && Integer.parseInt(playlistId) != -1) {
+							overwriteCheckBox.setChecked(true);
+							overwriteCheckBox.setVisibility(View.VISIBLE);
+						}
+					} catch (Exception e) {
+						Log.i(TAG, "Playlist id isn't a integer, probably MusicCabinet", e);
 					}
-				} catch(Exception e) {
-					Log.i(TAG, "Playlist id isn't a integer, probably MusicCabinet");
 				}
 			} else {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -1213,6 +1231,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			@Override
 			protected void error(Throwable error) {
 				String msg = context.getResources().getString(R.string.download_playlist_error) + " " + getErrorMessage(error);
+				Log.e(TAG, "Failed to create playlist", error);
 				Util.toast(context, msg);
 			}
 		}.execute();
@@ -1242,6 +1261,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					msg = context.getResources().getString(R.string.download_playlist_error) + " " + getErrorMessage(error);
 				}
 
+				Log.e(TAG, "Failed to overwrite playlist", error);
 				Util.toast(context, msg, false);
 			}
 		}.execute();
@@ -1680,6 +1700,33 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				});
 		AlertDialog dialog = builder.create();
 		dialog.show();
+	}
+
+	protected void onSongPress(List<Entry> entries, Entry entry) {
+		onSongPress(entries, entry, 0, true);
+	}
+	protected void onSongPress(List<Entry> entries, Entry entry, boolean allowPlayAll) {
+		onSongPress(entries, entry, 0, allowPlayAll);
+	}
+	protected void onSongPress(List<Entry> entries, Entry entry, int position, boolean allowPlayAll) {
+		List<Entry> songs = new ArrayList<Entry>();
+
+		String songPressAction = Util.getSongPressAction(context);
+		if("all".equals(songPressAction) && allowPlayAll) {
+			for(Entry song: entries) {
+				if(!song.isDirectory() && !song.isVideo()) {
+					songs.add(song);
+				}
+			}
+			playNow(songs, entry, position);
+		} else if("next".equals(songPressAction)) {
+			getDownloadService().download(Arrays.asList(entry), false, false, true, false);
+		}  else if("last".equals(songPressAction)) {
+			getDownloadService().download(Arrays.asList(entry), false, false, false, false);
+		} else {
+			songs.add(entry);
+			playNow(songs);
+		}
 	}
 
 	protected void playNow(List<Entry> entries) {
