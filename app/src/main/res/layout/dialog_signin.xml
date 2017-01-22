@@ -6,12 +6,11 @@
     android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
-        android:text="Sign in"
+        android:text="@string/login.header"
         android:id="@+id/title"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:scaleType="center"
-        android:contentDescription="Sign in"
         android:textAppearance="@style/NotificationText.Title"
         android:textSize="30sp" />
 
@@ -25,7 +24,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
         android:fontFamily="sans-serif"
-        android:hint="Server Adress"/>
+        android:hint="@string/login.hint.server"/>
     <EditText
         android:id="@+id/username"
         android:layout_width="match_parent"
@@ -34,7 +33,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="Username" />
+        android:hint="@string/login.hint.username" />
     <EditText
         android:id="@+id/password"
         android:inputType="textPassword"
@@ -45,14 +44,26 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif"
-        android:hint="Password"/>
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:id="@+id/linearLayout1">
-        <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_weight="0.5"
-            android:id="@+id/btnCancel" android:text="Demo Server"></Button>
-        <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_weight="0.5"
-            android:id="@+id/btnLogin" android:text="Login"></Button>
+        android:hint="@string/login.hint.password"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout1">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:id="@+id/btnCancel"
+            android:text="@string/login.button.demo"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:id="@+id/btnLogin"
+            android:text="@string/login.button.signin"/>
+
     </LinearLayout>
 </LinearLayout>

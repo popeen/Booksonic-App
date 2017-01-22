@@ -727,5 +727,10 @@
     <string name="msg.server.offline">The server is offline</string>
     <string name="msg.noInternet">There is no internet connection</string>
 
-
+	<string name="login.header">Sign in</string>
+	<string name="login.hint.server">Server address</string>
+	<string name="login.hint.username">Username</string>
+	<string name="login.hint.password">Password</string>
+	<string name="login.button.demo">Demo server</string>
+	<string name="login.button.signin">Sign in</string>
 </resources>
