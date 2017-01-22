@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="match_parent"
+        android:text="Sign in"
+        android:id="@+id/title"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:scaleType="center"
+        android:contentDescription="Sign in"
+        android:textAppearance="@style/NotificationText.Title"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/server"
+        android:inputType="textUri"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="sans-serif"
+        android:hint="Server Adress"/>
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint="Username" />
+    <EditText
+        android:id="@+id/password"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif"
+        android:hint="Password"/>
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+        <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_weight="0.5"
+            android:id="@+id/btnCancel" android:text="Demo Server"></Button>
+        <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_weight="0.5"
+            android:id="@+id/btnLogin" android:text="Login"></Button>
+    </LinearLayout>
+</LinearLayout>

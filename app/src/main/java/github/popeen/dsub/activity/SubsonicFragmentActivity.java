@@ -38,6 +38,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -907,12 +909,49 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}.execute();
 	}
 
-	private void showInfoDialog() {
-		if (!infoDialogDisplayed) {
-			infoDialogDisplayed = true;
-			if (Util.getRestUrl(this, null).contains("demo.subsonic.org")) {
-				Util.info(this, R.string.main_welcome_title, R.string.main_welcome_text);
+	private void showLoginDialog() {
+		final Dialog login = new Dialog(this);
+		login.setContentView(R.layout.dialog_signin);
+
+		Button btnLogin = (Button) login.findViewById(R.id.btnLogin);
+		Button btnCancel = (Button) login.findViewById(R.id.btnCancel);
+
+		btnLogin.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				//Test server connection.
+				EditText username = (EditText) login.findViewById(R.id.username);
+				EditText password = (EditText) login.findViewById(R.id.password);
+				EditText server = (EditText) login.findViewById(R.id.server);
+
+				String strUsername = username.getText().toString();
+				String strPassword = password.getText().toString();
+				String strServer = server.getText().toString();
+
+				if(strUsername.length() > 0 && strPassword.length() > 0 && strServer.length() > 0){
+					Util.setRestCredentials(SubsonicFragmentActivity.this, null, strUsername, strPassword, strServer);
+					login.dismiss();
+					//recreate();
+					SubsonicFragmentActivity.super.restart();
+				}
 			}
+		});
+
+		btnCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				login.dismiss();
+			}
+		});
+
+		login.show();
+	}
+
+	private void showInfoDialog() {
+		infoDialogDisplayed = true;
+		//Display the welcome message until the user has changed their Username and Password.
+		if (Util.getRestUsername(this, null).contains("guest")) {
+			showLoginDialog();
 		}
 	}
 

@@ -60,6 +60,7 @@ import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PlayerState;
 import github.popeen.dsub.domain.RepeatMode;
 import github.popeen.dsub.domain.ServerInfo;
+import github.popeen.dsub.fragments.SettingsFragment;
 import github.popeen.dsub.receiver.MediaButtonIntentReceiver;
 import github.popeen.dsub.service.DownloadService;
 
@@ -321,6 +322,23 @@ public final class Util {
 	}
 	public static void setBatchMode(Context context, boolean batchMode) {
 		Util.getPreferences(context).edit().putBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, batchMode).commit();
+	}
+
+	public static String getRestUsername(Context context, String method) {
+		SharedPreferences prefs = getPreferences(context);
+		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+		String Username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
+		return  Username;
+	}
+
+	public static void setRestCredentials(Context context, String method, String username, String password, String server) {
+		SharedPreferences prefs = getPreferences(context);
+		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(Constants.PREFERENCES_KEY_USERNAME + 1, username);
+		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + 1, password);
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + 1, server);
+		editor.commit();
 	}
 
     public static String getRestUrl(Context context, String method) {
