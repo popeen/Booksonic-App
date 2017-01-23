@@ -688,4 +688,11 @@
     <string name="msg.server.offline">Servern är offline</string>
     <string name="msg.noInternet">Det finns ingen internetanslutning</string>
 
+	<string name="login.header">Logga in</string>
+	<string name="login.hint.server">Server adress</string>
+	<string name="login.hint.username">Användarnamn</string>
+	<string name="login.hint.password">Lösenord</string>
+	<string name="login.button.demo">Demo server</string>
+	<string name="login.button.signin">Logga in</string>
+
 </resources>
