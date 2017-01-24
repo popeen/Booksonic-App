@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.11" versioncode="13" releasedate="2017-01-23">
+        <change>Bugfixes</change>
+        <change>Added login screen for easy setup (Thanks hjone72!)</change>
+        <change>Added support for emulated servers</change>
+        <change>Moved logs from Pastebin to my server for privacy</change>
+        <change>The demo server is now running Booksonic</change>
+        <change>Updated to use DSub 5.3.4 (Changes below are from DSub)</change>
+        <change>Variable playback speed (has been tweaked a bit)</change>
+        <change>Internet radio</change>
+        <change>Automatic Day/Night theme</change>
+        <change>Bugfixes and optimizations</change>
+    </release>
     <release version="1.0.10" versioncode="12" releasedate="2016-06-22">
         <change>Bugfixes</change>
         <change>Updated DSub Sources</change>
