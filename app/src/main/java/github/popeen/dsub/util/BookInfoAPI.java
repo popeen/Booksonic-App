@@ -22,6 +22,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import github.popeen.dsub.domain.ServerInfo;
+
 /**
  * Created by P on 2015-10-13.
  */
@@ -90,12 +92,17 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
             String input = readJson(apiParams[0].getURL());
             JSONObject json = new JSONObject(input);
 
+            String respRoot = "subsonic-response";
+            if(ServerInfo.isMadsonic6(context)){
+                respRoot = "madsonic-response";
+            }
+
             if(Util.isTagBrowsing(context)){
-                returnData[0] = json.getJSONObject("subsonic-response").getJSONObject("album").get("description").toString();
-                returnData[1] = json.getJSONObject("subsonic-response").getJSONObject("album").get("reader").toString();
+                returnData[0] = json.getJSONObject(respRoot).getJSONObject("album").get("description").toString();
+                returnData[1] = json.getJSONObject(respRoot).getJSONObject("album").get("reader").toString();
             }else {
-                returnData[0] = json.getJSONObject("subsonic-response").getJSONObject("directory").get("description").toString();
-                returnData[1] = json.getJSONObject("subsonic-response").getJSONObject("directory").get("reader").toString();
+                returnData[0] = json.getJSONObject(respRoot).getJSONObject("directory").get("description").toString();
+                returnData[1] = json.getJSONObject(respRoot).getJSONObject("directory").get("reader").toString();
             }
         } catch (Exception e) {
             this.exception = e;
