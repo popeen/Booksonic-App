@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="1.0.11" versioncode="13" releasedate="2017-01-23">
+    <release version="1.0.11" versioncode="14" releasedate="2017-01-24">
         <change>Bugfixes</change>
         <change>Added login screen for easy setup (Thanks hjone72!)</change>
         <change>Added support for emulated servers</change>
