@@ -1568,13 +1568,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
                         float playbackSpeed = 1.0f;
                         switch (id) {
                             case R.id.playback_speed_one_half:
-                                playbackSpeed = 1.5f;
+                                playbackSpeed = 1.2f;
                                 break;
                             case R.id.playback_speed_double:
-                                playbackSpeed = 2.0f;
+                                playbackSpeed = 1.5f;
                                 break;
                             case R.id.playback_speed_triple:
-                                playbackSpeed = 3.0f;
+                                playbackSpeed = 2.0f;
                                 break;
                             default:
                                 break;

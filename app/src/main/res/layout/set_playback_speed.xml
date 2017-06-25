@@ -25,23 +25,23 @@
 			android:id="@+id/playback_speed_one_half"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:tag="1.5"
-			android:text="1.5x"/>
+			android:tag="1.2"
+			android:text="1.2x"/>
 
 		<Button
 			android:id="@+id/playback_speed_double"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:tag="2.0"
-			android:text="2.0x"/>
+			android:tag="1.5"
+			android:text="1.5x"/>
 
 
 		<Button
 			android:id="@+id/playback_speed_triple"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="3.0x"
-			android:tag="3.0"/>
+			android:text="2.0x"
+			android:tag="2.0"/>
 	</LinearLayout>
 
 	<TextView
