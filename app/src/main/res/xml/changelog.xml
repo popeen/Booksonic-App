@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.12" versioncode="15" releasedate="2017-06-25">
+        <change>Bugfixes</change>
+        <change>Updated to use DSub f863540</change>
+    </release>
     <release version="1.0.11" versioncode="14" releasedate="2017-01-24">
         <change>Bugfixes</change>
         <change>Added login screen for easy setup (Thanks hjone72!)</change>
