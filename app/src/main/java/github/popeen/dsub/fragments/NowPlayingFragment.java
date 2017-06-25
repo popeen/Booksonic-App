@@ -1268,8 +1268,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				previousButton.setVisibility(View.VISIBLE);
 				nextButton.setVisibility(View.VISIBLE);
 
-				rewindButton.setVisibility(View.GONE);
-				fastforwardButton.setVisibility(View.GONE);
+				rewindButton.setVisibility(View.VISIBLE);
+				fastforwardButton.setVisibility(View.VISIBLE);
 			}
 		}
 	}
