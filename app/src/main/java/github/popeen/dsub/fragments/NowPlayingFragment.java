@@ -56,6 +56,11 @@ import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
+import com.shehabic.droppy.DroppyClickCallbackInterface;
+import com.shehabic.droppy.DroppyMenuPopup;
+import com.shehabic.droppy.animations.DroppyFadeInAnimation;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.activity.SubsonicFragmentActivity;
 import github.popeen.dsub.adapter.SectionAdapter;
@@ -78,7 +83,6 @@ import github.popeen.dsub.view.FadeOutAnimation;
 import github.popeen.dsub.view.FastScroller;
 import github.popeen.dsub.view.UpdateView;
 import github.popeen.dsub.util.Util;
-
 import static github.popeen.dsub.domain.MusicDirectory.Entry;
 import static github.popeen.dsub.domain.PlayerState.*;
 import github.popeen.dsub.util.*;
@@ -134,6 +138,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private int lastY = 0;
 	private int currentPlayingSize = 0;
 	private MenuItem timerMenu;
+    private DroppySpeedControl speed;
 
     private SQLiteHandler sqlh;
 
@@ -396,41 +401,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			playbackSpeedButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					PopupMenu popup = new PopupMenu(context, v);
-					popup.getMenuInflater().inflate(R.menu.playback_speed_options, popup.getMenu());
-
-					popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-						@Override
-						public boolean onMenuItemClick(MenuItem menuItem) {
-							float playbackSpeed = 1.0f;
-							switch (menuItem.getItemId()) {
-								case R.id.playback_speed_half:
-									playbackSpeed = 0.5f;
-									break;
-								case R.id.playback_speed_one_p_two:
-									playbackSpeed = 1.2f;
-									break;
-								case R.id.playback_speed_one_p_five:
-									playbackSpeed = 1.5f;
-									break;
-								case R.id.playback_speed_double:
-									playbackSpeed = 2.0f;
-									break;
-								case R.id.playback_speed_custom:
-									setPlaybackSpeed();
-									return true;
-							}
-
-							setPlaybackSpeed(playbackSpeed);
-							return true;
-						}
-					});
-					popup.show();
-				}
-			});
+		    setPlaybackSpeed();
 		} else {
 			playbackSpeedButton.setVisibility(View.GONE);
 		}
@@ -1214,10 +1185,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 							downloadService.previous();
 							break;
 						case ACTION_FORWARD:
-							downloadService.seekTo(downloadService.getPlayerPosition() + DownloadService.FAST_FORWARD);
+							downloadService.fastForward();
 							break;
 						case ACTION_REWIND:
-							downloadService.seekTo(downloadService.getPlayerPosition() - DownloadService.REWIND);
+							downloadService.rewind();
 							break;
 					}
 					return null;
@@ -1261,7 +1232,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex) {
+	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward) {
 		try {
 			String track[] = new String[3];
 			track[0] = this.currentPlaying.getSong().getId();
@@ -1273,14 +1244,21 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 		this.currentPlaying = currentPlaying;
 		setupSubtitle(currentPlayingIndex);
-/*
-		if(getDownloadService().isCurrentPlayingSingle()) {
+
+		updateMediaButton(shouldFastForward);
+		updateTitle();
+		setPlaybackSpeed();
+	}
+
+	private void updateMediaButton(boolean shouldFastForward) {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService.isCurrentPlayingSingle()) {
 			previousButton.setVisibility(View.GONE);
 			nextButton.setVisibility(View.GONE);
 			rewindButton.setVisibility(View.GONE);
 			fastforwardButton.setVisibility(View.GONE);
 		} else {
-			if (currentPlaying != null && !currentPlaying.isSong()) {
+			if (downloadService.shouldFastForward()) {
 				previousButton.setVisibility(View.GONE);
 				nextButton.setVisibility(View.GONE);
 
@@ -1293,8 +1271,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				rewindButton.setVisibility(View.GONE);
 				fastforwardButton.setVisibility(View.GONE);
 			}
-		}*/
-		updateTitle();
+		}
 	}
 
 	private void setupSubtitle(int currentPlayingIndex) {
@@ -1321,7 +1298,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex) {
+	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward) {
 		currentPlayingSize = songs.size();
 
 		DownloadService downloadService = getDownloadService();
@@ -1350,9 +1327,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		if(this.currentPlaying != currentPlaying) {
-			onSongChanged(currentPlaying, currentPlayingIndex);
+			onSongChanged(currentPlaying, currentPlayingIndex, shouldFastForward);
 			onMetadataUpdate(currentPlaying != null ? currentPlaying.getSong() : null, DownloadService.METADATA_UPDATED_ALL);
 		} else {
+			updateMediaButton(shouldFastForward);
 			setupSubtitle(currentPlayingIndex);
 		}
 
@@ -1363,6 +1341,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			toggleListButton.setVisibility(View.GONE);
 			repeatButton.setVisibility(View.GONE);
 		}
+        setPlaybackSpeed();
 	}
 
 	@Override
@@ -1564,55 +1543,52 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	private void setPlaybackSpeed() {
-		View dialogView = context.getLayoutInflater().inflate(R.layout.set_playback_speed, null);
+        if (playbackSpeedButton.getVisibility() == View.GONE)
+            return;
+        speed = new DroppySpeedControl(R.layout.set_playback_speed);
+        DroppyMenuPopup.Builder builder = new DroppyMenuPopup.Builder(context,playbackSpeedButton);
+        speed.setClickable(true);
+        float playbackSpeed;
 
-		// Setup playbackSpeed label
-		final TextView playbackSpeedBox = (TextView) dialogView.findViewById(R.id.playback_speed_label);
-		final SharedPreferences prefs = Util.getPreferences(context);
-		String playbackSpeedString = prefs.getString(Constants.PREFERENCES_KEY_CUSTOM_PLAYBACK_SPEED, "17");
-		int playbackSpeed = Integer.parseInt(playbackSpeedString);
-		playbackSpeedBox.setText(new Float(playbackSpeed / 10.0).toString());
+        playbackSpeed = getDownloadService() != null ? getDownloadService().getPlaybackSpeed() : 1.0f;
 
-		// Setup playbackSpeed slider
-		final SeekBar playbackSpeedBar = (SeekBar) dialogView.findViewById(R.id.playback_speed_bar);
-		playbackSpeedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				if (fromUser) {
-					playbackSpeedBox.setText(new Float((progress + 5) / 10.0).toString());
-					seekBar.setProgress(progress);
-				}
-			}
+        final DroppyMenuPopup popup = builder.triggerOnAnchorClick(true).addMenuItem(speed).setPopupAnimation(new DroppyFadeInAnimation()).build();
+        speed.setOnSeekBarChangeListener(context, new DroppyClickCallbackInterface() {
+            @Override
+            public void call(View v, int id) {
+                SeekBar playbackSpeedBar = (SeekBar) v;
+                int playbackSpeed = playbackSpeedBar.getProgress() +5 ;
+                setPlaybackSpeed(playbackSpeed/10f);
+            }
+        },R.id.playback_speed_bar,R.id.playback_speed_label,playbackSpeed);
+        speed.setOnClicks(context,
+                new DroppyClickCallbackInterface() {
+                    @Override
+                    public void call(View v, int id) {
+                        float playbackSpeed = 1.0f;
+                        switch (id) {
+                            case R.id.playback_speed_one_half:
+                                playbackSpeed = 1.5f;
+                                break;
+                            case R.id.playback_speed_double:
+                                playbackSpeed = 2.0f;
+                                break;
+                            case R.id.playback_speed_triple:
+                                playbackSpeed = 3.0f;
+                                break;
+                            default:
+                                break;
+                        }
+                        setPlaybackSpeed(playbackSpeed);
+                        speed.updateSeekBar(playbackSpeed);
+                        popup.dismiss(true);
+                    }
+                }
+                ,R.id.playback_speed_normal,R.id.playback_speed_one_half,R.id.playback_speed_double,
+                R.id.playback_speed_triple);
+        speed.updateSeekBar(playbackSpeed);
 
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-		});
-		playbackSpeedBar.setProgress(playbackSpeed - 5);
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(R.string.download_playback_speed_custom)
-				.setView(dialogView)
-				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						int playbackSpeed = playbackSpeedBar.getProgress() + 5;
-
-						SharedPreferences.Editor editor = prefs.edit();
-						editor.putString(Constants.PREFERENCES_KEY_CUSTOM_PLAYBACK_SPEED, Integer.toString(playbackSpeed));
-						editor.commit();
-
-						setPlaybackSpeed(new Float(playbackSpeed / 10.0));
-					}
-				})
-				.setNegativeButton(R.string.common_cancel, null);
-		AlertDialog dialog = builder.create();
-		dialog.show();
-	}
+    }
 	private void setPlaybackSpeed(float playbackSpeed) {
 		DownloadService downloadService = getDownloadService();
 		if (downloadService == null) {

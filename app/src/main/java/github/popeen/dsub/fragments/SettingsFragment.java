@@ -49,6 +49,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import github.popeen.dsub.activity.SubsonicActivity;
+import github.popeen.dsub.util.MediaRouteManager;
 import github.popeen.dsub.view.CacheLocationPreference;
 import github.popeen.dsub.R;
 import github.popeen.dsub.service.DownloadService;
@@ -195,6 +196,18 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			if("day/night".equals(value) || "day/black".equals(value)) {
 				if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 					ActivityCompat.requestPermissions(context, new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION }, SubsonicActivity.PERMISSIONS_REQUEST_LOCATION);
+				}
+			}
+		} else if(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED.equals(key)) {
+			DownloadService downloadService = DownloadService.getInstance();
+			if(downloadService != null) {
+				MediaRouteManager mediaRouter = downloadService.getMediaRouter();
+
+				Boolean enabled = sharedPreferences.getBoolean(key, true);
+				if (enabled) {
+					mediaRouter.addDLNAProvider();
+				} else {
+					mediaRouter.removeDLNAProvider();
 				}
 			}
 		}

@@ -51,12 +51,12 @@ import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.MediaRouteManager;
 import github.popeen.dsub.util.ShufflePlayBuffer;
 import github.popeen.dsub.util.SimpleServiceBinder;
+import github.popeen.dsub.util.UpdateHelper;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.util.compat.RemoteControlClientBase;
 import github.popeen.dsub.util.tags.BastpUtil;
 import github.popeen.dsub.view.UpdateView;
 import github.daneren2005.serverproxy.BufferProxy;
-import github.popeen.dsub.util.UpdateHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,16 +99,14 @@ import android.view.KeyEvent;
 public class DownloadService extends Service {
 	private static final String TAG = DownloadService.class.getSimpleName();
 
-	public static final String CMD_PLAY = "github.popeen.dsub.CMD_PLAY";
-	public static final String CMD_TOGGLEPAUSE = "github.popeen.dsub.CMD_TOGGLEPAUSE";
-	public static final String CMD_PAUSE = "github.popeen.dsub.CMD_PAUSE";
-	public static final String CMD_STOP = "github.popeen.dsub.CMD_STOP";
-	public static final String CMD_PREVIOUS = "github.popeen.dsub.CMD_PREVIOUS";
-	public static final String CMD_NEXT = "github.popeen.dsub.CMD_NEXT";
-	public static final String CANCEL_DOWNLOADS = "github.popeen.dsub.CANCEL_DOWNLOADS";
-	public static final String START_PLAY = "github.popeen.dsub.START_PLAYING";
-	public static final int FAST_FORWARD = 30000;
-	public static final int REWIND = 10000;
+	public static final String CMD_PLAY = "github.daneren2005.dsub.CMD_PLAY";
+	public static final String CMD_TOGGLEPAUSE = "github.daneren2005.dsub.CMD_TOGGLEPAUSE";
+	public static final String CMD_PAUSE = "github.daneren2005.dsub.CMD_PAUSE";
+	public static final String CMD_STOP = "github.daneren2005.dsub.CMD_STOP";
+	public static final String CMD_PREVIOUS = "github.daneren2005.dsub.CMD_PREVIOUS";
+	public static final String CMD_NEXT = "github.daneren2005.dsub.CMD_NEXT";
+	public static final String CANCEL_DOWNLOADS = "github.daneren2005.dsub.CANCEL_DOWNLOADS";
+	public static final String START_PLAY = "github.daneren2005.dsub.START_PLAYING";
 	private static final long DEFAULT_DELAY_UPDATE_PROGRESS = 1000L;
 	private static final double DELETE_CUTOFF = 0.84;
 	private static final int REQUIRED_ALBUM_MATCHES = 4;
@@ -180,7 +178,7 @@ public class DownloadService extends Service {
 	private boolean runListenersOnInit = false;
 
 	private MediaRouteManager mediaRouter;
-	
+
 	// Variables to manage getCurrentPosition sometimes starting from an arbitrary non-zero number
 	private long subtractNextPosition = 0;
 	private int subtractPosition = 0;
@@ -383,7 +381,7 @@ public class DownloadService extends Service {
 	public IBinder onBind(Intent intent) {
 		return binder;
 	}
-	
+
 	public void post(Runnable r) {
 		handler.post(r);
 	}
@@ -564,7 +562,7 @@ public class DownloadService extends Service {
 				this.toDelete.add(forSong(entry));
 			}
 		}
-		
+
 		suggestedPlaylistName = prefs.getString(Constants.PREFERENCES_KEY_PLAYLIST_NAME, null);
 		suggestedPlaylistId = prefs.getString(Constants.PREFERENCES_KEY_PLAYLIST_ID, null);
 	}
@@ -708,7 +706,7 @@ public class DownloadService extends Service {
 			DownloadFile downloadFile = iterator.next();
 			if (!downloadFile.isCompleteFileAvailable()) {
 				iterator.remove();
-				
+
 				// Reset if the current playing song has been removed
 				if(currentPlaying == downloadFile) {
 					reset();
@@ -771,7 +769,7 @@ public class DownloadService extends Service {
 			podcast.delete();
 		}
 		toDelete.clear();
-		
+
 		// Clear bookmarks from current playing if past a certain point
 		if(cutoff) {
 			clearCurrentBookmark(true);
@@ -873,7 +871,7 @@ public class DownloadService extends Service {
 			this.currentPlaying.setPlaying(false);
 		}
 		if(delayUpdateProgress != DEFAULT_DELAY_UPDATE_PROGRESS && !isNextPlayingSameAlbum(currentPlaying, this.currentPlaying)) {
-			resetPlaybackSpeed();
+//			resetPlaybackSpeed();
 		}
 		this.currentPlaying = currentPlaying;
 		if(currentPlaying == null) {
@@ -1027,6 +1025,10 @@ public class DownloadService extends Service {
 		}
 	}
 
+	public synchronized boolean shouldFastForward() {
+		return size() == 1 || (currentPlaying != null && !currentPlaying.isSong());
+	}
+
 	public synchronized List<DownloadFile> getDownloads() {
 		List<DownloadFile> temp = new ArrayList<DownloadFile>();
 		temp.addAll(downloadList);
@@ -1102,7 +1104,7 @@ public class DownloadService extends Service {
 	}
 	private synchronized void playNext(boolean start) {
 		Util.broadcastPlaybackStatusChange(this, currentPlaying.getSong(), PlayerState.PREPARED);
-		
+
 		// Swap the media players since nextMediaPlayer is ready to play
 		subtractPosition = 0;
 		if(start) {
@@ -1112,7 +1114,7 @@ public class DownloadService extends Service {
 			nextMediaPlayer.start();
 		} else {
 			Log.i(TAG, "nextMediaPlayer already playing");
-			
+
 			// Next time the cachedPosition is updated, use that as position 0
 			subtractNextPosition = System.currentTimeMillis();
 		}
@@ -1174,10 +1176,10 @@ public class DownloadService extends Service {
 		}
 	}
 	public synchronized int rewind() {
-		return seekToWrapper(-REWIND);
+		return seekToWrapper(Integer.parseInt(Util.getPreferences(this).getString(Constants.PREFERENCES_KEY_REWIND_INTERVAL, "10"))*-1000);
 	}
 	public synchronized int fastForward() {
-		return seekToWrapper(FAST_FORWARD);
+		return seekToWrapper(Integer.parseInt(Util.getPreferences(this).getString(Constants.PREFERENCES_KEY_FASTFORWARD_INTERVAL, "30"))*1000);
 	}
 	protected int seekToWrapper(int difference) {
 		int msPlayed = Math.max(0, getPlayerPosition());
@@ -1202,11 +1204,12 @@ public class DownloadService extends Service {
 		}
 
 		// If only one song, just skip within song
-		if(size() == 1 || (currentPlaying != null && !currentPlaying.isSong())) {
+		if(shouldFastForward()) {
 			rewind();
 			return;
+		} else if(playerState == PREPARING || playerState == PREPARED) {
+			return;
 		}
-
 
 		// Restart song if played more than five seconds.
 		if (getPlayerPosition() > 5000 || (index == 0 && getRepeatMode() != RepeatMode.ALL)) {
@@ -1228,7 +1231,7 @@ public class DownloadService extends Service {
 	}
 	public synchronized void next(boolean forceCutoff, boolean forceStart) {
 		// If only one song, just skip within song
-		if(size() == 1 || (currentPlaying != null && !currentPlaying.isSong())) {
+		if(shouldFastForward()) {
 			fastForward();
 			return;
 		} else if(playerState == PREPARING || playerState == PREPARED) {
@@ -1665,6 +1668,9 @@ public class DownloadService extends Service {
 		return controller;
 	}
 
+	public MediaRouteManager getMediaRouter() {
+		return mediaRouter;
+	}
 	public MediaRouteSelector getRemoteSelector() {
 		return mediaRouter.getSelector();
 	}
@@ -2421,7 +2427,7 @@ public class DownloadService extends Service {
 	public RemoteControlClientBase getRemoteControlClient() {
 		return mRemoteControl;
 	}
-	
+
 	private boolean isPastCutoff() {
 		return isPastCutoff(getPlayerPosition(), getPlayerDuration());
 	}
@@ -2436,7 +2442,7 @@ public class DownloadService extends Service {
 		// Make cutoff a maximum of 10 minutes
 		int cutoffPoint = Math.max((int) (duration * DELETE_CUTOFF), duration - 10 * 60 * 1000);
 		boolean isPastCutoff = duration > 0 && position > cutoffPoint;
-		
+
 		// Check to make sure song isn't within 10 seconds of where it was created
 		MusicDirectory.Entry entry = currentPlaying.getSong();
 		if(entry != null && entry.getBookmark() != null) {
@@ -2445,7 +2451,7 @@ public class DownloadService extends Service {
 				isPastCutoff = false;
 			}
 		}
-		
+
 		// Check to make sure we aren't in a series of similar content before deleting bookmark
 		if(isPastCutoff && allowSkipping) {
 			// Check to make sure:
@@ -2457,10 +2463,10 @@ public class DownloadService extends Service {
 				isPastCutoff = false;
 			}
 		}
-		
+
 		return isPastCutoff;
 	}
-	
+
 	private void clearCurrentBookmark() {
 		clearCurrentBookmark(false);
 	}
@@ -2477,12 +2483,12 @@ public class DownloadService extends Service {
 		if(entry.getBookmark() == null) {
 			return;
 		}
-		
+
 		// If delete is not specified, check position
 		if(!checkDelete) {
 			checkDelete = isPastCutoff();
 		}
-		
+
 		// If supposed to delete
 		if(checkDelete) {
 			new SilentBackgroundTask<Void>(this) {
@@ -2502,14 +2508,14 @@ public class DownloadService extends Service {
 				@Override
 				public void error(Throwable error) {
 					Log.e(TAG, "Failed to delete bookmark", error);
-					
+
 					String msg;
 					if(error instanceof OfflineException || error instanceof ServerTooOldException) {
 						msg = getErrorMessage(error);
 					} else {
 						msg = DownloadService.this.getResources().getString(R.string.bookmark_deleted_error, entry.getTitle()) + " " + getErrorMessage(error);
 					}
-					
+
 					Util.toast(DownloadService.this, msg, false);
 				}
 			}.execute();
@@ -2524,10 +2530,10 @@ public class DownloadService extends Service {
 		if(currentPlaying == null || !ServerInfo.canBookmark(this)) {
 			return;
 		}
-		
+
 		final MusicDirectory.Entry entry = currentPlaying.getSong();
 		int duration = getPlayerDuration();
-		
+
 		// If song is podcast or long go ahead and auto add a bookmark
 		if(entry.isPodcast() || entry.isAudioBook() || duration > (10L * 60L * 1000L)) {
 			final Context context = this;
@@ -2552,21 +2558,21 @@ public class DownloadService extends Service {
 					if(updateMetadata) {
 						onMetadataUpdate(METADATA_UPDATED_BOOKMARK);
 					}
-					
+
 					return null;
 				}
-				
+
 				@Override
 				public void error(Throwable error) {
 					Log.w(TAG, "Failed to create automatic bookmark", error);
-					
+
 					String msg;
 					if(error instanceof OfflineException || error instanceof ServerTooOldException) {
 						msg = getErrorMessage(error);
 					} else {
 						msg = context.getResources().getString(R.string.download_save_bookmark_failed) + getErrorMessage(error);
 					}
-					
+
 					Util.toast(context, msg, false);
 				}
 			}.execute();
@@ -2584,35 +2590,35 @@ public class DownloadService extends Service {
 			if (prefs.getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, false)) {
 				float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
 				boolean singleAlbum = false;
-				
+
 				String replayGainType = prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE, "1");
 				// 1 => Smart replay gain
 				if("1".equals(replayGainType)) {
 					// Check if part of at least <REQUIRED_ALBUM_MATCHES> consequetive songs of the same album
-					
+
 					int index = downloadList.indexOf(downloadFile);
 					if(index != -1) {
 						String albumName = downloadFile.getSong().getAlbum();
 						int matched = 0;
-						
+
 						// Check forwards
 						for(int i = index + 1; i < downloadList.size() && matched < REQUIRED_ALBUM_MATCHES; i++) {
-							if(albumName.equals(downloadList.get(i).getSong().getAlbum())) {
+							if(Util.equals(albumName, downloadList.get(i).getSong().getAlbum())) {
 								matched++;
 							} else {
 								break;
 							}
 						}
-						
+
 						// Check backwards
 						for(int i = index - 1; i >= 0 && matched < REQUIRED_ALBUM_MATCHES; i--) {
-							if(albumName.equals(downloadList.get(i).getSong().getAlbum())) {
+							if(Util.equals(albumName, downloadList.get(i).getSong().getAlbum())) {
 								matched++;
 							} else {
 								break;
 							}
 						}
-						
+
 						if(matched >= REQUIRED_ALBUM_MATCHES) {
 							singleAlbum = true;
 						}
@@ -2624,8 +2630,8 @@ public class DownloadService extends Service {
 				}
 				// 3 => Use track tags
 				// Already false, no need to do anything here
-				
-				
+
+
 				// If playing a single album or no track gain, use album gain
 				if((singleAlbum || rg[0] == 0) && rg[1] != 0) {
 					adjust = rg[1];
@@ -2633,7 +2639,7 @@ public class DownloadService extends Service {
 					// Otherwise, give priority to track gain
 					adjust = rg[0];
 				}
-			
+
 				if (adjust == 0) {
 					/* No RG value found: decrease volume for untagged song if requested by user */
 					int untagged = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED, "0"));
@@ -2643,7 +2649,7 @@ public class DownloadService extends Service {
 					adjust += (bump - 150) / 10f;
 				}
 			}
-			
+
 			float rg_result = ((float) Math.pow(10, (adjust / 20))) * volume;
 			if (rg_result > 1.0f) {
 				rg_result = 1.0f; /* android would IGNORE the change if this is > 1 and we would end up with the wrong volume */
@@ -2657,18 +2663,30 @@ public class DownloadService extends Service {
 	}
 
 	public void setPlaybackSpeed(float playbackSpeed) {
-		Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
+		if(currentPlaying.isSong())
+			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED, playbackSpeed).commit();
+		else
+			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
 		if(mediaPlayer != null && (playerState == PREPARED || playerState == STARTED || playerState == PAUSED || playerState == PAUSED_TEMP)) {
 			applyPlaybackParamsMain();
 		}
+
 		delayUpdateProgress = Math.round(DEFAULT_DELAY_UPDATE_PROGRESS / playbackSpeed);
 	}
 	private void resetPlaybackSpeed() {
 		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_PLAYBACK_SPEED).commit();
+		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED).commit();
 	}
 
 	public float getPlaybackSpeed() {
-		return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, 1.0f);
+		if (currentPlaying == null)
+			return  1.0f;
+		else {
+			if (currentPlaying.isSong())
+				return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED, 1.0f);
+			else
+				return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, 1.0f);
+		}
 	}
 
 	private synchronized void applyPlaybackParamsMain() {
@@ -2710,7 +2728,7 @@ public class DownloadService extends Service {
 		UpdateHelper.toggleStarred(this, currentPlaying.getSong(), new UpdateHelper.OnStarChange() {
 			@Override
 			public void starChange(boolean starred) {
-				if (currentPlaying == DownloadService.this.currentPlaying) {
+				if(currentPlaying == DownloadService.this.currentPlaying) {
 					onMetadataUpdate(METADATA_UPDATED_STAR);
 				}
 			}
@@ -2804,12 +2822,13 @@ public class DownloadService extends Service {
 	private void onSongChanged() {
 		final long atRevision = revision;
 		synchronized(onSongChangedListeners) {
+			final boolean shouldFastForward = shouldFastForward();
 			for (final OnSongChangedListener listener : onSongChangedListeners) {
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
 						if (revision == atRevision && instance != null) {
-							listener.onSongChanged(currentPlaying, currentPlayingIndex);
+							listener.onSongChanged(currentPlaying, currentPlayingIndex, shouldFastForward);
 
 							MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
 							listener.onMetadataUpdate(entry, METADATA_UPDATED_ALL);
@@ -2831,12 +2850,13 @@ public class DownloadService extends Service {
 	private void onSongsChanged() {
 		final long atRevision = revision;
 		synchronized(onSongChangedListeners) {
+			final boolean shouldFastForward = shouldFastForward();
 			for (final OnSongChangedListener listener : onSongChangedListeners) {
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
 						if (revision == atRevision && instance != null) {
-							listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex);
+							listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex, shouldFastForward);
 						}
 					}
 				});
@@ -3036,8 +3056,8 @@ public class DownloadService extends Service {
 	}
 
 	public interface OnSongChangedListener {
-		void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex);
-		void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex);
+		void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward);
+		void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward);
 		void onSongProgress(DownloadFile currentPlaying, int millisPlayed, Integer duration, boolean isSeekable);
 		void onStateUpdate(DownloadFile downloadFile, PlayerState playerState);
 		void onMetadataUpdate(MusicDirectory.Entry entry, int fieldChange);

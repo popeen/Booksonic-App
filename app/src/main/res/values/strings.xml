@@ -45,7 +45,6 @@
 
     <string name="main.welcome_title">Welcome!</string>
     <string name="main.welcome_text">Welcome to Booksonic! The app is currently configured to use the Subsonic demo server.</string>
-
 	<string name="main.about_title">About Booksonic</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
@@ -319,7 +318,6 @@
 
 	<string name="settings.track_summary">Display Track # in front of tracks if one exists</string>
 	<string name="settings.custom_sort">Sort By Year</string>
-
 	<string name="settings.custom_sort_summary">Sort books by year, or by alphabetical</string>
 	<string name="settings.open_to_tab">Open To Tab</string>
 	<string name="settings.open_to_tab_summary">Open directly to this tab</string>
@@ -327,6 +325,7 @@
     <string name="settings.max_bitrate_wifi">Max bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max bitrate - Mobile</string>
     <string name="settings.max_bitrate_32">32 Kbps</string>
+	<string name="settings.max_bitrate_48">48 Kbps</string>
     <string name="settings.max_bitrate_64">64 Kbps</string>
     <string name="settings.max_bitrate_80">80 Kbps</string>
     <string name="settings.max_bitrate_96">96 Kbps</string>
@@ -357,7 +356,6 @@
 	<string name="settings.network_timeout_30000">30 seconds</string>
 	<string name="settings.network_timeout_45000">45 seconds</string>
 	<string name="settings.network_timeout_60000">60 seconds</string>
-
     <string name="settings.preload_0">0 tracks</string>
     <string name="settings.preload_1">1 track</string>
     <string name="settings.preload_2">2 tracks</string>
@@ -438,10 +436,8 @@
 	<string name="settings.sync_wifi">Sync on Wifi only</string>
 	<string name="settings.sync_wifi_summary">Only sync while on wifi</string>
 	<string name="settings.sync_most_recent">Sync Recently Added</string>
-
 	<string name="settings.sync_most_recent_summary">Automatically cache newly added books</string>
 	<string name="settings.sync_starred">Sync Starred</string>
-
 	<string name="settings.sync_starred_summary">Automatically cache tracks, books, and authors which are starred</string>
 	<string name="settings.sync_notification">Show Sync Notification</string>
 	<string name="settings.sync_notification_summary">Show a notification after new media has been synced</string>
@@ -489,7 +485,6 @@
 	<string name="settings.start_on_headphones_summary">Start when headphones are plugged in.  This requires the use of a service which starts on boot up to check for the headphone plug event even when Booksonic is not running.</string>
 	<string name="settings.color_action_bar">Color Action Bar</string>
 	<string name="settings.color_action_bar.summary">Color the action bar and status bar or leave them alone</string>
-
 	<string name="settings.shuffle_by_album">Shuffle By Book</string>
 	<string name="settings.shuffle_by_album.true">Shuffle order of books</string>
 	<string name="settings.shuffle_by_album.false">Shuffle all tracks together</string>
@@ -499,6 +494,8 @@
 	<string name="settings.heads_up_notification_summary">Show playing notifications as Heads Up notifications (Android Lollipop+ only)</string>
 	<string name="settings.casting_cache">Cache While Casting</string>
 	<string name="settings.casting_cache_summary">Cache currently playing songs while casting</string>
+	<string name="settings.casting.dlna_casting_enabled">DLNA Enabled</string>
+	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems on Android 7.0 try turning this off</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>
@@ -571,7 +568,6 @@
     <string name="parser.upgrade_client">Incompatible versions. Please upgrade Booksonic.</string>
     <string name="parser.upgrade_server">Incompatible versions. Please upgrade server.</string>
     <string name="parser.not_authenticated">Wrong username or password.</string>
-
     <string name="parser.not_authorized">Not authorized. Check user permissions in the server.</string>
     <string name="parser.artist_count">Got %d authors.</string>
 	<string name="parser.server_error">Server error: %s</string>
@@ -588,7 +584,6 @@
 	<string name="equalizer.voice_booster">Voice Booster</string>
 	<string name="equalizer.db_size">%d dB</string>
 	<string name="equalizer.bass_size">%d mille</string>
-
 
 	<string name="widget.4x1">Booksonic (4x1)</string>
 	<string name="widget.4x2">Booksonic (4x2)</string>
@@ -615,8 +610,6 @@
 
 	<string name="tasker.start_playing">Start playing</string>
 	<string name="tasker.start_playing_shuffled">Start playing in Shuffle Mode</string>
-
-
 	<string name="tasker.start_playing_title">Tasker -> Start Booksonic</string>
 	<string name="tasker.edit_shuffle_mode">Start in shuffle mode: </string>
 	<string name="tasker.edit_shuffle_start_year">Shuffle start year:</string>
@@ -625,17 +618,14 @@
 	<string name="tasker.edit_server_offline">Toggle offline: </string>
 	<string name="tasker.edit_do_nothing">Do Nothing</string>
 
-
 	<string name="details.title.song">Track Details</string>
 	<string name="details.title.album">Book Details</string>
 	<string name="details.title.podcast">Podcast Details</string>
 	<string name="details.title.playlist">Playlist Details</string>
-
 	<string name="details.title.artist">Author Details</string>
 	<string name="details.title.internet_radio_station">Internet Radio Details</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Status</string>
-
 	<string name="details.artist">Author</string>
 	<string name="details.album">Book</string>
 	<string name="details.track">Track</string>
@@ -652,7 +642,6 @@
 	<string name="details.description">Description</string>
 	<string name="details.owner">Owner</string>
 	<string name="details.comments">Comments</string>
-
 	<string name="details.song_count">Track Count</string>
 	<string name="details.public">Public</string>
 	<string name="details.created">Created</string>
@@ -667,7 +656,6 @@
 	<string name="details.used_space">Used Space</string>
 	<string name="details.available_space">Available Space</string>
 	<string name="details.of">%1$s of %2$s</string>
-
 	<string name="details.song">Track</string>
 	<string name="details.position">Position</string>
 	<string name="details.updated">Updated</string>
@@ -681,18 +669,15 @@
 	<string name="permission.external_storage.failed">DSub cannot function without the ability to write to storage</string>
 
     <plurals name="select_album_n_songs">
-
         <item quantity="zero">No tracks</item>
         <item quantity="one">One track</item>
         <item quantity="other">%d track</item>
     </plurals>
     <plurals name="select_album_n_songs_downloading">
-
         <item quantity="one">One track scheduled for download.</item>
         <item quantity="other">%d track scheduled for download.</item>
     </plurals>
     <plurals name="select_album_n_songs_added">
-
         <item quantity="one">One track added to play queue.</item>
         <item quantity="other">%d tracks added to play queue.</item>
     </plurals>

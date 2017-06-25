@@ -15,7 +15,7 @@
 		compat:showAsAction="always|withText"
 		android:visible="false"/>
 
-	<group android:id="@+id/madsonic">
+	<group android:id="@+id/rescan_server">
 		<item
 			android:id="@+id/menu_rescan"
 			android:title="@string/menu.rescan"/>
