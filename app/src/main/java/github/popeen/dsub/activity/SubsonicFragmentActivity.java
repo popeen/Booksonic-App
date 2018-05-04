@@ -913,22 +913,26 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		final Dialog login = new Dialog(this);
 		login.setContentView(R.layout.dialog_signin);
 
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        ((EditText) login.findViewById(R.id.username)).setText(prefs.getString("username1", ""));
+        ((EditText) login.findViewById(R.id.password)).setText(prefs.getString("password1", ""));
+        ((EditText) login.findViewById(R.id.server)).setText(prefs.getString("serverUrl1", ""));
+
 		Button btnLogin = (Button) login.findViewById(R.id.btnLogin);
 		Button btnCancel = (Button) login.findViewById(R.id.btnCancel);
 
 		btnLogin.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//Test server connection.
-				EditText username = (EditText) login.findViewById(R.id.username);
-				EditText password = (EditText) login.findViewById(R.id.password);
-				EditText server = (EditText) login.findViewById(R.id.server);
 
-				String strUsername = username.getText().toString();
-				String strPassword = password.getText().toString();
-				String strServer = server.getText().toString();
+				String strUsername = ((EditText) login.findViewById(R.id.username)).getText().toString();
+				String strPassword = ((EditText) login.findViewById(R.id.password)).getText().toString();
+				String strServer = ((EditText) login.findViewById(R.id.server)).getText().toString();
 
 				if(strUsername.length() > 0 && strPassword.length() > 0 && strServer.length() > 0){
+				    if(!strServer.contains("http")){
+				        //TODO, add warning that the URL needs to contain https or http alt add them and check connectionstatus to find which to use
+                    }
 					Util.setRestCredentials(SubsonicFragmentActivity.this, null, strUsername, strPassword, strServer);
 					login.dismiss();
 					//recreate();
