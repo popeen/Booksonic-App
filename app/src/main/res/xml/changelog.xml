@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.14" versioncode="17" releasedate="2018-05-04">
+        <change>Tweaked login popup</change>
+        <change>Added support for android auto</change>
+    </release>
     <release version="1.0.13" versioncode="16" releasedate="2017-06-25">
         <change>Fixed rewind/fastforward missing</change>
         <change>Updated Chromecast app</change>
