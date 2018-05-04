@@ -931,7 +931,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 				if(strUsername.length() > 0 && strPassword.length() > 0 && strServer.length() > 0){
 				    if(!strServer.contains("http")){
-				        //TODO, add warning that the URL needs to contain https or http alt add them and check connectionstatus to find which to use
+				        //TODO, add warning that the URL needs to contain https or http alt add them and check connection status to find which to use
                     }
 					Util.setRestCredentials(SubsonicFragmentActivity.this, null, strUsername, strPassword, strServer);
 					login.dismiss();
