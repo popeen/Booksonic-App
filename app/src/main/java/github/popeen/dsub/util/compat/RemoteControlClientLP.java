@@ -267,23 +267,12 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		Bundle showOnWearExtras = new Bundle();
 		showOnWearExtras.putBoolean(SHOW_ON_WEAR, true);
 
-		int rating = currentSong.getRating();
-		PlaybackState.CustomAction thumbsUp = new PlaybackState.CustomAction.Builder(CUSTOM_ACTION_THUMBS_UP,
-					downloadService.getString(R.string.download_thumbs_up),
-					rating == 5 ? R.drawable.ic_action_rating_good_selected : R.drawable.ic_action_rating_good)
-				.setExtras(showOnWearExtras).build();
-
-		PlaybackState.CustomAction thumbsDown = new PlaybackState.CustomAction.Builder(CUSTOM_ACTION_THUMBS_DOWN,
-					downloadService.getString(R.string.download_thumbs_down),
-					rating == 1 ? R.drawable.ic_action_rating_bad_selected : R.drawable.ic_action_rating_bad)
-				.setExtras(showOnWearExtras).build();
-
 		PlaybackState.CustomAction star = new PlaybackState.CustomAction.Builder(CUSTOM_ACTION_STAR,
 					downloadService.getString(R.string.common_star),
 					currentSong.isStarred() ? R.drawable.ic_toggle_star : R.drawable.ic_toggle_star_outline)
 				.setExtras(showOnWearExtras).build();
 
-		builder.addCustomAction(thumbsDown).addCustomAction(star).addCustomAction(thumbsUp);
+		builder.addCustomAction(star);
 	}
 
 	private void searchPlaylist(final String name) {

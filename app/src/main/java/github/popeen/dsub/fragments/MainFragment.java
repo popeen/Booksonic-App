@@ -120,7 +120,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		List<String> headers = new ArrayList<>();
 
 		List<Integer> albums = new ArrayList<>();
-		albums.add(R.string.main_albums_newest);
+        albums.add(R.string.main_albums_newest);
 		albums.add(R.string.main_albums_recent);
 		albums.add(R.string.main_author);
 		if(ServerInfo.checkServerVersion(context, "1.8")) {

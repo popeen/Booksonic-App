@@ -138,7 +138,8 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 				.setMediaId(BROWSER_PLAYLISTS);
 		mediaItems.add(new MediaBrowser.MediaItem(playlists.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
 
-		if(Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true)) {
+		//TODO, make this work, it currently crashes on auto
+		/*if(Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true)) {
 			MediaDescription.Builder podcasts = new MediaDescription.Builder();
 			podcasts.setTitle(downloadService.getString(R.string.button_bar_podcasts))
 					.setMediaId(BROWSER_PODCASTS);
@@ -150,7 +151,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 			podcasts.setTitle(downloadService.getString(R.string.button_bar_bookmarks))
 					.setMediaId(BROWSER_BOOKMARKS);
 			mediaItems.add(new MediaBrowser.MediaItem(podcasts.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
-		}
+		}*/
 
 		result.sendResult(mediaItems);
 	}
@@ -165,7 +166,6 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 		}
 		albums.add(R.string.main_albums_starred);
 		albums.add(R.string.main_albums_recent);
-		albums.add(R.string.main_albums_frequent);
 
 		List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
 
