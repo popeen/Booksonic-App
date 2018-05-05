@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="github.popeen.dsub"
           android:installLocation="internalOnly"
-          android:versionCode="17"
-          android:versionName="1.0.14">
+          android:versionCode="18"
+          android:versionName="1.0.15">
           
     <instrumentation android:name="android.test.InstrumentationTestRunner"
 		android:targetPackage="github.popeen.dsub"

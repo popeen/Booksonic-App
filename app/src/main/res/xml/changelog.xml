@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.15" versioncode="18" releasedate="2018-05-05">
+        <change>Added Genres and Recent lists to the main view</change>
+        <change>Bugfixes</change>
+    </release>
     <release version="1.0.14" versioncode="17" releasedate="2018-05-04">
         <change>Tweaked login popup</change>
         <change>Added support for android auto</change>
