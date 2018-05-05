@@ -121,6 +121,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 		List<Integer> albums = new ArrayList<>();
 		albums.add(R.string.main_albums_newest);
+		albums.add(R.string.main_albums_recent);
 		albums.add(R.string.main_author);
 		if(ServerInfo.checkServerVersion(context, "1.8")) {
 			albums.add(R.string.main_albums_alphabetical);
@@ -129,8 +130,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		albums.add(R.string.main_albums_genres);
 		albums.add(R.string.main_albums_year);
 		albums.add(R.string.main_albums_starred);
-		albums.add(R.string.main_albums_year);
-		albums.add(R.string.main_albums_recent);
 		albums.add(R.string.button_bar_podcasts);
 
 		sections.add(albums);
