@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.16" versioncode="20" releasedate="2018-05-05">
+        <change>Tweaked Android Auto and Wear</change>
+        <change>Bugfixes</change>
+    </release>
     <release version="1.0.15" versioncode="18" releasedate="2018-05-05">
         <change>Added Genres and Recent lists to the main view</change>
         <change>Bugfixes</change>
