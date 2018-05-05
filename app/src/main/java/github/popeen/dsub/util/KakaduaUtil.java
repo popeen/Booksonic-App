@@ -126,22 +126,23 @@ public class KakaduaUtil {
     public static String http_get_contents_all_cert(String url) { return http_get_contents_all_cert(url, "UTF-8"); }
     public static String http_get_contents_all_cert(String str, String encoding){
 
-        HttpParams params = new BasicHttpParams();
-        ConnManagerParams.setMaxTotalConnections(params, 20);
-        ConnManagerParams.setMaxConnectionsPerRoute(params, new ConnPerRouteBean(20));
-        HttpConnectionParams.setConnectionTimeout(params, 10000);
-        HttpConnectionParams.setSoTimeout(params, 10000);
-        HttpConnectionParams.setStaleCheckingEnabled(params, false);
-        SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        schemeRegistry.register(new Scheme("https", createSSLSocketFactory(), 443));
-        ThreadSafeClientConnManager connManager;
-        DefaultHttpClient client;
-        connManager = new ThreadSafeClientConnManager(params, schemeRegistry);
-        client = new DefaultHttpClient(connManager, params);
-        StringBuilder builder = new StringBuilder();
-        HttpGet httpGet = new HttpGet(str);
         try {
+            HttpParams params = new BasicHttpParams();
+            ConnManagerParams.setMaxTotalConnections(params, 20);
+            ConnManagerParams.setMaxConnectionsPerRoute(params, new ConnPerRouteBean(20));
+            HttpConnectionParams.setConnectionTimeout(params, 10000);
+            HttpConnectionParams.setSoTimeout(params, 10000);
+            HttpConnectionParams.setStaleCheckingEnabled(params, false);
+            SchemeRegistry schemeRegistry = new SchemeRegistry();
+            schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+            schemeRegistry.register(new Scheme("https", createSSLSocketFactory(), 443));
+            ThreadSafeClientConnManager connManager;
+            DefaultHttpClient client;
+            connManager = new ThreadSafeClientConnManager(params, schemeRegistry);
+            client = new DefaultHttpClient(connManager, params);
+            StringBuilder builder = new StringBuilder();
+            HttpGet httpGet = new HttpGet(str);
+
             HttpResponse response = client.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
             int statusCode = statusLine.getStatusCode();
@@ -154,10 +155,11 @@ public class KakaduaUtil {
                     builder.append(line);
                 }
             }
+            return builder.toString();
         } catch(Exception e) {
             e.printStackTrace();
+            return "";
         }
-        return builder.toString();
     }
 
     private static SocketFactory createSSLSocketFactory() {
