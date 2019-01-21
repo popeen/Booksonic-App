@@ -1,16 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 24
-	buildToolsVersion '25.0.0'
-    useLibrary  'org.apache.http.legacy'
-
+	compileSdkVersion 27
+	useLibrary 'org.apache.http.legacy'
 	defaultConfig {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 14
 		targetSdkVersion 23
-		versionCode 20
-		versionName '1.0.16'
+		versionCode 21
+		versionName '1.0.17'
 		setProperty("archivesBaseName", "Booksonic $versionName")
 		resConfigs "sv"
 	}
@@ -28,37 +26,47 @@ android {
 			zipAlignEnabled true
 		}
 	}
-
+	flavorDimensions "version"
+	productFlavors {
+		floss {
+			// FLOSS build (no proprietary libraries)
+			dimension "version"
+		}
+		google {
+			// FLOSS build + Google libraries
+			// Adds ChromeCast support
+			dimension "version"
+		}
+	}
 	packagingOptions {
 		exclude 'META-INF/beans.xml'
 	}
-
 	lintOptions {
 		checkReleaseBuilds false
 	}
-
 	signingConfigs {
 		debug {
 			storeFile file('../debug.keystore')
 		}
 	}
+	buildToolsVersion '28.0.3'
 }
 
 dependencies {
-	compile project(':Server Proxy')
-	compile fileTree(include: ['*.jar'], dir: 'libs')
-	compile 'com.android.support:support-v4:24.2.+'
-	compile 'com.android.support:appcompat-v7:24.2.+'
-	compile 'com.android.support:mediarouter-v7:24.2.+'
-	compile 'com.android.support:recyclerview-v7:24.2.+'
-	compile 'com.android.support:design:24.2.+'
-	compile 'com.google.android.gms:play-services-cast:8.1.0'
-	compile 'com.sothree.slidinguppanel:library:3.0.0'
-	compile 'de.hdodenhof:circleimageview:1.2.1'
-    compile 'com.shehabic.droppy:Droppy:0.5.1@aar'
-	compile group: 'org.fourthline.cling', name: 'cling-core', version:'2.1.1'
-	compile group: 'org.fourthline.cling', name: 'cling-support', version:'2.1.1'
-	compile group: 'org.eclipse.jetty', name: 'jetty-server', version:'8.1.16.v20140903'
-	compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version:'8.1.16.v20140903'
-	compile group: 'org.eclipse.jetty', name: 'jetty-client', version:'8.1.16.v20140903'
+	implementation project(path: ':ServerProxy')
+	implementation fileTree(include: ['*.jar'], dir: 'libs')
+	implementation 'com.android.support:support-v4:27.1.+'
+	implementation 'com.android.support:appcompat-v7:27.1.+'
+	implementation 'com.android.support:mediarouter-v7:27.1.+'
+	implementation 'com.android.support:recyclerview-v7:27.1.+'
+	implementation 'com.android.support:design:27.1.+'
+	implementation 'com.sothree.slidinguppanel:library:3.0.0'
+	implementation 'com.google.android.gms:play-services-cast:16.0.3'
+	implementation 'de.hdodenhof:circleimageview:1.2.1'
+	implementation 'com.shehabic.droppy:Droppy:0.5.1@aar'
+	implementation 'org.fourthline.cling:cling-core:2.1.1'
+	implementation 'org.fourthline.cling:cling-support:2.1.1'
+	implementation 'org.eclipse.jetty:jetty-server:8.1.16.v20140903'
+	implementation 'org.eclipse.jetty:jetty-servlet:8.1.16.v20140903'
+	implementation 'org.eclipse.jetty:jetty-client:8.1.16.v20140903'
 }
