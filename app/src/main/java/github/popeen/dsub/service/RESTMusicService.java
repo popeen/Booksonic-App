@@ -1502,17 +1502,14 @@ public class RESTMusicService implements MusicService {
 
 		// Synchronize on the username so that we don't download concurrently for
 		// the same user.
-		try {
-			synchronized (username) {
-				String url = Util.getRestUrl(context, "getAvatar");
-				List<String> parameterNames = Collections.singletonList("username");
-				List<Object> parameterValues = Arrays.<Object>asList(username);
+		synchronized (username) {
+			String url = Util.getRestUrl(context, "getAvatar");
+			List<String> parameterNames = Collections.singletonList("username");
+			List<Object> parameterValues = Arrays.<Object>asList(username);
 
-				return getBitmapFromUrl(context, url, parameterNames, parameterValues, size, FileUtil.getAvatarFile(context, username), false, progressListener, task);
-			}
-		}catch(Exception e){
-			return null;
+			return getBitmapFromUrl(context, url, parameterNames, parameterValues, size, FileUtil.getAvatarFile(context, username), false, progressListener, task);
 		}
+
 	}
 
 	@Override
