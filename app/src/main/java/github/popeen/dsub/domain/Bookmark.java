@@ -42,7 +42,13 @@ public class Bookmark implements Serializable {
 	}
 
 	public int getPosition() {
-		return position;
+	    //TODO, Try is a temporary fix for a crash I am unable to reproduce, once able to reproduce this needs to be fixed correctly
+		try{
+		    return position;
+		}catch(Exception e)
+		{
+			return 0;
+		}
 	}
 	
 	public void setPosition(int position) {
