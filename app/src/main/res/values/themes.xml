@@ -70,7 +70,7 @@
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/colorPrimary</item>
 		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_light</item>
-		<item name="drawerHeaderBackground">@drawable/drawer_header_light</item>
+		<item name="drawerHeaderBackground">@drawable/drawer_header</item>
 	</style>
 	<style name="Theme.DSub.Dark.Base" parent="@style/Theme.AppCompat">
 		<item name="offline_icon">@drawable/main_offline_dark</item>
@@ -141,59 +141,24 @@
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/colorPrimary</item>
 		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_dark</item>
-		<item name="drawerHeaderBackground">@drawable/drawer_header_dark</item>
+		<item name="drawerHeaderBackground">@drawable/drawer_header</item>
 	</style>
 	<style name="Theme.DSub.Light" parent="Theme.DSub.Light.Base">
 	</style>
 	<style name="Theme.DSub.Dark" parent="Theme.DSub.Dark.Base">
 	</style>
-	<style name="Theme.DSub.Classic.Base" parent="Theme.DSub.Light.Base">
-		<item name="colorPrimary">@color/lightPrimary_classic</item>
-		<item name="colorPrimaryDark">@color/lightPrimaryDark_classic</item>
-		<item name="colorAccent">@color/lightAccent_classic</item>
-		<item name="actionbarBackgroundColor">@color/lightPrimary_classic</item>
-		<item name="drawerHeaderBackground">@drawable/drawer_header_classic</item>
-	</style>
-	<style name="Theme.DSub.Classic" parent="Theme.DSub.Classic.Base">
-	</style>
-	<style name="Theme.DSub.Black.Base" parent="Theme.DSub.Dark.Base">
-		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_black</item>
-		<item name="android:windowBackground">@android:color/black</item>
-	</style>
-	<style name="Theme.DSub.Black" parent="Theme.DSub.Black.Base">
-	</style>
-	<style name="Theme.DSub.Holo.Base" parent="Theme.DSub.Dark.Base">
-		<item name="android:windowBackground">@drawable/background</item>
-		<item name="colorPrimary">@color/holoPrimary</item>
-		<item name="colorPrimaryDark">@color/holoPrimaryDark</item>
-		<item name="colorAccent">@color/holoAccent</item>
-		<item name="actionbarBackgroundColor">@color/holoPrimary</item>
-		<item name="drawerHeaderBackground">@drawable/drawer_header_holo</item>
-		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_black</item>
-	</style>
-	<style name="Theme.DSub.Holo" parent="Theme.DSub.Holo.Base">
-	</style>
+
 
 	<style name="Theme.DSub.Light.No_Actionbar" parent="Theme.DSub.Light">
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
 	</style>
-	<style name="Theme.DSub.Classic.No_Actionbar" parent="Theme.DSub.Classic">
-		<item name="windowActionBar">false</item>
-		<item name="windowNoTitle">true</item>
-	</style>
-	<style name="Theme.DSub.Black.No_Actionbar" parent="Theme.DSub.Black">
-		<item name="windowActionBar">false</item>
-		<item name="windowNoTitle">true</item>
-	</style>
+
 	<style name="Theme.DSub.Dark.No_Actionbar" parent="Theme.DSub.Dark">
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
 	</style>
-	<style name="Theme.DSub.Holo.No_Actionbar" parent="Theme.DSub.Holo">
-		<item name="windowActionBar">false</item>
-		<item name="windowNoTitle">true</item>
-	</style>
+
 
 	<style name="Theme.DSub.Light.No_Color.Base" parent="Theme.DSub.Light.No_Actionbar">
 		<item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.ActionBar</item>
@@ -224,54 +189,16 @@
 		<item name="actionModeStyle">@style/LightActionMode</item>
 		<item name="actionModeCloseButtonStyle">@style/DarkCloseButton</item>
 	</style>
-	<style name="Theme.DSub.Classic.No_Color.Base" parent="Theme.DSub.Classic.No_Actionbar">
-		<item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.ActionBar</item>
-		<item name="actionbarBackgroundColor">@android:color/transparent</item>
-		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
-		<item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
-		<item name="android:spinnerItemStyle">@style/LightSpinnerItem</item>
-		<item name="drawerTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
-		<item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
-		<item name="actionbar_backward">@drawable/media_backward_light</item>
-		<item name="actionbar_forward">@drawable/media_forward_light</item>
-		<item name="actionbar_pause">@drawable/media_pause_light</item>
-		<item name="actionbar_start">@drawable/media_start_light</item>
-		<item name="actionbar_stop">@drawable/media_stop_light</item>
-		<item name="add">@drawable/ic_action_add_light</item>
-		<item name="shuffle">@drawable/ic_menu_shuffle_light</item>
-		<item name="refresh">@drawable/ic_menu_refresh_light</item>
-		<item name="search">@drawable/ic_menu_search_light</item>
-		<item name="remove">@drawable/ic_menu_remove_light</item>
-		<item name="save">@drawable/ic_menu_save_light</item>
-		<item name="add_person">@drawable/ic_menu_add_person_light</item>
-		<item name="password">@drawable/ic_menu_password_light</item>
-		<item name="radio">@drawable/ic_menu_radio_light</item>
-		<item name="actionModeBackground">@color/background_material_light</item>
-		<item name="actionModeStyle">@style/LightActionMode</item>
-		<item name="actionModeCloseButtonStyle">@style/DarkCloseButton</item>
-	</style>
-	<style name="Theme.DSub.Black.No_Color.Base" parent="Theme.DSub.Black.No_Actionbar">
-		<item name="actionbarBackgroundColor">@android:color/transparent</item>
-		<item name="actionModeBackground">@android:color/black</item>
-	</style>
+
 	<style name="Theme.DSub.Dark.No_Color.Base" parent="Theme.DSub.Dark.No_Actionbar">
 		<item name="actionbarBackgroundColor">@android:color/transparent</item>
 		<item name="actionModeBackground">@color/background_material_dark</item>
 	</style>
-	<style name="Theme.DSub.Holo.No_Color.Base" parent="Theme.DSub.Holo.No_Actionbar">
-		<item name="actionbarBackgroundColor">@android:color/transparent</item>
-		<item name="actionModeBackground">@drawable/background</item>
-	</style>
 
 	<style name="Theme.DSub.Light.No_Color" parent="Theme.DSub.Light.No_Color.Base">
 	</style>
-	<style name="Theme.DSub.Classic.No_Color" parent="Theme.DSub.Classic.No_Color.Base">
-	</style>
-	<style name="Theme.DSub.Black.No_Color" parent="Theme.DSub.Black.No_Color.Base">
-	</style>
+
 	<style name="Theme.DSub.Dark.No_Color" parent="Theme.DSub.Dark.No_Color.Base">
-	</style>
-	<style name="Theme.DSub.Holo.No_Color" parent="Theme.DSub.Holo.No_Color.Base">
 	</style>
 
 	<style name="DSub.DrawerArrow" parent="Widget.AppCompat.DrawerArrowToggle">
