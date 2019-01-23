@@ -465,7 +465,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 						textTimer.setVisibility(View.GONE);
 					}
 				}else{
-					textTimer.setVisibility(View.GONE);
+					if(textTimer != null) {
+						textTimer.setVisibility(View.GONE);
+					}
 				}
 			}
 		});
