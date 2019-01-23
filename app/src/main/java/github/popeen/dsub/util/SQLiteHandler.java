@@ -54,7 +54,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(TRACK_HEARD, track[1]);
         values.put(TRACK_DATE, track[2]);
 
-        db.insert(TABLE_HEARD_TRACKS, null, values);
+        db.insertWithOnConflict(TABLE_HEARD_TRACKS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
     }
 
