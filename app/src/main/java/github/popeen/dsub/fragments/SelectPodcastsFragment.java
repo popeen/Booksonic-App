@@ -14,6 +14,9 @@
 */
 package github.popeen.dsub.fragments;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -59,6 +62,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();
@@ -317,7 +323,17 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 	private void addNewPodcast() {
 		View dialogView = context.getLayoutInflater().inflate(R.layout.create_podcast, null);
 		final TextView urlBox = (TextView) dialogView.findViewById(R.id.create_podcast_url);
-		
+
+		//If a string is in clipboard and it contains http or https, add it to the textbox
+		ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+		if (clipboard.hasPrimaryClip() && clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN)) {
+
+			String url = clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+			if(url.contains("http")) {
+				urlBox.setText(url.trim());
+			}
+		}
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_add_podcast)
 			.setView(dialogView)
@@ -335,7 +351,10 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 				}
 			})
 			.setCancelable(true);
-		
+
+
+
+
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
@@ -366,7 +385,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 						Matcher matcher = pattern.matcher(raw);
 						if (matcher.find())	{
 							try {
-								url2 = "http://feeds.soundcloud.com/users/soundcloud:users:" + matcher.group(1) + "/sounds.rss";
+								url2 = "https://feeds.soundcloud.com/users/soundcloud:users:" + matcher.group(1) + "/sounds.rss";
 								Log.w("podcast", url2);
 							}catch(Exception e){
 								Log.w("podcast", e.toString());

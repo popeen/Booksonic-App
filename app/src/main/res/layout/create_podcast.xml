@@ -23,6 +23,6 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:layout_marginLeft="4dp"
-			android:text="http://"/>
+			android:text="https://"/>
 	</LinearLayout>
 </LinearLayout>
