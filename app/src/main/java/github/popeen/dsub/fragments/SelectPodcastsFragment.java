@@ -26,6 +26,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.MusicDirectory;
@@ -37,6 +41,7 @@ import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.service.OfflineException;
 import github.popeen.dsub.service.ServerTooOldException;
 import github.popeen.dsub.util.FileUtil;
+import github.popeen.dsub.util.KakaduaUtil;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.Constants;
@@ -52,6 +57,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();
@@ -317,7 +324,9 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
-					addNewPodcast(urlBox.getText().toString());
+					String url = urlBox.getText().toString();
+
+					addNewPodcast(url);
 				}
 			})
 			.setNegativeButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
@@ -335,8 +344,31 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 		new LoadingTask<Void>(context, false) {
 			@Override
 			protected Void doInBackground() throws Throwable {
+
+
+				String url2 = url;
+				//If the link is for a podcast on itunes, get the rss link
+				try  {
+					if(url.toLowerCase().contains("itunes.apple.com")){
+						Pattern pattern = Pattern.compile("/id([0-9]*)");
+						Matcher matcher = pattern.matcher(url);
+						if (matcher.find())	{
+							try {
+								String raw = KakaduaUtil.http_get_contents("https://itunes.apple.com/lookup?id=" + matcher.group(1) + "&entity=podcast");
+								url2 = new JSONObject(raw).getJSONArray("results").getJSONObject(0).getString("feedUrl");
+								Log.w("podcast", url);
+							}catch(Exception e){
+								Log.w("podcast", e.toString());
+							}
+						}
+					}
+				}catch(Exception e){
+					Log.w("podcast", e.toString());
+				}
+
+
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.createPodcastChannel(url, context, null);
+				musicService.createPodcastChannel(url2, context, null);
 				return null;
 			}
 
