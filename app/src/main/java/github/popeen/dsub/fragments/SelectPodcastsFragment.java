@@ -325,7 +325,6 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					String url = urlBox.getText().toString();
-
 					addNewPodcast(url);
 				}
 			})
@@ -356,7 +355,19 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 							try {
 								String raw = KakaduaUtil.http_get_contents("https://itunes.apple.com/lookup?id=" + matcher.group(1) + "&entity=podcast");
 								url2 = new JSONObject(raw).getJSONArray("results").getJSONObject(0).getString("feedUrl");
-								Log.w("podcast", url);
+								Log.w("podcast", url2);
+							}catch(Exception e){
+								Log.w("podcast", e.toString());
+							}
+						}
+					}else if(url.toLowerCase().contains("soundcloud.com")){
+						Pattern pattern = Pattern.compile("users:([0-9]*)");
+						String raw = KakaduaUtil.http_get_contents(url);
+						Matcher matcher = pattern.matcher(raw);
+						if (matcher.find())	{
+							try {
+								url2 = "http://feeds.soundcloud.com/users/soundcloud:users:" + matcher.group(1) + "/sounds.rss";
+								Log.w("podcast", url2);
 							}catch(Exception e){
 								Log.w("podcast", e.toString());
 							}
