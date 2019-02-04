@@ -66,7 +66,7 @@ public final class Notifications {
 		}
 		boolean remote = downloadService.isRemoteEnabled();
 		boolean isSingle = downloadService.isCurrentPlayingSingle();
-		boolean shouldFastForward = downloadService.shouldFastForward();
+		boolean shouldFastForward = true;
 		if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN){
 			RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
 			setupViews(expandedContentView ,context, song, true, playing, remote, isSingle, shouldFastForward);
