@@ -495,9 +495,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(downloadService != null && downloadService.getKeepScreenOn()) {
 			menu.findItem(R.id.menu_screen_on_off).setChecked(true);
 		}
-		if(downloadService != null && downloadService.isRemovePlayed()) {
-			menu.findItem(R.id.menu_remove_played).setChecked(true);
-		}
 
 		boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();
 		boolean isRemoteEnabled = downloadService != null && downloadService.isRemoteEnabled();
@@ -526,19 +523,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				mediaRouteButton.setDialogFactory(new CustomMediaRouteDialogFactory());
 				mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
 			}
-
-			if(downloadService.isCurrentPlayingSingle()) {
-				if(!Util.isOffline(context)) {
-					menu.removeItem(R.id.menu_save_playlist);
-				}
-
-				menu.removeItem(R.id.menu_batch_mode);
-				menu.removeItem(R.id.menu_remove_played);
-			}
-		}
-
-		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false)) {
-			menu.findItem(R.id.menu_batch_mode).setChecked(true);
 		}
 	}
 
@@ -674,29 +658,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 				context.supportInvalidateOptionsMenu();
 				return true;
-			case R.id.menu_remove_played:
-				if (getDownloadService().isRemovePlayed()) {
-					getDownloadService().setRemovePlayed(false);
-				} else {
-					getDownloadService().setRemovePlayed(true);
-				}
-				context.supportInvalidateOptionsMenu();
-				return true;
-			case R.id.menu_shuffle:
-				if(getDownloadService().getSleepTimer()) {
-					getDownloadService().stopSleepTimer();
-					context.supportInvalidateOptionsMenu();
-				} else {
-					startTimer();
-				}
-				return true;
-			case R.id.menu_save_playlist:
-				List<Entry> entries = new LinkedList<Entry>();
-				for (DownloadFile downloadFile : getDownloadService().getSongs()) {
-					entries.add(downloadFile.getSong());
-				}
-				createNewPlaylist(entries, true);
-				return true;
 			case R.id.menu_rate:
 				UpdateHelper.setRating(context, song.getSong());
 				return true;
@@ -732,17 +693,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				// Any failed condition will get here
 				Util.toast(context, "Failed to start equalizer.  Try restarting.");
 				return true;
-			}case R.id.menu_batch_mode:
-				if(Util.isBatchMode(context)) {
-					Util.setBatchMode(context, false);
-					songListAdapter.notifyDataSetChanged();
-				} else {
-					Util.setBatchMode(context, true);
-					songListAdapter.notifyDataSetChanged();
-				}
-				context.supportInvalidateOptionsMenu();
-
-				return true;
+			}
 			default:
 				return false;
 		}
