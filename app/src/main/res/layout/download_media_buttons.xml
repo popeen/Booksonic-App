@@ -34,6 +34,7 @@
             android:id="@+id/download_pause"
             android:src="?attr/media_button_pause"
             android:layout_centerInParent="true"
+			android:background="@drawable/circle"
 			android:visibility="invisible"
             />
 
@@ -41,6 +42,7 @@
             style="@style/PlaybackControl.Large"
             android:id="@+id/download_stop"
             android:src="?attr/media_button_stop"
+			android:background="@drawable/circle"
             android:layout_centerInParent="true"
 			android:visibility="invisible"
             />
@@ -49,6 +51,7 @@
             style="@style/PlaybackControl.Large"
             android:id="@+id/download_start"
             android:src="?attr/media_button_start"
+			android:background="@drawable/circle"
             android:layout_centerInParent="true"
             />
 
