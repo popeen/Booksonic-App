@@ -97,7 +97,7 @@
 	<string name="menu.log">Skicka Logg</string>
 	<string name="menu.set_timer">Starta timer</string>
 	<string name="menu.check_podcasts">Leta efter nya avsnitt</string>
-	<string name="menu.add_podcast">Lägg till podcast med RSS, iTunes eller SoundCloud</string>
+	<string name="menu.add_podcast">Lägg till podcast med RSS, iTunes, Acast eller SoundCloud</string>
 	<string name="menu.keep_synced">Håll synkroniserad</string>
 	<string name="menu.stop_sync">Sluta synkronisera</string>
 	<string name="menu.show_all">Visa all media</string>

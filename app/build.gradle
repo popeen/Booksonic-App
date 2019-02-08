@@ -7,7 +7,7 @@ android {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 14
 		targetSdkVersion 23
-		versionCode 21
+		versionCode 23
 		versionName '1.0.17'
 		setProperty("archivesBaseName", "Booksonic $versionName")
 		resConfigs "sv"
@@ -69,4 +69,5 @@ dependencies {
 	implementation 'org.eclipse.jetty:jetty-server:8.1.16.v20140903'
 	implementation 'org.eclipse.jetty:jetty-servlet:8.1.16.v20140903'
 	implementation 'org.eclipse.jetty:jetty-client:8.1.16.v20140903'
+	implementation 'org.jsoup:jsoup:1.10.1'
 }

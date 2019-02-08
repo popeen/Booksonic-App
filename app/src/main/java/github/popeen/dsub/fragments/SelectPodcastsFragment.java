@@ -32,6 +32,10 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.SectionAdapter;
@@ -379,6 +383,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 								Log.w("podcast", e.toString());
 							}
 						}
+
 					}else if(url.toLowerCase().contains("soundcloud.com")){
 						Pattern pattern = Pattern.compile("users:([0-9]*)");
 						String raw = KakaduaUtil.http_get_contents(url);
@@ -390,6 +395,20 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 							}catch(Exception e){
 								Log.w("podcast", e.toString());
 							}
+						}
+					}else if(url.toLowerCase().contains("acast.com")){
+
+						try {
+							Document doc = Jsoup.connect(url).get();
+							Elements links = doc.select("link");
+							for (Element link : links) {
+								if(link.attr("type").equals("application/rss+xml")){
+									url2 = link.attr("href");
+									Log.w("podcast", url2);
+								}
+							}
+						}catch(Exception e){
+							Log.w("podcast", e.toString());
 						}
 					}
 				}catch(Exception e){
