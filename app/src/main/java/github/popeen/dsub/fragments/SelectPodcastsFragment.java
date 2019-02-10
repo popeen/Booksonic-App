@@ -396,8 +396,13 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 								Log.w("podcast", e.toString());
 							}
 						}
-					}else if(url.toLowerCase().contains("acast.com")){
-
+					}else if(url.toLowerCase().contains("acast.com") || url.toLowerCase().contains("podbean.com")){
+						/*
+						TODO,
+						This uses a standard tag that most podcasting websites support.
+						Make it always try this if the url entered is not a valid feed or a website with a specific conversion above like for example iTunes.
+						If it fails it needs to prevent the app from adding it to the server and then show an error message
+						 */
 						try {
 							Document doc = Jsoup.connect(url).get();
 							Elements links = doc.select("link");
