@@ -99,7 +99,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				changeLog.getFullLogDialog().show();
 				return true;
 			case R.id.menu_faq:
-				showFAQDialog();
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://popeen.com/2019/02/08/booksonic-faq/")));
 				return true;
 			case R.id.menu_rescan:
 				rescanServer();
@@ -254,10 +254,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				Util.showDetailsDialog(context, R.string.main_about_title, headers, details);
 			}
 		}.execute();
-	}
-
-	private void showFAQDialog() {
-		Util.showHTMLDialog(context, R.string.main_faq_title, R.string.main_faq_text);
 	}
 
 	private void rescanServer() {
