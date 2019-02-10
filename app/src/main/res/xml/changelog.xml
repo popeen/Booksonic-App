@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.17" versioncode="24" releasedate="2019-02-10">
+        <change>iTunes, Acast, Podbean and Cloudflare podcasts now works without needing to find the RSS feed first.</change>
+        <change>Some smaller UI updates</change>
+        <change>Fixed several bugs that caused the app to crash in some instances</change>
+    </release>
     <release version="1.0.16" versioncode="20" releasedate="2018-05-05">
         <change>Tweaked Android Auto and Wear</change>
         <change>Bugfixes</change>
