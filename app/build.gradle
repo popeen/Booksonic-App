@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 27
-
+	compileSdkVersion 27	
+	useLibrary 'org.apache.http.legacy'
+	
 	defaultConfig {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 14
 		targetSdkVersion 26
-		versionCode 25
+		versionCode 27
 		versionName '1.0.18'
 		setProperty("archivesBaseName", "Booksonic $versionName")
 		resConfigs "sv"

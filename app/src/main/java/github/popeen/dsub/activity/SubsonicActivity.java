@@ -548,7 +548,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-		savedInstanceState.clear();
+		//savedInstanceState.clear();
 		String[] ids = new String[backStack.size() + 1];
 		ids[0] = currentFragment.getTag();
 		int i = 1;

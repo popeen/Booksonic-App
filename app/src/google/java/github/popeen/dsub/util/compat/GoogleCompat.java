@@ -1,4 +1,4 @@
-package github.daneren2005.dsub.util.compat;
+package github.popeen.dsub.util.compat;
 
 import android.content.Context;
 import android.support.v7.media.MediaRouter;
@@ -10,10 +10,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 
-import github.daneren2005.dsub.service.ChromeCastController;
-import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.RemoteController;
-import github.daneren2005.dsub.util.EnvironmentVariables;
+import github.popeen.dsub.service.ChromeCastController;
+import github.popeen.dsub.service.DownloadService;
+import github.popeen.dsub.service.RemoteController;
+import github.popeen.dsub.util.EnvironmentVariables;
 
 public final class GoogleCompat {
 

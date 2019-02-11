@@ -1,10 +1,10 @@
-package github.daneren2005.dsub.util.compat;
+package github.popeen.dsub.util.compat;
 
 import android.content.Context;
 import android.support.v7.media.MediaRouter;
 
-import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.RemoteController;
+import github.popeen.dsub.service.DownloadService;
+import github.popeen.dsub.service.RemoteController;
 
 
 // Provides stubs for Google-related functionality

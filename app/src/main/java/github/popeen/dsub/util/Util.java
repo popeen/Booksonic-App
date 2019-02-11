@@ -1520,7 +1520,7 @@ public final class Util {
 			intent.putExtra("duration", (long) downloadService.getPlayerDuration());
 			intent.putExtra("position", (long) downloadService.getPlayerPosition());
 			intent.putExtra("coverart", albumArtFile.getAbsolutePath());
-			intent.putExtra("package","github.daneren2005.dsub");
+			intent.putExtra("package","github.popeen.dsub");
 		} else {
 			intent.putExtra("track", "");
 			intent.putExtra("artist", "");
@@ -1530,7 +1530,7 @@ public final class Util {
 			intent.putExtra("duration", (long) 0);
 			intent.putExtra("position", (long) 0);
 			intent.putExtra("coverart", "");
-			intent.putExtra("package","github.daneren2005.dsub");
+			intent.putExtra("package","github.popeen.dsub");
 		}
 	}
 	

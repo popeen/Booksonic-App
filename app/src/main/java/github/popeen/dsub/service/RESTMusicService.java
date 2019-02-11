@@ -80,7 +80,7 @@ import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.Util;
-import github.daneren2005.dsub.util.compat.GoogleCompat;
+import github.popeen.dsub.util.compat.GoogleCompat;
 
 import java.io.*;
 import java.util.Map;

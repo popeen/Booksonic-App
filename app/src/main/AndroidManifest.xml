@@ -244,7 +244,7 @@
 
         <meta-data android:name="android.app.default_searchable"
                    android:value="github.popeen.dsub.activity.QueryReceiverActivity"/>
-        	android:value="AEdPqrEAAAAIQUWLQCXcoUNDViA1zX_S2KEwCFIId-Ut-f8LXw"/>
+
 
 
 		<meta-data
