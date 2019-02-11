@@ -73,6 +73,7 @@ public final class Constants {
 	public static final String INTENT_EXTRA_SHOW_ALL = "showAll";
 	public static final String INTENT_EXTRA_PLAY_LAST = "playLast";
 	public static final String INTENT_EXTRA_ENTRY = "passedEntry";
+	public static final String INTENT_EXTRA_ENTRY_BYTES = "passedEntryBytes";
 
     // Preferences keys.
 	public static final String PREFERENCES_KEY_SERVER_KEY = "server";
@@ -108,6 +109,7 @@ public final class Constants {
     public static final String PREFERENCES_KEY_SCROBBLE = "scrobble";
     public static final String PREFERENCES_KEY_REPEAT_MODE = "repeatMode";
     public static final String PREFERENCES_KEY_WIFI_REQUIRED_FOR_DOWNLOAD = "wifiRequiredForDownload";
+    public static final String PREFERENCES_KEY_LOCAL_NETWORK_REQUIRED_FOR_DOWNLOAD = "localNetworkRequiredForDownload";
 	public static final String PREFERENCES_KEY_RANDOM_SIZE = "randomSize";
 	public static final String PREFERENCES_KEY_SLEEP_TIMER_DURATION = "sleepTimerDuration";
 	public static final String PREFERENCES_KEY_OFFLINE = "offline";
@@ -184,9 +186,10 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_PLAYBACK_SPEED = "playbackSpeed";
 	public static final String PREFERENCES_KEY_SONG_PLAYBACK_SPEED = "songPlaybackSpeed";
 	public static final String PREFERENCES_KEY_DLNA_CASTING_ENABLED = "dlnaCastingEnabled";
+
 	public static final String PREFERENCES_KEY_REWIND_INTERVAL = "rewindInterval";
 	public static final String PREFERENCES_KEY_FASTFORWARD_INTERVAL = "fastforwardInterval";
-	
+
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
 	public static final String OFFLINE_SCROBBLE_SEARCH = "scrobbleTitle";

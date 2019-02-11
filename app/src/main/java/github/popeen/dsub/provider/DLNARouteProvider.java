@@ -257,6 +257,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 								broadcastDescriptors();
 							}
 						});
+
 						synchronized (adding) {
 							if (adding.contains(id)) {
 								adding.remove(id);
@@ -268,6 +269,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 					public void failure(ActionInvocation actionInvocation, UpnpResponse upnpResponse, String s) {
 						Log.w(TAG, "Failed to get default volume for DLNA route");
 						Log.w(TAG, "Reason: " + s);
+
 						synchronized (adding) {
 							if (adding.contains(id)) {
 								adding.remove(id);
@@ -280,7 +282,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 			}
 		} else {
 			synchronized (adding) {
-				if (adding.contains(id)) {
+				if(adding.contains(id)) {
 					adding.remove(id);
 				}
 			}

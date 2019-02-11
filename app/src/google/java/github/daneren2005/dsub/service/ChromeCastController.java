@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.popeen.dsub.service;
+package github.daneren2005.dsub.service;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -37,15 +37,14 @@ import com.google.android.gms.common.images.WebImage;
 import java.io.File;
 import java.io.IOException;
 
-import github.popeen.dsub.R;
-import github.popeen.dsub.domain.MusicDirectory;
-import github.popeen.dsub.domain.PlayerState;
-import github.popeen.dsub.domain.RemoteControlState;
-import github.popeen.dsub.util.Constants;
-import github.popeen.dsub.util.EnvironmentVariables;
-import github.popeen.dsub.util.FileUtil;
-import github.popeen.dsub.util.Util;
-import github.popeen.dsub.util.compat.CastCompat;
+import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.RemoteControlState;
+import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.EnvironmentVariables;
+import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.Util;
 import github.daneren2005.serverproxy.FileProxy;
 import github.daneren2005.serverproxy.ServerProxy;
 import github.daneren2005.serverproxy.WebProxy;

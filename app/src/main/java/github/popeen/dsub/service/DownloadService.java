@@ -68,13 +68,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -110,7 +113,8 @@ public class DownloadService extends Service {
 	private static final long DEFAULT_DELAY_UPDATE_PROGRESS = 1000L;
 	private static final double DELETE_CUTOFF = 0.84;
 	private static final int REQUIRED_ALBUM_MATCHES = 4;
-	private static final int REMOTE_PLAYLIST_TOTAL = 3;
+	private static final int REMOTE_PLAYLIST_PREV = 10;
+	private static final int REMOTE_PLAYLIST_NEXT = 40;
 	private static final int SHUFFLE_MODE_NONE = 0;
 	private static final int SHUFFLE_MODE_ALL = 1;
 	private static final int SHUFFLE_MODE_ARTIST = 2;
@@ -153,7 +157,7 @@ public class DownloadService extends Service {
 	private boolean removePlayed;
 	private boolean shufflePlay;
 	private boolean artistRadio;
-	private final List<OnSongChangedListener> onSongChangedListeners = new ArrayList<>();
+	private final CopyOnWriteArrayList<OnSongChangedListener> onSongChangedListeners = new CopyOnWriteArrayList<>();
 	private long revision;
 	private static DownloadService instance;
 	private String suggestedPlaylistName;
@@ -165,6 +169,7 @@ public class DownloadService extends Service {
 	private boolean downloadOngoing = false;
 	private float volume = 1.0f;
 	private long delayUpdateProgress = DEFAULT_DELAY_UPDATE_PROGRESS;
+	private boolean foregroundService = false;
 
 	private AudioEffectsController effectsController;
 	private RemoteControlState remoteState = LOCAL;
@@ -176,6 +181,9 @@ public class DownloadService extends Service {
 	private long timerStart;
 	private boolean autoPlayStart = false;
 	private boolean runListenersOnInit = false;
+
+	private IntentFilter audioNoisyIntent = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+	private AudioNoisyReceiver audioNoisyReceiver = null;
 
 	private MediaRouteManager mediaRouter;
 
@@ -259,6 +267,8 @@ public class DownloadService extends Service {
 		}, "DownloadService").start();
 
 		Util.registerMediaButtonEventReceiver(this);
+		audioNoisyReceiver = new AudioNoisyReceiver();
+		registerReceiver(audioNoisyReceiver, audioNoisyIntent);
 
 		if (mRemoteControl == null) {
 			// Use the remote control APIs (if available) to set the playback state
@@ -271,7 +281,7 @@ public class DownloadService extends Service {
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
 		wakeLock.setReferenceCounted(false);
 
-		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 		wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "downloadServiceLock");
 
 		try {
@@ -289,12 +299,19 @@ public class DownloadService extends Service {
 		shufflePlayBuffer = new ShufflePlayBuffer(this);
 		artistRadioBuffer = new ArtistRadioBuffer(this);
 		lifecycleSupport.onCreate();
+
+		if(Build.VERSION.SDK_INT >= 26) {
+			Notifications.shutGoogleUpNotification(this);
+		}
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		lifecycleSupport.onStart(intent);
+		if(Build.VERSION.SDK_INT >= 26 && !this.isForeground()) {
+			Notifications.shutGoogleUpNotification(this);
+		}
 		return START_NOT_STICKY;
 	}
 
@@ -368,11 +385,25 @@ public class DownloadService extends Service {
 			proxy.stop();
 			proxy = null;
 		}
+		if (audioNoisyReceiver != null) {
+			unregisterReceiver(audioNoisyReceiver);
+		}
 		mediaRouter.destroy();
 		Notifications.hidePlayingNotification(this, this, handler);
 		Notifications.hideDownloadingNotification(this, this, handler);
 	}
 
+	public static void startService(Context context) {
+		startService(context, new Intent(context, DownloadService.class));
+	}
+	public static void startService(Context context, Intent intent) {
+		PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
+		if (Build.VERSION.SDK_INT < 26 || (powerManager != null && powerManager.isIgnoringBatteryOptimizations(intent.getPackage()))) {
+			context.startService(intent);
+		} else {
+			context.startForegroundService(intent);
+		}
+	}
 	public static DownloadService getInstance() {
 		return instance;
 	}
@@ -507,14 +538,17 @@ public class DownloadService extends Service {
 	private synchronized void updateRemotePlaylist() {
 		List<DownloadFile> playlist = new ArrayList<>();
 		if(currentPlaying != null) {
-			int index = downloadList.indexOf(currentPlaying);
-			if(index == -1) {
-				index = 0;
+			int startIndex = downloadList.indexOf(currentPlaying) - REMOTE_PLAYLIST_PREV;
+			if(startIndex < 0) {
+				startIndex = 0;
 			}
 
 			int size = size();
-			int end = index + REMOTE_PLAYLIST_TOTAL;
-			for(int i = index; i < size && i < end; i++) {
+			int endIndex = downloadList.indexOf(currentPlaying) + REMOTE_PLAYLIST_NEXT;
+			if(endIndex > size) {
+				endIndex = size;
+			}
+			for(int i = startIndex; i < endIndex; i++) {
 				playlist.add(downloadList.get(i));
 			}
 		}
@@ -1029,9 +1063,26 @@ public class DownloadService extends Service {
 		return size() == 1 || (currentPlaying != null && !currentPlaying.isSong());
 	}
 
+	public synchronized boolean isForeground() {
+		return this.foregroundService;
+	}
+
+	public synchronized void setIsForeground(boolean foreground) {
+		this.foregroundService = foreground;
+	}
+
 	public synchronized List<DownloadFile> getDownloads() {
 		List<DownloadFile> temp = new ArrayList<DownloadFile>();
 		temp.addAll(downloadList);
+		temp.addAll(backgroundDownloadList);
+		return temp;
+	}
+
+	public synchronized List<DownloadFile> getRecentDownloads() {
+		int from = Math.max(currentPlayingIndex - 10, 0);
+		int songsToKeep = Math.max(Util.getPreloadCount(this), 20);
+		int to = Math.min(currentPlayingIndex + songsToKeep, Math.max(downloadList.size() - 1, 0));
+		List<DownloadFile> temp = downloadList.subList(from, to);
 		temp.addAll(backgroundDownloadList);
 		return temp;
 	}
@@ -1463,7 +1514,8 @@ public class DownloadService extends Service {
 		this.playerState = playerState;
 
 		if(playerState == STARTED) {
-			Util.requestAudioFocus(this);
+			AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+			Util.requestAudioFocus(this, audioManager);
 		}
 
 		if (show) {
@@ -2753,14 +2805,16 @@ public class DownloadService extends Service {
 	}
 	public void setRating(int rating) {
 		final DownloadFile currentPlaying = this.currentPlaying;
-		if(currentPlaying == null) {
+		if (currentPlaying == null) {
 			return;
 		}
 		MusicDirectory.Entry entry = currentPlaying.getSong();
 
 		// Immediately skip to the next song if down thumbed
-		if(rating == 1) {
+		if (rating == 1 && size() > 1) {
 			next(true);
+		} else if (rating == 1 && size() == 1) {
+			stop();
 		}
 
 		UpdateHelper.setRating(this, entry, rating, new UpdateHelper.OnRatingChange() {
@@ -2787,12 +2841,7 @@ public class DownloadService extends Service {
 		addOnSongChangedListener(listener, false);
 	}
 	public void addOnSongChangedListener(OnSongChangedListener listener, boolean run) {
-		synchronized(onSongChangedListeners) {
-			int index = onSongChangedListeners.indexOf(listener);
-			if (index == -1) {
-				onSongChangedListeners.add(listener);
-			}
-		}
+		onSongChangedListeners.addIfAbsent(listener);
 
 		if(run) {
 			if(mediaPlayerHandler != null) {
@@ -2811,56 +2860,47 @@ public class DownloadService extends Service {
 		}
 	}
 	public void removeOnSongChangeListener(OnSongChangedListener listener) {
-		synchronized(onSongChangedListeners) {
-			int index = onSongChangedListeners.indexOf(listener);
-			if (index != -1) {
-				onSongChangedListeners.remove(index);
-			}
-		}
+		onSongChangedListeners.remove(listener);
 	}
 
 	private void onSongChanged() {
 		final long atRevision = revision;
-		synchronized(onSongChangedListeners) {
-			final boolean shouldFastForward = shouldFastForward();
-			for (final OnSongChangedListener listener : onSongChangedListeners) {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						if (revision == atRevision && instance != null) {
-							listener.onSongChanged(currentPlaying, currentPlayingIndex, shouldFastForward);
+		final boolean shouldFastForward = shouldFastForward();
+		for (final OnSongChangedListener listener : onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					if (revision == atRevision && instance != null) {
+						listener.onSongChanged(currentPlaying, currentPlayingIndex, shouldFastForward);
 
-							MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
-							listener.onMetadataUpdate(entry, METADATA_UPDATED_ALL);
-						}
+						MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
+						listener.onMetadataUpdate(entry, METADATA_UPDATED_ALL);
 					}
-				});
-			}
+				}
+			});
+		}
 
-			if (mediaPlayerHandler != null && !onSongChangedListeners.isEmpty()) {
-				mediaPlayerHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						onSongProgress();
-					}
-				});
-			}
+		if (mediaPlayerHandler != null && !onSongChangedListeners.isEmpty()) {
+			mediaPlayerHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					onSongProgress();
+				}
+			});
 		}
 	}
 	private void onSongsChanged() {
 		final long atRevision = revision;
-		synchronized(onSongChangedListeners) {
-			final boolean shouldFastForward = shouldFastForward();
-			for (final OnSongChangedListener listener : onSongChangedListeners) {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						if (revision == atRevision && instance != null) {
-							listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex, shouldFastForward);
-						}
+		final boolean shouldFastForward = shouldFastForward();
+		for (final OnSongChangedListener listener : onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					if (revision == atRevision && instance != null) {
+						listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex, shouldFastForward);
 					}
-				});
-			}
+				}
+			});
 		}
 	}
 
@@ -2875,17 +2915,15 @@ public class DownloadService extends Service {
 		final int index = getCurrentPlayingIndex();
 		final int queueSize = size();
 
-		synchronized(onSongChangedListeners) {
-			for (final OnSongChangedListener listener : onSongChangedListeners) {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						if (revision == atRevision && instance != null) {
-							listener.onSongProgress(currentPlaying, position, duration, isSeekable);
-						}
+		for (final OnSongChangedListener listener : onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					if (revision == atRevision && instance != null) {
+						listener.onSongProgress(currentPlaying, position, duration, isSeekable);
 					}
-				});
-			}
+				}
+			});
 		}
 
 		if(manual) {
@@ -2908,35 +2946,31 @@ public class DownloadService extends Service {
 	}
 	private void onStateUpdate() {
 		final long atRevision = revision;
-		synchronized(onSongChangedListeners) {
-			for (final OnSongChangedListener listener : onSongChangedListeners) {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						if (revision == atRevision && instance != null) {
-							listener.onStateUpdate(currentPlaying, playerState);
-						}
+		for (final OnSongChangedListener listener : onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					if (revision == atRevision && instance != null) {
+						listener.onStateUpdate(currentPlaying, playerState);
 					}
-				});
-			}
+				}
+			});
 		}
 	}
 	public void onMetadataUpdate() {
 		onMetadataUpdate(METADATA_UPDATED_ALL);
 	}
 	public void onMetadataUpdate(final int updateType) {
-		synchronized(onSongChangedListeners) {
-			for (final OnSongChangedListener listener : onSongChangedListeners) {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						if (instance != null) {
-							MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
-							listener.onMetadataUpdate(entry, updateType);
-						}
+		for (final OnSongChangedListener listener : onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					if (instance != null) {
+						MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
+						listener.onMetadataUpdate(entry, updateType);
 					}
-				});
-			}
+				}
+			});
 		}
 
 		handler.post(new Runnable() {

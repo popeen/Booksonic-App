@@ -1619,7 +1619,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					Share share = shares.get(0);
 					shareExternal(share);
 				} else {
-					Util.toast(context, context.getResources().getString(R.string.playlist_error), false);
+					Util.toast(context, context.getResources().getString(R.string.share_create_error), false);
 				}
 			}
 
@@ -1629,9 +1629,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
 				} else {
-					msg = context.getResources().getString(R.string.playlist_error) + " " + getErrorMessage(error);
+					msg = context.getResources().getString(R.string.share_create_error) + " " + getErrorMessage(error);
 				}
 
+				Log.e(TAG, "Failed to create share", error);
 				Util.toast(context, msg, false);
 			}
 		}.execute();

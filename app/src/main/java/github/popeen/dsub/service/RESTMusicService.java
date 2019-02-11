@@ -42,8 +42,8 @@ import android.net.NetworkInfo;
 import android.util.Base64;
 import android.util.Log;
 
-
-import com.google.android.gms.security.ProviderInstaller;import github.popeen.dsub.R;
+import com.google.android.gms.security.ProviderInstaller;
+import github.popeen.dsub.R;
 import github.popeen.dsub.domain.*;
 import github.popeen.dsub.fragments.MainFragment;
 import github.popeen.dsub.service.parser.ArtistInfoParser;
@@ -80,6 +80,8 @@ import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.Util;
+import github.daneren2005.dsub.util.compat.GoogleCompat;
+
 import java.io.*;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -1879,7 +1881,7 @@ public class RESTMusicService implements MusicService {
 	private HttpURLConnection getConnectionDirect(Context context, String url, Map<String, String> headers, int minNetworkTimeout) throws Exception {
 		if(!hasInstalledGoogleSSL) {
 			try {
-				ProviderInstaller.installIfNeeded(context);
+				GoogleCompat.installProvider(context);
 			} catch(Exception e) {
 				// Just continue on anyways, doesn't really harm anything if this fails
 				Log.w(TAG, "Failed to update to use Google Play SSL", e);

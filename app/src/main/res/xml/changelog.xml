@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="1.0.18" versioncode="25" releasedate="2019-02-11">
+	<release version="1.0.18" versioncode="25" releasedate="2019-02-11">
         <change>Bugfix</change>
     </release>
     <release version="1.0.17" versioncode="24" releasedate="2019-02-10">

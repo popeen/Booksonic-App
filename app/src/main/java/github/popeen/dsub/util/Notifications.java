@@ -15,7 +15,9 @@
 
 package github.popeen.dsub.util;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -47,6 +49,7 @@ public final class Notifications {
 	// Notification IDs.
 	public static final int NOTIFICATION_ID_PLAYING = 100;
 	public static final int NOTIFICATION_ID_DOWNLOADING = 102;
+	public static final int NOTIFICATION_ID_SHUT_GOOGLE_UP = 103;
 	public static final String NOTIFICATION_SYNC_GROUP = "github.popeen.dsub.sync";
 
 	private static boolean playShowing = false;
@@ -54,11 +57,24 @@ public final class Notifications {
 	private static boolean downloadForeground = false;
 	private static boolean persistentPlayingShowing = false;
 
+	private static NotificationChannel playingChannel;
+	private static NotificationChannel downloadingChannel;
+	private static NotificationChannel syncChannel;
+
 	private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
 
 	public static void showPlayingNotification(final Context context, final DownloadService downloadService, final Handler handler, MusicDirectory.Entry song) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			getPlayingNotificationChannel(context);
+		}
+
 		// Set the icon, scrolling text and timestamp
-		final Notification notification = new Notification(R.drawable.stat_notify_playing, song.getTitle(), System.currentTimeMillis());
+		final Notification notification = new NotificationCompat.Builder(context)
+				.setSmallIcon(R.drawable.stat_notify_playing)
+				.setTicker(song.getTitle())
+				.setWhen(System.currentTimeMillis())
+				.setChannelId("now-playing-channel")
+				.build();
 
 		final boolean playing = downloadService.getPlayerState() == PlayerState.STARTED;
 		if(playing) {
@@ -97,11 +113,11 @@ public final class Notifications {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					downloadService.stopForeground(true);
+					stopForeground(downloadService, true);
 					showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
 
 					try {
-						downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+						startForeground(downloadService, NOTIFICATION_ID_PLAYING, notification);
 					} catch(Exception e) {
 						Log.e(TAG, "Failed to start notifications after stopping foreground download");
 					}
@@ -114,7 +130,7 @@ public final class Notifications {
 
 					if (playing) {
 						try {
-							downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+							startForeground(downloadService, NOTIFICATION_ID_PLAYING, notification);
 						} catch(Exception e) {
 							Log.e(TAG, "Failed to start notifications while playing");
 						}
@@ -122,7 +138,7 @@ public final class Notifications {
 						playShowing = false;
 						persistentPlayingShowing = true;
 						NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-						downloadService.stopForeground(false);
+						stopForeground(downloadService, false);
 
 						try {
 							notificationManager.notify(NOTIFICATION_ID_PLAYING, notification);
@@ -202,13 +218,13 @@ public final class Notifications {
 
 		int previous = 0, pause = 0, next = 0, close = 0, rewind = 0, fastForward = 0;
 		if (expanded) {
+			pause = R.id.control_pause;
+
 			if (shouldFastForward) {
 				rewind = R.id.control_previous;
-				pause = R.id.control_pause;
 				fastForward = R.id.control_next;
 			} else {
 				previous = R.id.control_previous;
-				pause = R.id.control_pause;
 				next = R.id.control_next;
 			}
 
@@ -226,9 +242,15 @@ public final class Notifications {
 				}
 				close = R.id.control_next;
 			} else {
-				rewind = R.id.control_previous;
+				if (shouldFastForward) {
+					rewind = R.id.control_previous;
+					fastForward = R.id.control_next;
+				} else {
+					previous = R.id.control_previous;
+					next = R.id.control_next;
+				}
+
 				pause = R.id.control_pause;
-				fastForward = R.id.control_next;
 			}
 		}
 
@@ -318,7 +340,7 @@ public final class Notifications {
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				downloadService.stopForeground(true);
+				stopForeground(downloadService, true);
 
 				if(persistentPlayingShowing) {
 					NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -337,7 +359,24 @@ public final class Notifications {
 		DSubWidgetProvider.notifyInstances(context, downloadService, false);
 	}
 
+	@TargetApi(Build.VERSION_CODES.O)
+	private static NotificationChannel getPlayingNotificationChannel(Context context) {
+		if(playingChannel == null) {
+			playingChannel = new NotificationChannel("now-playing-channel", "Now Playing", NotificationManager.IMPORTANCE_LOW);
+			playingChannel.setDescription("Now playing notification");
+
+			NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+			notificationManager.createNotificationChannel(playingChannel);
+		}
+
+		return playingChannel;
+	}
+
 	public static void showDownloadingNotification(final Context context, final DownloadService downloadService, Handler handler, DownloadFile file, int size) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			getDownloadingNotificationChannel(context);
+		}
+
 		Intent cancelIntent = new Intent(context, DownloadService.class);
 		cancelIntent.setAction(DownloadService.CANCEL_DOWNLOADS);
 		PendingIntent cancelPI = PendingIntent.getService(context, 0, cancelIntent, 0);
@@ -362,7 +401,8 @@ public final class Notifications {
 				.setOngoing(true)
 				.addAction(R.drawable.notification_close,
 						context.getResources().getString(R.string.common_cancel),
-						cancelPI);
+						cancelPI)
+				.setChannelId("downloading-channel");
 
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
@@ -380,7 +420,7 @@ public final class Notifications {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					downloadService.startForeground(NOTIFICATION_ID_DOWNLOADING, notification);
+					startForeground(downloadService, NOTIFICATION_ID_DOWNLOADING, notification);
 				}
 			});
 		}
@@ -396,10 +436,40 @@ public final class Notifications {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					downloadService.stopForeground(true);
+					stopForeground(downloadService, true);
 				}
 			});
 		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.O)
+	private static NotificationChannel getDownloadingNotificationChannel(Context context) {
+		if(downloadingChannel == null) {
+			downloadingChannel = new NotificationChannel("downloading-channel", "Downloading Notification", NotificationManager.IMPORTANCE_LOW);
+			downloadingChannel.setDescription("Ongoing downloading notification to keep the service alive");
+
+			NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+			notificationManager.createNotificationChannel(downloadingChannel);
+		}
+
+		return downloadingChannel;
+	}
+
+	@TargetApi(Build.VERSION_CODES.O)
+	public static void shutGoogleUpNotification(final DownloadService downloadService) {
+		// On Android O+, service crashes if startForeground isn't called within 5 seconds of starting
+		getDownloadingNotificationChannel(downloadService);
+
+		NotificationCompat.Builder builder;
+		builder = new NotificationCompat.Builder(downloadService)
+				.setSmallIcon(android.R.drawable.stat_sys_download)
+				.setContentTitle(downloadService.getResources().getString(R.string.download_downloading_title, 0))
+				.setContentText(downloadService.getResources().getString(R.string.download_downloading_summary, "Temp"))
+				.setChannelId("downloading-channel");
+
+		final Notification notification = builder.build();
+		startForeground(downloadService, NOTIFICATION_ID_SHUT_GOOGLE_UP, notification);
+		stopForeground(downloadService, true);
 	}
 
 	public static void showSyncNotification(final Context context, int stringId, String extra) {
@@ -411,6 +481,10 @@ public final class Notifications {
 				extra = "";
 			}
 
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				getSyncNotificationChannel(context);
+			}
+
 			NotificationCompat.Builder builder;
 			builder = new NotificationCompat.Builder(context)
 					.setSmallIcon(R.drawable.stat_notify_sync)
@@ -420,6 +494,7 @@ public final class Notifications {
 					.setOngoing(false)
 					.setGroup(NOTIFICATION_SYNC_GROUP)
 					.setPriority(NotificationCompat.PRIORITY_LOW)
+					.setChannelId("sync-channel")
 					.setAutoCancel(true);
 
 			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
@@ -456,5 +531,28 @@ public final class Notifications {
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			notificationManager.notify(stringId, builder.build());
 		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.O)
+	private static NotificationChannel getSyncNotificationChannel(Context context) {
+		if(syncChannel == null) {
+			syncChannel = new NotificationChannel("sync-channel", "Sync Notifications", NotificationManager.IMPORTANCE_MIN);
+			syncChannel.setDescription("Sync notifications");
+
+			NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+			notificationManager.createNotificationChannel(syncChannel);
+		}
+
+		return syncChannel;
+	}
+
+	private static void startForeground(DownloadService downloadService, int notificationId, Notification notification) {
+		downloadService.startForeground(notificationId, notification);
+		downloadService.setIsForeground(true);
+	}
+
+	private static void stopForeground(DownloadService downloadService, boolean removeNotification) {
+		downloadService.stopForeground(removeNotification);
+		downloadService.setIsForeground(false);
 	}
 }

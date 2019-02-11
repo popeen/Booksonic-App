@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -106,6 +107,14 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		if(Build.VERSION.SDK_INT >= 21) {
+			CheckBoxPreference mediaButtons = (CheckBoxPreference) findPreference("mediaButtons");
+			if (mediaButtons != null) {
+				PreferenceCategory otherCategory = (PreferenceCategory) findPreference("otherSettings");
+				otherCategory.removePreference(mediaButtons);
+			}
+		}
+
 		int instance = this.getArguments().getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, -1);
 		if (instance != -1) {
 			PreferenceScreen preferenceScreen = expandServer(instance);
@@ -549,7 +558,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverPasswordPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		serverPasswordPreference.setSummary("***");
 		serverPasswordPreference.setTitle(R.string.settings_server_password);
-
 		final CheckBoxPreference serverSyncPreference = new CheckBoxPreference(context);
 		serverSyncPreference.setKey(Constants.PREFERENCES_KEY_SERVER_SYNC + instance);
 		serverSyncPreference.setChecked(Util.isSyncEnabled(context, instance));
@@ -783,7 +791,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 						try {
 							String url = (String) value;
 							new URL(url);
-							if (url.contains(" ") || url.contains("@") || url.contains("_")) {
+							if (url.contains(" ") || url.contains("@")) {
 								throw new Exception();
 							}
 						} catch (Exception x) {
@@ -804,7 +812,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 							}
 
 							new URL(url);
-							if (url.contains(" ") || url.contains("@") || url.contains("_")) {
+							if (url.contains(" ") || url.contains("@")) {
 								throw new Exception();
 							}
 						} catch (Exception x) {

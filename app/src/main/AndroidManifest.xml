@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="github.popeen.dsub"
-          android:installLocation="internalOnly"
-          android:versionCode="20"
-          android:versionName="1.0.16">
+          android:installLocation="internalOnly">
           
     <instrumentation android:name="android.test.InstrumentationTestRunner"
 		android:targetPackage="github.popeen.dsub"
@@ -40,7 +38,8 @@
     <application android:label="@string/common.appname"
     	android:backupAgent="github.popeen.dsub.util.SettingsBackupAgent"
     	android:icon="@drawable/launch"
-    	android:theme="@style/Theme.DSub.Light">
+    	android:theme="@style/Theme.DSub.Light"
+		android:largeHeap="true">
     	
         <uses-library android:name="android.test.runner" />
 
@@ -173,7 +172,6 @@
 			</intent-filter>
 		</receiver>
 		
-
 		<receiver android:name="github.popeen.dsub.receiver.A2dpIntentReceiver">
 			<intent-filter>
 				<action android:name="android.music.playstatusrequest"/>
@@ -181,7 +179,6 @@
 		</receiver>
 
         <receiver
-
 			android:name="github.popeen.dsub.provider.DSubWidget4x1"
 			android:label="@string/widget.4x1">
             <intent-filter>
@@ -198,7 +195,6 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x2"/>
         </receiver>
 		<receiver
-
 			android:name="github.popeen.dsub.provider.DSubWidget4x3"
 			android:label="@string/widget.4x3">
             <intent-filter>
@@ -207,7 +203,6 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x3"/>
         </receiver>
 		<receiver
-
 			android:name="github.popeen.dsub.provider.DSubWidget4x4"
 			android:label="@string/widget.4x4">
             <intent-filter>
@@ -231,22 +226,16 @@
 			android:label="@string/button_bar.playlists"
 			android:exported="false"
 			android:syncable="true"/>
-
-
 		<provider android:name="github.popeen.dsub.provider.PodcastStubProvider"
 			android:authorities="github.popeen.dsub.podcasts.provider"
 			android:label="@string/button_bar.podcasts"
 			android:exported="false"
 			android:syncable="true"/>
-
-
 		<provider android:name="github.popeen.dsub.provider.StarredStubProvider"
 				  android:authorities="github.popeen.dsub.starred.provider"
 				  android:label="@string/main.albums_starred"
 				  android:exported="false"
 				  android:syncable="true"/>
-
-
 		<provider android:name="github.popeen.dsub.provider.MostRecentStubProvider"
 				  android:authorities="github.popeen.dsub.mostrecent.provider"
 				  android:label="@string/main.albums_newest"
@@ -254,12 +243,9 @@
 				  android:syncable="true"/>
 
         <meta-data android:name="android.app.default_searchable"
-
                    android:value="github.popeen.dsub.activity.QueryReceiverActivity"/>
-                   
-        <meta-data android:name="com.google.android.backup.api_key"
-
         	android:value="AEdPqrEAAAAIQUWLQCXcoUNDViA1zX_S2KEwCFIId-Ut-f8LXw"/>
+
 
 		<meta-data
 			android:name="com.google.android.gms.version"
