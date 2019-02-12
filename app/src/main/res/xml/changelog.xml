@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.19" versioncode="28" releasedate="2019-02-12">
+        <change>Updated to latest DSub sources</change>
+    </release>
 	<release version="1.0.18" versioncode="25" releasedate="2019-02-11">
         <change>Bugfix</change>
     </release>
