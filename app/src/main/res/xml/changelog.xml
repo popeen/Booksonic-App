@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.20-beta" versioncode="29" releasedate="2019-02-20">
+        <change>This is a BETA version, please report any bugs you find</change>
+        <change>Now supports player.fm without needing to manually find RSS feed</change>
+        <change>Internal changes to how RSS feeds are collected for podcasts</change>
+        <change>When the app has been used for a while it will ask if you want to rate it</change>
+        <change>New item counter fixed</change>
+    </release>
     <release version="1.0.19" versioncode="28" releasedate="2019-02-12">
         <change>Updated to latest DSub sources</change>
     </release>
