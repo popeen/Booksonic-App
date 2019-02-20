@@ -385,17 +385,19 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 						}
 
 					}else if(url.toLowerCase().contains("soundcloud.com")){
-						Pattern pattern = Pattern.compile("users:([0-9]*)");
-						String raw = KakaduaUtil.http_get_contents(url);
-						Matcher matcher = pattern.matcher(raw);
-						if (matcher.find())	{
 							try {
-								url2 = "https://feeds.soundcloud.com/users/soundcloud:users:" + matcher.group(1) + "/sounds.rss";
-								Log.w("podcast", url2);
+								Document doc = Jsoup.connect(url).get();
+								Elements metas = doc.getElementsByTag("meta");
+								for (Element meta : metas) {
+									if(meta.attr("property").equals("al:android:url")){
+										String id = meta.attr("content").replace("soundcloud://users:", "");
+										url2 = "https://feeds.soundcloud.com/users/soundcloud:users:" + id + "/sounds.rss";
+										Log.w("podcast", url2);
+									}
+								}
 							}catch(Exception e){
 								Log.w("podcast", e.toString());
 							}
-						}
 					}else if(url.toLowerCase().contains("player.fm/series")){
 						try {
 							Document doc = Jsoup.connect(url).get();
