@@ -216,7 +216,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 
 
-		RateThisApp.Config config = new RateThisApp.Config(60, 30);
+		RateThisApp.Config config = new RateThisApp.Config(60, 300);
+		RateThisApp.init(config);
 		RateThisApp.onCreate(this);
 		RateThisApp.showRateDialogIfNeeded(this);
 	}
