@@ -366,76 +366,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 		new LoadingTask<Void>(context, false) {
 			@Override
 			protected Void doInBackground() throws Throwable {
-
-
-				String url2 = url;
-				//If the link is for a podcast on itunes, get the rss link
-				try  {
-					if(url.toLowerCase().contains("itunes.apple.com")){
-						Pattern pattern = Pattern.compile("/id([0-9]*)");
-						Matcher matcher = pattern.matcher(url);
-						if (matcher.find())	{
-							try {
-								String raw = KakaduaUtil.http_get_contents("https://itunes.apple.com/lookup?id=" + matcher.group(1) + "&entity=podcast");
-								url2 = new JSONObject(raw).getJSONArray("results").getJSONObject(0).getString("feedUrl");
-								Log.w("podcast", url2);
-							}catch(Exception e){
-								Log.w("podcast", e.toString());
-							}
-						}
-
-					}else if(url.toLowerCase().contains("soundcloud.com")){
-							try {
-								Document doc = Jsoup.connect(url).get();
-								Elements metas = doc.getElementsByTag("meta");
-								for (Element meta : metas) {
-									if(meta.attr("property").equals("al:android:url")){
-										String id = meta.attr("content").replace("soundcloud://users:", "");
-										url2 = "https://feeds.soundcloud.com/users/soundcloud:users:" + id + "/sounds.rss";
-										Log.w("podcast", url2);
-									}
-								}
-							}catch(Exception e){
-								Log.w("podcast", e.toString());
-							}
-					}else if(url.toLowerCase().contains("player.fm/series")){
-						try {
-							Document doc = Jsoup.connect(url).get();
-							Elements links = doc.select(".blatant");
-							for (Element link : links) {
-								if(link.text().equals("Public Feed")){
-									url2 = link.attr("href");
-									Log.w("podcast", url2);
-								}
-							}
-						}catch(Exception e){
-							Log.w("podcast", e.toString());
-						}
-					}else if(url.toLowerCase().contains("acast.com") || url.toLowerCase().contains("podbean.com")){
-						/*
-						TODO,
-						This uses a standard tag that most podcasting websites support.
-						Make it always try this if the url entered is not a valid feed or a website with a specific conversion above like for example iTunes.
-						If it fails it needs to prevent the app from adding it to the server and then show an error message
-						 */
-						try {
-							Document doc = Jsoup.connect(url).get();
-							Elements links = doc.select("link");
-							for (Element link : links) {
-								if(link.attr("type").equals("application/rss+xml")){
-									url2 = link.attr("href");
-									Log.w("podcast", url2);
-								}
-							}
-						}catch(Exception e){
-							Log.w("podcast", e.toString());
-						}
-					}
-				}catch(Exception e){
-					Log.w("podcast", e.toString());
-				}
-
-
+				String url2 = getRssFeed(url);
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.createPodcastChannel(url2, context, null);
 				return null;
@@ -459,7 +390,76 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 			}
 		}.execute();
 	}
-	
+
+	private String getRssFeed(String url){
+		String url2 = url;
+		try  {
+			if(url.toLowerCase().contains("itunes.apple.com")){
+				Pattern pattern = Pattern.compile("/id([0-9]*)");
+				Matcher matcher = pattern.matcher(url);
+				if (matcher.find())	{
+					try {
+						String raw = KakaduaUtil.http_get_contents("https://itunes.apple.com/lookup?id=" + matcher.group(1) + "&entity=podcast");
+						url2 = new JSONObject(raw).getJSONArray("results").getJSONObject(0).getString("feedUrl");
+						Log.w("podcast", url2);
+					}catch(Exception e){
+						Log.w("podcast", e.toString());
+					}
+				}
+
+			}else if(url.toLowerCase().contains("soundcloud.com")){
+				try {
+					Document doc = Jsoup.connect(url).get();
+					Elements metas = doc.getElementsByTag("meta");
+					for (Element meta : metas) {
+						if(meta.attr("property").equals("al:android:url")){
+							String id = meta.attr("content").replace("soundcloud://users:", "");
+							url2 = "https://feeds.soundcloud.com/users/soundcloud:users:" + id + "/sounds.rss";
+							Log.w("podcast", url2);
+						}
+					}
+				}catch(Exception e){
+					Log.w("podcast", e.toString());
+				}
+			}else if(url.toLowerCase().contains("player.fm/series")){
+				try {
+					Document doc = Jsoup.connect(url).get();
+					Elements links = doc.select(".blatant");
+					for (Element link : links) {
+						if(link.text().equals("Public Feed")){
+							url2 = link.attr("href");
+							Log.w("podcast", url2);
+						}
+					}
+				}catch(Exception e){
+					Log.w("podcast", e.toString());
+				}
+			}else if(url.toLowerCase().contains("acast.com") || url.toLowerCase().contains("podbean.com")){
+						/*
+						TODO,
+						This uses a standard tag that most podcasting websites support.
+						Make it always try this if the url entered is not a valid feed or a website with a specific conversion above like for example iTunes.
+						If it fails it needs to prevent the app from adding it to the server and then show an error message
+						 */
+				try {
+					Document doc = Jsoup.connect(url).get();
+					Elements links = doc.select("link");
+					for (Element link : links) {
+						if(link.attr("type").equals("application/rss+xml")){
+							url2 = link.attr("href");
+							Log.w("podcast", url2);
+						}
+					}
+				}catch(Exception e){
+					Log.w("podcast", e.toString());
+				}
+			}
+		}catch(Exception e){
+			Log.w("podcast", e.toString());
+		}
+		return url2;
+	}
+
 	private void displayPodcastInfo(final PodcastChannel channel) {
 		List<Integer> headers = new ArrayList<>();
 		List<String> details = new ArrayList<>();
