@@ -396,6 +396,19 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 								Log.w("podcast", e.toString());
 							}
 						}
+					}else if(url.toLowerCase().contains("player.fm/series")){
+						try {
+							Document doc = Jsoup.connect(url).get();
+							Elements links = doc.select(".blatant");
+							for (Element link : links) {
+								if(link.text().equals("Public Feed")){
+									url2 = link.attr("href");
+									Log.w("podcast", url2);
+								}
+							}
+						}catch(Exception e){
+							Log.w("podcast", e.toString());
+						}
 					}else if(url.toLowerCase().contains("acast.com") || url.toLowerCase().contains("podbean.com")){
 						/*
 						TODO,

@@ -99,7 +99,7 @@
 	<string name="menu.log">Send Log</string>
 	<string name="menu.set_timer">Set Timer</string>
 	<string name="menu.check_podcasts">Check For New Episodes</string>
-	<string name="menu.add_podcast">Add Podcast using RSS, iTunes, Acast, Podbean or SoundCloud</string>
+	<string name="menu.add_podcast">Add Podcast using RSS, iTunes, Acast, Podbean, Player.fm or SoundCloud</string>
 	<string name="menu.keep_synced">Keep Synced</string>
 	<string name="menu.stop_sync">Stop syncing</string>
 	<string name="menu.show_all">Show all songs</string>
