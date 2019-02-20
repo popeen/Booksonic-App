@@ -6,6 +6,7 @@
         <change>Internal changes to how RSS feeds are collected for podcasts</change>
         <change>When the app has been used for a while it will ask if you want to rate it</change>
         <change>New item counter fixed</change>
+        <change>Possible WA for DownloadService crash that I can not reproduce</change>
     </release>
     <release version="1.0.19" versioncode="28" releasedate="2019-02-12">
         <change>Updated to latest DSub sources</change>
