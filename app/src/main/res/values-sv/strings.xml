@@ -289,6 +289,7 @@
     <string name="settings.testing_ok">Anslutningen är OK</string>
     <string name="settings.testing_unlicensed">Anslutningen är OK. Servern är olicenserad.</string>
     <string name="settings.connection_failure">Kunde inte ansluta.</string>
+	<string name="settings.connection_username_password_wrong">Användarnamn eller lösenord är felaktigt</string>
     <string name="settings.invalid_url">Skriv in en korrekt URL.</string>
     <string name="settings.invalid_username">Skriv ett giltigt användarnamn (inga mellanslag efter).</string>
     <string name="settings.appearance_title">Utseende</string>

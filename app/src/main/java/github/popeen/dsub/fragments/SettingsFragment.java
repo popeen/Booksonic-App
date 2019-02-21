@@ -751,7 +751,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			protected void error(Throwable error) {
 				Log.w(TAG, error.toString(), error);
 				if(statusCode == 200){
-					new ErrorDialog(context, "username or password", false);
+					new ErrorDialog(context, getResources().getString(R.string.settings_connection_username_password_wrong), false);
 				}else {
 					new ErrorDialog(context, getResources().getString(R.string.settings_connection_failure) +
 							" " + getErrorMessage(error), false);
