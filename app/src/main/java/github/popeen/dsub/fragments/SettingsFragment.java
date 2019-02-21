@@ -41,6 +41,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.jsoup.Jsoup;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -710,10 +712,12 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private void testConnection(final int instance) {
 		LoadingTask<Boolean> task = new LoadingTask<Boolean>(context) {
 			private int previousInstance;
-
+			private int statusCode;
 			@Override
 			protected Boolean doInBackground() throws Throwable {
 				updateProgress(R.string.settings_testing_connection);
+
+				statusCode = Jsoup.connect(Util.getRestUrl(context, "ping")).followRedirects(false).execute().statusCode();
 
 				previousInstance = Util.getActiveServer(context);
 				testingConnection = true;
@@ -746,8 +750,12 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			@Override
 			protected void error(Throwable error) {
 				Log.w(TAG, error.toString(), error);
-				new ErrorDialog(context, getResources().getString(R.string.settings_connection_failure) +
-						" " + getErrorMessage(error), false);
+				if(statusCode == 200){
+					new ErrorDialog(context, "username or password", false);
+				}else {
+					new ErrorDialog(context, getResources().getString(R.string.settings_connection_failure) +
+							" " + getErrorMessage(error), false);
+				}
 			}
 		};
 		task.execute();
