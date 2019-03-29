@@ -8,7 +8,7 @@ android {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 14
 		targetSdkVersion 26
-		versionCode 30
+		versionCode 32
 		versionName '1.0.20-beta'
 		setProperty("archivesBaseName", "Booksonic $versionName")
 		resConfigs "sv"
