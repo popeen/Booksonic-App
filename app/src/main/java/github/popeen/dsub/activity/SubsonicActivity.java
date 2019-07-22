@@ -290,7 +290,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
                                         t.setVisibility(View.VISIBLE);
                                     } else {
                                         Log.w(":)", ":)");
-                                        t.setVisibility(View.INVISIBLE);
+                                        t.setVisibility(View.GONE);
                                         try {
                                             resp = json.getJSONObject("subsonic-response").getString("emulator");
                                             t.setText("Server Emulator: "+resp.toString());

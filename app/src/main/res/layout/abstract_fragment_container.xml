@@ -12,7 +12,7 @@
 		android:layout_height="wrap_content"
 		android:text=""
 		android:id="@+id/msg"
-		android:visibility="invisible"
+		android:visibility="gone"
 		android:layout_gravity="center|top" />
 
 	<FrameLayout
