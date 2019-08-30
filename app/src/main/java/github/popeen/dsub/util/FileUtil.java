@@ -116,12 +116,15 @@ public class FileUtil {
         File dir = getAlbumDirectory(context, song);
 
         StringBuilder fileName = new StringBuilder();
-        
+
+        /*
+        TODO, we want to do this but it brakes offline playback. As temporary fix disable this and bring it back once offline playback works with it as well
         Integer albumNumber=song.getDiscNumber();
         if(albumNumber!=null){
         	fileName.append(albumNumber);
         	fileName.append('-');
 		}
+		*/
 
         Integer track = song.getTrack();
         if (track != null) {
