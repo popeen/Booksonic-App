@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="1.0.21" versioncode="34" releasedate="2019-08-31">
+    <release version="1.0.21-BETA" versioncode="34" releasedate="2019-08-31">
         <change>Fixed a bug where playback didn't work in offline mode</change>
     </release>
     <release version="1.0.20" versioncode="33" releasedate="2019-03-29">
