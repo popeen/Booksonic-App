@@ -1349,7 +1349,7 @@ public final class Util {
             // Ignored.
         }
     }
-    
+
     @TargetApi(8)
 	public static void requestAudioFocus(final Context context, final AudioManager audioManager) {
     	if(Build.VERSION.SDK_INT >= 26) {
@@ -1362,6 +1362,7 @@ public final class Util {
 				audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
 						.setAudioAttributes(playbackAttributes)
 						.setOnAudioFocusChangeListener(getAudioFocusChangeListener(context, audioManager))
+						.setWillPauseWhenDucked(true)
 						.build();
 				audioManager.requestAudioFocus(audioFocusRequest);
 			}
