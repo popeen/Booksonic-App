@@ -1322,7 +1322,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			if(podcastDescription != null){
 				text = podcastDescription;
 			}
-			if(artistInfo != null){
+			if(artistInfo != null && bookDescription.equals("The server has no description for this book")){
 				text = artistInfo.getBiography();
 			}
 			Spanned spanned = null;
