@@ -399,7 +399,9 @@ public class DownloadService extends Service {
 	}
 	public static void startService(Context context, Intent intent) {
 		PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
-		if (Build.VERSION.SDK_INT < 26 || (powerManager != null && powerManager.isIgnoringBatteryOptimizations(intent.getPackage()))) {
+		//According to Google Play logs this is causing a lot of crashes, most likely it is when ignoring battery optimizations.
+		// As a test I am removing that part and will check back at end of BETA to see if crashes stopped
+		if (Build.VERSION.SDK_INT < 26){ // || (powerManager != null && powerManager.isIgnoringBatteryOptimizations(intent.getPackage()))) {
 			context.startService(intent);
 		} else {
 			context.startForegroundService(intent);
