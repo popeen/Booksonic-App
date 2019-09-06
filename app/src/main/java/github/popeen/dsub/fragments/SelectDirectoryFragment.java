@@ -1289,6 +1289,24 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		} catch(Exception e){
 			Log.w("GetInfoError", e.toString());
+			try{
+
+				String endpoint = "getBookDirectory";
+				if (Util.isTagBrowsing(context)) {
+					endpoint = "getBook";
+				}
+				SharedPreferences prefs = Util.getPreferences(context);
+				String url = Util.getRestUrl(context, endpoint) +
+						"&id=" + directory.getId() + "&f=json";
+
+				Log.w("GetInfo", url);
+
+				BookInfoAPIParams params = new BookInfoAPIParams(url, "", "", 0);
+				bookInfo = new BookInfoAPI(context).execute(params).get();
+				bookDescription = bookInfo[0];
+			}catch(Exception e2){
+				Log.w("GetInfoError", e2.toString());
+			}
 		}
 		if(bookDescription.equals("noInfo")){
 			bookDescription = "The server has no description for this book"; }
