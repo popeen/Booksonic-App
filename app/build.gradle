@@ -66,7 +66,7 @@ dependencies {
 	implementation 'com.sothree.slidinguppanel:library:3.0.0'
 	implementation 'de.hdodenhof:circleimageview:1.2.1'
     implementation 'com.shehabic.droppy:Droppy:0.5.1@aar'
-	implementation group: 'org.fourthline.cling', name: 'cling-core', version:'2.1.1'
+	implementation group: 'org.fourthline.cling', name: 'cling-core', version:'2.1.2'
 	implementation group: 'org.fourthline.cling', name: 'cling-support', version:'2.1.1'
 	implementation group: 'org.eclipse.jetty', name: 'jetty-server', version:'8.1.16.v20140903'
 	implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version:'8.1.16.v20140903'
