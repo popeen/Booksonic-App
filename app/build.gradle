@@ -1,7 +1,13 @@
 apply plugin: 'com.android.application'
 
+repositories {
+	maven {
+		url "https://maven.google.com"
+	}
+}
+
 android {
-	compileSdkVersion 27	
+	compileSdkVersion 28
 	useLibrary 'org.apache.http.legacy'
 	
 	defaultConfig {
@@ -62,8 +68,8 @@ dependencies {
 	implementation 'com.android.support:mediarouter-v7:27.1.+'
 	implementation 'com.android.support:recyclerview-v7:27.1.+'
 	implementation 'com.android.support:design:27.1.+'
-	googleImplementation 'com.google.android.gms:play-services-cast:8.1.0'
-	implementation 'com.sothree.slidinguppanel:library:3.0.0'
+	implementation 'com.google.android.gms:play-services-cast:8.1.0'
+	implementation 'com.sothree.slidinguppanel:library:3.2.1'
 	implementation 'de.hdodenhof:circleimageview:1.2.1'
     implementation 'com.shehabic.droppy:Droppy:0.5.1@aar'
 	implementation group: 'org.fourthline.cling', name: 'cling-core', version:'2.1.1'
