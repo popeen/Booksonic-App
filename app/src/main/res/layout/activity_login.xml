@@ -38,7 +38,8 @@
                 android:layout_height="200dp"
                 android:contentDescription="Logo"
                 android:paddingLeft="30dp"
-                android:paddingRight="30dp" />
+                android:paddingRight="30dp"
+                android:src="@drawable/booksonic_text_logo"/>
 
             <EditText
                 android:id="@+id/address"
