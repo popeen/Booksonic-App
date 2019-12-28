@@ -388,7 +388,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			} else {
 				Dialog log = changeLog.getLogDialog();
 				if (log != null) {
-					log.show();
+					//log.show(); //For now we don't want to show changelog on first start after update, most users don't care about this. If they want to see it they can do that from the top right menu. Might change it back later depending on feedback.
 				}
 			}
 		}
