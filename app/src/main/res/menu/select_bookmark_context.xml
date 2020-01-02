@@ -6,18 +6,6 @@
 		android:id="@+id/bookmark_menu_info"
 		android:title="@string/common.info"/>
 
-	<group android:id="@+id/hide_play_next">
-		<item
-			android:id="@+id/song_menu_play_next"
-			android:title="@string/common.play_next"/>
-	</group>
-
-	<group android:id="@+id/hide_play_last">
-		<item
-			android:id="@+id/song_menu_play_last"
-			android:title="@string/common.play_last"/>
-	</group>
-
 	<item
 		android:id="@+id/song_menu_show_album"
 		android:title="@string/download.menu_show_album"/>
@@ -30,12 +18,6 @@
 		<item
 			android:id="@+id/song_menu_download"
 			android:title="@string/common.download"/>
-	</group>
-
-	<group android:id="@+id/hide_pin">
-		<item
-			android:id="@+id/song_menu_pin"
-			android:title="@string/common.pin"/>
 	</group>
 
 	<group android:id="@+id/hide_delete">

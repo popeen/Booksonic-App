@@ -149,10 +149,6 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 			menuInflater.inflate(R.menu.multiselect_media, menu);
 		}
 
-		if(!removeFromPlaylist) {
-			menu.removeItem(R.id.menu_remove_playlist);
-		}
-
 		if(!selected.isEmpty()) {
 			MenuItem starItem = menu.findItem(R.id.menu_star);
 			if(starItem != null) {

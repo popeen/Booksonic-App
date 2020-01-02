@@ -6,14 +6,6 @@
 		android:icon="?attr/actionbar_start"
 		android:title="@string/menu.play"
 		compat:showAsAction="always|withText"/>
-		
-	<item 
-		android:id="@+id/menu_shuffle"
-		android:icon="?attr/shuffle"
-		android:title="@string/menu.shuffle"
-		compat:showAsAction="ifRoom|withText"
-		android:visible="false"/>
-
 	<group android:id="@+id/not_touchscreen">
 		<item
 			android:id="@+id/menu_refresh"
@@ -27,18 +19,6 @@
 		android:title="@string/common.download"/>
 		
 	<item 
-		android:id="@+id/menu_cache"
-		android:title="@string/common.pin"/>
-		
-	<item 
 		android:id="@+id/menu_delete"
 		android:title="@string/menu.delete_cache"/>
-
-	<item
-		android:id="@+id/menu_play_next"
-		android:title="@string/common.play_next"/>
-
-	<item
-		android:id="@+id/menu_play_last"
-		android:title="@string/menu.play_last"/>
 </menu>

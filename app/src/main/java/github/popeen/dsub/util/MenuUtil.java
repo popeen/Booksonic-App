@@ -35,10 +35,6 @@ public final class MenuUtil {
 	private final static String TAG = MenuUtil.class.getSimpleName();
 
 	public static void hideMenuItems(Context context, Menu menu, UpdateView updateView) {
-		if(!ServerInfo.checkServerVersion(context, "1.8")) {
-			menu.setGroupVisible(R.id.server_1_8, false);
-			menu.setGroupVisible(R.id.hide_star, false);
-		}
 		if(!ServerInfo.checkServerVersion(context, "1.9")) {
 			menu.setGroupVisible(R.id.server_1_9, false);
 		}
@@ -49,15 +45,6 @@ public final class MenuUtil {
 		SharedPreferences prefs = Util.getPreferences(context);
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_NOW, true)) {
 			menu.setGroupVisible(R.id.hide_play_now, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_SHUFFLED, true)) {
-			menu.setGroupVisible(R.id.hide_play_shuffled, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_NEXT, false)) {
-			menu.setGroupVisible(R.id.hide_play_next, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_LAST, true)) {
-			menu.setGroupVisible(R.id.hide_play_last, false);
 		}
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_DOWNLOAD, false)) {
 			menu.setGroupVisible(R.id.hide_download, false);
@@ -70,12 +57,6 @@ public final class MenuUtil {
 		}
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
 			menu.setGroupVisible(R.id.hide_star, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || !UserUtil.canShare()) {
-			menu.setGroupVisible(R.id.hide_share, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {
-			menu.setGroupVisible(R.id.hide_rating, false);
 		}
 
 		if(!Util.isOffline(context)) {

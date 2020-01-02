@@ -72,7 +72,5 @@ public class BookmarkAdapter extends SectionAdapter<MusicDirectory.Entry> {
 		} else {
 			menuInflater.inflate(R.menu.multiselect_media, menu);
 		}
-
-		menu.removeItem(R.id.menu_remove_playlist);
 	}
 }

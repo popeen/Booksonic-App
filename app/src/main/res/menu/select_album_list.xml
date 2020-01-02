@@ -6,13 +6,6 @@
 		android:icon="?actionbar_start"
 		android:title="@string/menu.play"
 		compat:showAsAction="always|withText"/>
-		
-	<item
-		android:id="@+id/menu_shuffle"
-		android:icon="?attr/shuffle"
-		android:title="@string/menu.shuffle"
-		compat:showAsAction="ifRoom|withText"
-		android:visible="false"/>
 
 	<group android:id="@+id/not_touchscreen">
 		<item

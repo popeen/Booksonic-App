@@ -128,9 +128,6 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
 	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
 		MusicDirectory.Entry selectedItem = downloadFile.getSong();
 		onCreateContextMenuSupport(menu, menuInflater, updateView, selectedItem);
-		if(!selectedItem.isVideo() && !Util.isOffline(context)) {
-			menu.removeItem(R.id.song_menu_remove_playlist);
-		}
 
 		recreateContextMenu(menu);
 	}

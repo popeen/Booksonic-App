@@ -278,15 +278,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		} else if(artist && !showAll) {
 			menuInflater.inflate(R.menu.select_album, menu);
 
-			if(!ServerInfo.hasTopSongs(context)) {
-				menu.removeItem(R.id.menu_top_tracks);
-			}
-			if(!ServerInfo.checkServerVersion(context, "1.11")) {
-				menu.removeItem(R.id.menu_radio);
-				menu.removeItem(R.id.menu_similar_artists);
-			} else if(!ServerInfo.hasSimilarArtists(context)) {
-				menu.removeItem(R.id.menu_similar_artists);
-			}
+
 		} else {
 			if(podcastId == null) {
 				if(Util.isOffline(context)) {
@@ -295,17 +287,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				else {
 					menuInflater.inflate(R.menu.select_song, menu);
 
-					if(playlistId == null || !playlistOwner) {
-						menu.removeItem(R.id.menu_remove_playlist);
-					}
-				}
 
-				SharedPreferences prefs = Util.getPreferences(context);
-				if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_NEXT, true)) {
-					menu.setGroupVisible(R.id.hide_play_next, false);
-				}
-				if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_LAST, true)) {
-					menu.setGroupVisible(R.id.hide_play_last, false);
 				}
 			} else {
 				if(Util.isOffline(context)) {
@@ -329,23 +311,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_remove_playlist:
-				removeFromPlaylist(playlistId, playlistName, getSelectedIndexes());
-				return true;
 			case R.id.menu_download_all:
 				downloadAllPodcastEpisodes();
-				return true;
-			case R.id.menu_show_all:
-				setShowAll();
-				return true;
-			case R.id.menu_top_tracks:
-				showTopTracks();
-				return true;
-			case R.id.menu_similar_artists:
-				showSimilarArtists(id);
-				return true;
-			case R.id.menu_radio:
-				startArtistRadio(id);
 				return true;
 			case R.id.reverse:
 				FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -360,22 +327,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	@Override
 	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView updateView, Entry entry) {
 		onCreateContextMenuSupport(menu, menuInflater, updateView, entry);
-		if(!entry.isVideo() && !Util.isOffline(context) && (playlistId == null || !playlistOwner) && (podcastId == null  || Util.isOffline(context) && podcastId != null)) {
-			menu.removeItem(R.id.song_menu_remove_playlist);
-		}
-
 		recreateContextMenu(menu);
 	}
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Entry> updateView, Entry entry) {
 		if(onContextItemSelected(menuItem, entry)) {
 			return true;
-		}
-
-		switch (menuItem.getItemId()) {
-			case R.id.song_menu_remove_playlist:
-				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(entries.indexOf(entry)));
-				break;
 		}
 
 		return true;

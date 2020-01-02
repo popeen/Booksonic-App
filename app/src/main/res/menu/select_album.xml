@@ -7,20 +7,6 @@
 		android:title="@string/menu.play"
 		compat:showAsAction="always|withText"/>
 
-	<item
-		android:id="@+id/menu_radio"
-		android:icon="?attr/radio"
-		android:title="@string/menu.start_radio"
-		compat:showAsAction="ifRoom|withText"
-		android:visible="false"/>
-
-	<item
-		android:id="@+id/menu_shuffle"
-		android:icon="?attr/shuffle"
-		android:title="@string/menu.shuffle"
-		compat:showAsAction="ifRoom|withText"
-		android:visible="false"/>
-
 	<group android:id="@+id/not_touchscreen">
 		<item
 			android:id="@+id/menu_refresh"
@@ -30,24 +16,8 @@
 	</group>
 
 	<item
-		android:id="@+id/menu_top_tracks"
-		android:title="@string/menu.top_tracks"/>
-
-	<item
-		android:id="@+id/menu_similar_artists"
-		android:title="@string/menu.similar_artists"/>
-
-	<item
-		android:id="@+id/menu_show_all"
-		android:title="@string/menu.show_all"/>
-
-	<item
 		android:id="@+id/menu_download"
 		android:title="@string/common.download"/>
-
-	<item
-		android:id="@+id/menu_cache"
-		android:title="@string/common.pin"/>
 
 	<item
 		android:id="@+id/menu_delete"

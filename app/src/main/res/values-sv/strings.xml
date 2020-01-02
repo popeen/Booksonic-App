@@ -5,7 +5,7 @@
     <string name="common.ok">OK</string>
     <string name="common.save">Spara</string>
     <string name="common.cancel">Avbryt</string>
-    <string name="common.play_now">Spela nu</string>
+    <string name="common.play_now">Spela</string>
 	<string name="common.play_shuffled">Spela slumpat</string>
     <string name="common.play_next">Spela nästa</string>
     <string name="common.play_last">Spela Sista</string>

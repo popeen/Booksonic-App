@@ -123,7 +123,6 @@ public class PodcastChannelAdapter extends ExpandableSectionAdapter<Serializable
 			menuInflater.inflate(R.menu.multiselect_media, menu);
 		}
 
-		menu.removeItem(R.id.menu_remove_playlist);
 		menu.removeItem(R.id.menu_star);
 	}
 }

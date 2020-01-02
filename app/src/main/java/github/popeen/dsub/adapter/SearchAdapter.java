@@ -132,7 +132,5 @@ public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
 		} else {
 			menuInflater.inflate(R.menu.multiselect_media, menu);
 		}
-
-		menu.removeItem(R.id.menu_remove_playlist);
 	}
 }

@@ -8,13 +8,6 @@
 		compat:actionViewClass="android.support.v7.widget.SearchView"
 		compat:showAsAction="ifRoom|collapseActionView"/>
 
-	<item 
-		android:id="@+id/menu_global_shuffle"
-		android:icon="?attr/shuffle"
-		android:title="@string/menu.shuffle"
-		compat:showAsAction="always|withText"
-		android:visible="false"/>
-
 	<group android:id="@+id/not_touchscreen">
 		<item
 			android:id="@+id/menu_refresh"
@@ -22,11 +15,6 @@
 			android:title="@string/menu.refresh"
 			compat:showAsAction="ifRoom|withText"/>
 	</group>
-
-	<item
-		android:id="@+id/menu_first_level_artist"
-		android:title="@string/menu.first_level_artist"
-		android:checkable="true"/>
 
 	<item
 		android:id="@+id/menu_exit"

@@ -8,45 +8,14 @@
 		compat:showAsAction="always|withText"/>
 
 	<item
-		android:id="@+id/menu_shuffle"
-		android:icon="?attr/shuffle"
-		android:title="@string/menu.shuffle"
-		compat:showAsAction="ifRoom|withText"
-		android:visible="false"/>
-
-	<item
 		android:id="@+id/menu_download"
 		android:title="@string/common.download"/>
-
-	<item
-		android:id="@+id/menu_cache"
-		android:title="@string/common.pin"/>
 
 	<item
 		android:id="@+id/menu_delete"
 		android:title="@string/menu.delete_cache"/>
 
 	<item
-		android:id="@+id/menu_add_playlist"
-		android:title="@string/menu.add_playlist"/>
-
-	<item
-		android:id="@+id/menu_remove_playlist"
-		android:title="@string/menu.remove_playlist"/>
-
-	<item
 		android:id="@+id/menu_star"
 		android:title="@string/common.star"/>
-
-	<group android:id="@+id/hide_play_next">
-		<item
-			android:id="@+id/menu_play_next"
-			android:title="@string/common.play_next"/>
-	</group>
-
-	<group android:id="@+id/hide_play_last">
-		<item
-			android:id="@+id/menu_play_last"
-			android:title="@string/menu.play_last"/>
-	</group>
 </menu>

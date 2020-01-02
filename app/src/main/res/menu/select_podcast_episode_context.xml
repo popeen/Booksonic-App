@@ -6,19 +6,6 @@
 		android:id="@+id/song_menu_info"
 		android:title="@string/common.info"/>
 
-	<group android:id="@+id/hide_play_next">
-		<item
-			android:id="@+id/song_menu_play_next"
-			android:title="@string/common.play_next"
-			android:visible="false"/>
-	</group>
-
-	<group android:id="@+id/hide_play_last">
-		<item
-			android:id="@+id/song_menu_play_last"
-			android:title="@string/common.play_last"/>
-	</group>
-
 	<group android:id="@+id/hide_download">
 		<item
 			android:id="@+id/song_menu_download"

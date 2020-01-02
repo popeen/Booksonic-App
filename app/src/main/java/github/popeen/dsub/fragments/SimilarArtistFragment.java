@@ -62,9 +62,6 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 			case R.id.menu_play_now:
 				playAll(false);
 				return true;
-			case R.id.menu_shuffle:
-				playAll(true);
-				return true;
 		}
 
 		return super.onOptionsItemSelected(item);
