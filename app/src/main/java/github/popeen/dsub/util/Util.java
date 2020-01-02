@@ -52,6 +52,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -78,6 +79,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
@@ -397,7 +399,7 @@ public final class Util {
 		}
 		builder.append(method).append(".view");
 		builder.append("?u=").append(username);
-		if(method != null && ServerInfo.canUseToken(context, instance)) {
+		if(method != null && ServerInfo.canUseToken(context, instance) && !serverUrl.equals("https://play.asti.ga")) {
 			int hash = (username + password).hashCode();
 			Pair<String, String> values = tokens.get(hash);
 			if(values == null) {
@@ -1550,5 +1552,13 @@ public final class Util {
 		}
 
 		return random;
+	}
+
+	public static void setMargins (View view, int left, int top, int right, int bottom) {
+		if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+			ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+			p.setMargins(left, top, right, bottom);
+			view.requestLayout();
+		}
 	}
 }

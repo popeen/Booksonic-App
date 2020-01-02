@@ -1117,24 +1117,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		// Try a few times to get a random cover art
 		if(artistInfo != null) {
 			final String url = artistInfo.getImageUrl();
-			coverArtView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (url == null) {
-						return;
-					}
-
-					AlertDialog.Builder builder = new AlertDialog.Builder(context);
-					ImageView fullScreenView = new ImageView(context);
-					imageLoader.loadImage(fullScreenView, url, true);
-					builder.setCancelable(true);
-
-					AlertDialog imageDialog = builder.create();
-					// Set view here with unecessary 0's to remove top/bottom border
-					imageDialog.setView(fullScreenView, 0, 0, 0, 0);
-					imageDialog.show();
-				}
-			});
 			imageLoader.loadImage(coverArtView, url, false);
 		} else if(entries.size() > 0) {
 
@@ -1143,26 +1125,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			for (int i = 0; (i < 3) && (coverArtRep == null || coverArtRep.getCoverArt() == null); i++) {
 				coverArtRep = entries.get(random.nextInt(entries.size()));
 			}
-
-
 			coverArtView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-
-					if (coverArtRep == null || coverArtRep.getCoverArt() == null) {
-						return;
-					}
-
-					AlertDialog.Builder builder = new AlertDialog.Builder(context);
-					ImageView fullScreenView = new ImageView(context);
-
-					imageLoader.loadImage(fullScreenView, coverArtRep, true, true);
-					builder.setCancelable(true);
-
-					AlertDialog imageDialog = builder.create();
-					// Set view here with unecessary 0's to remove top/bottom border
-					imageDialog.setView(fullScreenView, 0, 0, 0, 0);
-					imageDialog.show();
+					playNow(false, false);
 				}
 			});
 
@@ -1285,10 +1251,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			Spanned spanned = null;
 			if(text != null) {
 				String newText = "";
-				try{ if(!artistName.equals("")){ newText += "<b>" + context.getResources().getString(R.string.main_artist) + "</b>: " + artistName + "<br/>"; } } catch(Exception e){}
+				try{ if(!artistName.equals("")){ newText += "<br/><b>" + context.getResources().getString(R.string.main_artist) + "</b>: " + artistName + "<br/>"; } } catch(Exception e){}
 				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_reader) + "</b>: " + bookReader + "<br/>"; } } catch(Exception e){}
 				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_length) + "</b>: " + Util.formatDuration(totalDuration) + "<br/>"; } } catch(Exception e){}
-				try{ newText += text+"<br/>";} catch(Exception e){}
+				try{ newText += "<br/>&nbsp;<br/>"+text+"<br/>";} catch(Exception e){}
 				spanned = Html.fromHtml(newText);
 			}
 
@@ -1299,16 +1265,22 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			artistView.setTextAppearance(context, android.R.style.TextAppearance_Small);
 
 			final Spanned spannedText = spanned;
-			artistView.setOnClickListener(new View.OnClickListener() {
-				@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-				@Override
-				public void onClick(View v) {
 					if(artistView.getMaxLines() == minLines) {
 						// Use LeadingMarginSpan2 to try to make text flow around image
 						Display display = context.getWindowManager().getDefaultDisplay();
 						ImageView coverArtView = (ImageView) header.findViewById(R.id.select_album_art);
+						ImageView coverArtPlayView = (ImageView) header.findViewById(R.id.select_album_art_play);
 						coverArtView.measure(display.getWidth(), display.getHeight());
 
+						if(artistInfo == null) {
+							coverArtView.getLayoutParams().width = display.getWidth();
+							coverArtView.getLayoutParams().height = display.getWidth();
+							int margin = (display.getWidth()/2)-(coverArtPlayView.getLayoutParams().width/2);
+							Util.setMargins(coverArtPlayView, margin, margin ,margin ,margin);
+							coverArtPlayView.setVisibility(View.VISIBLE);
+						}else{
+							coverArtPlayView.setVisibility(View.INVISIBLE);
+						}
 						int height, width;
 						ViewGroup.MarginLayoutParams vlp = (ViewGroup.MarginLayoutParams) coverArtView.getLayoutParams();
 						if(coverArtView.getDrawable() != null) {
@@ -1339,8 +1311,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					} else {
 						artistView.setMaxLines(minLines);
 					}
-				}
-			});
 			artistView.setMovementMethod(LinkMovementMethod.getInstance());
 		} else if(topTracks) {
 			artistView.setText(R.string.menu_top_tracks);

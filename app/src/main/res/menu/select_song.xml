@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
-	<item 
-		android:id="@+id/menu_play_now"
-		android:icon="?attr/actionbar_start"
-		android:title="@string/menu.play"
-		compat:showAsAction="always|withText"/>
+
 	<group android:id="@+id/not_touchscreen">
 		<item
 			android:id="@+id/menu_refresh"

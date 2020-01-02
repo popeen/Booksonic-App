@@ -14,9 +14,18 @@
 			android:id="@+id/select_album_text_layout"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:layout_toRightOf="@+id/select_album_art"
+			android:layout_toRightOf="@+id/select_album_art_play"
 			android:orientation="vertical"
 			android:layout_centerVertical="true">
+
+			<github.popeen.dsub.view.RecyclingImageView
+				android:id="@+id/select_album_art"
+				android:layout_width="@dimen/AlbumArt.Header"
+				android:layout_height="@dimen/AlbumArt.Header"
+				android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true"
+				android:scaleType="fitCenter"
+				android:contentDescription="@null"/>
 
 			<TextView
 				android:text="This is the album title"
@@ -110,15 +119,17 @@
 				android:layout_gravity="center_vertical"/>
 		</LinearLayout>
 
-		<github.popeen.dsub.view.RecyclingImageView
-			android:id="@+id/select_album_art"
+		<ImageView
+			android:id="@+id/select_album_art_play"
 			android:layout_width="@dimen/AlbumArt.Header"
 			android:layout_height="@dimen/AlbumArt.Header"
 			android:layout_alignParentTop="true"
 			android:layout_alignParentLeft="true"
-			android:layout_marginRight="10dip"
-			android:scaleType="fitCenter"
+			android:layout_margin="100dp"
+			android:src="@drawable/ic_media_play_dark"
+			android:background="@drawable/coverartplaybackground"
 			android:contentDescription="@null"/>
+
 	</RelativeLayout>
 
 	<FrameLayout
