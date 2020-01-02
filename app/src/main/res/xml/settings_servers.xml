@@ -10,5 +10,9 @@
 			android:key="serverAdd"
 			android:order="1000000"
 			android:title="@string/settings.servers_add"/>
+		<Preference
+			android:key="serverHelp"
+			android:order="1000001"
+			android:title="@string/settings.server_help"/>
 	</PreferenceCategory>
 </PreferenceScreen>

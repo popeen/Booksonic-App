@@ -9,7 +9,7 @@
 	<string name="common.play_shuffled">Play Shuffled</string>
     <string name="common.play_next">Play Next</string>
     <string name="common.play_last">Play Last</string>
-	<string name="common.download">Cache</string>
+	<string name="common.download">Download</string>
     <string name="common.pin">Permanent Cache</string>
     <string name="common.delete">Delete</string>
 	<string name="common.star">Star</string>
@@ -105,7 +105,7 @@
 	<string name="menu.show_all">Show all songs</string>
 	<string name="menu.show_artist">Show Author</string>
 	<string name="menu.share">Share</string>
-	<string name="menu.delete_cache">Delete Cache</string>
+	<string name="menu.delete_cache">Delete from downloads</string>
 	<string name="menu.cast">Cast To Device</string>
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Add User</string>
@@ -286,6 +286,7 @@
 	<string name="settings.server_open_browser">Open in browser</string>
 	<string name="settings.server_sync_summary">Whether or not syncing is enabled for this server</string>
 	<string name="settings.server_sync">Sync Enabled</string>
+	<string name="settings.server_help">Help / Instructions</string>
     <string name="settings.cache_title">Cache</string>
 
     <string name="settings.preload_wifi">Tracks to preload (Wifi)</string>
@@ -296,8 +297,8 @@
     <string name="settings.cache_location_reset">The cache location you have set is no longer writable. If you recently upgraded your phone OS to KitKat 4.4, then the way apps write to the SD Card has changed so that they can only write to a specific location.  The location that Booksonic uses has already been automatically changed to the correct location.  In order to delete all of the old app data, you will need to mount the SD Card on your computer and delete the old folder manually</string>
 	<string name="settings.cache_location_internal">Internal</string>
 	<string name="settings.cache_location_external">External</string>
-	<string name="settings.cache_clear">Clear Cache</string>
-	<string name="settings.cache_clear_complete">Finished clearing cache</string>
+	<string name="settings.cache_clear">Clear Downloads</string>
+	<string name="settings.cache_clear_complete">Finished clearing downloads</string>
     <string name="settings.testing_connection">Testing connection...</string>
     <string name="settings.testing_ok">Connection is OK</string>
     <string name="settings.testing_unlicensed">Connection is OK. Server unlicensed.</string>
@@ -408,7 +409,7 @@
 	<string name="settings.video_hls">HTTP Live Stream (HLS) (Requires Subsonic 4.8+)</string>
 	<string name="settings.video_transcode">Direct Transcode (Requires video -> mp4 or similar setup on Server)</string>
 	<string name="settings.video_flash">Flash (Requires Plugin)</string>
-	<string name="settings.cache_screen_title">Cache/Network</string>
+	<string name="settings.cache_screen_title">Download/Network</string>
 	<string name="settings.playback_title">Playback</string>
 	<string name="settings.hide_widget_title">Hide Widget</string>
 	<string name="settings.hide_widget_summary">Hide widget after exiting app</string>
@@ -435,9 +436,9 @@
 	<string name="settings.sync_wifi">Sync on Wifi only</string>
 	<string name="settings.sync_wifi_summary">Only sync while on wifi</string>
 	<string name="settings.sync_most_recent">Sync Recently Added</string>
-	<string name="settings.sync_most_recent_summary">Automatically cache newly added books</string>
+	<string name="settings.sync_most_recent_summary">Automatically download newly added books</string>
 	<string name="settings.sync_starred">Sync Starred</string>
-	<string name="settings.sync_starred_summary">Automatically cache tracks, books, and authors which are starred</string>
+	<string name="settings.sync_starred_summary">Automatically download books, and authors which are starred</string>
 	<string name="settings.sync_notification">Show Sync Notification</string>
 	<string name="settings.sync_notification_summary">Show a notification after new media has been synced</string>
 	<string name="settings.menu_options.title">Optional Menu Options</string>
@@ -494,7 +495,7 @@
 	<string name="settings.casting_cache">Cache While Casting</string>
 	<string name="settings.casting_cache_summary">Cache currently playing songs while casting</string>
 	<string name="settings.casting.dlna_casting_enabled">DLNA Enabled</string>
-	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems on Android 7.0 try turning this off</string>
+	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems on Android 7.0 or newer try turning this off</string>
     <string name="settings.rewind_interval">Rewind Interval</string>
     <string name="settings.fastforward_interval">Fast Forward Interval</string>
 

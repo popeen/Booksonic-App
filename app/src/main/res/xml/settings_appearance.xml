@@ -88,12 +88,6 @@
 			android:defaultValue="true"/>
 
 		<CheckBoxPreference
-			android:title="@string/common.pin"
-			android:summary="@string/settings.menu_options.pin_summary"
-			android:key="showPin"
-			android:defaultValue="true"/>
-
-		<CheckBoxPreference
 			android:title="@string/common.delete"
 			android:summary="@string/settings.menu_options.delete_summary"
 			android:key="showDelete"
@@ -103,18 +97,6 @@
 			android:title="@string/common.star"
 			android:summary="@string/settings.menu_options.star_summary"
 			android:key="showStar"
-			android:defaultValue="true"/>
-
-		<CheckBoxPreference
-			android:title="@string/menu.share"
-			android:summary="@string/settings.menu_options.shared_summary"
-			android:key="showShared"
-			android:defaultValue="false" />
-
-		<CheckBoxPreference
-			android:title="@string/menu.rate"
-			android:summary="@string/settings.menu_options.rate_summary"
-			android:key="showRating"
 			android:defaultValue="true"/>
 	</PreferenceCategory>
 </PreferenceScreen>

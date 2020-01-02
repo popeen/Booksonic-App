@@ -56,7 +56,7 @@
 		<ListPreference
 			android:title="@string/settings.preload_wifi"
 			android:key="preloadCountWifi"
-			android:defaultValue="3"
+			android:defaultValue="-1"
 			android:entryValues="@array/preloadCountValues"
 			android:entries="@array/preloadCountNames"/>
 

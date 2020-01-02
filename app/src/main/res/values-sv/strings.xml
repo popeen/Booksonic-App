@@ -9,7 +9,7 @@
 	<string name="common.play_shuffled">Spela slumpat</string>
     <string name="common.play_next">Spela nästa</string>
     <string name="common.play_last">Spela Sista</string>
-	<string name="common.download">Cache</string>
+	<string name="common.download">Ladda ner</string>
     <string name="common.pin">Permanent cache</string>
     <string name="common.delete">Ta Bort</string>
 	<string name="common.star">Favorit</string>
@@ -103,7 +103,7 @@
 	<string name="menu.show_all">Visa all media</string>
 	<string name="menu.show_artist">Visa Författare</string>
 	<string name="menu.share">Dela</string>
-	<string name="menu.delete_cache">Rensa cache</string>
+	<string name="menu.delete_cache">Ta bort från nedladdade filer</string>
 	<string name="menu.cast">Casta till enhet</string>
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Lägg till användare</string>
@@ -283,8 +283,8 @@
     <string name="settings.cache_location_error">Ogiltig cache placering. Använder standard.</string>
 
     <string name="settings.cache_location_reset">Din cache placering är inte skrivbar. Om du nyligen uppdaterade Android till KitKat 4.4 så har sättet appar skriver till SD-kortet ändrats så de bara kan skriva till en specifik plats. Platsen som Booksonic använder har automatiskt ändrats till den korrekta platsen. För att radera gammal data måste du sätta in SD-kortet i din dator och radera mappen manuellt</string>
-	<string name="settings.cache_clear">Rensa cachen</string>
-	<string name="settings.cache_clear_complete">Cachen har rensats</string>
+	<string name="settings.cache_clear">Rensa nedladdade filer</string>
+	<string name="settings.cache_clear_complete">Nedladde filer har rensats</string>
     <string name="settings.testing_connection">Testar anslutning...</string>
     <string name="settings.testing_ok">Anslutningen är OK</string>
     <string name="settings.testing_unlicensed">Anslutningen är OK. Servern är olicenserad.</string>
@@ -396,7 +396,7 @@
 	<string name="settings.video_hls">HTTP Live Stream (HLS)</string>
 	<string name="settings.video_transcode">Direct Transcode (kräver video -> mp4 eller liknande installerat på servern)</string>
 	<string name="settings.video_flash">Flash (kräver plugin)</string>
-	<string name="settings.cache_screen_title">Cache/Nätverk</string>
+	<string name="settings.cache_screen_title">Ladda ner/Nätverk</string>
 	<string name="settings.playback_title">Uppspelning</string>
 	<string name="settings.hide_widget_title">Dölj widget</string>
 	<string name="settings.hide_widget_summary">Dölj widget efter att jag lämnat appen</string>
@@ -422,10 +422,10 @@
 	<string name="settings.sync_wifi_summary">Synkronisera bara på Wi-Fi</string>
 	<string name="settings.sync_most_recent">Synkronisera nyligen tillagda</string>
 
-	<string name="settings.sync_most_recent_summary">Lägg automatiskt till nya böcker i cachen</string>
+	<string name="settings.sync_most_recent_summary">Ladda automatiskt ner nya böcker</string>
 	<string name="settings.sync_starred">Synkronisera favoriter</string>
 
-	<string name="settings.sync_starred_summary">Lägg automatiskt till spår, böcker och författare som är favoriter i cachen</string>
+	<string name="settings.sync_starred_summary">Ladda automatiskt ner böcker och författare som är favoriter</string>
 	<string name="settings.sync_notification">Visa synkroniserings notifikation</string>
 	<string name="settings.sync_notification_summary">Visa notifikation efter att ny media har blivit synkroniserad</string>
 	<string name="settings.menu_options.title">Valfria menyalternativ</string>

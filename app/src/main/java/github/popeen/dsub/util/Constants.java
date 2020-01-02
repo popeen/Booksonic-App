@@ -79,6 +79,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SERVER_KEY = "server";
 	public static final String PREFERENCES_KEY_SERVER_COUNT = "serverCount";
 	public static final String PREFERENCES_KEY_SERVER_ADD = "serverAdd";
+	public static final String PREFERENCES_KEY_SERVER_HELP = "serverHelp";
 	public static final String PREFERENCES_KEY_SERVER_REMOVE = "serverRemove";
     public static final String PREFERENCES_KEY_SERVER_INSTANCE = "serverInstanceId";
     public static final String PREFERENCES_KEY_SERVER_NAME = "serverName";

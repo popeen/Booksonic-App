@@ -16,25 +16,7 @@
 			android:title="@string/settings.bookmarks_enabled"
 			android:summary="@string/settings.bookmarks_enabled_summary"
 			android:key="bookmarksEnabled"
-			android:defaultValue="false"/>
-
-		<CheckBoxPreference
-			android:title="@string/settings.internet_radio_enabled"
-			android:summary="@string/settings.internet_radio_enabled_summary"
-			android:key="internetRadioEnabled"
 			android:defaultValue="true"/>
-
-		<CheckBoxPreference
-			android:title="@string/settings.shares_enabled"
-			android:summary="@string/settings.shares_enabled_summary"
-			android:key="sharedEnabled"
-			android:defaultValue="false"/>
-
-		<CheckBoxPreference
-			android:title="@string/settings.chat_enabled"
-			android:summary="@string/settings.chat_enabled_summary"
-			android:key="chatEnabled"
-			android:defaultValue="false"/>
 
 		<CheckBoxPreference
 			android:title="@string/settings.admin_enabled"
@@ -53,13 +35,5 @@
 			android:entryValues="@array/defaultDrawerItemsDescriptions"
 			android:entries="@array/defaultDrawerItems"
 			android:defaultValue="Home"/>
-
-		<github.popeen.dsub.view.SeekBarPreference
-			android:title="@string/settings.chat_refresh"
-			android:key="chatRefreshRate"
-			android:defaultValue="30"
-			android:dialogLayout="@layout/seekbar_preference"
-			myns:max="120"
-			myns:display="%.0f seconds"/>
 	</PreferenceCategory>
 </PreferenceScreen>

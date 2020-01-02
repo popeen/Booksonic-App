@@ -84,6 +84,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference tempLoss;
 	private ListPreference pauseDisconnect;
 	private Preference addServerPreference;
+	private Preference serverHelpPreference;
 	private PreferenceCategory serversCategory;
 	private ListPreference songPressAction;
 	private ListPreference videoPlayer;
@@ -250,6 +251,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		pauseDisconnect = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
 		serversCategory = (PreferenceCategory) this.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
 		addServerPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
+		serverHelpPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_HELP);
 		//videoPlayer = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		songPressAction = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION);
 		syncInterval = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
@@ -349,6 +351,16 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 					serverSettings.put(String.valueOf(instance), ss);
 					ss.update();
 
+					return true;
+				}
+			});
+
+			serverHelpPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					Uri uri = Uri.parse("https://popeen.com/2016/01/14/how-to-stream-audiobooks-to-your-phone-with-booksonic/");
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+					startActivity(browserIntent);
 					return true;
 				}
 			});

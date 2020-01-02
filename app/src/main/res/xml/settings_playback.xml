@@ -16,7 +16,7 @@
 		<ListPreference
 			android:title="@string/settings.temp_loss_title"
 			android:key="tempLoss"
-			android:defaultValue="1"
+			android:defaultValue="0"
 			android:entryValues="@array/tempLossValues"
 			android:entries="@array/tempLossNames"/>
 
@@ -31,20 +31,13 @@
 			android:title="@string/settings.persistent_title"
 			android:summary="@string/settings.persistent_summary"
 			android:key="persistentNotification"
-			android:defaultValue="false"/>
+			android:defaultValue="true"/>
 
 		<CheckBoxPreference
 			android:title="@string/settings.heads_up_notification"
 			android:summary="@string/settings.heads_up_notification_summary"
 			android:key="headsUpNotification"
 			android:defaultValue="false"/>
-
-		<ListPreference
-			android:title="@string/settings.song_press_action"
-			android:key="songPressAction"
-			android:defaultValue="all"
-			android:entryValues="@array/songPressActionValues"
-			android:entries="@array/songPressActionNames"/>
 
         <github.popeen.dsub.view.SeekBarPreference
             android:title="@string/settings.rewind_interval"
@@ -101,12 +94,6 @@
 	<PreferenceCategory
 		android:title="@string/settings.other_title"
 		android:key="otherSettings">
-
-		<CheckBoxPreference
-			android:title="@string/settings.scrobble_title"
-			android:summary="@string/settings.scrobble_summary"
-			android:key="scrobble"
-			android:defaultValue="true"/>
 
 		<CheckBoxPreference
 			android:title="@string/settings.media_button_title"
