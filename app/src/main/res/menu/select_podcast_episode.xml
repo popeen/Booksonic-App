@@ -3,12 +3,6 @@
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 
 	<item
-		android:id="@+id/menu_play_now"
-		android:icon="?attr/actionbar_start"
-		android:title="@string/menu.play"
-		compat:showAsAction="always|withText"/>
-
-	<item
 		android:id="@+id/reverse"
 		android:icon="?attr/downloading"
 		android:title="@string/playlist.reverse"
