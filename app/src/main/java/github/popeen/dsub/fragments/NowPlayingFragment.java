@@ -15,15 +15,8 @@
 
 package github.popeen.dsub.fragments;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import android.annotation.TargetApi;
 import android.app.TimePickerDialog;
-import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.MediaRouteButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,19 +47,25 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.shehabic.droppy.DroppyClickCallbackInterface;
 import com.shehabic.droppy.DroppyMenuPopup;
 import com.shehabic.droppy.animations.DroppyFadeInAnimation;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.activity.SubsonicFragmentActivity;
+import github.popeen.dsub.adapter.DownloadFileAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.audiofx.EqualizerController;
 import github.popeen.dsub.domain.Bookmark;
@@ -80,20 +80,26 @@ import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.service.OfflineException;
 import github.popeen.dsub.service.ServerTooOldException;
 import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.DownloadFileItemHelperCallback;
+import github.popeen.dsub.util.DrawableTint;
+import github.popeen.dsub.util.DroppySpeedControl;
+import github.popeen.dsub.util.FileUtil;
+import github.popeen.dsub.util.MenuUtil;
+import github.popeen.dsub.util.SQLiteHandler;
 import github.popeen.dsub.util.SilentBackgroundTask;
-import github.popeen.dsub.adapter.DownloadFileAdapter;
+import github.popeen.dsub.util.UpdateHelper;
+import github.popeen.dsub.util.Util;
+import github.popeen.dsub.view.AutoRepeatButton;
 import github.popeen.dsub.view.FadeOutAnimation;
 import github.popeen.dsub.view.FastScroller;
 import github.popeen.dsub.view.UpdateView;
-import github.popeen.dsub.util.Util;
-import static github.popeen.dsub.domain.MusicDirectory.Entry;
-import static github.popeen.dsub.domain.PlayerState.*;
-import github.popeen.dsub.util.*;
-import github.popeen.dsub.view.AutoRepeatButton;
-import java.util.ArrayList;
-import java.util.concurrent.ScheduledFuture;
-
 import github.popeen.dsub.view.compat.CustomMediaRouteDialogFactory;
+
+import static github.popeen.dsub.domain.MusicDirectory.Entry;
+import static github.popeen.dsub.domain.PlayerState.COMPLETED;
+import static github.popeen.dsub.domain.PlayerState.IDLE;
+import static github.popeen.dsub.domain.PlayerState.PAUSED;
+import static github.popeen.dsub.domain.PlayerState.STOPPED;
 
 public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener, SectionAdapter.OnItemClickedListener<DownloadFile>, OnSongChangedListener {
 	private static final String TAG = NowPlayingFragment.class.getSimpleName();

@@ -1,10 +1,10 @@
 package github.popeen.dsub.util;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.shehabic.droppy.DroppyClickCallbackInterface;
 import com.shehabic.droppy.DroppyMenuCustomItem;
 

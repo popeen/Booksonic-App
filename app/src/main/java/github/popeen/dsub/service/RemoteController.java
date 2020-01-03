@@ -25,13 +25,13 @@ import android.util.Log;
 import java.util.Iterator;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import github.daneren2005.serverproxy.FileProxy;
+import github.daneren2005.serverproxy.ServerProxy;
+import github.daneren2005.serverproxy.WebProxy;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.RemoteStatus;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.Util;
-import github.daneren2005.serverproxy.FileProxy;
-import github.daneren2005.serverproxy.ServerProxy;
-import github.daneren2005.serverproxy.WebProxy;
 
 public abstract class RemoteController {
 	private static final String TAG = RemoteController.class.getSimpleName();

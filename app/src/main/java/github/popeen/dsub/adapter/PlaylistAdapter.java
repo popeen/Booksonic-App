@@ -15,10 +15,10 @@
 package github.popeen.dsub.adapter;
 
 import android.content.Context;
+import android.view.ViewGroup;
 
 import java.util.List;
 
-import android.view.ViewGroup;
 import github.popeen.dsub.domain.Playlist;
 import github.popeen.dsub.util.ImageLoader;
 import github.popeen.dsub.view.FastScroller;

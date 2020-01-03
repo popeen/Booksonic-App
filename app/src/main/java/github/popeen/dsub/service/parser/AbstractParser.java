@@ -18,14 +18,15 @@
  */
 package github.popeen.dsub.service.parser;
 
-import java.io.IOException;
-import java.io.Reader;
-
-import org.xmlpull.v1.XmlPullParser;
-
 import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.IOException;
+import java.io.Reader;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.domain.Version;

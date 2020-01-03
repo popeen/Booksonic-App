@@ -21,11 +21,13 @@ package github.popeen.dsub.updates;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.Util;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

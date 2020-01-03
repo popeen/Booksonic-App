@@ -33,7 +33,6 @@ import java.util.List;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.Artist;
-import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.MusicDirectory.Entry;
 import github.popeen.dsub.service.DownloadFile;
 import github.popeen.dsub.service.DownloadService;

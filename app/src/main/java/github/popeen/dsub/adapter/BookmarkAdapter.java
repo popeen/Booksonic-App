@@ -16,13 +16,12 @@
 package github.popeen.dsub.adapter;
 
 import android.content.Context;
-
-import java.util.List;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.List;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.Bookmark;

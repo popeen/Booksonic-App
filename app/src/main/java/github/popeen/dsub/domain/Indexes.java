@@ -21,9 +21,9 @@ package github.popeen.dsub.domain;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.Serializable;
 
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.Util;

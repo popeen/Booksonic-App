@@ -22,6 +22,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.Genre;
 

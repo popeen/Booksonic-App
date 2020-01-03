@@ -4,11 +4,6 @@ import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.media.RemoteControlClient;
-import github.popeen.dsub.activity.SubsonicActivity;
-import github.popeen.dsub.service.DownloadService;
-import github.popeen.dsub.util.SilentBackgroundTask;
-
-import github.popeen.dsub.util.SilentBackgroundTask;
 
 import github.popeen.dsub.util.SilentBackgroundTask;
 

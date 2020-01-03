@@ -16,7 +16,6 @@
 package github.popeen.dsub.service.parser;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -26,8 +25,6 @@ import java.util.List;
 
 import github.popeen.dsub.domain.MusicFolder;
 import github.popeen.dsub.domain.User;
-import github.popeen.dsub.util.ProgressListener;
-import github.popeen.dsub.domain.User.MusicFolderSetting;
 import github.popeen.dsub.domain.User.Setting;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;

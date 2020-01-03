@@ -1,14 +1,7 @@
 package github.popeen.dsub.fragments;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,23 +11,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.view.MenuItem;
-import android.net.Uri;
+import android.view.View;
 import android.view.ViewGroup;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.ArtistAdapter;
 import github.popeen.dsub.adapter.EntryGridAdapter;
 import github.popeen.dsub.adapter.SearchAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.Artist;
-import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.MusicDirectory.Entry;
 import github.popeen.dsub.domain.SearchCritera;
 import github.popeen.dsub.domain.SearchResult;
+import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
-import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.util.BackgroundTask;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.TabBackgroundTask;

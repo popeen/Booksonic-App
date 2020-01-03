@@ -18,27 +18,27 @@
  */
 package github.popeen.dsub.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+
+import github.daneren2005.serverproxy.BufferFile;
 import github.popeen.dsub.domain.InternetRadioStation;
 import github.popeen.dsub.domain.MusicDirectory;
-import github.popeen.dsub.util.Constants;
-import github.popeen.dsub.util.SilentBackgroundTask;
-import github.popeen.dsub.util.FileUtil;
-import github.popeen.dsub.util.Util;
 import github.popeen.dsub.util.CacheCleaner;
-import github.daneren2005.serverproxy.BufferFile;
+import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.FileUtil;
+import github.popeen.dsub.util.SilentBackgroundTask;
+import github.popeen.dsub.util.Util;
 
 public class DownloadFile implements BufferFile {
     private static final String TAG = DownloadFile.class.getSimpleName();

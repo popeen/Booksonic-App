@@ -22,8 +22,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import github.popeen.dsub.R;
-import github.popeen.dsub.adapter.ArtistAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.adapter.SimilarArtistAdapter;
 import github.popeen.dsub.domain.Artist;
@@ -36,12 +41,6 @@ import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.view.UpdateView;
-
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 	private static final String TAG = SimilarArtistFragment.class.getSimpleName();

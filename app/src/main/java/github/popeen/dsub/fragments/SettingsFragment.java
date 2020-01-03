@@ -51,10 +51,8 @@ import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import github.popeen.dsub.activity.SubsonicActivity;
-import github.popeen.dsub.util.MediaRouteManager;
-import github.popeen.dsub.view.CacheLocationPreference;
 import github.popeen.dsub.R;
+import github.popeen.dsub.activity.SubsonicActivity;
 import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.HeadphoneListenerService;
 import github.popeen.dsub.service.MusicService;
@@ -62,8 +60,10 @@ import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.LoadingTask;
+import github.popeen.dsub.util.MediaRouteManager;
 import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.Util;
+import github.popeen.dsub.view.CacheLocationPreference;
 import github.popeen.dsub.view.ErrorDialog;
 
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {

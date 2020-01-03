@@ -35,15 +35,14 @@ import com.google.android.gms.common.images.WebImage;
 
 import java.io.File;
 
+import github.daneren2005.serverproxy.WebProxy;
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PlayerState;
 import github.popeen.dsub.domain.RemoteControlState;
-import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.EnvironmentVariables;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.Util;
-import github.daneren2005.serverproxy.WebProxy;
 
 /**
  * Created by owner on 2/9/14.

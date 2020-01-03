@@ -30,7 +30,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-
 import android.widget.RemoteViews;
 
 import github.popeen.dsub.R;

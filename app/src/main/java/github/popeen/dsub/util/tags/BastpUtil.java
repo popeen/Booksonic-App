@@ -18,6 +18,7 @@
 package github.popeen.dsub.util.tags;
 
 import android.support.v4.util.LruCache;
+
 import java.util.HashMap;
 import java.util.Vector;
 

@@ -18,6 +18,10 @@
  */
 package github.popeen.dsub.service;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -28,10 +32,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
-
 import github.popeen.dsub.domain.Artist;
 import github.popeen.dsub.domain.ArtistInfo;
 import github.popeen.dsub.domain.Bookmark;
@@ -39,24 +39,24 @@ import github.popeen.dsub.domain.ChatMessage;
 import github.popeen.dsub.domain.Genre;
 import github.popeen.dsub.domain.Indexes;
 import github.popeen.dsub.domain.InternetRadioStation;
-import github.popeen.dsub.domain.PlayerQueue;
-import github.popeen.dsub.domain.PodcastEpisode;
-import github.popeen.dsub.domain.RemoteStatus;
 import github.popeen.dsub.domain.Lyrics;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.MusicFolder;
+import github.popeen.dsub.domain.PlayerQueue;
 import github.popeen.dsub.domain.Playlist;
 import github.popeen.dsub.domain.PodcastChannel;
+import github.popeen.dsub.domain.PodcastEpisode;
+import github.popeen.dsub.domain.RemoteStatus;
 import github.popeen.dsub.domain.SearchCritera;
 import github.popeen.dsub.domain.SearchResult;
 import github.popeen.dsub.domain.Share;
 import github.popeen.dsub.domain.User;
-import github.popeen.dsub.util.SilentBackgroundTask;
+import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ProgressListener;
+import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.TimeLimitedCache;
-import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.Util;
 
 import static github.popeen.dsub.domain.MusicDirectory.Entry;

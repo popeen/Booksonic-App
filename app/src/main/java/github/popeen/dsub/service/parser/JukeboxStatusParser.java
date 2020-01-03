@@ -18,11 +18,12 @@
  */
 package github.popeen.dsub.service.parser;
 
-import java.io.Reader;
+import android.content.Context;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import android.content.Context;
+import java.io.Reader;
+
 import github.popeen.dsub.domain.RemoteStatus;
 
 /**

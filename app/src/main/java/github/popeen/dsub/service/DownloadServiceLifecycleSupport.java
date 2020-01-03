@@ -18,12 +18,6 @@
  */
 package github.popeen.dsub.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -37,7 +31,14 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import github.popeen.dsub.domain.InternetRadioStation;import github.popeen.dsub.domain.MusicDirectory;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
+
+import github.popeen.dsub.domain.InternetRadioStation;
+import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PlayerQueue;
 import github.popeen.dsub.domain.PlayerState;
 import github.popeen.dsub.domain.ServerInfo;

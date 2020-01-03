@@ -28,10 +28,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SyncResult;
-import android.os.BatteryManager;
-import android.os.Bundle;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.BatteryManager;
+import android.os.Bundle;
 import android.util.Log;
 
 import java.util.List;

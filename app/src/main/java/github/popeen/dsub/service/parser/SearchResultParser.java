@@ -20,16 +20,17 @@ package github.popeen.dsub.service.parser;
 
 import android.content.Context;
 
-import github.popeen.dsub.domain.MusicDirectory;
-import github.popeen.dsub.domain.SearchResult;
-import github.popeen.dsub.domain.Artist;
-import github.popeen.dsub.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
+
+import github.popeen.dsub.domain.Artist;
+import github.popeen.dsub.domain.MusicDirectory;
+import github.popeen.dsub.domain.SearchResult;
+import github.popeen.dsub.util.ProgressListener;
 
 /**
  * @author Sindre Mehus

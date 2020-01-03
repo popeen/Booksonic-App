@@ -32,12 +32,13 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.util.LruCache;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.support.v4.util.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.ArtistInfo;
 import github.popeen.dsub.domain.InternetRadioStation;
@@ -48,9 +49,6 @@ import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.util.compat.RemoteControlClientBase;
-
-
-import java.lang.ref.WeakReference;
 /**
  * Asynchronous loading of images, with caching.
  * <p/>

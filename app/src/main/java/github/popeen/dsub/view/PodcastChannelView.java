@@ -19,19 +19,19 @@
 package github.popeen.dsub.view;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.File;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.PodcastChannel;
-import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ImageLoader;
-import java.io.File;
+import github.popeen.dsub.util.SyncUtil;
 
 public class PodcastChannelView extends UpdateView<PodcastChannel> {
 	private static final String TAG = PodcastChannelView.class.getSimpleName();

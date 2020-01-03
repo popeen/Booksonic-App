@@ -22,9 +22,6 @@ import android.content.Context;
 import android.text.Html;
 import android.util.Log;
 
-import github.popeen.dsub.domain.Genre;
-import github.popeen.dsub.util.ProgressListener;
-
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedReader;
@@ -33,6 +30,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import github.popeen.dsub.domain.Genre;
+import github.popeen.dsub.util.ProgressListener;
 
 /**
  * @author Joshua Bahnsen

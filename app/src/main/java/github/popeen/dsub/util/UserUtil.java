@@ -16,10 +16,10 @@
 package github.popeen.dsub.util;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.SectionAdapter;
+import github.popeen.dsub.adapter.SettingsAdapter;
 import github.popeen.dsub.domain.User;
 import github.popeen.dsub.fragments.SubsonicFragment;
 import github.popeen.dsub.service.DownloadService;
@@ -40,7 +41,6 @@ import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.service.OfflineException;
 import github.popeen.dsub.service.ServerTooOldException;
-import github.popeen.dsub.adapter.SettingsAdapter;
 import github.popeen.dsub.view.UpdateView;
 
 public final class UserUtil {

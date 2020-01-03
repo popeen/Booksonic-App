@@ -18,13 +18,13 @@
  */
 package github.popeen.dsub.service.parser;
 
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import android.content.Context;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
 import github.popeen.dsub.domain.MusicFolder;
 import github.popeen.dsub.util.ProgressListener;

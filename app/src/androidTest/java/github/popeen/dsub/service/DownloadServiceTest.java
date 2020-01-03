@@ -1,19 +1,20 @@
 package github.popeen.dsub.service;
 
-import static github.popeen.dsub.domain.PlayerState.COMPLETED;
-import static github.popeen.dsub.domain.PlayerState.IDLE;
-import static github.popeen.dsub.domain.PlayerState.PAUSED;
-import static github.popeen.dsub.domain.PlayerState.STARTED;
-import static github.popeen.dsub.domain.PlayerState.STOPPED;
+import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
+
+import java.util.LinkedList;
 import java.util.List;
 
 import github.popeen.dsub.activity.SubsonicFragmentActivity;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PlayerState;
 
-import java.util.LinkedList;
-import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
+import static github.popeen.dsub.domain.PlayerState.COMPLETED;
+import static github.popeen.dsub.domain.PlayerState.IDLE;
+import static github.popeen.dsub.domain.PlayerState.PAUSED;
+import static github.popeen.dsub.domain.PlayerState.STARTED;
+import static github.popeen.dsub.domain.PlayerState.STOPPED;
 
 public class DownloadServiceTest extends
 		ActivityInstrumentationTestCase2<SubsonicFragmentActivity> {

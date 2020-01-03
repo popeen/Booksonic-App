@@ -19,13 +19,15 @@
 package github.popeen.dsub.service.parser;
 
 import android.content.Context;
-import github.popeen.dsub.domain.InternetRadioStation;
-import github.popeen.dsub.util.ProgressListener;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+
+import github.popeen.dsub.domain.InternetRadioStation;
+import github.popeen.dsub.util.ProgressListener;
 
 public class InternetRadioStationParser extends ErrorParser {
 	public InternetRadioStationParser(Context context, int instance) {

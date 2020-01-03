@@ -31,10 +31,10 @@ import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PodcastEpisode;
 import github.popeen.dsub.service.DownloadFile;
 import github.popeen.dsub.service.parser.SubsonicRESTException;
+import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.Notifications;
 import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.SyncUtil.SyncSet;
-import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.Util;
 
 /**

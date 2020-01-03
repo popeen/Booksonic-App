@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.ArtistAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
@@ -24,10 +28,6 @@ import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.view.UpdateView;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> implements ArtistAdapter.OnMusicFolderChanged {
 	private static final String TAG = SelectArtistFragment.class.getSimpleName();

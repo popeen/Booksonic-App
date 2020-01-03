@@ -14,14 +14,13 @@
 */
 package github.popeen.dsub.fragments;
 
-import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.Menu;
@@ -30,14 +29,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import github.popeen.dsub.R;
+import github.popeen.dsub.adapter.PodcastChannelAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PodcastChannel;
@@ -47,28 +53,18 @@ import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.service.OfflineException;
 import github.popeen.dsub.service.ServerTooOldException;
+import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.KakaduaUtil;
-import github.popeen.dsub.util.ProgressListener;
-import github.popeen.dsub.util.SyncUtil;
-import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.LoadingTask;
+import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.SilentBackgroundTask;
+import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.UserUtil;
 import github.popeen.dsub.util.Util;
-import github.popeen.dsub.adapter.PodcastChannelAdapter;
 import github.popeen.dsub.view.UpdateView;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
-import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();

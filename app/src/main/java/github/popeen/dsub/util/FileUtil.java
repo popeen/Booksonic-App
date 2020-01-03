@@ -18,6 +18,19 @@
  */
 package github.popeen.dsub.util;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.os.Environment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,34 +43,22 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
-import android.os.Environment;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import github.popeen.dsub.domain.Artist;
 import github.popeen.dsub.domain.Genre;
 import github.popeen.dsub.domain.Indexes;
-import github.popeen.dsub.domain.Playlist;
-import github.popeen.dsub.domain.PodcastChannel;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.MusicFolder;
+import github.popeen.dsub.domain.Playlist;
+import github.popeen.dsub.domain.PodcastChannel;
 import github.popeen.dsub.domain.PodcastEpisode;
 import github.popeen.dsub.service.MediaStoreService;
-
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 
 /**
  * @author Sindre Mehus

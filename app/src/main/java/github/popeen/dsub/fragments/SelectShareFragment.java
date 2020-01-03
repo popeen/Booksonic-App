@@ -15,9 +15,9 @@
 
 package github.popeen.dsub.fragments;
 
-import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +33,7 @@ import java.util.List;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.SectionAdapter;
+import github.popeen.dsub.adapter.ShareAdapter;
 import github.popeen.dsub.domain.Share;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
@@ -42,7 +43,6 @@ import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.LoadingTask;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.Util;
-import github.popeen.dsub.adapter.ShareAdapter;
 import github.popeen.dsub.view.UpdateView;
 
 public class SelectShareFragment extends SelectRecyclerFragment<Share> {

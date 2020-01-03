@@ -21,21 +21,19 @@
 package github.popeen.dsub.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import java.io.File;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ImageLoader;
 import github.popeen.dsub.util.Util;
-
-import java.io.File;
 
 public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	private static final String TAG = AlbumView.class.getSimpleName();

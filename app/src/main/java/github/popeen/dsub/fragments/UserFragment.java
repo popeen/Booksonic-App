@@ -20,19 +20,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.SectionAdapter;
+import github.popeen.dsub.adapter.SettingsAdapter;
 import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.domain.User;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.UserUtil;
-import github.popeen.dsub.adapter.SettingsAdapter;
 import github.popeen.dsub.view.UpdateView;
 
 public class UserFragment extends SelectRecyclerFragment<User.Setting>{

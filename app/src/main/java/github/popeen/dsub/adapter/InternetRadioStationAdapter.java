@@ -23,7 +23,6 @@ import github.popeen.dsub.domain.InternetRadioStation;
 import github.popeen.dsub.view.FastScroller;
 import github.popeen.dsub.view.InternetRadioStationView;
 import github.popeen.dsub.view.UpdateView;
-import github.popeen.dsub.adapter.SectionAdapter;
 
 public class InternetRadioStationAdapter extends SectionAdapter<InternetRadioStation> implements FastScroller.BubbleTextGetter {
 	public static int VIEW_TYPE_INTERNET_RADIO_STATION = 1;

@@ -1,9 +1,5 @@
 package github.popeen.dsub.util.compat;
 
-import github.popeen.dsub.domain.MusicDirectory;
-import github.popeen.dsub.service.DownloadFile;
-import github.popeen.dsub.service.DownloadService;
-import github.popeen.dsub.util.ImageLoader;
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -18,6 +14,10 @@ import android.support.v7.media.MediaRouter;
 import java.util.List;
 
 import github.popeen.dsub.activity.SubsonicActivity;
+import github.popeen.dsub.domain.MusicDirectory;
+import github.popeen.dsub.service.DownloadFile;
+import github.popeen.dsub.service.DownloadService;
+import github.popeen.dsub.util.ImageLoader;
 
 @TargetApi(14)
 public class RemoteControlClientICS extends RemoteControlClientBase {

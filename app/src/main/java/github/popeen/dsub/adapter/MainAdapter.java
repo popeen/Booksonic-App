@@ -19,13 +19,10 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import java.util.List;
 
 import github.popeen.dsub.R;
-import github.popeen.dsub.domain.ServerInfo;
-import github.popeen.dsub.util.Util;
 import github.popeen.dsub.view.AlbumListCountView;
 import github.popeen.dsub.view.BasicHeaderView;
 import github.popeen.dsub.view.BasicListView;

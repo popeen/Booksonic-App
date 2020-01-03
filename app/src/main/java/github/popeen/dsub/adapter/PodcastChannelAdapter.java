@@ -17,28 +17,21 @@ package github.popeen.dsub.adapter;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-
-import github.popeen.dsub.R;
-import github.popeen.dsub.domain.PodcastChannel;
-import github.popeen.dsub.domain.PodcastEpisode;
-import github.popeen.dsub.util.DrawableTint;
-import github.popeen.dsub.util.ImageLoader;
-import github.popeen.dsub.view.FastScroller;
-import github.popeen.dsub.view.PodcastChannelView;
-import github.popeen.dsub.view.UpdateView;
-import github.popeen.dsub.util.Util;
-import github.popeen.dsub.view.BasicHeaderView;
-import github.popeen.dsub.view.FastScroller;
-import github.popeen.dsub.view.PodcastChannelView;
-import github.popeen.dsub.view.SongView;
-import github.popeen.dsub.view.UpdateView;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+
+import github.popeen.dsub.R;
+import github.popeen.dsub.domain.PodcastChannel;
+import github.popeen.dsub.domain.PodcastEpisode;
+import github.popeen.dsub.util.ImageLoader;
+import github.popeen.dsub.util.Util;
+import github.popeen.dsub.view.FastScroller;
+import github.popeen.dsub.view.PodcastChannelView;
+import github.popeen.dsub.view.SongView;
+import github.popeen.dsub.view.UpdateView;
 
 public class PodcastChannelAdapter extends ExpandableSectionAdapter<Serializable> implements FastScroller.BubbleTextGetter {
 	public static final int VIEW_TYPE_PODCAST_LEGACY = 1;

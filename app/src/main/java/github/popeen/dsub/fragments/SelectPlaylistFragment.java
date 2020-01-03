@@ -1,13 +1,13 @@
 package github.popeen.dsub.fragments;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +15,12 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import github.popeen.dsub.R;
+import github.popeen.dsub.adapter.PlaylistAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.Playlist;
@@ -25,19 +30,14 @@ import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.service.OfflineException;
 import github.popeen.dsub.service.ServerTooOldException;
-import github.popeen.dsub.util.ProgressListener;
-import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.CacheCleaner;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.LoadingTask;
+import github.popeen.dsub.util.ProgressListener;
+import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.UserUtil;
 import github.popeen.dsub.util.Util;
-import github.popeen.dsub.adapter.PlaylistAdapter;
 import github.popeen.dsub.view.UpdateView;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();

@@ -20,12 +20,14 @@ package github.popeen.dsub.service.parser;
 
 import android.content.Context;
 
-import github.popeen.dsub.domain.PodcastChannel;
-import github.popeen.dsub.util.ProgressListener;
+import org.xmlpull.v1.XmlPullParser;
+
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import org.xmlpull.v1.XmlPullParser;
+
+import github.popeen.dsub.domain.PodcastChannel;
+import github.popeen.dsub.util.ProgressListener;
 
 /**
  *

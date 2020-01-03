@@ -17,12 +17,10 @@
  Copyright 2009 (C) Sindre Mehus
  */
 package github.popeen.dsub.fragments;
-import android.app.Activity;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,8 +31,8 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StatFs;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -54,9 +52,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import github.popeen.dsub.R;
 
 import java.io.File;
 import java.text.DateFormat;

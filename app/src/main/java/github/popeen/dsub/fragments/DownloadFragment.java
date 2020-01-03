@@ -33,6 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import github.popeen.dsub.R;
+import github.popeen.dsub.adapter.DownloadFileAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.service.DownloadFile;
@@ -42,7 +43,6 @@ import github.popeen.dsub.util.DownloadFileItemHelperCallback;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.Util;
-import github.popeen.dsub.adapter.DownloadFileAdapter;
 import github.popeen.dsub.view.UpdateView;
 
 public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> implements SectionAdapter.OnItemClickedListener<DownloadFile> {

@@ -22,19 +22,23 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
+
+import java.io.File;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PodcastEpisode;
-import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.DownloadFile;
+import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.util.DrawableTint;
 import github.popeen.dsub.util.SQLiteHandler;
 import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.ThemeUtil;
 import github.popeen.dsub.util.Util;
-
-import java.io.File;
 
 /**
  * Used to display songs in a {@code ListView}.

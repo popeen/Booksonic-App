@@ -20,13 +20,15 @@ package github.popeen.dsub.service.parser;
 
 import android.content.Context;
 
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.Reader;
+
 import github.popeen.dsub.domain.Bookmark;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PodcastEpisode;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ProgressListener;
-import java.io.Reader;
-import org.xmlpull.v1.XmlPullParser;
 
 /**
  *

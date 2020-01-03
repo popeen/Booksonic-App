@@ -1,7 +1,6 @@
 package github.popeen.dsub.util;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,7 +30,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
-import github.popeen.dsub.R;
 import github.popeen.dsub.service.ssl.SSLSocketFactory;
 import github.popeen.dsub.service.ssl.TrustSelfSignedStrategy;
 

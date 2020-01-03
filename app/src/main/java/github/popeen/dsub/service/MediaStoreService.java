@@ -18,8 +18,6 @@
  */
 package github.popeen.dsub.service;
 
-import java.io.File;
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,6 +25,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import java.io.File;
+
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.Util;

@@ -18,7 +18,18 @@
  */
 package github.popeen.dsub.service;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Base64;
+import android.util.Log;
+
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,18 +44,36 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Base64;
-import android.util.Log;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
-import com.google.android.gms.security.ProviderInstaller;
 import github.popeen.dsub.R;
-import github.popeen.dsub.domain.*;
+import github.popeen.dsub.domain.ArtistInfo;
+import github.popeen.dsub.domain.ChatMessage;
+import github.popeen.dsub.domain.Genre;
+import github.popeen.dsub.domain.Indexes;
+import github.popeen.dsub.domain.InternetRadioStation;
+import github.popeen.dsub.domain.Lyrics;
+import github.popeen.dsub.domain.MusicDirectory;
+import github.popeen.dsub.domain.MusicFolder;
+import github.popeen.dsub.domain.PlayerQueue;
+import github.popeen.dsub.domain.Playlist;
+import github.popeen.dsub.domain.PodcastChannel;
+import github.popeen.dsub.domain.RemoteStatus;
+import github.popeen.dsub.domain.SearchCritera;
+import github.popeen.dsub.domain.SearchResult;
+import github.popeen.dsub.domain.ServerInfo;
+import github.popeen.dsub.domain.Share;
+import github.popeen.dsub.domain.User;
+import github.popeen.dsub.domain.Version;
 import github.popeen.dsub.fragments.MainFragment;
 import github.popeen.dsub.service.parser.ArtistInfoParser;
 import github.popeen.dsub.service.parser.BookmarkParser;
@@ -73,26 +102,14 @@ import github.popeen.dsub.service.parser.StarredListParser;
 import github.popeen.dsub.service.parser.TopSongsParser;
 import github.popeen.dsub.service.parser.UserParser;
 import github.popeen.dsub.service.parser.VideosParser;
-import github.popeen.dsub.util.Pair;
-import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.FileUtil;
+import github.popeen.dsub.util.Pair;
 import github.popeen.dsub.util.ProgressListener;
+import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.util.compat.GoogleCompat;
-
-import java.io.*;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 public class RESTMusicService implements MusicService {
 

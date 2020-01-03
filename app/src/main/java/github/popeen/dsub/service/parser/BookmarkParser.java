@@ -20,11 +20,8 @@ package github.popeen.dsub.service.parser;
 
 import android.content.Context;
 
-import github.popeen.dsub.domain.Bookmark;
-import github.popeen.dsub.domain.MusicDirectory;
-import github.popeen.dsub.domain.ServerInfo;
-import github.popeen.dsub.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
+
 import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +29,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import github.popeen.dsub.domain.Bookmark;
+import github.popeen.dsub.domain.MusicDirectory;
+import github.popeen.dsub.domain.ServerInfo;
+import github.popeen.dsub.util.ProgressListener;
 
 /**
  * @author Scott Jackson

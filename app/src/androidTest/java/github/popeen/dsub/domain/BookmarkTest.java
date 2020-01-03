@@ -1,11 +1,11 @@
 package github.popeen.dsub.domain;
 
+import junit.framework.TestCase;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import junit.framework.TestCase;
 
 public class BookmarkTest extends TestCase {
 	

@@ -19,16 +19,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import java.util.List;
+
 import github.popeen.dsub.R;
+import github.popeen.dsub.adapter.GenreAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.Genre;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.ProgressListener;
-import github.popeen.dsub.adapter.GenreAdapter;
 import github.popeen.dsub.view.UpdateView;
-
-import java.util.List;
 
 public class SelectGenreFragment extends SelectRecyclerFragment<Genre> {
 	private static final String TAG = SelectGenreFragment.class.getSimpleName();

@@ -41,7 +41,6 @@ import github.popeen.dsub.domain.MusicFolder;
 import github.popeen.dsub.domain.Playlist;
 import github.popeen.dsub.domain.PodcastChannel;
 import github.popeen.dsub.domain.PodcastEpisode;
-import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.SilentServiceTask;
 import github.popeen.dsub.util.Util;

@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-
 import github.popeen.dsub.R;
 import github.popeen.dsub.util.DrawableTint;
 

@@ -26,6 +26,7 @@ import java.util.List;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.adapter.SectionAdapter;
+import github.popeen.dsub.adapter.UserAdapter;
 import github.popeen.dsub.domain.User;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.parser.SubsonicRESTException;
@@ -33,7 +34,6 @@ import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.UserUtil;
 import github.popeen.dsub.util.Util;
-import github.popeen.dsub.adapter.UserAdapter;
 import github.popeen.dsub.view.UpdateView;
 
 public class AdminFragment extends SelectRecyclerFragment<User> {

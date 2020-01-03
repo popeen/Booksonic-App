@@ -8,16 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import github.popeen.dsub.R;
-import github.popeen.dsub.activity.SubsonicActivity;
-import github.popeen.dsub.domain.ChatMessage;
-import github.popeen.dsub.util.ImageLoader;
-import github.popeen.dsub.util.UserUtil;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
+
+import github.popeen.dsub.R;
+import github.popeen.dsub.activity.SubsonicActivity;
+import github.popeen.dsub.domain.ChatMessage;
+import github.popeen.dsub.util.ImageLoader;
+import github.popeen.dsub.util.UserUtil;
 
 public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 	

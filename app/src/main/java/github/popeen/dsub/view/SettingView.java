@@ -25,7 +25,6 @@ import github.popeen.dsub.R;
 import github.popeen.dsub.domain.User;
 import github.popeen.dsub.domain.User.MusicFolderSetting;
 
-
 import static github.popeen.dsub.domain.User.Setting;
 
 public class SettingView extends UpdateView2<Setting, Boolean> {

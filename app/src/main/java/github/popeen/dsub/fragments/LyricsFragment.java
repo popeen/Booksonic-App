@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.Lyrics;
 import github.popeen.dsub.service.MusicService;

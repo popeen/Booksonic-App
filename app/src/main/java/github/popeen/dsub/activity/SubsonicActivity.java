@@ -18,6 +18,7 @@
  */
 package github.popeen.dsub.activity;
 
+import android.Manifest.permission;
 import android.app.UiModeManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,26 +31,22 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.Manifest.permission;
 import android.media.AudioManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -69,28 +66,17 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kobakei.ratethisapp.RateThisApp;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.net.Socket;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.ServerInfo;
 import github.popeen.dsub.fragments.AdminFragment;
@@ -100,17 +86,14 @@ import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.HeadphoneListenerService;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
-import github.popeen.dsub.service.RESTMusicService;
-import github.popeen.dsub.updates.UpdateApp;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.DrawableTint;
 import github.popeen.dsub.util.ImageLoader;
-import github.popeen.dsub.util.KakaduaUtil;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.ThemeUtil;
+import github.popeen.dsub.util.UserUtil;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.view.UpdateView;
-import github.popeen.dsub.util.UserUtil;
 
 
 public class SubsonicActivity extends AppCompatActivity implements OnItemSelectedListener, SensorEventListener {

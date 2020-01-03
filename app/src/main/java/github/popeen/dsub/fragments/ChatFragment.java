@@ -2,11 +2,6 @@ package github.popeen.dsub.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,18 +20,24 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import github.popeen.dsub.R;
+import github.popeen.dsub.adapter.ChatAdapter;
 import github.popeen.dsub.domain.ChatMessage;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.util.BackgroundTask;
+import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.TabBackgroundTask;
 import github.popeen.dsub.util.Util;
-import github.popeen.dsub.adapter.ChatAdapter;
-import github.popeen.dsub.util.Constants;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joshua Bahnsen

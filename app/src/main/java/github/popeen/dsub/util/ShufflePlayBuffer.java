@@ -18,6 +18,9 @@
  */
 package github.popeen.dsub.util;
 
+import android.content.SharedPreferences;
+import android.util.Log;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +28,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import android.content.SharedPreferences;
-import android.util.Log;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.MusicService;

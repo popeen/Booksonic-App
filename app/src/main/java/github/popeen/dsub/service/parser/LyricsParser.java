@@ -20,11 +20,12 @@ package github.popeen.dsub.service.parser;
 
 import android.content.Context;
 
-import github.popeen.dsub.domain.Lyrics;
-import github.popeen.dsub.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
+
+import github.popeen.dsub.domain.Lyrics;
+import github.popeen.dsub.util.ProgressListener;
 
 /**
  * @author Sindre Mehus

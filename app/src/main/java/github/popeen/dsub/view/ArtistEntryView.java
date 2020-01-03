@@ -24,11 +24,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.File;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.util.FileUtil;
-
-import java.io.File;
 /**
  * Used to display albums in a {@code ListView}.
  *

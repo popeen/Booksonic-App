@@ -1,7 +1,8 @@
 package github.popeen.dsub.activity;
 
-import github.popeen.dsub.R;
 import android.test.ActivityInstrumentationTestCase2;
+
+import github.popeen.dsub.R;
 
 public class SubsonicFragmentActivityTest extends
 		ActivityInstrumentationTestCase2<SubsonicFragmentActivity> {

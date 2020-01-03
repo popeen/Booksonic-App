@@ -20,9 +20,9 @@ package github.popeen.dsub.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.Playlist;
 import github.popeen.dsub.util.ImageLoader;

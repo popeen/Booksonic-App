@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.MediaRouteControllerDialog;
 import android.support.v7.app.MediaRouteControllerDialogFragment;
 
-import github.popeen.dsub.util.Util;
 import github.popeen.dsub.util.ThemeUtil;
 
 public class CustomMediaRouteControllerDialogFragment extends MediaRouteControllerDialogFragment {

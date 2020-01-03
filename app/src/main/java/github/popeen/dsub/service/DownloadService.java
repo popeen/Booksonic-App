@@ -18,61 +18,7 @@
  */
 package github.popeen.dsub.service;
 
-import static android.support.v7.media.MediaRouter.RouteInfo;
-import static github.popeen.dsub.domain.PlayerState.COMPLETED;
-import static github.popeen.dsub.domain.PlayerState.DOWNLOADING;
-import static github.popeen.dsub.domain.PlayerState.IDLE;
-import static github.popeen.dsub.domain.PlayerState.PAUSED;
-import static github.popeen.dsub.domain.PlayerState.PAUSED_TEMP;
-import static github.popeen.dsub.domain.PlayerState.PREPARED;
-import static github.popeen.dsub.domain.PlayerState.PREPARING;
-import static github.popeen.dsub.domain.PlayerState.STARTED;
-import static github.popeen.dsub.domain.PlayerState.STOPPED;
-import static github.popeen.dsub.domain.RemoteControlState.LOCAL;
-
-import github.popeen.dsub.R;
-import github.popeen.dsub.activity.SubsonicActivity;
-import github.popeen.dsub.audiofx.AudioEffectsController;
-import github.popeen.dsub.audiofx.EqualizerController;
-import github.popeen.dsub.domain.Bookmark;
-import github.popeen.dsub.domain.InternetRadioStation;
-import github.popeen.dsub.domain.MusicDirectory;
-import github.popeen.dsub.domain.PlayerState;
-import github.popeen.dsub.domain.PodcastEpisode;
-import github.popeen.dsub.domain.RemoteControlState;
-import github.popeen.dsub.domain.RepeatMode;
-import github.popeen.dsub.domain.ServerInfo;
-import github.popeen.dsub.receiver.AudioNoisyReceiver;
-import github.popeen.dsub.receiver.MediaButtonIntentReceiver;
-import github.popeen.dsub.util.ArtistRadioBuffer;
-import github.popeen.dsub.util.ImageLoader;
-import github.popeen.dsub.util.Notifications;
-import github.popeen.dsub.util.SilentBackgroundTask;
-import github.popeen.dsub.util.Constants;
-import github.popeen.dsub.util.MediaRouteManager;
-import github.popeen.dsub.util.ShufflePlayBuffer;
-import github.popeen.dsub.util.SimpleServiceBinder;
-import github.popeen.dsub.util.UpdateHelper;
-import github.popeen.dsub.util.Util;
-import github.popeen.dsub.util.compat.RemoteControlClientBase;
-import github.popeen.dsub.util.tags.BastpUtil;
-import github.popeen.dsub.view.UpdateView;
-import github.daneren2005.serverproxy.BufferProxy;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
@@ -90,11 +36,64 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.support.v4.util.LruCache;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
-import android.support.v4.util.LruCache;
 import android.view.KeyEvent;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import github.daneren2005.serverproxy.BufferProxy;
+import github.popeen.dsub.R;
+import github.popeen.dsub.activity.SubsonicActivity;
+import github.popeen.dsub.audiofx.AudioEffectsController;
+import github.popeen.dsub.audiofx.EqualizerController;
+import github.popeen.dsub.domain.Bookmark;
+import github.popeen.dsub.domain.InternetRadioStation;
+import github.popeen.dsub.domain.MusicDirectory;
+import github.popeen.dsub.domain.PlayerState;
+import github.popeen.dsub.domain.PodcastEpisode;
+import github.popeen.dsub.domain.RemoteControlState;
+import github.popeen.dsub.domain.RepeatMode;
+import github.popeen.dsub.domain.ServerInfo;
+import github.popeen.dsub.receiver.AudioNoisyReceiver;
+import github.popeen.dsub.receiver.MediaButtonIntentReceiver;
+import github.popeen.dsub.util.ArtistRadioBuffer;
+import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.ImageLoader;
+import github.popeen.dsub.util.MediaRouteManager;
+import github.popeen.dsub.util.Notifications;
+import github.popeen.dsub.util.ShufflePlayBuffer;
+import github.popeen.dsub.util.SilentBackgroundTask;
+import github.popeen.dsub.util.SimpleServiceBinder;
+import github.popeen.dsub.util.UpdateHelper;
+import github.popeen.dsub.util.Util;
+import github.popeen.dsub.util.compat.RemoteControlClientBase;
+import github.popeen.dsub.util.tags.BastpUtil;
+import github.popeen.dsub.view.UpdateView;
+
+import static android.support.v7.media.MediaRouter.RouteInfo;
+import static github.popeen.dsub.domain.PlayerState.COMPLETED;
+import static github.popeen.dsub.domain.PlayerState.DOWNLOADING;
+import static github.popeen.dsub.domain.PlayerState.IDLE;
+import static github.popeen.dsub.domain.PlayerState.PAUSED;
+import static github.popeen.dsub.domain.PlayerState.PAUSED_TEMP;
+import static github.popeen.dsub.domain.PlayerState.PREPARED;
+import static github.popeen.dsub.domain.PlayerState.PREPARING;
+import static github.popeen.dsub.domain.PlayerState.STARTED;
+import static github.popeen.dsub.domain.PlayerState.STOPPED;
+import static github.popeen.dsub.domain.RemoteControlState.LOCAL;
 
 /**
  * @author Sindre Mehus

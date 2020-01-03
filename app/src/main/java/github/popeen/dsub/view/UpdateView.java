@@ -36,8 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
 
-import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.R;
+import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.util.DrawableTint;
 import github.popeen.dsub.util.SilentBackgroundTask;
 

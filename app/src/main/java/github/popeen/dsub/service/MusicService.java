@@ -18,31 +18,30 @@
  */
 package github.popeen.dsub.service;
 
-import java.net.HttpURLConnection;
-import java.util.List;
-
-
 import android.content.Context;
 import android.graphics.Bitmap;
+
+import java.net.HttpURLConnection;
+import java.util.List;
 
 import github.popeen.dsub.domain.ArtistInfo;
 import github.popeen.dsub.domain.ChatMessage;
 import github.popeen.dsub.domain.Genre;
 import github.popeen.dsub.domain.Indexes;
 import github.popeen.dsub.domain.InternetRadioStation;
-import github.popeen.dsub.domain.PlayerQueue;
-import github.popeen.dsub.domain.RemoteStatus;
 import github.popeen.dsub.domain.Lyrics;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.MusicFolder;
+import github.popeen.dsub.domain.PlayerQueue;
 import github.popeen.dsub.domain.Playlist;
 import github.popeen.dsub.domain.PodcastChannel;
+import github.popeen.dsub.domain.RemoteStatus;
 import github.popeen.dsub.domain.SearchCritera;
 import github.popeen.dsub.domain.SearchResult;
 import github.popeen.dsub.domain.Share;
 import github.popeen.dsub.domain.User;
-import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.ProgressListener;
+import github.popeen.dsub.util.SilentBackgroundTask;
 
 /**
  * @author Sindre Mehus

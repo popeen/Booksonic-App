@@ -24,14 +24,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.provider.MediaStore;
-import android.provider.SearchRecentSuggestions;
-import android.util.Log;
-
-
-
-
 
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.Util;

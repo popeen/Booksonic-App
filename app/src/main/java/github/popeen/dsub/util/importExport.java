@@ -8,7 +8,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

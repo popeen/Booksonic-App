@@ -17,12 +17,13 @@ package github.popeen.dsub.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;
+
+import java.util.List;
+
 import github.popeen.dsub.domain.Genre;
 import github.popeen.dsub.view.FastScroller;
 import github.popeen.dsub.view.GenreView;
 import github.popeen.dsub.view.UpdateView;
-
-import java.util.List;
 
 public class GenreAdapter extends SectionAdapter<Genre> implements FastScroller.BubbleTextGetter{
 	public static int VIEW_TYPE_GENRE = 1;

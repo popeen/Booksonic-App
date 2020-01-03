@@ -18,15 +18,6 @@ package github.popeen.dsub.service;
 import android.os.Handler;
 import android.util.Log;
 
-
-import github.popeen.dsub.R;
-import github.popeen.dsub.domain.RemoteStatus;
-import github.popeen.dsub.domain.PlayerState;
-import github.popeen.dsub.domain.RemoteControlState;
-import github.popeen.dsub.domain.RepeatMode;
-import github.popeen.dsub.service.parser.SubsonicRESTException;
-import github.popeen.dsub.util.Util;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -34,6 +25,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+
+import github.popeen.dsub.R;
+import github.popeen.dsub.domain.PlayerState;
+import github.popeen.dsub.domain.RemoteControlState;
+import github.popeen.dsub.domain.RemoteStatus;
+import github.popeen.dsub.domain.RepeatMode;
+import github.popeen.dsub.service.parser.SubsonicRESTException;
+import github.popeen.dsub.util.Util;
 
 public class JukeboxController extends RemoteController {
 	private static final String TAG = JukeboxController.class.getSimpleName();

@@ -37,16 +37,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.Date;
@@ -79,7 +74,6 @@ import github.popeen.dsub.updates.Updater;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.DrawableTint;
 import github.popeen.dsub.util.FileUtil;
-import github.popeen.dsub.util.KakaduaUtil;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.UserUtil;
 import github.popeen.dsub.util.Util;

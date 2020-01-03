@@ -18,28 +18,25 @@
 */
 package github.popeen.dsub.fragments;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import github.popeen.dsub.R;
+import github.popeen.dsub.adapter.BookmarkAdapter;
 import github.popeen.dsub.adapter.SectionAdapter;
 import github.popeen.dsub.domain.Bookmark;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.MusicService;
-import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.MenuUtil;
 import github.popeen.dsub.util.ProgressListener;
-import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.Util;
-import github.popeen.dsub.adapter.BookmarkAdapter;
 import github.popeen.dsub.view.UpdateView;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirectory.Entry> {
 	private static final String TAG = SelectBookmarkFragment.class.getSimpleName();

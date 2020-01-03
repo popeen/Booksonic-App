@@ -26,28 +26,25 @@ import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.io.File;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
+import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.UpdateHelper;
 import github.popeen.dsub.util.Util;
-import github.popeen.dsub.util.Constants;
-import github.popeen.dsub.util.Util;
-import github.popeen.dsub.service.DownloadService;
-import github.popeen.dsub.util.Constants;
 
 /**
  * @author Sindre Mehus

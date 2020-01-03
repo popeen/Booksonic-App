@@ -15,7 +15,6 @@
 
 package github.popeen.dsub.service;
 
-import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Log;
 
@@ -61,17 +60,14 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicLong;
 
+import github.daneren2005.serverproxy.WebProxy;
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.DLNADevice;
 import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.domain.PlayerState;
-import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.Pair;
 import github.popeen.dsub.util.Util;
-import github.daneren2005.serverproxy.FileProxy;
-import github.daneren2005.serverproxy.ServerProxy;
-import github.daneren2005.serverproxy.WebProxy;
 
 public class DLNAController extends RemoteController {
 	private static final String TAG = DLNAController.class.getSimpleName();

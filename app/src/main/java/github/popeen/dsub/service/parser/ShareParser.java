@@ -21,13 +21,8 @@ package github.popeen.dsub.service.parser;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import github.popeen.dsub.domain.ServerInfo;
-import github.popeen.dsub.domain.Share;
-import github.popeen.dsub.util.Constants;
-import github.popeen.dsub.util.ProgressListener;
-import github.popeen.dsub.util.Util;
-
 import org.xmlpull.v1.XmlPullParser;
+
 import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +30,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import github.popeen.dsub.domain.ServerInfo;
+import github.popeen.dsub.domain.Share;
+import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.ProgressListener;
+import github.popeen.dsub.util.Util;
 
 /**
  * @author Joshua Bahnsen

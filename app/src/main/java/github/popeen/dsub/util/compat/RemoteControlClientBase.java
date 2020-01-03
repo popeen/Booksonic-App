@@ -1,17 +1,15 @@
 package github.popeen.dsub.util.compat;
 
-import github.popeen.dsub.domain.MusicDirectory;
-import github.popeen.dsub.domain.MusicDirectory.Entry;
-import github.popeen.dsub.service.DownloadFile;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v7.media.MediaRouter;
-import android.util.Log;
 
 import java.util.List;
+
+import github.popeen.dsub.domain.MusicDirectory;
+import github.popeen.dsub.service.DownloadFile;
 
 public abstract class RemoteControlClientBase {
 	

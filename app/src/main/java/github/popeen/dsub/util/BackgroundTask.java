@@ -18,6 +18,14 @@
  */
 package github.popeen.dsub.util;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,13 +36,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import android.app.Activity;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import github.popeen.dsub.R;
 import github.popeen.dsub.view.ErrorDialog;
 

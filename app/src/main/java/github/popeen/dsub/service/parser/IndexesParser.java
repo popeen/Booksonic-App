@@ -18,23 +18,24 @@
  */
 package github.popeen.dsub.service.parser;
 
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.Artist;
 import github.popeen.dsub.domain.Indexes;
 import github.popeen.dsub.domain.MusicDirectory;
-import github.popeen.dsub.util.ProgressListener;
-import android.util.Log;
 import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.ProgressListener;
 import github.popeen.dsub.util.Util;
 
 /**

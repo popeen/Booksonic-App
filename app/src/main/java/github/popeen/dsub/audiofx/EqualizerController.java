@@ -18,13 +18,14 @@
  */
 package github.popeen.dsub.audiofx;
 
-import java.io.Serializable;
-
 import android.content.Context;
 import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
 import android.os.Build;
 import android.util.Log;
+
+import java.io.Serializable;
+
 import github.popeen.dsub.util.FileUtil;
 
 /**
