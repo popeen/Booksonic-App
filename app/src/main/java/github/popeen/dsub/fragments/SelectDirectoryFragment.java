@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -1120,12 +1121,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			for (int i = 0; (i < 3) && (coverArtRep == null || coverArtRep.getCoverArt() == null); i++) {
 				coverArtRep = entries.get(random.nextInt(entries.size()));
 			}
-			coverArtView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					playNow(false, false);
-				}
-			});
 
 			synchronized (coverArtRep) {
 				coverArtId = coverArtRep.getCoverArt();
@@ -1150,7 +1145,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			titleView.setText(podcastName);
 			titleView.setPadding(0, 6, 4, 8);
 		} else if(name != null) {
-			titleView.setText(name);
+			titleView.setText(name.replaceFirst("^[0-9]{4}+\\s-\\s", "")); //TODO, This hides YEAR - from the beginning of the title if it is there, make that an optional setting
 			if(artistInfo != null) {
 				titleView.setPadding(0, 6, 4, 8);
 			}
@@ -1251,6 +1246,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				try{ if(totalDuration > 0) { newText += "<b>" + context.getResources().getString(R.string.album_book_length) + "</b>: " + Util.formatDuration(totalDuration) + "<br/>"; } } catch(Exception e){}
 				try{ newText += "<br/>&nbsp;<br/>"+text+"<br/>";} catch(Exception e){}
 				spanned = Html.fromHtml(newText);
+				spanned = Html.fromHtml("");
 			}
 
 			artistView.setText(spanned);
@@ -1264,7 +1260,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 						// Use LeadingMarginSpan2 to try to make text flow around image
 						Display display = context.getWindowManager().getDefaultDisplay();
 						ImageView coverArtView = (ImageView) header.findViewById(R.id.select_album_art);
-						ImageView coverArtPlayView = (ImageView) header.findViewById(R.id.select_album_art_play);
+						TextView autorView = (TextView) header.findViewById(R.id.select_album_author);
+						TextView narratorView = (TextView) header.findViewById(R.id.select_album_narrator);
+						Button listenButton = (Button) header.findViewById(R.id.listenButton);
+						TextView durationView = (TextView) header.findViewById(R.id.select_album_duration);
+						TextView descriptionnView = (TextView) header.findViewById(R.id.select_album_description);
 						ImageView coverArtDownloadView = (ImageView) header.findViewById(R.id.select_album_art_download);
 						coverArtView.measure(display.getWidth(), display.getHeight());
 
@@ -1277,17 +1277,28 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							}
 						});
 
+						listenButton.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								playNow(false, false);
+							}
+						});
+
 						if(artistInfo == null) {
 							coverArtView.getLayoutParams().width = display.getWidth();
 							coverArtView.getLayoutParams().height = display.getWidth();
-							int margin = (display.getWidth()/2)-(coverArtPlayView.getLayoutParams().width/2);
-							Util.setMargins(coverArtPlayView, margin, margin ,margin ,margin);
-
+							autorView.setText("Author: " + artistName);
+							narratorView.setText("Narrated by: " + bookReader);
+							durationView.setText(Util.formatDuration(totalDuration));
+							descriptionnView.setText(text);
 							Util.setMargins(coverArtDownloadView, 0, (display.getWidth()-120) ,70 ,0);
 
-							coverArtPlayView.setVisibility(View.VISIBLE);
 						}else{
-							coverArtPlayView.setVisibility(View.INVISIBLE);
+							coverArtDownloadView.setVisibility(View.GONE);
+							autorView.setVisibility(View.GONE);
+							narratorView.setVisibility(View.GONE);
+							listenButton.setVisibility(View.GONE);
+							durationView.setVisibility(View.GONE);
 						}
 						int height, width;
 						ViewGroup.MarginLayoutParams vlp = (ViewGroup.MarginLayoutParams) coverArtView.getLayoutParams();

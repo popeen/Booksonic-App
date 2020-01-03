@@ -866,7 +866,7 @@ public final class Util {
         int minutes = (seconds / 60) % 60;
         int secs = seconds % 60;
 
-        StringBuilder builder = new StringBuilder(7);
+       /* StringBuilder builder = new StringBuilder(7);
 		if(hours > 0) {
 			builder.append(hours).append(":");
 			if(minutes < 10) {
@@ -878,7 +878,8 @@ public final class Util {
             builder.append("0");
         }
         builder.append(secs);
-        return builder.toString();
+        return builder.toString();*/
+       return hours + "h " + minutes + "min";
     }
 
 	public static String formatDate(Context context, String dateString) {
