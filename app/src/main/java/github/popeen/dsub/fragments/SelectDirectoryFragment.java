@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableString;
@@ -1264,13 +1265,26 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 						Display display = context.getWindowManager().getDefaultDisplay();
 						ImageView coverArtView = (ImageView) header.findViewById(R.id.select_album_art);
 						ImageView coverArtPlayView = (ImageView) header.findViewById(R.id.select_album_art_play);
+						ImageView coverArtDownloadView = (ImageView) header.findViewById(R.id.select_album_art_download);
 						coverArtView.measure(display.getWidth(), display.getHeight());
+
+						coverArtDownloadView.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								downloadBackground(false);
+								clearSelected();
+								Util.toast(context, "Downloading audiobook", false);
+							}
+						});
 
 						if(artistInfo == null) {
 							coverArtView.getLayoutParams().width = display.getWidth();
 							coverArtView.getLayoutParams().height = display.getWidth();
 							int margin = (display.getWidth()/2)-(coverArtPlayView.getLayoutParams().width/2);
 							Util.setMargins(coverArtPlayView, margin, margin ,margin ,margin);
+
+							Util.setMargins(coverArtDownloadView, 0, (display.getWidth()-120) ,70 ,0);
+
 							coverArtPlayView.setVisibility(View.VISIBLE);
 						}else{
 							coverArtPlayView.setVisibility(View.INVISIBLE);
