@@ -68,7 +68,7 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
     public static String convertToUTF8(String s) {
         String out = null;
         try {
-            out = new String(s.getBytes("UTF-8"), "ISO-8859-1");
+            out = new String(s.getBytes("UTF-8"), "iso-8859-1");
         } catch (java.io.UnsupportedEncodingException e) {
             return null;
         }
@@ -81,9 +81,7 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
 
         try {
 
-            //String input = readJson(apiParams[0].getURL());
-            String url = Util.getRestUrl(context, "ping") + "&f=json";
-            final String input = Jsoup.connect(url).get().body().outerHtml();
+            final String input = new String(Jsoup.connect(apiParams[0].getURL()).ignoreContentType(true).execute().bodyAsBytes(), "UTF-8");
             JSONObject json = new JSONObject(input);
 
             String respRoot = "subsonic-response";
