@@ -7,11 +7,6 @@ import android.util.Log;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 
 import github.popeen.dsub.domain.ServerInfo;
@@ -24,40 +19,11 @@ import github.popeen.dsub.domain.ServerInfo;
 public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
 
     private Context context;
-    private String author;
-    private String bookName;
 
     public BookInfoAPI(Context context){
         this.context = context;
     }
     private Exception exception;
-
-    public String readJsonutf8(String url){
-        Reader reader = null;
-        StringBuilder builder = new StringBuilder();
-        HttpURLConnection conn = null;
-        try {
-            // ...
-            conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
-            conn.connect();
-            reader = new InputStreamReader(conn.getInputStream(), "UTF-8");
-            char[] buffer = new char[8192];
-
-            for (int length = 0; (length = reader.read(buffer)) > 0;) {
-                builder.append(buffer, 0, length);
-                //loading.setProgress(length);
-            }
-        } catch(Exception e){}
-        finally {
-            conn.disconnect();
-            if (reader != null) try { reader.close(); } catch (IOException logOrIgnore) {}
-        }
-
-        return builder.toString();
-    }
     public String readJson(String url) {
         return readJson(url, "UTF-8");
     }
@@ -65,25 +31,15 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
         return KakaduaUtil.http_get_contents_all_cert(url, encoding);
     }
 
-    public static String convertToUTF8(String s) {
-        String out = null;
-        try {
-            out = new String(s.getBytes("UTF-8"), "iso-8859-1");
-        } catch (java.io.UnsupportedEncodingException e) {
-            return null;
-        }
-        return out;
-    }
-
     protected String[] doInBackground(BookInfoAPIParams... apiParams) {
         String[] returnData = new String[2];
         returnData[0] = "noInfo";
 
         try {
+            String url = apiParams[0].getURL();
+            String input = Jsoup.connect(url).ignoreContentType(true).execute().body();
 
-            final String input = Jsoup.connect(apiParams[0].getURL()).ignoreContentType(true).execute().body();
             JSONObject json = new JSONObject(input);
-
             String respRoot = "subsonic-response";
             if(ServerInfo.isMadsonic6(context)){
                 respRoot = "madsonic-response";
@@ -103,34 +59,38 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
         if(returnData[0].equals("noInfo")){
             if(context.getResources().getConfiguration().locale.getDisplayLanguage().equals("svenska")) {
                 try {
-                    String boktipsetUrl1 = "http://api.boktipset.se/book/search.cgi?accesskey="+EnvironmentVariables.BOKTIPSET_API_KEY+"&format=json&value="+URLEncoder.encode(apiParams[0].getTitle().replace(""+apiParams[0].getYear()+" - ", "").replace(" - Svensk", "").replace(" - Engelsk", ""), "iso-8859-1");
-                    Log.w("Boktipset", boktipsetUrl1);
-                    String input = readJson(boktipsetUrl1, "iso-8859-1");
+
+                    String url = "http://api.boktipset.se/book/search.cgi?accesskey="+EnvironmentVariables.BOKTIPSET_API_KEY+"&format=json&value="+URLEncoder.encode(apiParams[0].getTitle().replace(""+apiParams[0].getYear()+" - ", "").replace(" - Svensk", "").replace(" - Engelsk", ""));
+                    String input = Jsoup.connect(url).ignoreContentType(true).execute().body();
+
                     Log.w("Boktipset", input);
                     JSONObject json = new JSONObject(input);
                     String title = json.getJSONObject("answer").getJSONObject("books").getJSONArray("book").getJSONObject(0).getString("name");
                     String id = json.getJSONObject("answer").getJSONObject("books").getJSONArray("book").getJSONObject(0).getString("id");
 
-                    String boktipsetUrl2 = "http://api.boktipset.se/book/book.cgi?accesskey="+EnvironmentVariables.BOKTIPSET_API_KEY+"&format=json&book=" + id;
-                    Log.w("Boktipset", boktipsetUrl2);
-                    String input2 = readJson(boktipsetUrl2, "iso-8859-1");
-                    Log.w("Boktipset", input2);
-                    String description = new JSONObject(input2).getJSONObject("answer").getString("saga").replace("\n", " ").replace("<br />", "").replace("<br/>", "").replace("<p>", "").replace("</p>", "").replace("<b>", "").replace("</b>", "").replaceAll("\\s+", " ").trim();
-                    Log.w("Boktipset", description);
-                    returnData[0] = description+" \n<b>Den här bekrivningen för "+title+" hämtades automatiskt från Boktipset.se</b>";
+
+                    url = "http://api.boktipset.se/book/book.cgi?accesskey="+EnvironmentVariables.BOKTIPSET_API_KEY+"&format=json&book=" + id;
+                    input = Jsoup.connect(url).ignoreContentType(true).execute().body();
+
+                    String description = new JSONObject(input).getJSONObject("answer").getString("saga").replace("\n", " ").replace("<br />", "").replace("<br/>", "").replace("<p>", "").replace("</p>", "").replace("<b>", "").replace("</b>", "").replaceAll("\\s+", " ").trim();
+
+                    returnData[0] = "Följande beskrivning är för boken "+title+".\n\nBeskrivningen hämtades automatiskt från Boktipset.se\n\n" + description;
                 }catch(Exception e){Log.w("Boktipset Error", e);}
             }
-            if(returnData[0].equals("noInfo")){ //Language is not swedish or no description was collected
+            if(returnData[0].equals("noInfo")){ //Language is not swedish or no description was collected from boktipset
                 try {
-                    Log.w("GoogleBooks", "https://www.googleapis.com/books/v1/volumes?q=" + URLEncoder.encode(apiParams[0].getAuthor(), "UTF-8") + "+" + URLEncoder.encode(apiParams[0].getTitle(), "UTF-8"));
-                    String input = readJson("https://www.googleapis.com/books/v1/volumes?q=" + URLEncoder.encode(apiParams[0].getAuthor(), "UTF-8") + "+" + URLEncoder.encode(apiParams[0].getTitle(), "UTF-8"));
+                    String url = "https://www.googleapis.com/books/v1/volumes?q=" + URLEncoder.encode(apiParams[0].getAuthor()) + "+" + URLEncoder.encode(apiParams[0].getTitle());
+                    String input = Jsoup.connect(url).ignoreContentType(true).execute().body();
+
                     Log.w("GoogleBooks", input);
                     JSONObject json = new JSONObject(input);
 
                     try {
-                        returnData[0] = json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("description").toString() + "\n<b>This description for " + json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("title").toString() + " was automatically fetched from google books</b>";
+                        String description = json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("description").toString();
+                        returnData[0] =  "The following description is for the book " + json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("title").toString() + ".\n\nIt was automatically fetched from google books\n\n" + description;
                     } catch (Exception e) {
-                        returnData[0] = json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("description").toString() + "\n<b>This description for " + json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("title").toString() + " was automatically fetched from google books</b>";
+                        String description = json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("description").toString();
+                        returnData[0] =  "The following is for the book " + json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("title").toString() + ".\nIt was automatically fetched from google books\n\n" + description;
                     }
 
                 } catch (Exception e) {
