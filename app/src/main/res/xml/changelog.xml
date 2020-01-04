@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
     <release version="1.0.22" versioncode="43" releasedate="2020-01-04">
+        <change>You can now add descriptions for all folders allowing you to add descriptions for narrators and series</change>
         <change>Improved login screen (Based on Asti.ga's DSub fork, thank you Koenvh1)</change>
         <change>Updated the UI for when looking at a book</change>
         <change>Updated the UI for when looking at an author or series</change>
