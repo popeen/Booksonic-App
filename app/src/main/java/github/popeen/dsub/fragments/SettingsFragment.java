@@ -17,15 +17,19 @@ package github.popeen.dsub.fragments;
 
 import android.Manifest;
 import android.accounts.Account;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -35,6 +39,7 @@ import android.preference.PreferenceScreen;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,13 +48,25 @@ import android.widget.EditText;
 
 import org.jsoup.Jsoup;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.security.MessageDigest;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.activity.SubsonicActivity;
@@ -58,6 +75,7 @@ import github.popeen.dsub.service.HeadphoneListenerService;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.util.Constants;
+import github.popeen.dsub.util.EnvironmentVariables;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.LoadingTask;
 import github.popeen.dsub.util.MediaRouteManager;
@@ -65,6 +83,8 @@ import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.view.CacheLocationPreference;
 import github.popeen.dsub.view.ErrorDialog;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private final static String TAG = SettingsFragment.class.getSimpleName();
@@ -156,6 +176,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			xml = R.xml.settings_servers;
 		} else if ("cast".equals(name)) {
 			xml = R.xml.settings_cast;
+		} else if ("help".equals(name)) {
+			xml = R.xml.settings_help;
 		}
 
 		if(xml != 0) {
@@ -300,6 +322,212 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 						}
 					});
 					return false;
+				}
+			});
+
+
+
+
+		}
+
+		if((PreferenceCategory) this.findPreference("helpCategory") != null) {
+
+			this.findPreference("visitFaq").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					Uri uri = Uri.parse("https://popeen.com/2019/02/08/booksonic-faq/");
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+					startActivity(browserIntent);
+					return true;
+				}
+			});
+
+			this.findPreference("visitSubredit").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					Uri uri = Uri.parse("https://www.reddit.com/r/Booksonic/");
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+					startActivity(browserIntent);
+					return true;
+				}
+			});
+
+			this.findPreference("sendLogfile").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					try {
+						final PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+						new LoadingTask<String>(context) {
+							@Override
+							protected String doInBackground() throws Throwable {
+								updateProgress("Gathering Logs");
+								File logcat = new File(Environment.getExternalStorageDirectory(), "dsub-logcat.txt");
+								Util.delete(logcat);
+								Process logcatProc = null;
+
+								try {
+									List<String> progs = new ArrayList<String>();
+									progs.add("logcat");
+									progs.add("-v");
+									progs.add("time");
+									progs.add("-d");
+									progs.add("-f");
+									progs.add(logcat.getCanonicalPath());
+									progs.add("*:I");
+
+									logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[progs.size()]));
+									logcatProc.waitFor();
+								} finally {
+									if(logcatProc != null) {
+										logcatProc.destroy();
+									}
+								}
+
+								URL url = new URL("https://ptjwebben.se/logs/index.php");
+								HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+								StringBuffer responseBuffer = new StringBuffer();
+								try {
+									urlConnection.setReadTimeout(10000);
+									urlConnection.setConnectTimeout(15000);
+									urlConnection.setRequestMethod("POST");
+									urlConnection.setDoInput(true);
+									urlConnection.setDoOutput(true);
+
+									OutputStream os = urlConnection.getOutputStream();
+									BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, Constants.UTF_8));
+									writer.write("api_dev_key=" + URLEncoder.encode(EnvironmentVariables.PASTEBIN_DEV_KEY, Constants.UTF_8) + "&api_option=paste&api_paste_private=1&api_paste_code=");
+
+									BufferedReader reader = null;
+									try {
+										reader = new BufferedReader(new InputStreamReader(new FileInputStream(logcat)));
+										String line;
+										while ((line = reader.readLine()) != null) {
+											writer.write(URLEncoder.encode(line + "\n", Constants.UTF_8));
+										}
+									} finally {
+										Util.close(reader);
+									}
+
+									File stacktrace = new File(Environment.getExternalStorageDirectory(), "dsub-stacktrace.txt");
+									if(stacktrace.exists() && stacktrace.isFile()) {
+										writer.write("\n\nMost Recent Stacktrace:\n\n");
+
+										reader = null;
+										try {
+											reader = new BufferedReader(new InputStreamReader(new FileInputStream(stacktrace)));
+											String line;
+											while ((line = reader.readLine()) != null) {
+												writer.write(URLEncoder.encode(line + "\n", Constants.UTF_8));
+											}
+										} finally {
+											Util.close(reader);
+										}
+									}
+
+									writer.flush();
+									writer.close();
+									os.close();
+
+									BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+									String inputLine;
+									while ((inputLine = in.readLine()) != null) {
+										responseBuffer.append(inputLine);
+									}
+									in.close();
+								} finally {
+									urlConnection.disconnect();
+								}
+
+								String response = responseBuffer.toString();
+
+								urlConnection.disconnect();
+								if(response.indexOf("http") == 0) {
+									return response.replace("http:", "https:");
+								} else {
+									throw new Exception("Paste Error: " + response);
+								}
+							}
+
+							@Override
+							protected void error(Throwable error) {
+								Log.e(TAG, "Failed to gather logs", error);
+								Util.toast(context, "Failed to gather logs");
+							}
+
+							@Override
+							protected void done(String logcat) {
+								String footer = "\nLogs: " + logcat;
+								footer += "Android SDK: " + Build.VERSION.SDK;
+								footer += "\nDevice Model: " + Build.MODEL;
+								footer += "\nDevice Name: " + Build.MANUFACTURER + " "  + Build.PRODUCT;
+								footer += "\nROM: " + Build.DISPLAY;
+								footer += "\nBuild Number: " + packageInfo.versionCode;
+
+								try {
+									MessageDigest md;
+									md = MessageDigest.getInstance("SHA");
+									md.update(context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES).signatures[0].toByteArray());
+									footer += "\nSignature: " + new String(Base64.encode(md.digest(), 0));
+								}catch(Exception e){}
+
+
+								Intent selectorIntent = new Intent(Intent.ACTION_SENDTO);
+								selectorIntent.setData(Uri.parse("mailto:"));
+
+								final Intent emailIntent = new Intent(Intent.ACTION_SEND);
+								emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"support@booksonic.org"});
+								emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Booksonic " + packageInfo.versionName + " Error Logs");
+								emailIntent.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n\n" + footer);
+								emailIntent.setSelector( selectorIntent );
+
+								startActivity(Intent.createChooser(emailIntent, "Send log..."));
+							}
+						}.execute();
+					} catch(Exception e) {}
+					return true;
+				}
+			});
+
+			this.findPreference("visitWindowsGuide").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					Uri uri = Uri.parse("https://popeen.com/2016/01/14/how-to-stream-audiobooks-to-your-phone-with-booksonic/");
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+					startActivity(browserIntent);
+					return true;
+				}
+			});
+
+			this.findPreference("visitDockerGuide").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					Uri uri = Uri.parse("https://hub.docker.com/r/linuxserver/booksonic/");
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+					startActivity(browserIntent);
+					return true;
+				}
+			});
+
+
+			try {
+				MessageDigest md;
+				md = MessageDigest.getInstance("SHA");
+				md.update(context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES).signatures[0].toByteArray());
+				final PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+				String aboutInfo = "\nVersion: " + packageInfo.versionName;
+				aboutInfo += "\nBuild Number: " + packageInfo.versionCode;
+				aboutInfo += "\nSignature: " + new String(Base64.encode(md.digest(), 0));
+				this.findPreference("copyAppInfo").setSummary("Click here to copy the information about your app version to the clipboard\n\n" + aboutInfo);
+			}catch(Exception e){ this.findPreference("copyAppInfo").setSummary("Click here to copy the information about your app version to the clipboard\n\nCould not get app data"); }
+
+			this.findPreference("copyAppInfo").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+					android.content.ClipData clip = android.content.ClipData.newPlainText("Copied to clipboard", preference.getSummary().toString().split("\n\n")[1]);
+					clipboard.setPrimaryClip(clip);
+					Util.toast(getActivity(), "Copied to clipboard");
+					return true;
 				}
 			});
 		}

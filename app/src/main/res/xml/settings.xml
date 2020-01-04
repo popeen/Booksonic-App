@@ -36,4 +36,9 @@
 		android:title="@string/settings.casting"
 		android:key="cast">
 	</PreferenceScreen>
+
+	<PreferenceScreen
+		android:title="Help / Support"
+		android:key="help">
+	</PreferenceScreen>
 </PreferenceScreen>
