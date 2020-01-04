@@ -945,7 +945,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			getImageLoader().loadImage(coverArtView, song, false, height, false);
 		}
 
-		updateMediaButtons(shouldFastForward);
+		updateMediaButtons(true);
 	}
 
 	private void updateMediaButtons(boolean shouldFastForward) {
@@ -978,7 +978,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		if(this.currentPlaying != currentPlaying || this.currentPlaying == null) {
 			onSongChanged(currentPlaying, currentPlayingIndex, shouldFastForward);
 		} else {
-			updateMediaButtons(shouldFastForward);
+			updateMediaButtons(true);
 		}
 	}
 
