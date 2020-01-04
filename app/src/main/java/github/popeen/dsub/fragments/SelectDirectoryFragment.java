@@ -1222,7 +1222,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		}
 		if(bookDescription.equals("noInfo")){
-			bookDescription = "The server has no description for this book"; }
+			bookDescription = "No description available"; }
 
 		final TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
 		if(podcastDescription != null || artistInfo != null || bookDescription != null) {
@@ -1235,7 +1235,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			if(podcastDescription != null){
 				text = podcastDescription;
 			}
-			if(artistInfo != null && bookDescription.equals("The server has no description for this book")){
+			if(artistInfo != null && bookDescription.equals("No description available")){
 				text = artistInfo.getBiography();
 			}
 			Spanned spanned = null;
@@ -1284,13 +1284,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							}
 						});
 
+						coverArtView.getLayoutParams().width = display.getWidth();
+						coverArtView.getLayoutParams().height = display.getWidth();
+						descriptionnView.setText(text);
+
 						if(songCount != 0) {
-							coverArtView.getLayoutParams().width = display.getWidth();
-							coverArtView.getLayoutParams().height = display.getWidth();
 							autorView.setText("Author: " + artistName);
 							narratorView.setText("Narrated by: " + bookReader);
 							durationView.setText(Util.formatDuration(totalDuration, true));
-							descriptionnView.setText(text);
 							Util.setMargins(coverArtDownloadView, 0, (display.getWidth()-120) ,70 ,0);
 
 						}else{
