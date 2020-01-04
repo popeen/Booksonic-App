@@ -857,7 +857,11 @@ public final class Util {
         return BYTE_LOCALIZED_FORMAT.format((double) byteCount);
     }
 
-    public static String formatDuration(Integer seconds) {
+	public static String formatDuration(Integer seconds) {
+		return Util.formatDuration(seconds, false);
+	}
+
+    public static String formatDuration(Integer seconds, boolean inText) {
         if (seconds == null) {
             return null;
         }
@@ -866,20 +870,23 @@ public final class Util {
         int minutes = (seconds / 60) % 60;
         int secs = seconds % 60;
 
-       /* StringBuilder builder = new StringBuilder(7);
-		if(hours > 0) {
-			builder.append(hours).append(":");
-			if(minutes < 10) {
+        if(inText){
+			return hours + "h " + minutes + "min";
+		}else {
+			StringBuilder builder = new StringBuilder(7);
+			if (hours > 0) {
+				builder.append(hours).append(":");
+				if (minutes < 10) {
+					builder.append("0");
+				}
+			}
+			builder.append(minutes).append(":");
+			if (secs < 10) {
 				builder.append("0");
 			}
+			builder.append(secs);
+			return builder.toString();
 		}
-        builder.append(minutes).append(":");
-        if (secs < 10) {
-            builder.append("0");
-        }
-        builder.append(secs);
-        return builder.toString();*/
-       return hours + "h " + minutes + "min";
     }
 
 	public static String formatDate(Context context, String dateString) {

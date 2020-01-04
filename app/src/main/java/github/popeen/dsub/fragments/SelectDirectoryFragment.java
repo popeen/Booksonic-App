@@ -1289,7 +1289,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							coverArtView.getLayoutParams().height = display.getWidth();
 							autorView.setText("Author: " + artistName);
 							narratorView.setText("Narrated by: " + bookReader);
-							durationView.setText(Util.formatDuration(totalDuration));
+							durationView.setText(Util.formatDuration(totalDuration, true));
 							descriptionnView.setText(text);
 							Util.setMargins(coverArtDownloadView, 0, (display.getWidth()-120) ,70 ,0);
 
@@ -1300,33 +1300,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							listenButton.setVisibility(View.GONE);
 							durationView.setVisibility(View.GONE);
 						}
-						int height, width;
-						ViewGroup.MarginLayoutParams vlp = (ViewGroup.MarginLayoutParams) coverArtView.getLayoutParams();
-						if(coverArtView.getDrawable() != null) {
-							height = coverArtView.getMeasuredHeight() + coverArtView.getPaddingBottom();
-							width = coverArtView.getWidth() + coverArtView.getPaddingRight();
-						} else {
-							height = coverArtView.getHeight();
-							width = coverArtView.getWidth() + coverArtView.getPaddingRight();
-						}
-						float textLineHeight = artistView.getPaint().getTextSize();
-
-						int lines = (int) Math.ceil(height / textLineHeight) + 1;
-
-						SpannableString ss = new SpannableString(spannedText);
-						ss.setSpan(new MyLeadingMarginSpan2(lines, width), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-						View linearLayout = header.findViewById(R.id.select_album_text_layout);
-						RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
-						int[]rules = params.getRules();
-						rules[RelativeLayout.RIGHT_OF] = 0;
-						params.leftMargin = vlp.rightMargin;
-
-						artistView.setText(ss);
-						artistView.setMaxLines(100);
-
-						vlp = (ViewGroup.MarginLayoutParams) titleView.getLayoutParams();
-						vlp.leftMargin = width;
 					} else {
 						artistView.setMaxLines(minLines);
 					}
