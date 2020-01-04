@@ -81,7 +81,7 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
 
         try {
 
-            final String input = new String(Jsoup.connect(apiParams[0].getURL()).ignoreContentType(true).execute().bodyAsBytes(), "UTF-8");
+            final String input = Jsoup.connect(apiParams[0].getURL()).ignoreContentType(true).execute().body();
             JSONObject json = new JSONObject(input);
 
             String respRoot = "subsonic-response";
