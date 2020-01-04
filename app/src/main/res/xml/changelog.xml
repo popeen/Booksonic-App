@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.22" versioncode="43" releasedate="2020-01-04">
+        <change>Improved login screen (Based on Asti.ga's DSub fork, thank you Koenvh1)</change>
+        <change>Updated the UI for when looking at a book</change>
+        <change>Updated the UI for when looking at an author or series</change>
+        <change>Added a help / support menu under settings</change>
+        <change>Descriptions can now be added to all folders (on the server) including series and author folders</change>
+        <change>The add server menu now has a link to help/instructions</change>
+        <change>Changelog is no longer shown on first start after update, it can still be shown from the top right menu.</change>
+        <change>Cache is now called downloads since most other streaming software use that term meaning that's what new users will look for.</change>
+        <change>Permanent cache is now removed as people found it confusing with two types but it will come back if people ask for it.</change>
+        <change>Simplified menus, this means that some old music oriented features from DSub have been removed, if you want any of them back let me know</change>
+        <change>Possible fix for bug that caused crashes that I have not been able to reproduce</change>
+        <change>Possible fix for ssl bug that I have not been able to reproduce</change>
+    </release>
     <release version="1.0.21" versioncode="37" releasedate="2019-09-05">
         <change>Fixed a bug where the app would not pause on focus loss (gps talking etc) even if it was set to do so</change>
         <change>Fixed a bug where playback would not work in offline mode</change>
