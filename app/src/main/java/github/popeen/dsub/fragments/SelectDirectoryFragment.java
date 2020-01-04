@@ -1284,7 +1284,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							}
 						});
 
-						if(artistInfo == null) {
+						if(songCount != 0) {
 							coverArtView.getLayoutParams().width = display.getWidth();
 							coverArtView.getLayoutParams().height = display.getWidth();
 							autorView.setText("Author: " + artistName);
