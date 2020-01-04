@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Help / Settings">
+
+
+	<Preference
+		android:title="Visit FAQ"
+		android:summary="Usually you can find the answer to your question on the frequently asked questions page."
+		android:key="visitFaq"/>
+
+	<PreferenceCategory
+		android:title="Contact / Discussion / Suggestions"
+		android:key="helpCategory">
+		<Preference
+			android:title="Visit the Booksonic subreddit"
+			android:summary="A forum where both users and the developer helps each other out. This is the preferred way of support but can also be used for suggesting features or talk about whatever you like that is Booksonic related."
+			android:key="visitSubredit"/>
+
+		<Preference
+			android:title="Send log file to developer"
+			android:summary="This will let you email a log file to the developer to help troubleshoot your problem. Can also be used to ask for support if you prefer not to post on Reddit."
+			android:key="sendLogfile"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="Installing the server">
+		<Preference
+			android:title="Windows"
+			android:summary="The official guide for setting up the Booksonic Windows server."
+			android:key="visitWindowsGuide"/>
+		<Preference
+			android:title="Linux (Docker)"
+			android:summary="An unofficial but recommended docker container"
+			android:key="visitDockerGuide"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="App information">
+		<Preference
+			android:title=""
+			android:summary="Click here to copy the information about your app version to the clipboard\n\nApp version: 10.0.22-BETA5 (44)\nBuild date: 4 jan, 2020\nSignature: 16541654132174"
+			android:key="copyAppInfo"/>
+	</PreferenceCategory>
+</PreferenceScreen>
