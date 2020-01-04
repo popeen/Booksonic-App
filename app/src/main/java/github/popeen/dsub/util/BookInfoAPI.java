@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -80,7 +81,9 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
 
         try {
 
-            String input = readJson(apiParams[0].getURL());
+            //String input = readJson(apiParams[0].getURL());
+            String url = Util.getRestUrl(context, "ping") + "&f=json";
+            final String input = Jsoup.connect(url).get().body().outerHtml();
             JSONObject json = new JSONObject(input);
 
             String respRoot = "subsonic-response";
