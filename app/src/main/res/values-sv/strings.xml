@@ -75,8 +75,7 @@
 	<string name="main.albums_year">Årtionden</string>
 	<string name="main.albums_alphabetical">Alfabetiskt</string>
 	<string name="main.videos">Videor</string>
-	<string name="main.songs_genres">@string/main.albums_genres</string>
-	<string name="main.back_confirm">Tryck bakåt igen för att avsluta</string>
+    <string name="main.back_confirm">Tryck bakåt igen för att avsluta</string>
 	<string name="main.scan_complete">Skanning av server klar</string>
 	<string name="main.artist">Författare</string>
 	<string name="main.title">Titel</string>
@@ -311,28 +310,8 @@
 
     <string name="settings.max_bitrate_wifi">Max bithastighet (bitrate) - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max bithastighet (bitrate) - Mobil data</string>
-    <string name="settings.max_bitrate_32">32 Kbps</string>
-    <string name="settings.max_bitrate_64">64 Kbps</string>
-    <string name="settings.max_bitrate_80">80 Kbps</string>
-    <string name="settings.max_bitrate_96">96 Kbps</string>
-    <string name="settings.max_bitrate_112">112 Kbps</string>
-    <string name="settings.max_bitrate_128">128 Kbps</string>
-    <string name="settings.max_bitrate_160">160 Kbps</string>
-    <string name="settings.max_bitrate_192">192 Kbps</string>
-    <string name="settings.max_bitrate_256">256 Kbps</string>
-    <string name="settings.max_bitrate_320">320 Kbps</string>
-	<string name="settings.max_video_bitrate_wifi">Max video bithastighet (bitrate) - Wi-Fi</string>
+    <string name="settings.max_video_bitrate_wifi">Max video bithastighet (bitrate) - Wi-Fi</string>
     <string name="settings.max_video_bitrate_mobile">Max video bithastighet (bitrate) - Mobil data</string>
-	<string name="settings.max_video_bitrate_200">200 Kbps</string>
-    <string name="settings.max_video_bitrate_300">300 Kbps</string>
-    <string name="settings.max_video_bitrate_400">400 Kbps</string>
-    <string name="settings.max_video_bitrate_500">500 Kbps</string>
-    <string name="settings.max_video_bitrate_700">700 Kbps</string>
-    <string name="settings.max_video_bitrate_1000">1000 Kbps</string>
-    <string name="settings.max_video_bitrate_1500">1500 Kbps</string>
-    <string name="settings.max_video_bitrate_2000">2000 Kbps</string>
-    <string name="settings.max_video_bitrate_3000">3000 Kbps</string>
-    <string name="settings.max_video_bitrate_5000">5000 Kbps</string>
     <string name="settings.max_bitrate_unlimited">Oändlig</string>
     <string name="settings.wifi_required_title">Bara Wi-Fi streaming</string>
     <string name="settings.wifi_required_summary">Streama bara media om jag är ansluten till Wi-Fi</string>
@@ -564,23 +543,13 @@
     <string name="equalizer.preset">Välj förinställning</string>
 	<string name="equalizer.bass_booster">Bas Booster</string>
 	<string name="equalizer.voice_booster">Röst Booster</string>
-	<string name="equalizer.db_size">%d dB</string>
-	<string name="equalizer.bass_size">%d mille</string>
+    <string name="equalizer.bass_size">%d mille</string>
 
-	<string name="widget.4x1">Booksonic (4x1)</string>
-	<string name="widget.4x2">Booksonic (4x2)</string>
-	<string name="widget.4x3">Booksonic (4x3)</string>
-	<string name="widget.4x4">Booksonic (4x4)</string>
     <string name="widget.initial_text">Tryck för att välja musik</string>
     <string name="widget.sdcard_busy">SD-kort kunde inte användas</string>
     <string name="widget.sdcard_missing">Inget SD-kort</string>
 
-    <string name="util.bytes_format.gigabyte">0.00 GB</string>
-    <string name="util.bytes_format.megabyte">0.00 MB</string>
-    <string name="util.bytes_format.kilobyte">0 KB</string>
-    <string name="util.bytes_format.byte">0 B</string>
-
-	<string name="changelog_full_title">Uppdateringslogg</string>
+    <string name="changelog_full_title">Uppdateringslogg</string>
     <string name="changelog_title">Vad är nytt</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Mer…</string>
