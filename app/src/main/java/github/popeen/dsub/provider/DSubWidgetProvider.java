@@ -28,12 +28,14 @@ import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -59,13 +61,17 @@ import github.popeen.dsub.util.Util;
  * @author Sindre Mehus
  */
 public class DSubWidgetProvider extends AppWidgetProvider {
-    private static final String TAG = DSubWidgetProvider.class.getSimpleName();
+    protected static final String TAG = DSubWidgetProvider.class.getSimpleName();
+    private static DSubWidget1x1 instance1x1;
 	private static DSubWidget4x1 instance4x1;
 	private static DSubWidget4x2 instance4x2;
 	private static DSubWidget4x3 instance4x3;
 	private static DSubWidget4x4 instance4x4;
 
 	public static synchronized void notifyInstances(Context context, DownloadService service, boolean playing) {
+        if(instance1x1 == null) {
+            instance1x1 = new DSubWidget1x1();
+        }
 		if(instance4x1 == null) {
 			instance4x1 = new DSubWidget4x1();
 		}
@@ -78,7 +84,8 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 		if(instance4x4 == null) {
 			instance4x4 = new DSubWidget4x4();
 		}
-		
+
+        instance1x1.notifyChange(context, service, playing);
 		instance4x1.notifyChange(context, service, playing);
 		instance4x2.notifyChange(context, service, playing);
 		instance4x3.notifyChange(context, service, playing);
@@ -193,22 +200,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
             errorState = res.getText(R.string.widget_initial_text);
         }
 
-        if (errorState != null) {
-            // Show error state to user
-        	views.setTextViewText(R.id.title,null);
-            views.setTextViewText(R.id.artist, errorState);
-			views.setTextViewText(R.id.album, "");
-			if(getLayout() != R.layout.appwidget4x1) {
-				views.setImageViewResource(R.id.appwidget_coverart, R.drawable.appwidget_art_default);
-			}
-        } else {
-            // No error, so show normal titles
-            views.setTextViewText(R.id.title, title);
-            views.setTextViewText(R.id.artist, artist);
-			if(getLayout() != R.layout.appwidget4x1) {
-				views.setTextViewText(R.id.album, album);
-			}
-        }
+        setText(views, title, artist, album, errorState);
 
         // Set correct drawable for pause state
         if (playing) {
@@ -217,13 +209,42 @@ public class DSubWidgetProvider extends AppWidgetProvider {
             views.setImageViewResource(R.id.control_play, R.drawable.media_start_dark);
         }
 
+        setImage(views, context, currentPlaying);
+
+        // Link actions buttons to intents
+        linkButtons(context, views, currentPlaying != null);
+
+        pushUpdate(context, appWidgetIds, views);
+    }
+
+    protected void setText(RemoteViews views, String title, CharSequence artist, CharSequence album, CharSequence errorState) {
+        if (errorState != null) {
+            // Show error state to user
+            views.setTextViewText(R.id.title,null);
+            views.setTextViewText(R.id.artist, errorState);
+            views.setTextViewText(R.id.album, "");
+            if(getLayout() != R.layout.appwidget4x1) {
+                views.setImageViewResource(R.id.appwidget_coverart, R.drawable.appwidget_art_default);
+            }
+        } else {
+            // No error, so show normal titles
+            views.setTextViewText(R.id.title, title);
+            views.setTextViewText(R.id.artist, artist);
+            if(getLayout() != R.layout.appwidget4x1) {
+                views.setTextViewText(R.id.album, album);
+            }
+        }
+    }
+
+    protected void setImage(RemoteViews views, Context context, MusicDirectory.Entry currentPlaying)
+    {
         // Set the cover art
         try {
             boolean large = false;
-			if(getLayout() != R.layout.appwidget4x1 && getLayout() != R.layout.appwidget4x2) {
-				large = true;
-			}
-			ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(context);
+            if(getLayout() != R.layout.appwidget4x1 && getLayout() != R.layout.appwidget4x2 && getLayout() != R.layout.appwidget1x1) {
+                large = true;
+            }
+            ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(context);
             Bitmap bitmap = imageLoader == null ? null : imageLoader.getCachedImage(context, currentPlaying, large);
 
             if (bitmap == null) {
@@ -237,17 +258,12 @@ public class DSubWidgetProvider extends AppWidgetProvider {
             Log.e(TAG, "Failed to load cover art", x);
             views.setImageViewResource(R.id.appwidget_coverart, R.drawable.appwidget_art_unknown);
         }
-
-        // Link actions buttons to intents
-        linkButtons(context, views, currentPlaying != null);
-
-        pushUpdate(context, appWidgetIds, views);
     }
     
     /**
      * Round the corners of a bitmap for the cover art image
      */
-    private static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
+    protected static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
@@ -268,6 +284,17 @@ public class DSubWidgetProvider extends AppWidgetProvider {
         canvas.drawBitmap(bitmap, rect, rect, paint);
 
         return output;
+    }
+
+    protected static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int radius)
+    {
+        Bitmap bitmapRounded = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+        Canvas canvas = new Canvas(bitmapRounded);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setShader(new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
+        canvas.drawRoundRect((new RectF(0.0f, 0.0f, bitmap.getWidth(), bitmap.getHeight())), radius, radius, paint);
+        return bitmapRounded;
     }
 
     /**
