@@ -17,7 +17,7 @@ android {
 		versionCode 43
 		versionName '1.0.22'
 		setProperty("archivesBaseName", "Booksonic $versionName")
-		resConfigs "sv"
+		resConfigs "sv", "ru"
 	}
 	buildTypes {
 		release {

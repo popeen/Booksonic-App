@@ -73,11 +73,11 @@
 	<string name="main.albums_year">Decades</string>
 	<string name="main.albums_alphabetical">Alphabetically</string>
 	<string name="main.videos">Videos</string>
-	<string name="main.songs_genres">@string/main.albums_genres</string>
-	<string name="main.songs_newest">@string/main.albums_newest</string>
+	<string name="main.songs_genres" translatable="false">@string/main.albums_genres</string>
+	<string name="main.songs_newest" translatable="false">@string/main.albums_newest</string>
 	<string name="main.songs_top_played">Top Played</string>
-	<string name="main.songs_recent">@string/main.albums_recent</string>
-	<string name="main.songs_frequent">@string/main.albums_frequent</string>
+	<string name="main.songs_recent" translatable="false">@string/main.albums_recent</string>
+	<string name="main.songs_frequent" translatable="false">@string/main.albums_frequent</string>
 	<string name="main.back_confirm">Press back again to exit</string>
 	<string name="main.scan_complete">Completed scan of Server</string>
 	<string name="main.artist">Author</string>
@@ -223,11 +223,11 @@
 	<string name="download.thumbs_up">Thumbs Up</string>
 	<string name="download.thumbs_down">Thumbs Down</string>
 	<string name="download.batch_mode">Batch Mode</string>
-	<string name="download.playback_speed_half">0.5x</string>
-	<string name="download.playback_speed_normal">1x</string>
-	<string name="download_playback_speed_one_p_two">1.2x</string>
-	<string name="download_playback_speed_one_p_five">1.5x</string>
-	<string name="download_playback_speed_two">2x</string>
+	<string name="download.playback_speed_half" translatable="false">0.5x</string>
+	<string name="download.playback_speed_normal" translatable="false">1x</string>
+	<string name="download_playback_speed_one_p_two" translatable="false">1.2x</string>
+	<string name="download_playback_speed_one_p_five" translatable="false">1.5x</string>
+	<string name="download_playback_speed_two" translatable="false">2x</string>
 	<string name="download.playback_speed_custom">Custom</string>
 
 	<string name="sync.new_podcasts">New podcasts available</string>
@@ -322,29 +322,29 @@
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max bitrate - Mobile</string>
-    <string name="settings.max_bitrate_32">32 Kbps</string>
-	<string name="settings.max_bitrate_48">48 Kbps</string>
-    <string name="settings.max_bitrate_64">64 Kbps</string>
-    <string name="settings.max_bitrate_80">80 Kbps</string>
-    <string name="settings.max_bitrate_96">96 Kbps</string>
-    <string name="settings.max_bitrate_112">112 Kbps</string>
-    <string name="settings.max_bitrate_128">128 Kbps</string>
-    <string name="settings.max_bitrate_160">160 Kbps</string>
-    <string name="settings.max_bitrate_192">192 Kbps</string>
-    <string name="settings.max_bitrate_256">256 Kbps</string>
-    <string name="settings.max_bitrate_320">320 Kbps</string>
+    <string name="settings.max_bitrate_32" translatable="false">32 Kbps</string>
+	<string name="settings.max_bitrate_48" translatable="false">48 Kbps</string>
+    <string name="settings.max_bitrate_64" translatable="false">64 Kbps</string>
+    <string name="settings.max_bitrate_80" translatable="false">80 Kbps</string>
+    <string name="settings.max_bitrate_96" translatable="false">96 Kbps</string>
+    <string name="settings.max_bitrate_112" translatable="false">112 Kbps</string>
+    <string name="settings.max_bitrate_128" translatable="false">128 Kbps</string>
+    <string name="settings.max_bitrate_160" translatable="false">160 Kbps</string>
+    <string name="settings.max_bitrate_192" translatable="false">192 Kbps</string>
+    <string name="settings.max_bitrate_256" translatable="false">256 Kbps</string>
+    <string name="settings.max_bitrate_320" translatable="false">320 Kbps</string>
 	<string name="settings.max_video_bitrate_wifi">Max Video bitrate - Wi-Fi</string>
     <string name="settings.max_video_bitrate_mobile">Max Video bitrate - Mobile</string>
-	<string name="settings.max_video_bitrate_200">200 Kbps</string>
-    <string name="settings.max_video_bitrate_300">300 Kbps</string>
-    <string name="settings.max_video_bitrate_400">400 Kbps</string>
-    <string name="settings.max_video_bitrate_500">500 Kbps</string>
-    <string name="settings.max_video_bitrate_700">700 Kbps</string>
-    <string name="settings.max_video_bitrate_1000">1000 Kbps</string>
-    <string name="settings.max_video_bitrate_1500">1500 Kbps</string>
-    <string name="settings.max_video_bitrate_2000">2000 Kbps</string>
-    <string name="settings.max_video_bitrate_3000">3000 Kbps</string>
-    <string name="settings.max_video_bitrate_5000">5000 Kbps</string>
+	<string name="settings.max_video_bitrate_200" translatable="false">200 Kbps</string>
+    <string name="settings.max_video_bitrate_300" translatable="false">300 Kbps</string>
+    <string name="settings.max_video_bitrate_400" translatable="false">400 Kbps</string>
+    <string name="settings.max_video_bitrate_500" translatable="false">500 Kbps</string>
+    <string name="settings.max_video_bitrate_700" translatable="false">700 Kbps</string>
+    <string name="settings.max_video_bitrate_1000" translatable="false">1000 Kbps</string>
+    <string name="settings.max_video_bitrate_1500" translatable="false">1500 Kbps</string>
+    <string name="settings.max_video_bitrate_2000" translatable="false">2000 Kbps</string>
+    <string name="settings.max_video_bitrate_3000" translatable="false">3000 Kbps</string>
+    <string name="settings.max_video_bitrate_5000" translatable="false">5000 Kbps</string>
     <string name="settings.max_bitrate_unlimited">Unlimited</string>
     <string name="settings.wifi_required_title">Wi-Fi streaming only</string>
     <string name="settings.wifi_required_summary">Only stream media if connected to Wi-Fi</string>
@@ -585,21 +585,21 @@
     <string name="equalizer.preset">Select preset</string>
 	<string name="equalizer.bass_booster">Bass Booster</string>
 	<string name="equalizer.voice_booster">Voice Booster</string>
-	<string name="equalizer.db_size">%d dB</string>
+	<string name="equalizer.db_size" translatable="false">%d dB</string>
 	<string name="equalizer.bass_size">%d mille</string>
 
-	<string name="widget.4x1">Booksonic (4x1)</string>
-	<string name="widget.4x2">Booksonic (4x2)</string>
-	<string name="widget.4x3">Booksonic (4x3)</string>
-	<string name="widget.4x4">Booksonic (4x4)</string>
+	<string name="widget.4x1" translatable="false">Booksonic (4x1)</string>
+	<string name="widget.4x2" translatable="false">Booksonic (4x2)</string>
+	<string name="widget.4x3" translatable="false">Booksonic (4x3)</string>
+	<string name="widget.4x4" translatable="false">Booksonic (4x4)</string>
     <string name="widget.initial_text">Touch to select music</string>
     <string name="widget.sdcard_busy">SD card unavailable</string>
     <string name="widget.sdcard_missing">No SD card</string>
 
-    <string name="util.bytes_format.gigabyte">0.00 GB</string>
-    <string name="util.bytes_format.megabyte">0.00 MB</string>
-    <string name="util.bytes_format.kilobyte">0 KB</string>
-    <string name="util.bytes_format.byte">0 B</string>
+    <string name="util.bytes_format.gigabyte" translatable="false">0.00 GB</string>
+    <string name="util.bytes_format.megabyte" translatable="false">0.00 MB</string>
+    <string name="util.bytes_format.kilobyte" translatable="false">0 KB</string>
+    <string name="util.bytes_format.byte" translatable="false">0 B</string>
 
 	<string name="changelog_full_title">Change Log</string>
     <string name="changelog_title">What\'s New</string>
