@@ -3,6 +3,10 @@ package github.popeen.dsub.fragments;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -1265,7 +1269,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 						Button listenButton = (Button) header.findViewById(R.id.listenButton);
 						TextView durationView = (TextView) header.findViewById(R.id.select_album_duration);
 						TextView descriptionnView = (TextView) header.findViewById(R.id.select_album_description);
-						ImageView coverArtDownloadView = (ImageView) header.findViewById(R.id.select_album_art_download);
+						final ImageView coverArtDownloadView = (ImageView) header.findViewById(R.id.select_album_art_download);
 						coverArtView.measure(display.getWidth(), display.getHeight());
 
 						coverArtDownloadView.setOnClickListener(new View.OnClickListener() {
@@ -1274,6 +1278,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 								downloadBackground(false);
 								clearSelected();
 								Util.toast(context, "Downloading audiobook", false);
+
+								//Grey out the download button and disable it
+								ColorMatrix matrix = new ColorMatrix();
+								matrix.setSaturation(0);
+								ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+								coverArtDownloadView.setColorFilter(cf);
+								coverArtDownloadView.setImageAlpha(128);
+								coverArtDownloadView.setClickable(false);
 							}
 						});
 
@@ -1300,6 +1312,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							narratorView.setVisibility(View.GONE);
 							listenButton.setVisibility(View.GONE);
 							durationView.setVisibility(View.GONE);
+						}
+						if(podcastDescription != null) {
+							//Remove author and narrator info if we are looking at a podcast
+							autorView.setVisibility(View.GONE);
+							narratorView.setVisibility(View.GONE);
 						}
 					} else {
 						artistView.setMaxLines(minLines);
