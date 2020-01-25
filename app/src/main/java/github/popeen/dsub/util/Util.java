@@ -349,19 +349,34 @@ public final class Util {
 	public static String getRestUrl(Context context, String method, boolean allowAltAddress) {
 		SharedPreferences prefs = getPreferences(context);
 		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+		if(instance<1){
+			instance = 1;
+		}
 		return getRestUrl(context, method, prefs, instance, allowAltAddress);
 	}
     public static String getRestUrl(Context context, String method, int instance) {
+		if(instance<1){
+			instance = 1;
+		}
     	return getRestUrl(context, method, instance, true);
     }
 	public static String getRestUrl(Context context, String method, int instance, boolean allowAltAddress) {
+		if(instance<1){
+			instance = 1;
+		}
 		SharedPreferences prefs = getPreferences(context);
 		return getRestUrl(context, method, prefs, instance, allowAltAddress);
 	}
     public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance) {
+		if(instance<1){
+			instance = 1;
+		}
         return getRestUrl(context, method, prefs, instance, true);
     }
 	public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
+		if(instance<1){
+			instance = 1;
+		}
 		StringBuilder builder = new StringBuilder();
 
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
