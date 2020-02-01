@@ -606,7 +606,7 @@
 	<string name="details.email">Email</string>
 	<string name="details.fork">Forked från</string>
 	<string name="details.version">Version</string>
-	<string name="details.files_cached">Filer cachade</string>
+	<string name="details.files_cached">Nedladdade filer</string>
 	<string name="details.files_permanent">Permanent cachade</string>
 	<string name="details.used_space">Använt utrymme</string>
 	<string name="details.available_space">Tillgängligt utrymme</string>

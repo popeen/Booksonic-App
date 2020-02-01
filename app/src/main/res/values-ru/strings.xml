@@ -611,7 +611,7 @@
 	<string name="details.author">Автор</string>
 	<string name="details.email">Эл. адрес</string>
 	<string name="details.version">Версия</string>
-	<string name="details.files_cached">Кэшированные файлы</string>
+	<string name="details.files_cached">загруженные файлы</string>
 	<string name="details.files_permanent">Кэшированные постоянно</string>
 	<string name="details.used_space">Используемое пространство</string>
 	<string name="details.available_space">Доступное место</string>

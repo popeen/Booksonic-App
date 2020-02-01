@@ -655,7 +655,7 @@
 	<string name="details.author">Author</string>
 	<string name="details.email">Email</string>
 	<string name="details.version">Version</string>
-	<string name="details.files_cached">Files Cached</string>
+	<string name="details.files_cached">Downloaded files</string>
 	<string name="details.files_permanent">Permanent Cached</string>
 	<string name="details.used_space">Used Space</string>
 	<string name="details.available_space">Available Space</string>
