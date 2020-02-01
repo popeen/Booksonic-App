@@ -1302,8 +1302,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 						if(songCount != 0) {
 							autorView.setText("Author: " + artistName);
+							if(bookReader == null || bookReader.equals("")){
+								bookReader = "Unknown";
+							}
 							narratorView.setText("Narrated by: " + bookReader);
-							durationView.setText(Util.formatDuration(totalDuration, true));
+							String duration = Util.formatDuration(totalDuration, true);
+							if(duration.equals("0h 0min")){
+								duration = "Unknown book duration";
+							}
+							durationView.setText(duration);
 							Util.setMargins(coverArtDownloadView, 0, (display.getWidth()-120) ,70 ,0);
 
 						}else{
@@ -1313,6 +1320,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							listenButton.setVisibility(View.GONE);
 							durationView.setVisibility(View.GONE);
 						}
+
 						if(podcastDescription != null) {
 							//Remove author and narrator info if we are looking at a podcast
 							autorView.setVisibility(View.GONE);
