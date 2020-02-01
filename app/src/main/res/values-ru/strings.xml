@@ -94,7 +94,7 @@
 	<string name="menu.log">Отправить журнал</string>
 	<string name="menu.set_timer">Установить таймер</string>
 	<string name="menu.check_podcasts">Проверьте новые эпизоды</string>
-	<string name="menu.add_podcast">Добавить подкаст, используя RSS, iTunes, Acast, Podbean, Player.fm или SoundCloud</string>
+	<string name="menu.add_podcast">Добавить подкаст с URL или именем</string>
 	<string name="menu.keep_synced">Синхронизировать</string>
 	<string name="menu.stop_sync">Остановить синхронизацию</string>
 	<string name="menu.show_all">Показать все песни</string>
