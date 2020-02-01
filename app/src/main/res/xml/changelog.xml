@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.23" versioncode="45" releasedate="2020-02-01">
+        <change>Bugfixes</change>
+        <change>Improved "Add podcast"</change>
+        <change>Added Russian translation (thanks sxn90)</change>
+        <change>Added 1x1 widget (thanks sxn90)</change>
+    </release>
     <release version="1.0.22" versioncode="43" releasedate="2020-01-04">
         <change>You can now add descriptions for all folders allowing you to add descriptions for narrators and series</change>
         <change>Improved login screen (Based on Asti.ga's DSub fork, thank you Koenvh1)</change>
