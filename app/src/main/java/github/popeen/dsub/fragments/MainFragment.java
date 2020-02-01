@@ -93,7 +93,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				changeLog.getFullLogDialog().show();
 				return true;
 			case R.id.menu_faq:
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://popeen.com/2019/02/08/booksonic-faq/")));
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://booksonic.org/faq")));
 				return true;
 			case R.id.menu_rescan:
 				rescanServer();
@@ -220,7 +220,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				details.add("Patrik Johansson");
 
 				headers.add(R.string.details_email);
-				details.add("support@ptjwebben.se");
+				details.add("support@booksonic.org");
 
                 headers.add(R.string.details_fork);
                 details.add("DSub");

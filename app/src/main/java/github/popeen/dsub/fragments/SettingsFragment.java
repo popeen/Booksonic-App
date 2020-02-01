@@ -335,7 +335,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			this.findPreference("visitFaq").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					Uri uri = Uri.parse("https://popeen.com/2019/02/08/booksonic-faq/");
+					Uri uri = Uri.parse("https://booksonic.org/faq");
 					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
 					startActivity(browserIntent);
 					return true;
