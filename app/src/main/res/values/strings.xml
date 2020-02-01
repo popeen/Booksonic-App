@@ -170,7 +170,8 @@
 	<string name="select_podcasts.refreshing">The server is checking for new podcasts now</string>
 	<string name="select_podcasts.deleted">Deleted podcast %s</string>
 	<string name="select_podcasts.deleted_error">Failed to delete podcast %s</string>
-	<string name="select_podcasts.add_url">URL:</string>
+	<string name="select_podcasts.add_url"></string>
+	<string name="select_podcasts.add_message">If you don\'t know the RSS feed for your podcast you can enter it\'s name instead and Booksonic will try and look it up for you.</string>
 	<string name="select_podcasts.created_error">Failed to add podcast</string>
 	<string name="select_podcasts.invalid_podcast_channel">Invalid podcast channel: %s</string>
 	<string name="select_podcasts.delete">Delete podcast</string>

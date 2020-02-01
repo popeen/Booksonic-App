@@ -164,7 +164,7 @@
 	<string name="select_podcasts.refreshing">Теперь сервер проверяет наличие новых подкастов</string>
 	<string name="select_podcasts.deleted">Подкаст %s удален</string>
 	<string name="select_podcasts.deleted_error">Не удалось удалить подкаст %s</string>
-	<string name="select_podcasts.add_url">URL:</string>
+	<string name="select_podcasts.add_url"></string>
 	<string name="select_podcasts.created_error">Не удалось добавить подкаст</string>
 	<string name="select_podcasts.invalid_podcast_channel">Неверный канал подкаста: %s</string>
 	<string name="select_podcasts.delete">Удалить подкаст</string>

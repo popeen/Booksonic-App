@@ -168,7 +168,8 @@
 	<string name="select_podcasts.refreshing">Servern letar efter nya podcasts nu</string>
 	<string name="select_podcasts.deleted">Raderade podcasten %s</string>
 	<string name="select_podcasts.deleted_error">Misslyckades med att radera podcasten %s</string>
-	<string name="select_podcasts.add_url">URL:</string>
+	<string name="select_podcasts.add_url"></string>
+	<string name="select_podcasts.add_message">Om du inte kan adressen till podcasten så kan du skriva namnet istället. Booksonic kommer då försöka kolla upp det åt dig.</string>
 	<string name="select_podcasts.created_error">Misslyckades med att lägga till podcasten</string>
 	<string name="select_podcasts.invalid_podcast_channel">Ogiltig podcast kanal: %s</string>
 	<string name="select_podcasts.delete">Radera podcast</string>
