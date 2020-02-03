@@ -113,13 +113,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			}else{
 				heard.setVisibility(View.GONE);
 			}
-		}catch(Exception e){ //TODO, This will not always register as listened to but will have to do until I add support for podcast inside try
-			if(this.sqlh.getTrack(song.getId())[0] != null){
-				heard.setVisibility(View.VISIBLE);
-			}else{
-				heard.setVisibility(View.GONE);
-			}
-		}
+		}catch(Exception e){}
 
 		StringBuilder artist = new StringBuilder(40);
 

@@ -91,6 +91,7 @@ import github.popeen.dsub.util.ImageLoader;
 import github.popeen.dsub.util.LoadingTask;
 import github.popeen.dsub.util.MenuUtil;
 import github.popeen.dsub.util.ProgressListener;
+import github.popeen.dsub.util.SQLiteHandler;
 import github.popeen.dsub.util.SilentBackgroundTask;
 import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.UpdateHelper;
@@ -127,6 +128,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected boolean firstRun;
 	protected MenuItem searchItem;
 	protected SearchView searchView;
+	private SQLiteHandler sqlh;
 
 	public SubsonicFragment() {
 		super();
@@ -347,6 +349,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 	// For reverting specific removals: https://github.com/daneren2005/Subsonic/commit/fbd1a68042dfc3601eaa0a9e37b3957bbdd51420
 	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
+		sqlh  = new SQLiteHandler(context);
 		Artist artist = selectedItem instanceof Artist ? (Artist) selectedItem : null;
 		Entry entry = selectedItem instanceof Entry ? (Entry) selectedItem : null;
 		if(selectedItem instanceof DownloadFile) {
@@ -426,6 +429,17 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				break;
 			case R.id.bookmark_menu_delete:
 				deleteBookmark(entry, null);
+				break;
+			case R.id.mark_as_read:
+				Util.toast(context, entry.toString());
+				try {
+					String book[] = new String[3];
+					book[0] = ""+entry.toString();
+					book[1] = "true";
+					Long temp = System.currentTimeMillis() / 1000L;
+					book[2] = ""+temp.toString();
+					this.sqlh.addBook(book);
+				}catch(Exception e){}
 				break;
 			default:
 				return false;

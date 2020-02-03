@@ -28,6 +28,12 @@
 			android:title="@string/menu.show_artist"/>
 	</group>
 
+	<group android:id="@+id/hide_mark_as_read">
+		<item
+			android:id="@+id/mark_as_read"
+			android:title="Mark as read"/>
+	</group>
+
 	<group android:id="@+id/hide_star">
 		<item
 			android:id="@+id/album_menu_star"

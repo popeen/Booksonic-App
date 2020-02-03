@@ -149,8 +149,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private MenuItem timerMenu;
     private DroppySpeedControl speed;
 
-    private SQLiteHandler sqlh;
-
 	/**
 	 * Called when the activity is first created.
 	 */
@@ -164,7 +162,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		}
 		primaryFragment = false;
-        sqlh  = new SQLiteHandler(context);
 	}
 
 	@Override
@@ -1181,15 +1178,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 	@Override
 	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward) {
-		try {
-			String track[] = new String[3];
-			track[0] = this.currentPlaying.getSong().getId();
-			track[1] = "true";
-			Long temp = System.currentTimeMillis() / 1000L;
-			track[2] = temp.toString();
-			this.sqlh.addTrack(track);
-		} catch (Exception e) {
-		}
+
 		this.currentPlaying = currentPlaying;
 		setupSubtitle(currentPlayingIndex);
 
