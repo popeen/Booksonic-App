@@ -34,15 +34,18 @@ import github.popeen.dsub.domain.MusicDirectory;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.ImageLoader;
 import github.popeen.dsub.util.Util;
+import github.popeen.dsub.util.SQLiteHandler;
 
 public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	private static final String TAG = AlbumView.class.getSimpleName();
 
 	private File file;
+	private TextView isHeardView;
 	private TextView titleView;
 	private TextView artistView;
 	private boolean showArtist = true;
 	private String coverArtId;
+	private SQLiteHandler sqlh;
 
 	public AlbumView(Context context, boolean cell) {
 		super(context);
@@ -54,6 +57,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		}
 
 		coverArtView = findViewById(R.id.album_coverart);
+		isHeardView = findViewById(R.id.heard);
 		titleView = (TextView) findViewById(R.id.album_title);
 		artistView = (TextView) findViewById(R.id.album_artist);
 
@@ -62,6 +66,8 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		starButton = (ImageButton) findViewById(R.id.album_star);
 		starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.item_more);
+
+		sqlh  = new SQLiteHandler(context);
 
 		checkable = true;
 	}
@@ -72,6 +78,16 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 
 	protected void setObjectImpl(MusicDirectory.Entry album, ImageLoader imageLoader) {
 
+		Boolean isRead = false;
+		try {
+			if(this.sqlh.getBook(album.getAlbumDisplay())[0] != null) {
+				isRead = true;
+			}
+		}catch(Exception e){}
+
+		if(!isRead){
+			isHeardView.setVisibility(GONE);
+		}
         titleView.setText(album.getAlbumDisplay());
 		String artist = "";
 		if(showArtist) {
@@ -113,6 +129,17 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 
 		if(!Util.equals(item.getCoverArt(), coverArtId)) {
 			onUpdateImageView();
+		}
+
+		Boolean isRead = false;
+		try {
+			if(this.sqlh.getBook(item.getAlbumDisplay())[0] != null) {
+				isRead = true;
+			}
+		}catch(Exception e){}
+
+		if(!isRead){
+			isHeardView.setVisibility(GONE);
 		}
 	}
 

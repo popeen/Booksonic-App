@@ -95,15 +95,15 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_HEARD_BOOKS,
                 COLUMNS, " " + BOOK_NAME + " = ?", new String[] { name }, null, null, null, null);
 
+        String[] book = new String[3];
         try {
             cursor.moveToFirst();
-            String[] book = new String[3];
             book[0] = cursor.getString(0); //id
             book[1] = cursor.getString(1); //heard
             book[2] = cursor.getString(2); //date
             return book;
         }catch(Exception e){}
-        return new String[3];
+        return book;
     }
     public void updateTrack(String[] track) {
         SQLiteDatabase db = this.getWritableDatabase();
