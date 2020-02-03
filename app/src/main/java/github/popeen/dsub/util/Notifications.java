@@ -461,9 +461,8 @@ public final class Notifications {
 
 		NotificationCompat.Builder builder;
 		builder = new NotificationCompat.Builder(downloadService)
-				.setSmallIcon(android.R.drawable.stat_sys_download)
-				.setContentTitle(downloadService.getResources().getString(R.string.download_downloading_title, 0))
-				.setContentText(downloadService.getResources().getString(R.string.download_downloading_summary, "Temp"))
+				.setSmallIcon(R.drawable.launch)
+				.setContentText("Starting Booksonic")
 				.setChannelId("downloading-channel");
 
 		final Notification notification = builder.build();
