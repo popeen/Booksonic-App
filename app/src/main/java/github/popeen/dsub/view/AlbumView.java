@@ -40,7 +40,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	private static final String TAG = AlbumView.class.getSimpleName();
 
 	private File file;
-	private TextView isHeardView;
+	private ImageView listenedView;
 	private TextView titleView;
 	private TextView artistView;
 	private boolean showArtist = true;
@@ -57,7 +57,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		}
 
 		coverArtView = findViewById(R.id.album_coverart);
-		isHeardView = findViewById(R.id.heard);
+		listenedView = (ImageView) findViewById(R.id.album_listened);
 		titleView = (TextView) findViewById(R.id.album_title);
 		artistView = (TextView) findViewById(R.id.album_artist);
 
@@ -78,16 +78,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 
 	protected void setObjectImpl(MusicDirectory.Entry album, ImageLoader imageLoader) {
 
-		Boolean isRead = false;
-		try {
-			if(this.sqlh.getBook(album.getAlbumDisplay())[0] != null) {
-				isRead = true;
-			}
-		}catch(Exception e){}
-
-		if(!isRead){
-			isHeardView.setVisibility(GONE);
-		}
+		listenedView.setVisibility(GONE);
         titleView.setText(album.getAlbumDisplay());
 		String artist = "";
 		if(showArtist) {
@@ -104,12 +95,24 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		artistView.setText(album.getArtist() == null ? "" : artist);
 
 		onUpdateImageView();
+
 		file = null;
 	}
 
 	public void onUpdateImageView() {
 		imageTask = item2.loadImage(coverArtView, item, false, true);
 		coverArtId = item.getCoverArt();
+
+		Boolean isRead = false;
+		try {
+			if(this.sqlh.getBook(item.getAlbumDisplay())[0] != null) {
+				isRead = true;
+			}
+		}catch(Exception e){}
+
+		if(isRead){
+			listenedView.setVisibility(VISIBLE);
+		}
 	}
 
 	@Override
@@ -121,6 +124,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		exists = file.exists();
 		isStarred = item.isStarred();
 		isRated = item.getRating();
+
 	}
 
 	@Override
@@ -131,16 +135,6 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 			onUpdateImageView();
 		}
 
-		Boolean isRead = false;
-		try {
-			if(this.sqlh.getBook(item.getAlbumDisplay())[0] != null) {
-				isRead = true;
-			}
-		}catch(Exception e){}
-
-		if(!isRead){
-			isHeardView.setVisibility(GONE);
-		}
 	}
 
 	public MusicDirectory.Entry getEntry() {

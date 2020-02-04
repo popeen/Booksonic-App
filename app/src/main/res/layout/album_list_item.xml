@@ -37,15 +37,31 @@
 		android:paddingLeft="10dip"
 		android:paddingRight="3dip">
 
-        <TextView
-			android:id="@+id/album_title"
-			android:layout_width="wrap_content"
+		<LinearLayout
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:singleLine="true"
-			android:ellipsize="marquee"
-			android:paddingBottom="6dip"
-			android:textColor="?android:textColorPrimary"/>
+			android:layout_gravity="center_vertical"
+			android:orientation="horizontal">
+
+			<ImageView
+				android:id="@+id/album_listened"
+				android:layout_width="24dip"
+				android:layout_height="24dip"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/heard"
+				android:visibility="gone"/>
+
+			<TextView
+				android:id="@+id/album_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:singleLine="true"
+				android:ellipsize="marquee"
+				android:paddingBottom="6dip"
+				android:textColor="?android:textColorPrimary"/>
+
+		</LinearLayout>
 
 		<TextView
 			android:id="@+id/album_artist"
@@ -54,7 +70,7 @@
 			android:textAppearance="?android:attr/textAppearanceSmall"
 			android:singleLine="true"
 			android:textColor="?android:textColorSecondary"/>
-
+<!--
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -62,17 +78,8 @@
 			android:singleLine="true"
 			android:textColor="?android:textColorSecondary"
 			android:text="You have already listened to this"
-			android:id="@+id/heard"/>
-
-        <!--<TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:singleLine="true"
-            android:textColor="?android:textColorSecondary"
-            android:text="You have already listened to this"
-            android:id="@+id/heard"/> -->
-        <!--TODO, Implement this -->
+			android:id="@+id/album_listened"
+			android:visibility="gone"/> -->
 
 	</LinearLayout>
 
