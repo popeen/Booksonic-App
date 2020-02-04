@@ -106,14 +106,17 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		this.checkable = checkable;
 		ImageView heard = (ImageView) findViewById(R.id.track_heard);
 
-		try{ //Podcast will always catch
+		try{
 			Long[] dates = SongDBHandler.getHandler(context).getLastPlayed(song);
 			if(dates[1] != null && dates[1] != 0){ //Check if it has been listened to
 				heard.setVisibility(View.VISIBLE);
 			}else{
 				heard.setVisibility(View.GONE);
 			}
-		}catch(Exception e){}
+		}catch(Exception e){
+			//TODO, fix so the view of new podcast episodes can show the symbol as well, for now they will always catch so we hide the symbol, if not everything would be marked as listened to
+			heard.setVisibility(View.GONE);
+		}
 
 		StringBuilder artist = new StringBuilder(40);
 

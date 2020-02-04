@@ -41,7 +41,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public void addBook(String[] track) {
+    public void markBookAsRead(String[] track) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -50,6 +50,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(BOOK_DATE, track[2]);
 
         db.insertWithOnConflict(TABLE_HEARD_BOOKS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        db.close();
+    }
+
+    public void markBookAsUnread(String track) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_HEARD_BOOKS, BOOK_NAME + " = ?", new String[] { track });
         db.close();
     }
 
@@ -103,6 +109,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             book[2] = cursor.getString(2); //date
             return book;
         }catch(Exception e){}
+        db.close();
         return book;
     }
     public void updateTrack(String[] track) {

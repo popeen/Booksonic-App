@@ -8,6 +8,10 @@
 		android:id="@+id/mark_as_read"
 		android:title="Mark as read"/>
 
+	<item
+		android:id="@+id/mark_as_unread"
+		android:title="Mark as unread"/>
+
 	<group android:id="@+id/hide_play_now">
 		<item
 			android:id="@+id/album_menu_play_now"

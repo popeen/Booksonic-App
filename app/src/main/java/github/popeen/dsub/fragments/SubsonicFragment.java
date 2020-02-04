@@ -431,14 +431,20 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				deleteBookmark(entry, null);
 				break;
 			case R.id.mark_as_read:
-				Util.toast(context, entry.toString());
+				Util.toast(context, entry.toString() + " is now marked as read");
 				try {
 					String book[] = new String[3];
 					book[0] = ""+entry.toString();
 					book[1] = "true";
 					Long temp = System.currentTimeMillis() / 1000L;
 					book[2] = ""+temp.toString();
-					this.sqlh.addBook(book);
+					this.sqlh.markBookAsRead(book);
+				}catch(Exception e){}
+				break;
+			case R.id.mark_as_unread:
+				Util.toast(context, entry.toString() + " is no longer marked as read");
+				try {
+					this.sqlh.markBookAsUnread(entry.toString());
 				}catch(Exception e){}
 				break;
 			default:
