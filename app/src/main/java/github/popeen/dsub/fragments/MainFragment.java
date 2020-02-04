@@ -264,8 +264,8 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	}
 
 	private void getLogs() {
-		if (EnvironmentVariables.PASTEBIN_DEV_KEY == null) {
-			Util.toast(context, "No PASTEBIN_DEV_KEY configured - can't upload logs");
+		if (EnvironmentVariables.LOG_API_KEY == null) {
+			Util.toast(context, "No LOG_API_KEY configured - can't upload logs");
 			return;
 		}
 		try {
@@ -308,7 +308,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 						OutputStream os = urlConnection.getOutputStream();
 						BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, Constants.UTF_8));
-						writer.write("api_dev_key=" + URLEncoder.encode(EnvironmentVariables.PASTEBIN_DEV_KEY, Constants.UTF_8) + "&api_option=paste&api_paste_private=1&api_paste_code=");
+						writer.write("api_dev_key=" + URLEncoder.encode(EnvironmentVariables.LOG_API_KEY, Constants.UTF_8) + "&api_option=paste&api_paste_private=1&api_paste_code=");
 
 						BufferedReader reader = null;
 						try {

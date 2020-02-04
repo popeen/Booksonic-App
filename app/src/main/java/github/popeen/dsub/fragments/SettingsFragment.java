@@ -17,8 +17,6 @@ package github.popeen.dsub.fragments;
 
 import android.Manifest;
 import android.accounts.Account;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -83,8 +81,6 @@ import github.popeen.dsub.util.SyncUtil;
 import github.popeen.dsub.util.Util;
 import github.popeen.dsub.view.CacheLocationPreference;
 import github.popeen.dsub.view.ErrorDialog;
-
-import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private final static String TAG = SettingsFragment.class.getSimpleName();
@@ -395,7 +391,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 									OutputStream os = urlConnection.getOutputStream();
 									BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, Constants.UTF_8));
-									writer.write("api_dev_key=" + URLEncoder.encode(EnvironmentVariables.PASTEBIN_DEV_KEY, Constants.UTF_8) + "&api_option=paste&api_paste_private=1&api_paste_code=");
+									writer.write("api_dev_key=" + URLEncoder.encode(EnvironmentVariables.LOG_API_KEY, Constants.UTF_8) + "&api_option=paste&api_paste_private=1&api_paste_code=");
 
 									BufferedReader reader = null;
 									try {
