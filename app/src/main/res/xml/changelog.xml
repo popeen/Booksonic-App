@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.24" versioncode="46" releasedate="2020-02-09">
+        <change>You can now mark books as read</change>
+        <change>Bugfixes</change>
+    </release>
     <release version="1.0.23" versioncode="45" releasedate="2020-02-01">
         <change>Bugfixes</change>
         <change>Improved "Add podcast"</change>
