@@ -101,14 +101,15 @@
 				<LinearLayout
 					android:layout_height="fill_parent"
 					android:layout_width="0dp"
-					android:layout_weight="1">
+					android:layout_weight="1"
+					android:visibility="gone"
+					android:id="@+id/bottom_bar_controls">
 
 					<ImageButton
 						style="@style/PlaybackControl.BottomBar"
 						android:id="@+id/download_rewind"
 						android:src="?attr/actionbar_rewind"
-						android:padding="2dp"
-						android:visibility="gone"/>
+						android:padding="2dp"/>
 
 					<ImageButton
 						style="@style/PlaybackControl.BottomBar"

@@ -39,6 +39,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -97,6 +98,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	private Toolbar nowPlayingToolbar;
 
 	private View bottomBar;
+	private LinearLayout bottomBarControls;
 	private ImageView coverArtView;
 	private TextView trackView;
 	private TextView artistView;
@@ -258,11 +260,19 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}
 
 		bottomBar = findViewById(R.id.bottom_bar);
+		bottomBarControls = findViewById(R.id.bottom_bar_controls);
 		mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
 		nowPlayingToolbar = (Toolbar) findViewById(R.id.now_playing_toolbar);
 		coverArtView = (ImageView) bottomBar.findViewById(R.id.album_art);
 		trackView = (TextView) bottomBar.findViewById(R.id.track_name);
 		artistView = (TextView) bottomBar.findViewById(R.id.artist_name);
+
+		bottomBarControls = findViewById(R.id.bottom_bar_controls);
+		if(Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_BOTTOM_BAR_CONTROLS_ENABLED, false)){
+			bottomBarControls.setVisibility(View.VISIBLE);
+		}else{
+			bottomBarControls.setVisibility(View.GONE);
+		}
 
 		setSupportActionBar(mainToolbar);
 
@@ -432,6 +442,13 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	@Override
 	public void onResume() {
 		super.onResume();
+
+		bottomBarControls = findViewById(R.id.bottom_bar_controls);
+		if(Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_BOTTOM_BAR_CONTROLS_ENABLED, false)){
+			bottomBarControls.setVisibility(View.VISIBLE);
+		}else{
+			bottomBarControls.setVisibility(View.GONE);
+		}
 
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
 			SubsonicFragment fragment = new SelectDirectoryFragment();

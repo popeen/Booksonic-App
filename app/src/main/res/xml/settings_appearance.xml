@@ -29,6 +29,12 @@
 		android:title="@string/settings.appearance_title">
 
 		<CheckBoxPreference
+			android:title="Bottom bar controls"
+			android:summary="Should the bottom bar include controls?\nThese make play/pause a bit quicker but sometimes confuse new users when switching between books"
+			android:key="bottomBarControlsEnabled"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
 			android:title="@string/settings.track_title"
 			android:summary="@string/settings.track_summary"
 			android:key="displayTrack"
