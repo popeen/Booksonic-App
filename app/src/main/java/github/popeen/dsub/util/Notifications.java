@@ -187,11 +187,11 @@ public final class Notifications {
 		boolean shouldFastForward = downloadService.shouldFastForward();
 		int rating = song.getRating();
 
-			Intent rewindIntent = new Intent("KEYCODE_MEDIA_REWIND");
-			rewindIntent.setComponent(new ComponentName(context, DownloadService.class));
-			rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_REWIND));
-			pendingIntent = PendingIntent.getService(context, 0, rewindIntent, 0);
-			builder.addAction(R.drawable.ic_fast_rewind, "Rewind", pendingIntent);
+		Intent rewindIntent = new Intent("KEYCODE_MEDIA_REWIND");
+		rewindIntent.setComponent(new ComponentName(context, DownloadService.class));
+		rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_REWIND));
+		pendingIntent = PendingIntent.getService(context, 0, rewindIntent, 0);
+		builder.addAction(R.drawable.ic_fast_rewind, "Rewind", pendingIntent);
 
 		if(playing) {
 			Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
@@ -207,13 +207,11 @@ public final class Notifications {
 			builder.addAction(R.drawable.ic_play_arrow, "Play", pendingIntent);
 		}
 
-		if(shouldFastForward) {
-			Intent fastForwardIntent = new Intent("KEYCODE_MEDIA_FAST_FORWARD");
-			fastForwardIntent.setComponent(new ComponentName(context, DownloadService.class));
-			fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
-			pendingIntent = PendingIntent.getService(context, 0, fastForwardIntent, 0);
-			builder.addAction(R.drawable.ic_fast_forward, "Fast Forward", pendingIntent);
-		}
+		Intent fastForwardIntent = new Intent("KEYCODE_MEDIA_FAST_FORWARD");
+		fastForwardIntent.setComponent(new ComponentName(context, DownloadService.class));
+		fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
+		pendingIntent = PendingIntent.getService(context, 0, fastForwardIntent, 0);
+		builder.addAction(R.drawable.ic_fast_forward, "Fast Forward", pendingIntent);
 	}
 	private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean expanded, boolean playing, boolean remote, boolean isSingleFile, boolean shouldFastForward) {
 		// Use the same text for the ticker and the expanded notification
