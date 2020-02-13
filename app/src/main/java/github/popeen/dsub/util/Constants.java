@@ -188,6 +188,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SONG_PLAYBACK_SPEED = "songPlaybackSpeed";
 	public static final String PREFERENCES_KEY_DLNA_CASTING_ENABLED = "dlnaCastingEnabled";
 	public static final String PREFERENCES_KEY_BOTTOM_BAR_CONTROLS_ENABLED = "bottomBarControlsEnabled";
+	public static final String PREFERENCES_KEY_PODCAST_REVERSED_ENABLED = "reversePodcastsEnabled";
 
 	public static final String PREFERENCES_KEY_REWIND_INTERVAL = "rewindInterval";
 	public static final String PREFERENCES_KEY_FASTFORWARD_INTERVAL = "fastforwardInterval";

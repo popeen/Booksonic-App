@@ -317,6 +317,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			case R.id.reverse:
 				FragmentTransaction ft = getFragmentManager().beginTransaction();
 				ft.detach(this).attach(this).commit();
+				playlistReverse = true;
 				return true;
 		}
 
@@ -1145,7 +1146,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(playlistName != null) {
 			titleView.setText(playlistName);
 		} else if(podcastName != null) {
-			Collections.reverse(entries);
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PODCAST_REVERSED_ENABLED, true) || playlistReverse) {
+				Collections.reverse(entries);
+			}
 			titleView.setText(podcastName);
 			titleView.setPadding(0, 6, 4, 8);
 		} else if(name != null) {

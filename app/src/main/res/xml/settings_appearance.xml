@@ -41,6 +41,12 @@
 			android:defaultValue="true"/>
 
 		<CheckBoxPreference
+			android:title="Reverse podcasts by default"
+			android:summary="Should the order the podcasts episodes are shown in be reversed by default?"
+			android:key="reversePodcastsEnabled"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
 			android:title="@string/settings.hide_widget_title"
 			android:summary="@string/settings.hide_widget_summary"
 			android:key="hideWidget"
