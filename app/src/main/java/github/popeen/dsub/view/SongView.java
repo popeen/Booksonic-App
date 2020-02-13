@@ -327,6 +327,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			}
 		}
 
+		/*
 		if(isPlayed) {
 			if(!isPlayedShown) {
 				if(playedButton.getDrawable() == null) {
@@ -342,7 +343,8 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 				isPlayedShown = false;
 			}
 		}
-
+		*/
+		
 		if(isRated != rating) {
 			if(isRated > 1) {
 				if(rating <= 1) {
