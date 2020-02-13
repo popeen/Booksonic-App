@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -368,7 +369,26 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				return;
 			}
 
-			onSongPress(Arrays.asList(entry), entry, false);
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PODCAST_PLAYLIST_ENABLED, false)) {
+				List<Entry> songs = new ArrayList<Entry>();
+					Entry bookmark = null;
+					Iterator it = entries.listIterator(entries.indexOf(entry));
+					while (it.hasNext()) {
+						songs.add((Entry) it.next());
+						if(entry.getBookmark() != null) {
+							bookmark = entry;
+						}
+					}
+
+
+				if(bookmark == null) {
+					onSongPress(songs, entry, true);
+				}else{
+					playBookmark(songs, bookmark);
+				}
+			}else{
+				onSongPress(Arrays.asList(entry), entry, false);
+			}
 		} else {
 			onSongPress(entries, entry, albumListType == null || "starred".equals(albumListType));
 		}

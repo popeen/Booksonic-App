@@ -39,6 +39,12 @@
 			android:key="headsUpNotification"
 			android:defaultValue="false"/>
 
+		<CheckBoxPreference
+			android:title="Podcasts as playlists"
+			android:summary="When enabled podcasts will work just like books and add all the following episodes to the playlist and not just the selected one."
+			android:key="podcastPlaylistEnabled"
+			android:defaultValue="false"/>
+
         <github.popeen.dsub.view.SeekBarPreference
             android:title="@string/settings.rewind_interval"
             android:key="rewindInterval"
