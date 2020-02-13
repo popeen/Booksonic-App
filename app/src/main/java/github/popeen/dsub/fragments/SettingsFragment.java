@@ -36,6 +36,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
@@ -760,23 +761,52 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		final EditTextPreference serverLocalNetworkSSIDPreference = new EditTextPreference(context) {
 			@Override
 			protected void onAddEditTextToDialogView(View dialogView, final EditText editText) {
+
 				super.onAddEditTextToDialogView(dialogView, editText);
 				ViewGroup root = (ViewGroup) ((ViewGroup) dialogView).getChildAt(0);
 
-				Button defaultButton = new Button(getContext());
-				defaultButton.setText(internalSSIDDisplay);
-				defaultButton.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						editText.setText(internalSSID);
+				internalSSID = Util.getSSID(context);
+
+				internalSSIDDisplay = context.getResources().getString(R.string.settings_server_local_network_ssid_hint, internalSSID);
+				if(!(internalSSID == null || internalSSID.equals("") || internalSSID.equals("<unknown ssid>"))) {
+
+					if(editText.getText().toString().equals("Android considers SSID names location data, to use this feature you first need to give location permission")){
+						editText.setText("");
 					}
-				});
-				root.addView(defaultButton);
+
+					Button defaultButton = new Button(getContext());
+					defaultButton.setText(internalSSIDDisplay);
+					defaultButton.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							editText.setText(internalSSID);
+						}
+					});
+					root.addView(defaultButton);
+				}else{
+					editText.setEnabled(false);
+				}
 			}
 		};
 		serverLocalNetworkSSIDPreference.setKey(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
 		serverLocalNetworkSSIDPreference.setTitle(R.string.settings_server_local_network_ssid);
 		serverLocalNetworkSSIDPreference.setDialogTitle(R.string.settings_server_local_network_ssid);
+		if(internalSSID == null || internalSSID.equals("") || internalSSID.equals("<unknown ssid>")){
+			serverLocalNetworkSSIDPreference.setText("Android considers SSID names location data, to use this feature you first need to give location permission");
+		}
+
+
+		Preference locationPermissionPreference = new Preference(context);
+		locationPermissionPreference.setKey("LocationPermission");
+		locationPermissionPreference.setPersistent(false);
+		locationPermissionPreference.setTitle("Give location permission");
+		locationPermissionPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				checkLocationPermission();
+				return false;
+			}
+		});
 
 		final EditTextPreference serverInternalUrlPreference = new EditTextPreference(context);
 		serverInternalUrlPreference.setKey(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
@@ -784,7 +814,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverInternalUrlPreference.setDefaultValue("");
 		serverInternalUrlPreference.setTitle(R.string.settings_server_internal_address);
 		serverInternalUrlPreference.setDialogTitle(R.string.settings_server_internal_address);
-		serverInternalUrlPreference.setSummary(serverInternalUrlPreference.getText());
 
 		final EditTextPreference serverUsernamePreference = new EditTextPreference(context);
 		serverUsernamePreference.setKey(Constants.PREFERENCES_KEY_USERNAME + instance);
@@ -872,6 +901,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		screen.addPreference(serverUrlPreference);
 		screen.addPreference(serverInternalUrlPreference);
 		screen.addPreference(serverLocalNetworkSSIDPreference);
+		screen.addPreference(locationPermissionPreference);
 		screen.addPreference(serverUsernamePreference);
 		screen.addPreference(serverPasswordPreference);
 		screen.addPreference(serverSyncPreference);
@@ -880,6 +910,46 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		screen.addPreference(serverRemoveServerPreference);
 
 		return screen;
+	}
+
+	public boolean checkLocationPermission() {
+		if (ContextCompat.checkSelfPermission(context,
+				Manifest.permission.ACCESS_FINE_LOCATION)
+				!= PackageManager.PERMISSION_GRANTED) {
+
+			// Should we show an explanation?
+			if (ActivityCompat.shouldShowRequestPermissionRationale(context,
+					Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+				// Show an explanation to the user *asynchronously* -- don't block
+				// this thread waiting for the user's response! After the user
+				// sees the explanation, try again to request the permission.
+				new AlertDialog.Builder(context)
+						.setTitle("Location permission needed")
+						.setMessage("Location permission needed")
+						.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialogInterface, int i) {
+								//Prompt the user once explanation has been shown
+								ActivityCompat.requestPermissions(context,
+										new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+										99);
+							}
+						})
+						.create()
+						.show();
+
+
+			} else {
+				// No explanation needed, we can request the permission.
+				ActivityCompat.requestPermissions(context,
+						new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+						99);
+			}
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	private void setHideMedia(boolean hide) {
