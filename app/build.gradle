@@ -9,13 +9,13 @@ repositories {
 android {
 	compileSdkVersion 28
 	useLibrary 'org.apache.http.legacy'
-	
+
 	defaultConfig {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 15
 		targetSdkVersion 28
-		versionCode 46
-		versionName '1.0.24'
+		versionCode 49
+		versionName '1.0.25'
 		setProperty("archivesBaseName", "Booksonic $versionName")
 		resConfigs "sv", "ru"
 	}
@@ -71,7 +71,7 @@ dependencies {
 	implementation 'com.google.android.gms:play-services-cast:8.1.0'
 	implementation 'com.sothree.slidinguppanel:library:3.2.1'
 	implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'com.shehabic.droppy:Droppy:0.6.0@aar'
+	implementation 'com.shehabic.droppy:Droppy:0.6.0@aar'
 	implementation group: 'org.fourthline.cling', name: 'cling-core', version:'2.1.2'
 	implementation group: 'org.fourthline.cling', name: 'cling-support', version:'2.1.2'
 	implementation group: 'org.eclipse.jetty', name: 'jetty-server', version:'8.1.16.v20140903'

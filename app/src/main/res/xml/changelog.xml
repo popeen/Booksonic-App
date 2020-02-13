@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.25" versioncode="49" releasedate="2020-02-13">
+        <change>New more modern notification, the new notification should stay when pausing if persistant notification is enabled</change>
+        <change>The controls in the bottom bar are now hidden by default, there is a new appearance setting for changing this</change>
+        <change>There is now an appearance setting for if podcast episodes should be reversed or not</change>
+        <change>Added a playback setting for playing all the podcast episodes following the one you selected as well. This is good when catching up on a podcast. By default this is disabled.</change>
+    </release>
     <release version="1.0.24" versioncode="46" releasedate="2020-02-09">
         <change>You can now mark books as read</change>
         <change>Bugfixes</change>
