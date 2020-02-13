@@ -344,7 +344,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			}
 		}
 		*/
-		
+
 		if(isRated != rating) {
 			if(isRated > 1) {
 				if(rating <= 1) {
