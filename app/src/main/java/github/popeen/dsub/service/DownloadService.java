@@ -391,7 +391,7 @@ public class DownloadService extends Service {
 			unregisterReceiver(audioNoisyReceiver);
 		}
 		mediaRouter.destroy();
-		if (Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)
+		if (Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, true)
 				&& Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			stopForeground(android.app.Service.STOP_FOREGROUND_DETACH);
 		} else {
@@ -1129,7 +1129,7 @@ public class DownloadService extends Service {
 			reset();
 			if(index >= size && size != 0) {
 				setCurrentPlaying(0, false);
-				if(Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+				if(Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, true)) {
 					Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong());
 				} else {
 					Notifications.hidePlayingNotification(this, this, handler);
@@ -1537,7 +1537,7 @@ public class DownloadService extends Service {
 			Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong());
 		} else if (pause) {
 			SharedPreferences prefs = Util.getPreferences(this);
-			if(prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+			if(prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, true)) {
 				Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong());
 			} else {
 				Notifications.hidePlayingNotification(this, this, handler);
