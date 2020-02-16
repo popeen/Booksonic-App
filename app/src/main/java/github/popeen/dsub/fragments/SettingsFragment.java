@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -44,8 +45,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.jsoup.Jsoup;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -764,16 +767,9 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 				super.onAddEditTextToDialogView(dialogView, editText);
 				ViewGroup root = (ViewGroup) ((ViewGroup) dialogView).getChildAt(0);
-
 				internalSSID = Util.getSSID(context);
-
 				internalSSIDDisplay = context.getResources().getString(R.string.settings_server_local_network_ssid_hint, internalSSID);
-				if(!(internalSSID == null || internalSSID.equals("") || internalSSID.equals("<unknown ssid>"))) {
-
-					if(editText.getText().toString().equals("Android considers SSID names location data, to use this feature you first need to give location permission")){
-						editText.setText("");
-					}
-
+				if(!(internalSSID == null || internalSSID.equals("") || internalSSID.equals("<unknown ssid>") || internalSSID.equals("NULL"))) {
 					Button defaultButton = new Button(getContext());
 					defaultButton.setText(internalSSIDDisplay);
 					defaultButton.setOnClickListener(new View.OnClickListener() {
@@ -785,16 +781,22 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 					root.addView(defaultButton);
 				}else{
 					editText.setEnabled(false);
+					WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+					if (!wifiManager.isWifiEnabled()) {
+						TextView warning = new TextView(getContext());
+						warning.setText("Your Wi-Fi is disabled, please enable it and then try again");
+						root.addView(warning);
+					}else{
+						TextView warning = new TextView(getContext());
+						warning.setText("Android considers SSID names location data, to use this feature you first need to give location permission");
+						root.addView(warning);
+					}
 				}
 			}
 		};
 		serverLocalNetworkSSIDPreference.setKey(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
 		serverLocalNetworkSSIDPreference.setTitle(R.string.settings_server_local_network_ssid);
 		serverLocalNetworkSSIDPreference.setDialogTitle(R.string.settings_server_local_network_ssid);
-		if(internalSSID == null || internalSSID.equals("") || internalSSID.equals("<unknown ssid>")){
-			serverLocalNetworkSSIDPreference.setText("Android considers SSID names location data, to use this feature you first need to give location permission");
-		}
-
 
 		Preference locationPermissionPreference = new Preference(context);
 		locationPermissionPreference.setKey("LocationPermission");
