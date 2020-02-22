@@ -206,6 +206,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
 				} else {
+					ActivityCompat.requestPermissions(this, new String[]{ permission.WRITE_EXTERNAL_STORAGE }, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 				}
 			}
 		}
