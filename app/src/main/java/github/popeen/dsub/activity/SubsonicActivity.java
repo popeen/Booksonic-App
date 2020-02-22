@@ -206,8 +206,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
 				} else {
-					Util.toast(this, R.string.permission_external_storage_failed);
-					finish();
 				}
 			}
 		}
