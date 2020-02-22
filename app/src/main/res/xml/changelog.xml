@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.26" versioncode="50" releasedate="2020-02-22">
+        <change>Bugfix</change>
+    </release>
     <release version="1.0.25" versioncode="49" releasedate="2020-02-13">
         <change>New more modern notification, the new notification should stay when pausing if persistant notification is enabled</change>
         <change>The controls in the bottom bar are now hidden by default, there is a new appearance setting for changing this</change>
