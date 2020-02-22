@@ -34,12 +34,6 @@
 			android:defaultValue="true"/>
 
 		<CheckBoxPreference
-			android:title="@string/settings.heads_up_notification"
-			android:summary="@string/settings.heads_up_notification_summary"
-			android:key="headsUpNotification"
-			android:defaultValue="false"/>
-
-		<CheckBoxPreference
 			android:title="Podcasts as playlists"
 			android:summary="When enabled podcasts will work just like books and add all the following episodes to the playlist and not just the selected one."
 			android:key="podcastPlaylistEnabled"

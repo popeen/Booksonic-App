@@ -414,9 +414,9 @@
 	<string name="settings.playback_title">Playback</string>
 	<string name="settings.hide_widget_title">Hide Widget</string>
 	<string name="settings.hide_widget_summary">Hide widget after exiting app</string>
-	<string name="settings.podcasts_enabled">Podcasts Enabled</string>
+	<string name="settings.podcasts_enabled">Podcasts</string>
 	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
-	<string name="settings.bookmarks_enabled">Bookmarks Enabled</string>
+	<string name="settings.bookmarks_enabled">Bookmarks</string>
 	<string name="settings.bookmarks_enabled_summary">Whether or not to display the bookmarks listing in the pull out drawer</string>
 	<string name="settings.internet_radio_enabled">Internet Radio Enabled</string>
 	<string name="settings.internet_radio_enabled_summary">Whether or not to display the internet radio listing in the pull out drawer</string>
@@ -467,7 +467,7 @@
 	<string name="settings.song_press_play_last">Adds track to end of Now Playing Queue</string>
 	<string name="settings.large_album_art">Large Cover Art</string>
 	<string name="settings.large_album_art_summary">Display books with large cover art instead of in a list</string>
-	<string name="settings.admin_enabled">Admin Enabled</string>
+	<string name="settings.admin_enabled">Admin</string>
 	<string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
 	<string name="settings.replay_gain">Replay Gain</string>
 	<string name="settings.replay_gain_summary">Whether or not to scale playback volume by track and book replay gain tags</string>
@@ -491,8 +491,6 @@
 	<string name="settings.shuffle_by_album.false">Shuffle all tracks together</string>
 	<string name="settings.casting_stream_original">Stream original</string>
 	<string name="settings.casting_stream_original_summary">Stream original files where supported by cast device</string>
-	<string name="settings.heads_up_notification">Heads Up Notifications (5.0+)</string>
-	<string name="settings.heads_up_notification_summary">Show playing notifications as Heads Up notifications (Android Lollipop+ only)</string>
 	<string name="settings.casting_cache">Cache While Casting</string>
 	<string name="settings.casting_cache_summary">Cache currently playing songs while casting</string>
 	<string name="settings.casting.dlna_casting_enabled">DLNA Enabled</string>
@@ -669,8 +667,6 @@
 	<string name="details.played_count">Played Count</string>
 	<string name="details.stream_url">Stream URL</string>
 	<string name="details.home_page">Home Page</string>
-
-	<string name="permission.external_storage.failed">DSub cannot function without the ability to write to storage</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No tracks</item>

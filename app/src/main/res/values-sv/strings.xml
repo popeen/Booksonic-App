@@ -380,9 +380,9 @@
 	<string name="settings.playback_title">Uppspelning</string>
 	<string name="settings.hide_widget_title">Dölj widget</string>
 	<string name="settings.hide_widget_summary">Dölj widget efter att jag lämnat appen</string>
-	<string name="settings.podcasts_enabled">Podcasts Aktiverad</string>
+	<string name="settings.podcasts_enabled">Podcasts</string>
 	<string name="settings.podcasts_enabled_summary">Om podcast ska visas eller inte i menyn till vänster</string>
-	<string name="settings.bookmarks_enabled">Bokmärken aktiverade</string>
+	<string name="settings.bookmarks_enabled">Bokmärken</string>
 	<string name="settings.bookmarks_enabled_summary">Om bokmärken ska visas eller inte i menyn till vänster</string>
 	<string name="settings.shares_enabled">Delningar aktiverade</string>
 	<string name="settings.shares_enabled_summary">Om delningar ska visas eller inte i menyn till vänster</string>
@@ -433,7 +433,7 @@
 	<string name="settings.play_now_after_summary">Spela nu i context menyn spelar allt efter spåret (som i Booksonic webb GUI)</string>
 	<string name="settings.large_album_art">Stora bokomslag</string>
 	<string name="settings.large_album_art_summary">Visa böcker med stora omslag istället för en lista</string>
-	<string name="settings.admin_enabled">Admin aktiverad</string>
+	<string name="settings.admin_enabled">Admin</string>
 	<string name="settings.admin_enabled_summary">Om admin ska visas eller inte i menyn till vänster</string>
 	<string name="settings.replay_gain">Replay Gain</string>
 

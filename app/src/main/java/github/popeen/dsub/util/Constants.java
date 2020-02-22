@@ -182,7 +182,6 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_BATCH_MODE = "batchMode";
 	public static final String PREFERENCES_KEY_CAST_GAPLESS_PLAYBACK = "castingGaplessPlayback";
 	public static final String PREFERENCES_KEY_CAST_STREAM_ORIGINAL = "castStreamOriginal";
-	public static final String PREFERENCES_KEY_HEADS_UP_NOTIFICATION = "headsUpNotification";
 	public static final String PREFERENCES_KEY_CAST_CACHE = "castCache";
 	public static final String PREFERENCES_KEY_PLAYBACK_SPEED = "playbackSpeed";
 	public static final String PREFERENCES_KEY_SONG_PLAYBACK_SPEED = "songPlaybackSpeed";

@@ -100,7 +100,7 @@ public final class Notifications {
 				RemoteControlClientLP remoteControlClientLP = (RemoteControlClientLP) downloadService.getRemoteControlClient();
 				mediaStyle.setMediaSession(remoteControlClientLP.getMediaSession().getSessionToken());
 				builder.setVisibility(Notification.VISIBILITY_PUBLIC).setColor(context.getResources().getColor(R.color.lightPrimary));
-				if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HEADS_UP_NOTIFICATION, false) && !UpdateView.hasActiveActivity()) {
+				if(!UpdateView.hasActiveActivity()) {
 					builder.setVibrate(new long[0]);
 				}
 			}

@@ -380,9 +380,9 @@
 	<string name="settings.playback_title">Воспроизведение</string>
 	<string name="settings.hide_widget_title">Скрывать виджет</string>
 	<string name="settings.hide_widget_summary">Скрывать виджет после выхода из приложения</string>
-	<string name="settings.podcasts_enabled">Подкасты включены</string>
+	<string name="settings.podcasts_enabled">Подкасты</string>
 	<string name="settings.podcasts_enabled_summary">Показывать или нет список подкастов в выдвижном меню</string>
-	<string name="settings.bookmarks_enabled">Закладки включены</string>
+	<string name="settings.bookmarks_enabled">Закладки</string>
 	<string name="settings.bookmarks_enabled_summary">Отображать ли список закладок в выдвижном меню</string>
 	<string name="settings.internet_radio_enabled">Интернет-радио включено</string>
 	<string name="settings.internet_radio_enabled_summary">Отображать ли список интернет-радио в выдвижном меню</string>
@@ -433,7 +433,7 @@
 	<string name="settings.song_press_play_last">Добавлять трек в конец очереди «Сейчас играет»</string>
 	<string name="settings.large_album_art">Большая обложка</string>
 	<string name="settings.large_album_art_summary">Показывать книги с большими обложками вместо списка</string>
-	<string name="settings.admin_enabled">Список администратора включен</string>
+	<string name="settings.admin_enabled">администратора</string>
 	<string name="settings.admin_enabled_summary">Показывать или нет список администратора в выдвижном меню</string>
 	<string name="settings.replay_gain">Replay Gain</string>
 	<string name="settings.replay_gain_summary">Масштабировать громкость воспроизведения по тэгам Replay Gain треков и книг</string>
@@ -457,8 +457,6 @@
 	<string name="settings.shuffle_by_album.false">Перемешать все треки вместе</string>
 	<string name="settings.casting_stream_original">Стриммить оригинал</string>
 	<string name="settings.casting_stream_original_summary">Не транскодировать форматы поддерживыемые устройством</string>
-	<string name="settings.heads_up_notification">Heads Up Уведомления (5.0+)</string>
-	<string name="settings.heads_up_notification_summary">Показывать уведомления как уведомления Heads Up (только для Android Lollipop)</string>
 	<string name="settings.casting_cache">Кешировать во время трансляции</string>
 	<string name="settings.casting_cache_summary">Кешировать текущий трек во время трансляции</string>
 	<string name="settings.casting.dlna_casting_enabled">DLNA включен</string>
