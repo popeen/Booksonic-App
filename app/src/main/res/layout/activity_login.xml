@@ -93,6 +93,19 @@
                 android:typeface="normal"
                 android:textColor="@color/lightAccent" />
 
+            <TextView
+                android:id="@+id/login_sideloaded"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="You are using a sideloaded version of the app. Because of this the app will only be able to access the demo server.\n\nFeel free to try it out and if you decide that you like it get it on Google Play for $3 or build it yourself from the sourcecode for free, this will remove the demo limit."
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:typeface="normal"
+                android:textColor="@color/appwidget_text" />
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

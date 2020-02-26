@@ -146,6 +146,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			serverSettings.put(Integer.toString(instance), new ServerSettings(instance));
 			onInitPreferences(preferenceScreen);
 		}
+
 	}
 
 	@Override
@@ -173,7 +174,9 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		} else if("playback".equals(name)) {
 			xml = R.xml.settings_playback;
 		} else if("servers".equals(name)) {
-			xml = R.xml.settings_servers;
+			if(Util.installedFromPlayStore(context) || !Util.isSignedByPopeen(context)) {
+				xml = R.xml.settings_servers;
+			}
 		} else if ("cast".equals(name)) {
 			xml = R.xml.settings_cast;
 		} else if ("help".equals(name)) {

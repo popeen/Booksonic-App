@@ -34,6 +34,7 @@ public class LoginActivity extends Activity {
 	private EditText mPasswordView;
 	private View mProgressView;
 	private View mLoginFormView;
+	private View sideloadedView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,27 @@ public class LoginActivity extends Activity {
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mProgressView = findViewById(R.id.login_progress);
+		sideloadedView = findViewById(R.id.login_sideloaded);
+
+
+		/*
+			Some third party app stores have started publishing my builds of the app, this is not good since it will lead to users using old builds that might not work properly anymore.
+			When people build the app themselves they are aware that they will need to rebuild it later, people downloading from third party stores will no be so they will end up using older versions that will break and lead to frustration with Booksonic.
+
+			There is also the issue that some parts of Booksonic is relying on thirt party APIs, when people build the app themselves they are providing their own keys, when they are using my build they are using my keys meaning I will have to cover the cost.
+
+			For now we encourage users to get it from Play or build it themselves by only giving access to the demo server if it was signed with popeens key and then sideloaded. Anyone else building it will not be locked down to demo.
+
+		 */
+
+		if(!Util.installedFromPlayStore(this) && Util.isSignedByPopeen(this)){
+			mAddressView.setEnabled(false);
+			mUsernameView.setEnabled(false);
+			mPasswordView.setEnabled(false);
+			mEmailSignInButton.setEnabled(false);
+			mLoginFormView = findViewById(R.id.login_form);
+			sideloadedView.setVisibility(View.VISIBLE);
+		}
 	}
 
 

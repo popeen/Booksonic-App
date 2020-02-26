@@ -26,6 +26,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -67,6 +70,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -119,6 +123,9 @@ public final class Util {
 	private static AudioFocusRequest audioFocusRequest;
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
+
+
+	private static String CERTIFICATE_SHA1 = "E51AECDFB8DE9260698023CAB97EE4D265707307";
 
     // Used by hexEncode()
     private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -1578,5 +1585,59 @@ public final class Util {
 			p.setMargins(left, top, right, bottom);
 			view.requestLayout();
 		}
+	}
+
+	private static String calcSHA1(byte[] signature) throws NoSuchAlgorithmException {
+		MessageDigest digest = MessageDigest.getInstance("SHA1");
+		digest.update(signature);
+		byte[] signatureHash = digest.digest();
+		return bytesToHex(signatureHash);
+	}
+
+	public static String bytesToHex(byte[] bytes) {
+		final char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+		char[] hexChars = new char[bytes.length * 2];
+		int v;
+		for (int j = 0; j < bytes.length; j++) {
+			v = bytes[j] & 0xFF;
+			hexChars[j * 2] = hexArray[v >>> 4];
+			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+		}
+		return new String(hexChars);
+	}
+
+	public static boolean validateAppSignature(Context context) {
+		try {
+			// get the signature form the package manager
+			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+			Signature[] appSignatures = packageInfo.signatures;
+			// this sample only checks the first certificate
+			for (Signature signature : appSignatures) {
+				byte[] signatureBytes = signature.toByteArray();
+				// calc sha1 in hex
+				String currentSignature = calcSHA1(signatureBytes);
+				// compare signatures
+				Log.i("ValidateSigningCert", "Signature is " + currentSignature + " (" + CERTIFICATE_SHA1 + ")");
+				return CERTIFICATE_SHA1.equalsIgnoreCase(currentSignature);
+			}
+		} catch (Exception e) { // if error assume failed to validate
+			return false;
+		}
+
+		return false;
+	}
+
+	public static boolean isSignedByPopeen(Context context){
+		return validateAppSignature(context);
+	}
+
+	public static boolean installedFromPlayStore(Context context) {
+		boolean result = false;
+		try {
+			String installer = context.getPackageManager().getInstallerPackageName(context.getPackageName());
+			result = installer.equals("com.android.vending");
+		} catch (Throwable e) {}
+
+		return result;
 	}
 }
