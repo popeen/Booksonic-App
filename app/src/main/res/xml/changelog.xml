@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="1.0.27" versioncode="52" releasedate="2020-03-10">
+        <change>If you click on a track that has a bookmark the app will now ask if you want to resume from that</change>
+        <change>If the app is signed by Popeen and sideloaded it will be locked down to demo only to encourage people to get it from Google Play or build it from source. The reason for this is that we don't want them using old versions of the app they downloaded from shady websites</change>
+    </release>
     <release version="1.0.26" versioncode="50" releasedate="2020-02-22">
         <change>Bugfix</change>
     </release>

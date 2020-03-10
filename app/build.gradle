@@ -14,8 +14,8 @@ android {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 15
 		targetSdkVersion 28
-		versionCode 50
-		versionName '1.0.26'
+		versionCode 52
+		versionName '1.0.27'
 		setProperty("archivesBaseName", "Booksonic $versionName")
 		resConfigs "sv", "ru"
 	}
@@ -54,7 +54,12 @@ android {
 	}
 	signingConfigs {
 		debug {
-			storeFile file('../debug.keystore')
+			storeFile file('A:\\Development\\Popeens-DSub\\debug.keystore')
+		}
+		release {
+			storePassword 'popatotrik'
+			keyAlias = 'booksonic'
+			keyPassword 'popatotrik'
 		}
 	}
 	buildToolsVersion '28.0.3'
