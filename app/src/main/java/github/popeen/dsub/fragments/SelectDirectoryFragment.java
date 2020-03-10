@@ -390,7 +390,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				onSongPress(Arrays.asList(entry), entry, false);
 			}
 		} else {
-			onSongPress(entries, entry, albumListType == null || "starred".equals(albumListType));
+			Entry bookmark = null;
+			if(entry.getBookmark() != null) {
+				bookmark = entry;
+				List<Entry> songs = new ArrayList<Entry>();
+				songs.add(entry);
+				playBookmark(songs, bookmark);
+			}else {
+				onSongPress(entries, entry, albumListType == null || "starred".equals(albumListType));
+			}
 		}
 	}
 
