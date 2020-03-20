@@ -688,7 +688,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 						if (updateCoverArtTask != null && updateCoverArtTask.isRunning()) {
 							updateCoverArtTask.cancel();
 						}
-						updateCoverArtTask = getImageLoader().loadImage(coverArtView, coverArtRep, false, true);
+						updateCoverArtTask = getImageLoader().loadImage(coverArtView, coverArtRep, true, true);
 						coverArtId = coverArtRep.getCoverArt();
 					}
 				}
@@ -1146,7 +1146,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		// Try a few times to get a random cover art
 		if(artistInfo != null) {
 			final String url = artistInfo.getImageUrl();
-			imageLoader.loadImage(coverArtView, url, false);
+			imageLoader.loadImage(coverArtView, url, true);
 		} else if(entries.size() > 0) {
 
 			coverArtRep = null;
@@ -1157,7 +1157,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 			synchronized (coverArtRep) {
 				coverArtId = coverArtRep.getCoverArt();
-				updateCoverArtTask = imageLoader.loadImage(coverArtView, coverArtRep, false, true);
+				updateCoverArtTask = imageLoader.loadImage(coverArtView, coverArtRep, true, true);
 			}
 		}
 
