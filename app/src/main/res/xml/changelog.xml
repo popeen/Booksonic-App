@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="2003.2" versioncode="54" releasedate="2020-03-20">
+        <change>Fix for covers being very low quality</change>
+        <change>Changed the versioning format. It is now following the standard (Month Date) . (release number this month). For example the current version is the second relase of mars 2020 so it is called 2003.2</change>
+    </release>
     <release version="1.0.27" versioncode="52" releasedate="2020-03-10">
         <change>If you click on a track that has a bookmark the app will now ask if you want to resume from that</change>
         <change>If the app is signed by Popeen and sideloaded it will be locked down to demo only to encourage people to get it from Google Play or build it from source. The reason for this is that we don't want them using old versions of the app they downloaded from shady websites</change>
