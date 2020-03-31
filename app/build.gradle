@@ -78,7 +78,7 @@ dependencies {
 	implementation 'de.hdodenhof:circleimageview:3.1.0'
 	implementation 'com.shehabic.droppy:Droppy:0.6.0@aar'
 	implementation group: 'org.fourthline.cling', name: 'cling-core', version:'2.1.2'
-	implementation group: 'org.fourthline.cling', name: 'cling-support', version:'2.1.2'
+	implementation group: 'org.fourthline.cling', name: 'cling-support', version:'3.0.2'
 	implementation group: 'org.eclipse.jetty', name: 'jetty-server', version:'8.1.16.v20140903'
 	implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version:'8.1.16.v20140903'
 	implementation group: 'org.eclipse.jetty', name: 'jetty-client', version:'8.1.16.v20140903'
