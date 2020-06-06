@@ -56,11 +56,6 @@ android {
 		debug {
 			storeFile file('A:\\Development\\Popeens-DSub\\debug.keystore')
 		}
-		release {
-			storePassword 'popatotrik'
-			keyAlias = 'booksonic'
-			keyPassword 'popatotrik'
-		}
 	}
 	buildToolsVersion '28.0.3'
 }
@@ -82,6 +77,6 @@ dependencies {
 	implementation group: 'org.eclipse.jetty', name: 'jetty-server', version:'8.1.16.v20140903'
 	implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version:'8.1.16.v20140903'
 	implementation group: 'org.eclipse.jetty', name: 'jetty-client', version:'8.1.16.v20140903'
-	implementation 'org.jsoup:jsoup:1.12.2'
+	implementation 'org.jsoup:jsoup:1.13.1'
 	implementation 'io.github.kobakei:ratethisapp:1.2.0'
 }
