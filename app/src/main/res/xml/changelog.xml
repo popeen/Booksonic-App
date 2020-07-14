@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="2007" versioncode="55" releasedate="2020-07-14">
+        <change>Updated dependency</change>
+        <change>Bugfix in formating for the support email</change>
+    </release>
     <release version="2003.2" versioncode="54" releasedate="2020-03-20">
         <change>Fix for covers being very low quality</change>
         <change>Changed the versioning format. It is now following the standard (Month Date) . (release number this month). For example the current version is the second relase of mars 2020 so it is called 2003.2</change>
