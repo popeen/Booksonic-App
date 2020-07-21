@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="2007.2" versioncode="56" releasedate="2020-07-21">
+        <change>Updated login screen</change>
+    </release>
     <release version="2007" versioncode="55" releasedate="2020-07-14">
         <change>Updated dependency</change>
         <change>Bugfix in formating for the support email</change>
