@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -35,6 +37,7 @@ public class LoginActivity extends Activity {
 	private View mProgressView;
 	private View mLoginFormView;
 	private View sideloadedView;
+	private Button minstructionsButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,15 @@ public class LoginActivity extends Activity {
 				return false;
 			}
 		});
+
+		minstructionsButton = (Button) findViewById(R.id.instructions_button);
+		minstructionsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				goToUrl("https://booksonic.org/how.php");
+			}
+		});
+
 
 		Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 		mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -254,5 +266,11 @@ public class LoginActivity extends Activity {
 	@Override
 	public void onBackPressed(){
 		this.moveTaskToBack(true);
+	}
+
+	private void goToUrl (String url) {
+		Uri uriUrl = Uri.parse(url);
+		Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+		startActivity(launchBrowser);
 	}
 }

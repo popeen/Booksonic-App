@@ -8,7 +8,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="github.popeen.dsub.activity.LoginActivity">
+    tools:context="github.popeen.dsub.activity.LoginActivity"
+    android:background="@drawable/background1">
 
     <!-- Login progress -->
 
@@ -50,7 +51,11 @@
                 android:imeOptions="actionUnspecified"
                 android:inputType="textUri"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColorHint="#333"
+                android:textColor="#333"
+                android:background="#eee"
+                android:padding="5dp"/>
 
             <AutoCompleteTextView
                 android:id="@+id/email"
@@ -59,7 +64,12 @@
                 android:hint="@string/login.hint.username"
                 android:inputType="text"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColorHint="#333"
+                android:textColor="#333"
+                android:background="#eee"
+                android:layout_marginTop="10dp"
+                android:padding="5dp" />
 
             <EditText
                 android:id="@+id/password"
@@ -71,7 +81,12 @@
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColorHint="#333"
+                android:textColor="#333"
+                android:background="#eee"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"/>
 
             <Button
                 android:id="@+id/email_sign_in_button"
@@ -89,23 +104,50 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/action_demo"
                 android:textAllCaps="false"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:typeface="normal"
-                android:textColor="@color/lightAccent" />
+                android:textColor="#eee" />
 
-            <TextView
-                android:id="@+id/login_sideloaded"
-                android:visibility="gone"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="You are using a sideloaded version of the app. Because of this the app will only be able to access the demo server.\n\nFeel free to try it out and if you decide that you like it get it on Google Play for $3 or build it yourself from the sourcecode for free, this will remove the demo limit."
-                android:textAllCaps="false"
-                android:textSize="14sp"
-                android:typeface="normal"
-                android:textColor="@color/appwidget_text" />
+                android:orientation="vertical"
+                android:layout_marginTop="40dp">
 
+                <TextView
+                    android:id="@+id/instructions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Hi there! \n\nA quick tip in case you didn't know \n\nYou need to set up your own server if you want to listen to more audiobooks then can be found in the demo. \n\nSetting up a server is easy and instructions can be found here"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:typeface="normal"
+                    android:textColor="#333"
+                    android:padding="15dp"
+                    android:background="#eee" />
 
+                <Button
+                    android:id="@+id/instructions_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Instructions"
+                    android:textColor="@color/appwidget_text"
+                    android:background="@color/lightPrimaryDark"/>
+
+                <TextView
+                    android:id="@+id/login_sideloaded"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="Oh, it appears that you are using a sideloaded version of the app. Because of this the app will only be able to access the demo server.\n\nFeel free to try it out and if you decide that you like it get it on Google Play for $3 or build it yourself from the sourcecode for free, this will remove the demo limit."
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:typeface="normal"
+                    android:textColor="@color/appwidget_text"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
