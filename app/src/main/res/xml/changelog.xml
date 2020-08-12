@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="2008" versioncode="57" releasedate="2020-08-12">
+        <change>Improved error checking on login</change>
+        <change>Added settings / support to login screen</change>
+    </release>
     <release version="2007.2" versioncode="56" releasedate="2020-07-21">
         <change>Updated login screen</change>
     </release>
