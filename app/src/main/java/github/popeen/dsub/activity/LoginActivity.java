@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,11 +20,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.jsoup.Jsoup;
+
 import github.popeen.dsub.R;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.Util;
+
+import static org.fourthline.cling.binding.xml.Descriptor.Device.ELEMENT.url;
 
 public class LoginActivity extends Activity {
 
@@ -38,6 +43,7 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View sideloadedView;
 	private Button minstructionsButton;
+	private Button mSettingsButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,13 @@ public class LoginActivity extends Activity {
 			}
 		});
 
+		mSettingsButton = (Button) findViewById(R.id.settings_button);
+		mSettingsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				startActivity(new Intent(getBaseContext(), SettingsActivity.class));
+			}
+		});
 
 		Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 		mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -132,8 +145,8 @@ public class LoginActivity extends Activity {
 		boolean cancel = false;
 		View focusView = null;
 
-		// Check for a valid address, if the user entered one.
-		if (TextUtils.isEmpty(address) || TextUtils.substring(address, 0, 3).equals("http")) {
+		// Check for a valid address, if the  user entered one.
+		if (TextUtils.isEmpty(address)) {
 			mAddressView.setError("Invalid URL");
 			focusView = mAddressView;
 			cancel = true;
@@ -244,6 +257,7 @@ public class LoginActivity extends Activity {
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putBoolean(Constants.PREFERENCES_KEY_OFFLINE, false);
 
+				String address = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + 1, "http://demo.booksonic.org/booksonic/");
 				editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + 1, "Booksonic");
 				editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + 1, "http://demo.booksonic.org/booksonic/");
 				editor.putString(Constants.PREFERENCES_KEY_USERNAME + 1, "demo");
@@ -251,8 +265,29 @@ public class LoginActivity extends Activity {
 				editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
 				editor.commit();
 
-				mPasswordView.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
+
+				try {
+					String ping = Jsoup.connect(address).ignoreContentType(true).execute().body();
+					if(ping.contains("subsonic") == false){
+						mAddressView.setError("Invalid URL");
+						mAddressView.requestFocus();
+					}else{
+						mPasswordView.setError(getString(R.string.error_incorrect_password));
+						mPasswordView.requestFocus();
+					}
+
+				}catch (Exception e){
+					Log.println(10, "Login", "Unable to validate login url.\n" + e.toString() );
+					if(e.toString().contains("android.os.NetworkOnMainThreadException") == false) {
+						mAddressView.setError("Invalid URL");
+						mAddressView.requestFocus();
+					}else{
+						mPasswordView.setError(getString(R.string.error_incorrect_password));
+						mPasswordView.requestFocus();
+					}
+				}
+
+
 			}
 		}
 

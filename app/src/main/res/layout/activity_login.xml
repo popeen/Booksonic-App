@@ -119,7 +119,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Hi there! \n\nA quick tip in case you didn't know \n\nYou need to set up your own server if you want to listen to more audiobooks then can be found in the demo. \n\nSetting up a server is easy and instructions can be found here"
+                    android:text="Hi there! \n\nA quick tip in case you didn't know \n\nYou need to set up your own server if you want to listen to more audiobooks then can be found in the demo. \n\nSetting up a server is easy and instructions for it as well as support can be found below"
                     android:textAllCaps="false"
                     android:textSize="14sp"
                     android:typeface="normal"
@@ -135,6 +135,14 @@
                     android:text="Instructions"
                     android:textColor="@color/appwidget_text"
                     android:background="@color/lightPrimaryDark"/>
+
+                <Button
+                    android:id="@+id/settings_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Settings / Support"
+                    android:textColor="@color/appwidget_text"/>
 
                 <TextView
                     android:id="@+id/login_sideloaded"
