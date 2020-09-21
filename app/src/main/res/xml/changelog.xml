@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="2009" versioncode="58" releasedate="2020-09-21">
+        <change>Fixed a bug on Android 11 where files would not download correctly</change>
+    </release>
     <release version="2008" versioncode="57" releasedate="2020-08-12">
         <change>Improved error checking on login</change>
         <change>Added settings / support to login screen</change>
