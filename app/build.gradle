@@ -7,13 +7,13 @@ repositories {
 }
 
 android {
-	compileSdkVersion 28
+	compileSdkVersion 30
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 15
-		targetSdkVersion 28
+		targetSdkVersion 27
 		versionCode 57
 		versionName '2008'
 		setProperty("archivesBaseName", "Booksonic $versionName")
@@ -54,10 +54,10 @@ android {
 	}
 	signingConfigs {
 		debug {
-			storeFile file('A:\\Development\\Popeens-DSub\\debug.keystore')
+			storeFile file('C:\\Users\\Patrik\\Desktop\\Booksonic-APP\\debug.keystore')
 		}
 	}
-	buildToolsVersion '28.0.3'
+	buildToolsVersion '29.0.3'
 }
 
 dependencies {

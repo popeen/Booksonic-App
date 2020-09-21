@@ -77,7 +77,10 @@ public class MediaStoreService {
 			values.put(MediaStore.Audio.AudioColumns.IS_MUSIC, 1);
 
 			Uri uri = contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
-
+			if(uri == null) {
+				Log.e(TAG, "URI for media store is null");
+				return;
+			}
 			// Look up album, and add cover art if found.
 			Cursor cursor = contentResolver.query(uri, new String[]{MediaStore.Audio.AudioColumns.ALBUM_ID}, null, null, null);
 			if (cursor.moveToFirst()) {
