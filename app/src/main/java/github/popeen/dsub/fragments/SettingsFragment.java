@@ -61,7 +61,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.KeyManagementException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -69,6 +72,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.activity.SubsonicActivity;
@@ -1036,7 +1043,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			protected Boolean doInBackground() throws Throwable {
 				updateProgress(R.string.settings_testing_connection);
 
-				statusCode = Jsoup.connect(Util.getRestUrl(context, "ping")).followRedirects(false).execute().statusCode();
+				statusCode = Jsoup.connect(Util.getRestUrl(context, "ping")).sslSocketFactory(Util.socketFactory()).followRedirects(false).execute().statusCode();
 
 				previousInstance = Util.getActiveServer(context);
 				testingConnection = true;
@@ -1079,6 +1086,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		};
 		task.execute();
 	}
+
+
 
 	private void openInBrowser(final int instance) {
 		SharedPreferences prefs = Util.getPreferences(context);
