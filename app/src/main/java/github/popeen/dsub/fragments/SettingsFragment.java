@@ -830,11 +830,18 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverPasswordPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		serverPasswordPreference.setSummary("***");
 		serverPasswordPreference.setTitle(R.string.settings_server_password);
+
 		final CheckBoxPreference serverSyncPreference = new CheckBoxPreference(context);
 		serverSyncPreference.setKey(Constants.PREFERENCES_KEY_SERVER_SYNC + instance);
 		serverSyncPreference.setChecked(Util.isSyncEnabled(context, instance));
 		serverSyncPreference.setSummary(R.string.settings_server_sync_summary);
 		serverSyncPreference.setTitle(R.string.settings_server_sync);
+
+		final CheckBoxPreference serverAuthHeaderPreference = new CheckBoxPreference(context);
+		serverAuthHeaderPreference.setKey(Constants.PREFERENCES_KEY_SERVER_AUTHHEADER + instance);
+		serverAuthHeaderPreference.setChecked(Util.isAuthHeaderEnabled(context, instance));
+		serverAuthHeaderPreference.setSummary(R.string.settings_server_authheaders_summary);
+		serverAuthHeaderPreference.setTitle(R.string.settings_server_authheaders);
 
 		final Preference serverOpenBrowser = new Preference(context);
 		serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
@@ -910,6 +917,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		screen.addPreference(serverUsernamePreference);
 		screen.addPreference(serverPasswordPreference);
 		screen.addPreference(serverSyncPreference);
+		screen.addPreference(serverAuthHeaderPreference);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);
 		screen.addPreference(serverRemoveServerPreference);
