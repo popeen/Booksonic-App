@@ -54,7 +54,7 @@ android {
 	}
 	signingConfigs {
 		debug {
-			storeFile file('C:\\Users\\Patrik\\Desktop\\Booksonic-APP\\debug.keystore')
+			storeFile file('../debug.keystore')
 		}
 	}
 	buildToolsVersion '29.0.3'
