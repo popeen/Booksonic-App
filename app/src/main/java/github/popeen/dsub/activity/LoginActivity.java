@@ -111,6 +111,7 @@ public class LoginActivity extends Activity {
 
 		 */
 
+		/*
 		if(!Util.installedFromPlayStore(this) && Util.isSignedByPopeen(this)){
 			mAddressView.setEnabled(false);
 			mUsernameView.setEnabled(false);
@@ -119,6 +120,7 @@ public class LoginActivity extends Activity {
 			mLoginFormView = findViewById(R.id.login_form);
 			sideloadedView.setVisibility(View.VISIBLE);
 		}
+		*/
 	}
 
 

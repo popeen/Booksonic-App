@@ -33,6 +33,11 @@
 			android:title="@string/button_bar.offline"/>
 
 		<item
+			android:id="@+id/drawer_ishome"
+			android:icon="?attr/offline_icon"
+			android:title="Toggle local address"/>
+
+		<item
 			android:id="@+id/drawer_settings"
 			android:icon="?attr/drawerSettings"
 			android:title="@string/menu.settings"/>

@@ -232,6 +232,16 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			serviceIntent.setClassName(this.getPackageName(), HeadphoneListenerService.class.getName());
 			this.startService(serviceIntent);
 		}
+
+		/*
+		TextView msgLocal = (TextView) findViewById(R.id.msgLocalAddress);
+		if(Util.isHome(this)){
+			msgLocal.setVisibility(View.VISIBLE);
+		}else{
+			msgLocal.setVisibility(View.GONE);
+		}
+
+		*/
 		checkIfServerOutdated();
 
 		if (ContextCompat.checkSelfPermission(this, permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -429,6 +439,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 							return true;
 						case R.id.drawer_offline:
 							toggleOffline();
+							return true;
+						case R.id.drawer_ishome:
+							toggleHome();
 							return true;
 						case R.id.drawer_settings:
 							startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
@@ -1178,6 +1191,16 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				showOfflineSyncDialog(scrobblesCount, starsCount);
 			}
 		}
+
+		UserUtil.seedCurrentUser(this);
+		this.updateDrawerHeader();
+		drawer.closeDrawers();
+	}
+
+	public void toggleHome() {
+		boolean isHome = Util.isHome(this);
+		Util.setHome(this, !isHome);
+		invalidate();
 
 		UserUtil.seedCurrentUser(this);
 		this.updateDrawerHeader();

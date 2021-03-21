@@ -145,6 +145,18 @@ public final class Util {
     private Util() {
     }
 
+	public static boolean isHome(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_HOME, false);
+	}
+
+	public static void setHome(Context context, boolean home) {
+		SharedPreferences prefs = getPreferences(context);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean(Constants.PREFERENCES_KEY_HOME, home);
+		editor.commit();
+	}
+
     public static boolean isOffline(Context context) {
         SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false);
@@ -393,21 +405,22 @@ public final class Util {
 		}
 		StringBuilder builder = new StringBuilder();
 
+		// TODO tag, location
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
-		if(allowAltAddress && Util.isWifiConnected(context)) {
-			String SSID = prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "");
-			if(!SSID.isEmpty()) {
-				String currentSSID = Util.getSSID(context);
+		//if(allowAltAddress && Util.isWifiConnected(context)) {
+		//	String SSID = prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "");
+			if(Util.isHome(context)) {
+			/*	String currentSSID = Util.getSSID(context);
 
 				String[] ssidParts = SSID.split(",");
-				if ("".equals(SSID) || SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {
-					String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
-					if (internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
+				if ("".equals(SSID) || SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {*/
+					serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+				/*	if (internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
 						serverUrl = internalUrl;
 					}
-				}
+				}*/
 			}
-		}
+		//}
 
 		String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
 		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);

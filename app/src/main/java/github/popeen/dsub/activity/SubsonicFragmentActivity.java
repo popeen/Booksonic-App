@@ -454,9 +454,11 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	public void onResume() {
 		super.onResume();
 
+		/*
 		if(!Util.installedFromPlayStore(this) && Util.isSignedByPopeen(this)){
 			Util.toast(this, "You are using a sideloaded app and will only be able to use it in demo mode.", false);
 		}
+		*/
 
 		bottomBarControls = findViewById(R.id.bottom_bar_controls);
 		if(Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_BOTTOM_BAR_CONTROLS_ENABLED, false)){
