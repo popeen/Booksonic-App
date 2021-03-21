@@ -1,6 +1,16 @@
 
+
 Booksonic App
 ========
+[![googleplay-shield]][googleplay-link]
+[![googleplaydownloads-shield]][googleplay-link]
+[![issues-shield]](issues)
+[![License][license-shield]](LICENSE.md)
+[![reddit-shield]][reddit-link]
+[![twitter-shield]][twitter-link]
+
+[![Buy me a coffee][buymeacoffee-shield]][buymeacoffee-link]
+
 
 What is Booksonic?
 -----------------
@@ -8,8 +18,8 @@ What is Booksonic?
 Booksonic is a platform for accessing the audibooks you own wherever you are.
 At the moment the platform consists of
 
- - **[Booksonic Air](https://github.com/popeen/Booksonic-Air)** - A server for streaming your audiobooks, successor to the original Booksonic server. Based on Airsonic.
- - **[Booksonic App](https://github.com/popeen/Booksonic-App)** - An android app for connection to Booksonic servers. Available on [Google Play](https://play.google.com/store/apps/details?id=github.popeen.dsub). Based on DSub 
+ - **[Booksonic Air][booksonic-air-link]** - A server for streaming your audiobooks, successor to the original Booksonic server. Based on Airsonic.
+ - **[Booksonic App][booksonic-app-link]** - An android app for connection to Booksonic servers. Available on [Google Play][googleplay-link]. Based on DSub 
  
 **Upcoming:**
  - **Booksonic Bridge** - This is an upcoming serverside software that will allow you to use third party servers like Plex, Emby, Youtube etc. It is currently in closed beta and no timeframe is given.
@@ -56,3 +66,23 @@ All pull requests are welcome to any of the Booksonic projects
 Community
 ---------
 If you have any questions or ideas, come visit us at [/r/booksonic](https://reddit.com/r/booksonic) over on Reddit
+
+[booksonic-air-link]: https://github.com/popeen/Booksonic-Air
+[booksonic-app-link]: https://github.com/popeen/Booksonic-App
+
+[googleplay-shield]: https://img.shields.io/badge/released-google%20play-green.svg
+[googleplay-link]: https://play.google.com/store/apps/details?id=github.popeen.dsub
+[googleplaydownloads-shield]: https://img.shields.io/badge/google%20play%20downloads-10.000%2B-blue.svg
+
+[issues-shield]: https://img.shields.io/github/issues-raw/popeen/Booksonic-App.svg
+[license-shield]: https://img.shields.io/github/license/popeen/Booksonic-App.svg
+
+[reddit-shield]: https://img.shields.io/reddit/subreddit-subscribers/booksonic?style=social
+[reddit-link]: https://reddit.com/r/booksonic
+
+[twitter-shield]: https://img.shields.io/twitter/follow/popeencom?style=social
+[twitter-link]: https://twitter.com/popeencom
+
+[buymeacoffee-shield]: https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-2.svg
+[buymeacoffee-link]: https://www.buymeacoffee.com/popeen
+
