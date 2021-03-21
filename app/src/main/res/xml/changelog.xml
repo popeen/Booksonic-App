@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="2103" versioncode="59" releasedate="2021-03-21">
+        <change>App can now be sideloaded again</change>
+        <change>Removed background location usage for local network detection. For now you can switch between local and global network by using Toggle local network in the side bar. I am working on bringing back automatic detection for this.</change>
+    </release>
     <release version="2009" versioncode="58" releasedate="2020-09-21">
         <change>Fixed a bug on Android 11 where files would not download correctly</change>
     </release>
