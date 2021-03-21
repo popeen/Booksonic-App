@@ -773,6 +773,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverUrlPreference.setSummary(serverUrlPreference.getText());
 		screen.setSummary(serverUrlPreference.getText());
 
+		/*
 		final EditTextPreference serverLocalNetworkSSIDPreference = new EditTextPreference(context) {
 			@Override
 			protected void onAddEditTextToDialogView(View dialogView, final EditText editText) {
@@ -821,7 +822,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				return false;
 			}
 		});
-
+		*/
 		final EditTextPreference serverInternalUrlPreference = new EditTextPreference(context);
 		serverInternalUrlPreference.setKey(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
 		serverInternalUrlPreference.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_URI);
@@ -921,8 +922,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		screen.addPreference(serverNamePreference);
 		screen.addPreference(serverUrlPreference);
 		screen.addPreference(serverInternalUrlPreference);
-		screen.addPreference(serverLocalNetworkSSIDPreference);
-		screen.addPreference(locationPermissionPreference);
+		//screen.addPreference(serverLocalNetworkSSIDPreference);
+		//screen.addPreference(locationPermissionPreference);
 		screen.addPreference(serverUsernamePreference);
 		screen.addPreference(serverPasswordPreference);
 		screen.addPreference(serverSyncPreference);
@@ -1186,7 +1187,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				if (serverName != null) {
 					serverName.setSummary(serverName.getText());
 					serverUrl.setSummary(serverUrl.getText());
-					serverLocalNetworkSSID.setSummary(serverLocalNetworkSSID.getText());
+					//serverLocalNetworkSSID.setSummary(serverLocalNetworkSSID.getText());
 					serverInternalUrl.setSummary(serverInternalUrl.getText());
 					username.setSummary(username.getText());
 
