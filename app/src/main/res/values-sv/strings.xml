@@ -296,8 +296,6 @@
     <string name="settings.theme_title">Tema</string>
     <string name="settings.theme_light">Ljust</string>
     <string name="settings.theme_dark">Mörkt</string>
-	<string name="settings.theme_black">Svart</string>
-	<string name="settings.theme_holo">Holo</string>
 	<string name="settings.theme_fullscreen">Fullskärm</string>
 	<string name="settings.theme_fullscreen_summary">Göm så mycket UI som Android tillåter</string>
 	<string name="settings.track_title">Visa spårnummer #</string>
@@ -428,9 +426,7 @@
 
 	<string name="settings.override_system_language_summary">Visa appen på engelska även om systemet är på ett språk Booksonic har stöd för. Du kan eventuellt behöva rensa appen från minnet för att det ska ta effekt.</string>
 	<string name="settings.drawer_items_title">Sidoflikar</string>
-	<string name="settings.play_now_after">Spela nu - Efter</string>
 
-	<string name="settings.play_now_after_summary">Spela nu i context menyn spelar allt efter spåret (som i Booksonic webb GUI)</string>
 	<string name="settings.large_album_art">Stora bokomslag</string>
 	<string name="settings.large_album_art_summary">Visa böcker med stora omslag istället för en lista</string>
 	<string name="settings.admin_enabled">Admin</string>

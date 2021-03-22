@@ -624,7 +624,6 @@
 	<string name="details.stream_url">URL потока</string>
 	<string name="details.home_page">Домашняя страница</string>
 
-	<string name="permission.external_storage.failed">Booksonic не может функционировать без возможности записи в хранилище</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No tracks</item>
@@ -685,8 +684,4 @@
 	<string name="error_invalid_password">Этот пароль слишком короткий</string>
 	<string name="error_incorrect_password">Неверный пароль</string>
 	<string name="error_field_required">Это поле обязательно к заполнению</string>
-    <string name="settings.theme_holo">Holo</string>
-    <string name="settings.theme_black">Черная</string>
-    <string name="settings.play_now_after_summary">"Играть после всех "</string>
-    <string name="settings.play_now_after">Играть после</string>
 --></resources>
