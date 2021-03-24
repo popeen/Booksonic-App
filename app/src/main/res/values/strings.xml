@@ -278,7 +278,7 @@
     <string name="settings.servers_title">Servers</string>
     <string name="settings.server_unused">Unused</string>
     <string name="settings.server_name">Name</string>
-    <string name="settings.server_address">Server address</string>
+    <string name="settings.server_address">Global network address</string>
 	<string name="settings.server_local_network_ssid" >Local network SSID</string>
 	<string name="settings.server_local_network_ssid_hint">Current SSID: %s</string>
 	<string name="settings.server_internal_address">Local network address</string>
@@ -294,8 +294,8 @@
 
     <string name="settings.preload_wifi">Tracks to preload (Wifi)</string>
 	<string name="settings.preload_mobile">Tracks to preload (Mobile)</string>
-    <string name="settings.cache_size">Cache size</string>
-    <string name="settings.cache_location">Cache location</string>
+    <string name="settings.cache_size">Download storage size</string>
+    <string name="settings.cache_location">Download location</string>
     <string name="settings.cache_location_error">Invalid cache location. Using default.</string>
     <string name="settings.cache_location_reset">The cache location you have set is no longer writable. If you recently upgraded your phone OS to KitKat 4.4, then the way apps write to the SD Card has changed so that they can only write to a specific location.  The location that Booksonic uses has already been automatically changed to the correct location.  In order to delete all of the old app data, you will need to mount the SD Card on your computer and delete the old folder manually</string>
 	<string name="settings.cache_location_internal">Internal</string>
@@ -372,8 +372,8 @@
     <string name="settings.scrobble_title">Scrobble to Last.fm</string>
 
     <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the server</string>
-    <string name="settings.hide_media_title">Hide from other</string>
-    <string name="settings.hide_media_summary">Hide tracks from other apps.</string>
+    <string name="settings.hide_media_title">Hide from other apps</string>
+    <string name="settings.hide_media_summary">Hide downloaded files from other apps.</string>
     <string name="settings.hide_media_toast">Takes effect next time Android scans your phone for music.</string>
     <string name="settings.media_button_title">Media buttons</string>
     <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>
@@ -401,6 +401,8 @@
 	<string name="settings.disconnect_pause_neither">Do Nothing</string>
 	<string name="settings.persistent_title">Persistent Notification</string>
 	<string name="settings.persistent_summary">Show the notification even after pausing.  Press the stop button to clear it away.</string>
+	<string name="settings.podcastplaylist_title">Handle podcasts as playlists</string>
+	<string name="settings.podcastplaylist_summary">When enabled podcasts will work just like books and add all the following episodes to the playlist and not just the selected one.</string>
 	<string name="settings.gapless_playback">Gapless Playback</string>
 	<string name="settings.gapless_playback_summary">If you are seeing strange bugs during playback, turning this off may help.</string>
 	<string name="settings.chat_refresh">Chat Refresh Rate (Secs)</string>
@@ -426,7 +428,7 @@
 	<string name="settings.shares_enabled_summary">Whether or not to display the shares listing in the pull out drawer</string>
 	<string name="settings.sync_title">Sync</string>
 	<string name="settings.sync_enabled">Sync Enabled</string>
-	<string name="settings.sync_enabled_summary">Whether or not playlists or podcasts are periodically checked for changes</string>
+	<string name="settings.sync_enabled_summary">Whether or not playlists and podcasts are periodically checked for changes</string>
 	<string name="settings.sync_interval">Sync Interval</string>
 	<string name="settings.sync_interval_15">15 Minutes</string>
 	<string name="settings.sync_interval_30">30 Minutes</string>
@@ -438,9 +440,9 @@
 	<string name="settings.sync_interval_1440">Daily</string>
 	<string name="settings.sync_wifi">Sync on Wifi only</string>
 	<string name="settings.sync_wifi_summary">Only sync while on wifi</string>
-	<string name="settings.sync_most_recent">Sync Recently Added</string>
+	<string name="settings.sync_most_recent">Download Recently Added</string>
 	<string name="settings.sync_most_recent_summary">Automatically download newly added books</string>
-	<string name="settings.sync_starred">Sync Starred</string>
+	<string name="settings.sync_starred">Download Starred</string>
 	<string name="settings.sync_starred_summary">Automatically download books, and authors which are starred</string>
 	<string name="settings.sync_notification">Show Sync Notification</string>
 	<string name="settings.sync_notification_summary">Show a notification after new media has been synced</string>
@@ -480,8 +482,8 @@
 	<string name="settings.replay_gain_bump">Replay Gain Pre-amp</string>
 	<string name="settings.replay_gain_untagged">Tracks without Replay Gain</string>
 	<string name="settings.casting">Casting</string>
-	<string name="settings.casting_proxy">Use device proxy</string>
-	<string name="settings.casting_proxy_summary">Stream everything through the device as a proxy.  This gets around issues such as using self-signed certificates.</string>
+	<string name="settings.casting_proxy">Use device as proxy</string>
+	<string name="settings.casting_proxy_summary">Stream everything through the device as a proxy.  This gets around issues such as using self-signed certificates that are not trusted by the cast device.</string>
 	<string name="settings.rename_duplicates">Rename duplicate tracks</string>
 	<string name="settings.rename_duplicates_summary">Rename duplicate tracks to the original filename so you can tell them apart.</string>
 	<string name="settings.start_on_headphones">Start on headphones</string>
@@ -496,7 +498,7 @@
 	<string name="settings.casting_cache">Cache While Casting</string>
 	<string name="settings.casting_cache_summary">Cache currently playing songs while casting</string>
 	<string name="settings.casting.dlna_casting_enabled">DLNA Enabled</string>
-	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems on Android 7.0 or newer try turning this off</string>
+	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems try turning this off</string>
     <string name="settings.rewind_interval">Rewind Interval</string>
     <string name="settings.fastforward_interval">Fast Forward Interval</string>
 

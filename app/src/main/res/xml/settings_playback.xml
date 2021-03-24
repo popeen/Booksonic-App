@@ -34,8 +34,8 @@
 			android:defaultValue="true"/>
 
 		<CheckBoxPreference
-			android:title="Podcasts as playlists"
-			android:summary="When enabled podcasts will work just like books and add all the following episodes to the playlist and not just the selected one."
+			android:title="@string/settings.podcastplaylist_title"
+			android:summary="@string/settings.podcastplaylist_summary"
 			android:key="podcastPlaylistEnabled"
 			android:defaultValue="false"/>
 

@@ -660,7 +660,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 					megabyteFromat = new DecimalFormat(getResources().getString(R.string.util_bytes_format_megabyte));
 				}
 
-				cacheSize.setSummary(megabyteFromat.format((double) Integer.parseInt(cacheSize.getText())).replace(".00", ""));
+				String maxSize = megabyteFromat.format((double) Integer.parseInt(cacheSize.getText())).replace(".00", "");
+				cacheSize.setSummary("If " + maxSize + " has been downloaded the app will automatically delete the oldest files when downloading new ones");
 			} catch(Exception e) {
 				Log.e(TAG, "Failed to format cache size", e);
 				cacheSize.setSummary(cacheSize.getText());
