@@ -94,6 +94,9 @@
 					</FrameLayout>
 				</FrameLayout>
 
+
+				<include layout="@layout/download_slider"/>
+
 				<TextView
 					android:id="@+id/download_status"
 					android:layout_width="wrap_content"
@@ -114,6 +117,7 @@
 					android:layout_gravity="center_horizontal"
 					android:layout_marginLeft="16dip"
 					android:layout_marginRight="16dip"
+					android:layout_marginBottom="16dip"
 					android:singleLine="true"
 					android:textStyle="bold"
 					style="?attr/actionbarTitleStyle"
@@ -126,6 +130,5 @@
 
 		<include layout="@layout/download_media_buttons"/>
 
-		<include layout="@layout/download_slider"/>
 	</LinearLayout>
 </FrameLayout>
