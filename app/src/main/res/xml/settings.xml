@@ -38,6 +38,11 @@
 	</PreferenceScreen>
 
 	<PreferenceScreen
+		android:title="@string/settings.advanced_title"
+		android:key="advanced">
+	</PreferenceScreen>
+
+	<PreferenceScreen
 		android:title="Help / Support"
 		android:key="help">
 	</PreferenceScreen>

@@ -272,6 +272,11 @@
     <string name="error.label">Error</string>
 
     <string name="settings.title">Settings</string>
+
+
+	<string name="settings.advanced_screen_title">Advanced</string>
+	<string name="settings.advanced_title">Advanced</string>
+
     <string name="settings.test_connection_title">Test connection</string>
 	<string name="settings.servers_add">Add Server</string>
 	<string name="settings.servers_remove">Remove Server</string>
@@ -285,9 +290,9 @@
     <string name="settings.server_username">Username</string>
     <string name="settings.server_password">Password</string>
 	<string name="settings.server_open_browser">Open in browser</string>
-	<string name="settings.server_sync_summary">Whether or not syncing is enabled for this server</string>
+	<string name="settings.server_sync_summary">Whether or not the sync settings should be used on this server. Used for automatic downloading of new books etc. See Settings -> Sync.</string>
 	<string name="settings.server_sync">Sync Enabled</string>
-	<string name="settings.server_authheaders_summary">If this is enabled the request headers will include Authorization: Basic</string>
+	<string name="settings.server_authheaders_summary">If this is enabled the request headers will include Authorization: Basic. Only needed on some third party servers.</string>
 	<string name="settings.server_authheaders">Authorization Basic headers</string>
 	<string name="settings.server_help">Help / Instructions</string>
     <string name="settings.cache_title">Cache</string>
@@ -391,7 +396,7 @@
 	<string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
 	<string name="settings.temp_loss_lower">Always lower volume</string>
 	<string name="settings.temp_loss_nothing">Do Nothing</string>
-	<string name="settings.keep_played_count_title">Keep played tracks</string>
+	<string name="settings.keep_played_count_title">Keep played tracks on phone</string>
 	<string name="settings.keep_played_count_none">Remove all played tracks</string>
 	<string name="settings.keep_played_count_one">Keep last played tracks</string>
 	<string name="settings.keep_played_count_two">Keep 2 played tracks</string>

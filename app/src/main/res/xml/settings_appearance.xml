@@ -29,27 +29,15 @@
 		android:title="@string/settings.appearance_title">
 
 		<CheckBoxPreference
+			android:title="@string/settings.large_album_art"
+			android:summary="@string/settings.large_album_art_summary"
+			android:key="largeAlbumArt"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
 			android:title="Bottom bar controls"
 			android:summary="Should the bottom bar include controls?\nThese make play/pause a bit quicker but sometimes confuse new users when switching between books"
 			android:key="bottomBarControlsEnabled"
-			android:defaultValue="false"/>
-
-		<CheckBoxPreference
-			android:title="@string/settings.track_title"
-			android:summary="@string/settings.track_summary"
-			android:key="displayTrack"
-			android:defaultValue="true"/>
-
-		<CheckBoxPreference
-			android:title="Reverse podcasts by default"
-			android:summary="Should the order the podcasts episodes are shown in be reversed by default?"
-			android:key="reversePodcastsEnabled"
-			android:defaultValue="true"/>
-
-		<CheckBoxPreference
-			android:title="@string/settings.hide_widget_title"
-			android:summary="@string/settings.hide_widget_summary"
-			android:key="hideWidget"
 			android:defaultValue="false"/>
 
 		<CheckBoxPreference
@@ -59,55 +47,11 @@
 			android:defaultValue="true"/>
 
 		<CheckBoxPreference
-			android:title="@string/settings.rename_duplicates"
-			android:summary="@string/settings.rename_duplicates_summary"
-			android:key="renameDuplicates"
+			android:title="@string/settings.track_title"
+			android:summary="@string/settings.track_summary"
+			android:key="displayTrack"
 			android:defaultValue="true"/>
 
-		<CheckBoxPreference
-			android:title="@string/settings.disable_exit_prompt"
-			android:summary="@string/settings.disable_exit_prompt_summary"
-			android:key="disableExitPrompt"
-			android:defaultValue="false"/>
-
-		<CheckBoxPreference
-			android:title="@string/settings.override_system_language"
-			android:summary="@string/settings.override_system_language_summary"
-			android:key="overrideSystemLanguage"
-			android:defaultValue="false"/>
-
-		<CheckBoxPreference
-			android:title="@string/settings.large_album_art"
-			android:summary="@string/settings.large_album_art_summary"
-			android:key="largeAlbumArt"
-			android:defaultValue="true"/>
 	</PreferenceCategory>
 
-	<PreferenceCategory
-		android:title="@string/settings.menu_options.title">
-
-		<CheckBoxPreference
-			android:title="@string/common.play_now"
-			android:summary="@string/settings.menu_options.play_now_summary"
-			android:key="showPlayNow"
-			android:defaultValue="true"/>
-
-		<CheckBoxPreference
-			android:title="@string/common.download"
-			android:summary="@string/settings.menu_options.download_summary"
-			android:key="showDownload"
-			android:defaultValue="true"/>
-
-		<CheckBoxPreference
-			android:title="@string/common.delete"
-			android:summary="@string/settings.menu_options.delete_summary"
-			android:key="showDelete"
-			android:defaultValue="false"/>
-
-		<CheckBoxPreference
-			android:title="@string/common.star"
-			android:summary="@string/settings.menu_options.star_summary"
-			android:key="showStar"
-			android:defaultValue="true"/>
-	</PreferenceCategory>
 </PreferenceScreen>
