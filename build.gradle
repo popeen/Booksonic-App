@@ -23,6 +23,7 @@ allprojects {
 		jcenter()
 		maven {
 			url 'http://4thline.org/m2'
+			setAllowInsecureProtocol(true)
 		}
 		google()
 	}

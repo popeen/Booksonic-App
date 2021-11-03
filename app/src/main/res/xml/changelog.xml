@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="2111" versioncode="61" releasedate="2021-11-03">
+        <change>Possible fix for custom download location not working</change>
+    </release>
     <release version="2103.2" versioncode="60" releasedate="2021-03-23">
         <change>Fixed bug where it was no longer possible to send log file to developer</change>
     </release>
