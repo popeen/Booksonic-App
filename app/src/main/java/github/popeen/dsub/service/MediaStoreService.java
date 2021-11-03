@@ -51,7 +51,7 @@ public class MediaStoreService {
 		File songFile = downloadFile.getCompleteFile();
 
 		// Delete existing row in case the song has been downloaded before.
-		deleteFromMediaStore(downloadFile);
+		//deleteFromMediaStore(downloadFile);
 
 		ContentResolver contentResolver = context.getContentResolver();
 		ContentValues values = new ContentValues();

@@ -50,8 +50,7 @@
 
 		<github.popeen.dsub.view.CacheLocationPreference
 			android:title="@string/settings.cache_location"
-			android:key="cacheLocation"
-			android:enabled="false"/>
+			android:key="cacheLocation"/>
 
 		<ListPreference
 			android:title="@string/settings.preload_wifi"
