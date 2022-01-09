@@ -7,6 +7,14 @@
 		android:title="@string/settings.playback_title">
 
 		<ListPreference
+			android:title="@string/settings.auto_sleep_value"
+			android:summary="@string/settings.auto_sleep_value_summary"
+			android:key="autoSleepValue"
+			android:defaultValue="0"
+			android:entryValues="@array/autoSleepValues"
+			android:entries="@array/autoSleepNames"/>
+
+		<ListPreference
 			android:title="@string/settings.keep_played_count_title"
 			android:key="keepPlayedCount"
 			android:defaultValue="0"

@@ -23,7 +23,23 @@
         <item>@string/settings.theme_light</item>
         <item>@string/settings.theme_dark</item>
     </string-array>
-	
+
+	<string-array name="autoSleepNames">
+		<item>Off</item>
+		<item>15 min</item>
+		<item>30 min</item>
+		<item>45 min</item>
+		<item>60 min</item>
+	</string-array>
+
+	<string-array name="autoSleepValues">
+	<item>0</item>
+	<item>900000</item>
+	<item>1800000</item>
+	<item>2700000</item>
+	<item>3600000</item>
+	</string-array>
+
 	<string-array name="sleepTimerValues">
 		<item>0</item>
 		<item>1</item>

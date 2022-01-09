@@ -2758,6 +2758,14 @@ public class DownloadService extends Service {
 
 	private synchronized void applyPlaybackParamsMain() {
 		applyPlaybackParams(mediaPlayer);
+		SharedPreferences prefs = Util.getPreferences(this);
+		int autoSleepValue = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_AUTO_SLEEP_MODE, "0"));
+		if(autoSleepValue > 0) {
+			if (!this.getSleepTimer()) {
+				setSleepTimerDuration(autoSleepValue);
+				startSleepTimer();
+			}
+		}
 	}
 	private synchronized boolean isNextPlayingSameAlbum() {
 		return isNextPlayingSameAlbum(currentPlaying, nextPlaying);

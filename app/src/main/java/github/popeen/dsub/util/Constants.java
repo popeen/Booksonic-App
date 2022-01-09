@@ -195,6 +195,8 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_REWIND_INTERVAL = "rewindInterval";
 	public static final String PREFERENCES_KEY_FASTFORWARD_INTERVAL = "fastforwardInterval";
 
+	public static final String PREFERENCES_KEY_AUTO_SLEEP_MODE = "autoSleepValue";
+
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
 	public static final String OFFLINE_SCROBBLE_SEARCH = "scrobbleTitle";

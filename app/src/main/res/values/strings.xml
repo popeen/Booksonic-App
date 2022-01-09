@@ -97,7 +97,7 @@
     <string name="menu.deleted_playlist">Deleted playlist %s</string>
     <string name="menu.deleted_playlist_error">Failed to delete playlist %s</string>
     <string name="menu.log">Send Log</string>
-    <string name="menu.set_timer">Set Timer</string>
+    <string name="menu.set_timer">Set Sleep Timer</string>
     <string name="menu.check_podcasts">Check For New Episodes</string>
     <string name="menu.add_podcast">Add Podcast url or name</string>
     <string name="menu.keep_synced">Keep Synced</string>
@@ -379,6 +379,7 @@
     <string name="settings.other_title">Other settings</string>
     <string name="settings.scrobble_title">Scrobble to Last.fm</string>
 
+
     <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the server</string>
     <string name="settings.hide_media_title">Hide from other apps</string>
     <string name="settings.hide_media_summary">Hide downloaded files from other apps.</string>
@@ -389,6 +390,8 @@
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
     <string name="settings.playlist_title">Play</string>
     <string name="settings.playlist_random_size_title">Shuffle Playlist Size</string>
+    <string name="settings.auto_sleep_value">Auto Sleep Timer</string>
+    <string name="settings.auto_sleep_value_summary">Auto start the sleep timer.</string>
     <string name="settings.sleep_timer_title">Sleep Timer</string>
     <string name="settings.sleep_timer_duration_title">Sleep Timer Duration</string>
     <string name="settings.sleep_timer_off">Off</string>
