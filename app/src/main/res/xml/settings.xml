@@ -38,6 +38,11 @@
 	</PreferenceScreen>
 
 	<PreferenceScreen
+		android:title="@string/settings.podcast_title"
+		android:key="podcast">
+	</PreferenceScreen>
+
+	<PreferenceScreen
 		android:title="@string/settings.advanced_title"
 		android:key="advanced">
 	</PreferenceScreen>
@@ -46,4 +51,5 @@
 		android:title="Help / Support"
 		android:key="help">
 	</PreferenceScreen>
+
 </PreferenceScreen>

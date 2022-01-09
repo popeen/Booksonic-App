@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="common.appname">Booksonic</string>
-	<string name="common.ok">OK</string>
+    <string name="common.appname">Booksonic</string>
+    <string name="common.ok">OK</string>
     <string name="common.save">Save</string>
     <string name="common.cancel">Cancel</string>
     <string name="common.play_now">Play</string>
-	<string name="common.play_shuffled">Play Shuffled</string>
+    <string name="common.play_shuffled">Play Shuffled</string>
     <string name="common.play_next">Play Next</string>
     <string name="common.play_last">Play Last</string>
-	<string name="common.download">Download</string>
+    <string name="common.download">Download</string>
     <string name="common.pin">Permanent Cache</string>
     <string name="common.delete">Delete</string>
-	<string name="common.star">Star</string>
-	<string name="common.unstar">Unstar</string>
-	<string name="common.info">Details</string>
-	<string name="common.name">Name</string>
-	<string name="common.comment">Comment</string>
-	<string name="common.public">Public</string>
-	<string name="common.play_external">Play Video</string>
-	<string name="common.stream_external">Stream Video</string>
-	<string name="common.confirm">Confirm</string>
-	<string name="common.confirm_message">Do you want to %1$s %2$s?</string>
-	<string name="common.confirm_message_cache">cache</string>
-	<string name="common.empty">No data</string>
-	<string name="common.warning">Warning</string>
-	<string name="common.close">Close</string>
-	<string name="common.false">No</string>
-	<string name="common.true">Yes</string>
-	<string name="common.never">Never</string>
+    <string name="common.star">Star</string>
+    <string name="common.unstar">Unstar</string>
+    <string name="common.info">Details</string>
+    <string name="common.name">Name</string>
+    <string name="common.comment">Comment</string>
+    <string name="common.public">Public</string>
+    <string name="common.play_external">Play Video</string>
+    <string name="common.stream_external">Stream Video</string>
+    <string name="common.confirm">Confirm</string>
+    <string name="common.confirm_message">Do you want to %1$s %2$s?</string>
+    <string name="common.confirm_message_cache">cache</string>
+    <string name="common.empty">No data</string>
+    <string name="common.warning">Warning</string>
+    <string name="common.close">Close</string>
+    <string name="common.false">No</string>
+    <string name="common.true">Yes</string>
+    <string name="common.never">Never</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
-	<string name="button_bar.playlists">Playlists</string>
+    <string name="button_bar.playlists">Playlists</string>
     <string name="button_bar.now_playing">Now Playing</string>
-	<string name="button_bar.podcasts">Podcasts</string>
-	<string name="button_bar.bookmarks">Bookmarks</string>
-	<string name="button_bar.internet_radio">Internet Radio</string>
-	<string name="button_bar.shares">Shares</string>
-	<string name="button_bar.chat">Chat</string>
-	<string name="button_bar.admin">Admin</string>
-	<string name="button_bar.downloading">Downloading</string>
-	<string name="button_bar.offline">Offline</string>
+    <string name="button_bar.podcasts">Podcasts</string>
+    <string name="button_bar.bookmarks">Bookmarks</string>
+    <string name="button_bar.internet_radio">Internet Radio</string>
+    <string name="button_bar.shares">Shares</string>
+    <string name="button_bar.chat">Chat</string>
+    <string name="button_bar.admin">Admin</string>
+    <string name="button_bar.downloading">Downloading</string>
+    <string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Welcome!</string>
     <string name="main.welcome_text">Welcome to Booksonic! The app is currently configured to use the Subsonic demo server.</string>
-	<string name="main.about_title">About Booksonic</string>
-	<string name="main.faq_title">FAQ</string>
-	<string name="main.faq_text">
+    <string name="main.about_title">About Booksonic</string>
+    <string name="main.faq_title">FAQ</string>
+    <string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Permanent Cache</font>
 		<br/>When tracks are downloaded by Booksonic, they can be deleted to make room for new downloads.  Permanently cached tracks on the other hand will never be automatically deleted.
@@ -57,74 +57,74 @@
 		<br/>In the option menu, deselect "First level authors".  This will make it so that the entire first level of directories shown will be treated like groups of authors instead of the authors themselves.
 	]]>
 	</string>
-	<string name="main.shuffle">Shuffle play</string>
+    <string name="main.shuffle">Shuffle play</string>
     <string name="main.offline">Go Offline</string>
-	<string name="main.online">Go Online</string>
+    <string name="main.online">Go Online</string>
     <string name="main.settings">Settings</string>
     <string name="main.albums_title">Book Lists</string>
-	<string name="main.albums_per_folder">Per Folder</string>
+    <string name="main.albums_per_folder">Per Folder</string>
     <string name="main.albums_newest">Recently added</string>
     <string name="main.albums_recent">Recently played</string>
     <string name="main.albums_frequent">Most played</string>
     <string name="main.albums_highest">Top rated</string>
     <string name="main.albums_starred">Starred</string>
     <string name="main.albums_random">Random</string>
-	<string name="main.albums_genres">Genres</string>
-	<string name="main.albums_year">Decades</string>
-	<string name="main.albums_alphabetical">Alphabetically</string>
-	<string name="main.videos">Videos</string>
-	<string name="main.songs_genres" translatable="false">@string/main.albums_genres</string>
-	<string name="main.songs_newest" translatable="false">@string/main.albums_newest</string>
-	<string name="main.songs_top_played">Top Played</string>
-	<string name="main.songs_recent" translatable="false">@string/main.albums_recent</string>
-	<string name="main.songs_frequent" translatable="false">@string/main.albums_frequent</string>
-	<string name="main.back_confirm">Press back again to exit</string>
-	<string name="main.scan_complete">Completed scan of Server</string>
-	<string name="main.artist">Author</string>
-	<string name="main.title">Title</string>
+    <string name="main.albums_genres">Genres</string>
+    <string name="main.albums_year">Decades</string>
+    <string name="main.albums_alphabetical">Alphabetically</string>
+    <string name="main.videos">Videos</string>
+    <string name="main.songs_genres" translatable="false">@string/main.albums_genres</string>
+    <string name="main.songs_newest" translatable="false">@string/main.albums_newest</string>
+    <string name="main.songs_top_played">Top Played</string>
+    <string name="main.songs_recent" translatable="false">@string/main.albums_recent</string>
+    <string name="main.songs_frequent" translatable="false">@string/main.albums_frequent</string>
+    <string name="main.back_confirm">Press back again to exit</string>
+    <string name="main.scan_complete">Completed scan of Server</string>
+    <string name="main.artist">Author</string>
+    <string name="main.title">Title</string>
 
-	<string name="menu.search">Search</string>
-	<string name="menu.shuffle">Shuffle</string>
-	<string name="menu.refresh">Refresh</string>
-	<string name="menu.play">Play</string>
-	<string name="menu.play_last">Play Last</string>
+    <string name="menu.search">Search</string>
+    <string name="menu.shuffle">Shuffle</string>
+    <string name="menu.refresh">Refresh</string>
+    <string name="menu.play">Play</string>
+    <string name="menu.play_last">Play Last</string>
     <string name="menu.exit">Exit</string>
     <string name="menu.settings">Settings</string>
     <string name="menu.help">Help</string>
-	<string name="menu.about">About</string>
-	<string name="menu.add_playlist">Add To Playlist</string>
-	<string name="menu.remove_playlist">Remove From Playlist</string>
-	<string name="menu.deleted_playlist">Deleted playlist %s</string>
-	<string name="menu.deleted_playlist_error">Failed to delete playlist %s</string>
-	<string name="menu.log">Send Log</string>
-	<string name="menu.set_timer">Set Timer</string>
-	<string name="menu.check_podcasts">Check For New Episodes</string>
-	<string name="menu.add_podcast">Add Podcast url or name</string>
-	<string name="menu.keep_synced">Keep Synced</string>
-	<string name="menu.stop_sync">Stop syncing</string>
-	<string name="menu.show_all">Show all songs</string>
-	<string name="menu.show_artist">Show Author</string>
-	<string name="menu.share">Share</string>
-	<string name="menu.delete_cache">Delete from downloads</string>
-	<string name="menu.cast">Cast To Device</string>
-	<string name="menu.faq">FAQ</string>
-	<string name="menu.add_user">Add User</string>
-	<string name="menu.rescan">Rescan Server</string>
-	<string name="menu.rate">Set Rating</string>
-	<string name="menu.top_tracks">Last.FM Top Tracks</string>
-	<string name="menu.similar_artists">Similar Author</string>
-	<string name="menu.similar_artists.missing">Missing Artists</string>
-	<string name="menu.start_radio">Start Radio</string>
-	<string name="menu.first_level_artist">First level authors</string>
+    <string name="menu.about">About</string>
+    <string name="menu.add_playlist">Add To Playlist</string>
+    <string name="menu.remove_playlist">Remove From Playlist</string>
+    <string name="menu.deleted_playlist">Deleted playlist %s</string>
+    <string name="menu.deleted_playlist_error">Failed to delete playlist %s</string>
+    <string name="menu.log">Send Log</string>
+    <string name="menu.set_timer">Set Timer</string>
+    <string name="menu.check_podcasts">Check For New Episodes</string>
+    <string name="menu.add_podcast">Add Podcast url or name</string>
+    <string name="menu.keep_synced">Keep Synced</string>
+    <string name="menu.stop_sync">Stop syncing</string>
+    <string name="menu.show_all">Show all songs</string>
+    <string name="menu.show_artist">Show Author</string>
+    <string name="menu.share">Share</string>
+    <string name="menu.delete_cache">Delete from downloads</string>
+    <string name="menu.cast">Cast To Device</string>
+    <string name="menu.faq">FAQ</string>
+    <string name="menu.add_user">Add User</string>
+    <string name="menu.rescan">Rescan Server</string>
+    <string name="menu.rate">Set Rating</string>
+    <string name="menu.top_tracks">Last.FM Top Tracks</string>
+    <string name="menu.similar_artists">Similar Author</string>
+    <string name="menu.similar_artists.missing">Missing Artists</string>
+    <string name="menu.start_radio">Start Radio</string>
+    <string name="menu.first_level_artist">First level authors</string>
 
     <string name="playlist.label">Playlists</string>
-	<string name="playlist.update_info">Update Information</string>
-	<string name="playlist.updated_info">Updated playlist information for %s</string>
-	<string name="playlist.updated_info_error">Failed to update playlist information for %s</string>
-	<string name="playlist.overwrite">Overwrite existing playlist</string>
-	<string name="playlist.add_to">Add to Playlist</string>
-	<string name="playlist.create_new">Create New</string>
-	<string name="playlist.delete">Delete Playlist</string>
+    <string name="playlist.update_info">Update Information</string>
+    <string name="playlist.updated_info">Updated playlist information for %s</string>
+    <string name="playlist.updated_info_error">Failed to update playlist information for %s</string>
+    <string name="playlist.overwrite">Overwrite existing playlist</string>
+    <string name="playlist.add_to">Add to Playlist</string>
+    <string name="playlist.create_new">Create New</string>
+    <string name="playlist.delete">Delete Playlist</string>
 
     <string name="search.label">Search</string>
     <string name="search.title">Search</string>
@@ -134,14 +134,14 @@
     <string name="search.albums">Books</string>
     <string name="search.songs">Tracks</string>
 
-	<string name="progress.wait">Please wait...</string>
-	<string name="progress.artist_info">Loading Author Bio</string>
+    <string name="progress.wait">Please wait...</string>
+    <string name="progress.artist_info">Loading Author Bio</string>
 
-	<string name="select_album.n_selected">%d selected.</string>
-	<string name="select_album.offline">Offline</string>
-	<string name="select_album.no_sdcard">Error: No SD card available.</string>
+    <string name="select_album.n_selected">%d selected.</string>
+    <string name="select_album.offline">Offline</string>
+    <string name="select_album.no_sdcard">Error: No SD card available.</string>
     <string name="select_album.no_network">Warning: No network available.</string>
-	<string name="select_album.no_room">Warning: you only have %s left</string>
+    <string name="select_album.no_room">Warning: you only have %s left</string>
     <string name="select_album.not_licensed">Server not licensed. %d trial days left.</string>
     <string name="select_album.donate_dialog_message">Get unlimited downloads by donating to Subsonic.</string>
     <string name="select_album.donate_dialog_now">Now</string>
@@ -152,47 +152,47 @@
     <string name="offline.sync_dialog_message">Process %1$d offline scrobbles?
 		\nProcess %2$d offline stars?
 	</string>
-	<string name="offline.sync_dialog_default">Use action as default</string>
-	<string name="offline.sync_success">Successfully synced %1$d tracks</string>
-	<string name="offline.sync_partial">Successfully synced %1$d of %2$d tracks</string>
-	<string name="offline.sync_error">Failed to sync tracks</string>
+    <string name="offline.sync_dialog_default">Use action as default</string>
+    <string name="offline.sync_success">Successfully synced %1$d tracks</string>
+    <string name="offline.sync_partial">Successfully synced %1$d of %2$d tracks</string>
+    <string name="offline.sync_error">Failed to sync tracks</string>
 
-	<string name="select_genre.blank">Blank</string>
-	<string name="select_genre.songs">%d tracks</string>
-	<string name="select_genre.albums">%d books</string>
+    <string name="select_genre.blank">Blank</string>
+    <string name="select_genre.songs">%d tracks</string>
+    <string name="select_genre.albums">%d books</string>
 
-	<string name="select_podcasts.error">This podcast had an error while downloading on the server.  The server must download it first.</string>
-	<string name="select_podcasts.skipped">This podcast has not been downloaded on the server.  The server must download it first.</string>
+    <string name="select_podcasts.error">This podcast had an error while downloading on the server.  The server must download it first.</string>
+    <string name="select_podcasts.skipped">This podcast has not been downloaded on the server.  The server must download it first.</string>
     <string name="select_podcasts.initializing">This podcast channel is being initialized on the server.  Please reload after a moment.</string>
-	<string name="select_podcasts.server_download">Download on server</string>
-	<string name="select_podcasts.server_delete">Delete from server</string>
-	<string name="select_podcasts.downloading">Now downloading %s on the server</string>
-	<string name="select_podcasts.refreshing">The server is checking for new podcasts now</string>
-	<string name="select_podcasts.deleted">Deleted podcast %s</string>
-	<string name="select_podcasts.deleted_error">Failed to delete podcast %s</string>
-	<string name="select_podcasts.add_url"></string>
-	<string name="select_podcasts.add_message">If you don\'t know the RSS feed for your podcast you can enter it\'s name instead and Booksonic will try and look it up for you.</string>
-	<string name="select_podcasts.created_error">Failed to add podcast</string>
-	<string name="select_podcasts.invalid_podcast_channel">Invalid podcast channel: %s</string>
-	<string name="select_podcasts.delete">Delete podcast</string>
-	<string name="select_podcasts.channels">Podcast Channels</string>
+    <string name="select_podcasts.server_download">Download on server</string>
+    <string name="select_podcasts.server_delete">Delete from server</string>
+    <string name="select_podcasts.downloading">Now downloading %s on the server</string>
+    <string name="select_podcasts.refreshing">The server is checking for new podcasts now</string>
+    <string name="select_podcasts.deleted">Deleted podcast %s</string>
+    <string name="select_podcasts.deleted_error">Failed to delete podcast %s</string>
+    <string name="select_podcasts.add_url"></string>
+    <string name="select_podcasts.add_message">If you don\'t know the RSS feed for your podcast you can enter it\'s name instead and Booksonic will try and look it up for you.</string>
+    <string name="select_podcasts.created_error">Failed to add podcast</string>
+    <string name="select_podcasts.invalid_podcast_channel">Invalid podcast channel: %s</string>
+    <string name="select_podcasts.delete">Delete podcast</string>
+    <string name="select_podcasts.channels">Podcast Channels</string>
 
     <string name="download.empty">Playlist is empty</string>
-	<string name="download.shuffle_loading">Shuffle list is loading...</string>
+    <string name="download.shuffle_loading">Shuffle list is loading...</string>
     <string name="download.playerstate_downloading">Downloading - %s</string>
-	<string name="download.playerstate_mobile_disabled">Waiting for WiFi or local (non-roaming) network to download</string>
+    <string name="download.playerstate_mobile_disabled">Waiting for WiFi or local (non-roaming) network to download</string>
     <string name="download.playerstate_buffering">Buffering</string>
     <string name="download.playerstate_playing_shuffle">Shuffle mode</string>
-	<string name="download.playerstate_playing_artist_radio">Artist radio</string>
+    <string name="download.playerstate_playing_artist_radio">Artist radio</string>
     <string name="download.menu_show_album">Show Book</string>
     <string name="download.menu_lyrics">Lyrics</string>
-	<string name="download.menu_remove_all">Remove all</string>
+    <string name="download.menu_remove_all">Remove all</string>
     <string name="download.menu_screen_on">Screen on</string>
     <string name="download.menu_shuffle">Shuffle</string>
-	<string name="download.menu_toggle">Toggle</string>
+    <string name="download.menu_toggle">Toggle</string>
     <string name="download.menu_save">Save playlist</string>
     <string name="download.menu_shuffle_notification">Playlist was shuffled</string>
-	<string name="download.menu_remove_played_songs">Remove played tracks</string>
+    <string name="download.menu_remove_played_songs">Remove played tracks</string>
     <string name="download.playlist_title">Save playlist</string>
     <string name="download.playlist_name">Enter the playlist name:</string>
     <string name="download.playlist_saving">Saving playlist \"%s\"...</string>
@@ -207,65 +207,65 @@
     <string name="download.jukebox_server_too_old">Remote control is not supported. Please upgrade your server.</string>
     <string name="download.jukebox_offline">Remote control is not available in offline mode.</string>
     <string name="download.jukebox_not_authorized">Remote control is not allowed. Please enable jukebox mode in <b>Users &gt; Settings</b> on your server.</string>
-	<string name="download.start_timer">Start Timer</string>
-	<string name="download.stop_time_remaining">Stop in %1$s</string>
-	<string name="download.need_download">Video needs to be downloaded first</string>
-	<string name="download.no_streaming_player">No player can play this stream</string>
-	<string name="download.playing_out_of">Playing: %1$d/%2$d</string>
-	<string name="download.save_bookmark_title">Create bookmark</string>
-	<string name="download.save_bookmark">Bookmark created</string>
-	<string name="download.save_bookmark_failed">Failed to create bookmark</string>
-	<string name="download.downloading_title">Downloading %1$d tracks</string>
-	<string name="download.downloading_summary">Current: %1$s</string>
-	<string name="download.downloading_summary_expanded">Current: %1$s
+    <string name="download.start_timer">Start Timer</string>
+    <string name="download.stop_time_remaining">Stop in %1$s</string>
+    <string name="download.need_download">Video needs to be downloaded first</string>
+    <string name="download.no_streaming_player">No player can play this stream</string>
+    <string name="download.playing_out_of">Playing: %1$d/%2$d</string>
+    <string name="download.save_bookmark_title">Create bookmark</string>
+    <string name="download.save_bookmark">Bookmark created</string>
+    <string name="download.save_bookmark_failed">Failed to create bookmark</string>
+    <string name="download.downloading_title">Downloading %1$d tracks</string>
+    <string name="download.downloading_summary">Current: %1$s</string>
+    <string name="download.downloading_summary_expanded">Current: %1$s
 		\nEstimated Size: %2$s</string>
-	<string name="download.failed_to_load">Failed to load</string>
-	<string name="download.restore_play_queue">continue from where you left off on another device at</string>
-	<string name="download.thumbs_up">Thumbs Up</string>
-	<string name="download.thumbs_down">Thumbs Down</string>
-	<string name="download.batch_mode">Batch Mode</string>
-	<string name="download.playback_speed_half" translatable="false">0.5x</string>
-	<string name="download.playback_speed_normal" translatable="false">1x</string>
-	<string name="download_playback_speed_one_p_two" translatable="false">1.2x</string>
-	<string name="download_playback_speed_one_p_five" translatable="false">1.5x</string>
-	<string name="download_playback_speed_two" translatable="false">2x</string>
-	<string name="download.playback_speed_custom">Custom</string>
+    <string name="download.failed_to_load">Failed to load</string>
+    <string name="download.restore_play_queue">continue from where you left off on another device at</string>
+    <string name="download.thumbs_up">Thumbs Up</string>
+    <string name="download.thumbs_down">Thumbs Down</string>
+    <string name="download.batch_mode">Batch Mode</string>
+    <string name="download.playback_speed_half" translatable="false">0.5x</string>
+    <string name="download.playback_speed_normal" translatable="false">1x</string>
+    <string name="download_playback_speed_one_p_two" translatable="false">1.2x</string>
+    <string name="download_playback_speed_one_p_five" translatable="false">1.5x</string>
+    <string name="download_playback_speed_two" translatable="false">2x</string>
+    <string name="download.playback_speed_custom">Custom</string>
 
-	<string name="sync.new_podcasts">New podcasts available</string>
-	<string name="sync.new_playlists">New tracks in playlists</string>
-	<string name="sync.new_albums">New books available</string>
-	<string name="sync.new_starred">New starred tracks available</string>
+    <string name="sync.new_podcasts">New podcasts available</string>
+    <string name="sync.new_playlists">New tracks in playlists</string>
+    <string name="sync.new_albums">New books available</string>
+    <string name="sync.new_starred">New starred tracks available</string>
 
-	<string name="starring_content_starred">Starred \"%s\"</string>
-	<string name="starring_content_unstarred">Unstarred \"%s\"</string>
+    <string name="starring_content_starred">Starred \"%s\"</string>
+    <string name="starring_content_unstarred">Unstarred \"%s\"</string>
     <string name="starring_content_error">Failed to update \"%s\", please try later.</string>
 
-	<string name="playlist.mine">My Playlists</string>
-	<string name="playlist.shared">Shared Playlists</string>
-	<string name="playlist_error">Failed to grab list of playlists</string>
-	<string name="updated_playlist">Added %1$s tracks to \"%2$s\"</string>
+    <string name="playlist.mine">My Playlists</string>
+    <string name="playlist.shared">Shared Playlists</string>
+    <string name="playlist_error">Failed to grab list of playlists</string>
+    <string name="updated_playlist">Added %1$s tracks to \"%2$s\"</string>
     <string name="updated_playlist_error">Failed to update \"%s\", please try later.</string>
-	<string name="removed_playlist">Removed %1$s tracks from \"%2$s\"</string>
+    <string name="removed_playlist">Removed %1$s tracks from \"%2$s\"</string>
 
-	<string name="bookmark.delete">Delete bookmark</string>
-	<string name="bookmark.delete_title">Delete the bookmark for</string>
-	<string name="bookmark.deleted">Deleted the bookmark for \"%s\"</string>
-	<string name="bookmark.deleted_error">Failed to delete the bookmark for \"%s\"</string>
-	<string name="bookmark.details_title">Bookmark Details</string>
-	<string name="bookmark.resume_title">Resume playing?</string>
-	<string name="bookmark.resume">Resume playing \'%1$s\' from %2$s</string>
-	<string name="bookmark.action_resume">Resume</string>
-	<string name="bookmark.action_start_over">Start Over</string>
+    <string name="bookmark.delete">Delete bookmark</string>
+    <string name="bookmark.delete_title">Delete the bookmark for</string>
+    <string name="bookmark.deleted">Deleted the bookmark for \"%s\"</string>
+    <string name="bookmark.deleted_error">Failed to delete the bookmark for \"%s\"</string>
+    <string name="bookmark.details_title">Bookmark Details</string>
+    <string name="bookmark.resume_title">Resume playing?</string>
+    <string name="bookmark.resume">Resume playing \'%1$s\' from %2$s</string>
+    <string name="bookmark.action_resume">Resume</string>
+    <string name="bookmark.action_start_over">Start Over</string>
 
-	<string name="rating.title">Rate \"%s\"</string>
-	<string name="rating.set_rating">Rating set for \"%s\"</string>
-	<string name="rating.set_rating_failed">Failed to set rating for \"%s\"</string>
-	<string name="rating.remove_rating">Rating removed for \"%s\"</string>
-	<string name="rating.remove_rating_failed">Failed to remove rating for \"%s\"</string>
+    <string name="rating.title">Rate \"%s\"</string>
+    <string name="rating.set_rating">Rating set for \"%s\"</string>
+    <string name="rating.set_rating_failed">Failed to set rating for \"%s\"</string>
+    <string name="rating.remove_rating">Rating removed for \"%s\"</string>
+    <string name="rating.remove_rating_failed">Failed to remove rating for \"%s\"</string>
 
-	<string name="song_details.error">Error</string>
-	<string name="song_details.skipped">Skipped</string>
-	<string name="song_details.downloading">Downloading</string>
+    <string name="song_details.error">Error</string>
+    <string name="song_details.skipped">Skipped</string>
+    <string name="song_details.downloading">Downloading</string>
 
     <string name="lyrics.nomatch">No lyrics found</string>
 
@@ -274,64 +274,67 @@
     <string name="settings.title">Settings</string>
 
 
-	<string name="settings.advanced_screen_title">Advanced</string>
-	<string name="settings.advanced_title">Advanced</string>
+    <string name="settings.advanced_screen_title">Advanced</string>
+    <string name="settings.advanced_title">Advanced</string>
+
+    <string name="settings.podcast_screen_title">Podcast</string>
+    <string name="settings.podcast_title">Podcast</string>
 
     <string name="settings.test_connection_title">Test connection</string>
-	<string name="settings.servers_add">Add Server</string>
-	<string name="settings.servers_remove">Remove Server</string>
+    <string name="settings.servers_add">Add Server</string>
+    <string name="settings.servers_remove">Remove Server</string>
     <string name="settings.servers_title">Servers</string>
     <string name="settings.server_unused">Unused</string>
     <string name="settings.server_name">Name</string>
     <string name="settings.server_address">Global network address</string>
-	<string name="settings.server_local_network_ssid" >Local network SSID</string>
-	<string name="settings.server_local_network_ssid_hint">Current SSID: %s</string>
-	<string name="settings.server_internal_address">Local network address</string>
+    <string name="settings.server_local_network_ssid">Local network SSID</string>
+    <string name="settings.server_local_network_ssid_hint">Current SSID: %s</string>
+    <string name="settings.server_internal_address">Local network address</string>
     <string name="settings.server_username">Username</string>
     <string name="settings.server_password">Password</string>
-	<string name="settings.server_open_browser">Open in browser</string>
-	<string name="settings.server_sync_summary">Whether or not the sync settings should be used on this server. Used for automatic downloading of new books etc. See Settings -> Sync.</string>
-	<string name="settings.server_sync">Sync Enabled</string>
-	<string name="settings.server_authheaders_summary">If this is enabled the request headers will include Authorization: Basic. Only needed on some third party servers.</string>
-	<string name="settings.server_authheaders">Authorization Basic headers</string>
-	<string name="settings.server_help">Help / Instructions</string>
+    <string name="settings.server_open_browser">Open in browser</string>
+    <string name="settings.server_sync_summary">Whether or not the sync settings should be used on this server. Used for automatic downloading of new books etc. See Settings -> Sync.</string>
+    <string name="settings.server_sync">Sync Enabled</string>
+    <string name="settings.server_authheaders_summary">If this is enabled the request headers will include Authorization: Basic. Only needed on some third party servers.</string>
+    <string name="settings.server_authheaders">Authorization Basic headers</string>
+    <string name="settings.server_help">Help / Instructions</string>
     <string name="settings.cache_title">Cache</string>
 
     <string name="settings.preload_wifi">Tracks to preload (Wifi)</string>
-	<string name="settings.preload_mobile">Tracks to preload (Mobile)</string>
+    <string name="settings.preload_mobile">Tracks to preload (Mobile)</string>
     <string name="settings.cache_size">Download storage size</string>
     <string name="settings.cache_location">Download location</string>
     <string name="settings.cache_location_error">Invalid cache location. Using default.</string>
     <string name="settings.cache_location_reset">The cache location you have set is no longer writable. If you recently upgraded your phone OS to KitKat 4.4, then the way apps write to the SD Card has changed so that they can only write to a specific location.  The location that Booksonic uses has already been automatically changed to the correct location.  In order to delete all of the old app data, you will need to mount the SD Card on your computer and delete the old folder manually</string>
-	<string name="settings.cache_location_internal">Internal</string>
-	<string name="settings.cache_location_external">External</string>
-	<string name="settings.cache_clear">Clear Downloads</string>
-	<string name="settings.cache_clear_complete">Finished clearing downloads</string>
+    <string name="settings.cache_location_internal">Internal</string>
+    <string name="settings.cache_location_external">External</string>
+    <string name="settings.cache_clear">Clear Downloads</string>
+    <string name="settings.cache_clear_complete">Finished clearing downloads</string>
     <string name="settings.testing_connection">Testing connection...</string>
     <string name="settings.testing_ok">Connection is OK</string>
     <string name="settings.testing_unlicensed">Connection is OK. Server unlicensed.</string>
     <string name="settings.connection_failure">Connection failure.</string>
-	<string name="settings.connection_username_password_wrong">Username or password is incorrect</string>
+    <string name="settings.connection_username_password_wrong">Username or password is incorrect</string>
     <string name="settings.invalid_url">Please specify a valid URL.</string>
     <string name="settings.invalid_username">Please specify a valid username (no trailing spaces).</string>
     <string name="settings.appearance_title">Appearance</string>
     <string name="settings.theme_title">Theme</string>
     <string name="settings.theme_light">Light</string>
     <string name="settings.theme_dark">Dark</string>
-	<string name="settings.theme_fullscreen">Fullscreen</string>
-	<string name="settings.theme_fullscreen_summary">Hide as many UI elements as Android will allow</string>
-	<string name="settings.track_title">Display Track #</string>
+    <string name="settings.theme_fullscreen">Fullscreen</string>
+    <string name="settings.theme_fullscreen_summary">Hide as many UI elements as Android will allow</string>
+    <string name="settings.track_title">Display Track #</string>
 
-	<string name="settings.track_summary">Display Track # in front of tracks if one exists</string>
-	<string name="settings.custom_sort">Sort By Year</string>
-	<string name="settings.custom_sort_summary">Sort books by year, or by alphabetical</string>
-	<string name="settings.open_to_tab">Open To Tab</string>
-	<string name="settings.open_to_tab_summary">Open directly to this tab</string>
+    <string name="settings.track_summary">Display Track # in front of tracks if one exists</string>
+    <string name="settings.custom_sort">Sort By Year</string>
+    <string name="settings.custom_sort_summary">Sort books by year, or by alphabetical</string>
+    <string name="settings.open_to_tab">Open To Tab</string>
+    <string name="settings.open_to_tab_summary">Open directly to this tab</string>
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max bitrate - Mobile</string>
     <string name="settings.max_bitrate_32" translatable="false">32 Kbps</string>
-	<string name="settings.max_bitrate_48" translatable="false">48 Kbps</string>
+    <string name="settings.max_bitrate_48" translatable="false">48 Kbps</string>
     <string name="settings.max_bitrate_64" translatable="false">64 Kbps</string>
     <string name="settings.max_bitrate_80" translatable="false">80 Kbps</string>
     <string name="settings.max_bitrate_96" translatable="false">96 Kbps</string>
@@ -341,9 +344,9 @@
     <string name="settings.max_bitrate_192" translatable="false">192 Kbps</string>
     <string name="settings.max_bitrate_256" translatable="false">256 Kbps</string>
     <string name="settings.max_bitrate_320" translatable="false">320 Kbps</string>
-	<string name="settings.max_video_bitrate_wifi">Max Video bitrate - Wi-Fi</string>
+    <string name="settings.max_video_bitrate_wifi">Max Video bitrate - Wi-Fi</string>
     <string name="settings.max_video_bitrate_mobile">Max Video bitrate - Mobile</string>
-	<string name="settings.max_video_bitrate_200" translatable="false">200 Kbps</string>
+    <string name="settings.max_video_bitrate_200" translatable="false">200 Kbps</string>
     <string name="settings.max_video_bitrate_300" translatable="false">300 Kbps</string>
     <string name="settings.max_video_bitrate_400" translatable="false">400 Kbps</string>
     <string name="settings.max_video_bitrate_500" translatable="false">500 Kbps</string>
@@ -358,19 +361,19 @@
     <string name="settings.wifi_required_summary">Only stream media if connected to Wi-Fi</string>
     <string name="settings.local_network_required_title">Don\'t stream when roaming</string>
     <string name="settings.local_network_required_summary">Don\'t stream media while roaming</string>
-	<string name="settings.network_timeout_title">Network Timeout</string>
-	<string name="settings.network_timeout_10000">10 seconds</string>
-	<string name="settings.network_timeout_15000">15 seconds</string>
-	<string name="settings.network_timeout_30000">30 seconds</string>
-	<string name="settings.network_timeout_45000">45 seconds</string>
-	<string name="settings.network_timeout_60000">60 seconds</string>
+    <string name="settings.network_timeout_title">Network Timeout</string>
+    <string name="settings.network_timeout_10000">10 seconds</string>
+    <string name="settings.network_timeout_15000">15 seconds</string>
+    <string name="settings.network_timeout_30000">30 seconds</string>
+    <string name="settings.network_timeout_45000">45 seconds</string>
+    <string name="settings.network_timeout_60000">60 seconds</string>
     <string name="settings.preload_0">0 tracks</string>
     <string name="settings.preload_1">1 track</string>
     <string name="settings.preload_2">2 tracks</string>
     <string name="settings.preload_3">3 tracks</string>
     <string name="settings.preload_5">5 tracks</string>
     <string name="settings.preload_10">10 tracks</string>
-	<string name="settings.preload_unlimited">Unlimited</string>
+    <string name="settings.preload_unlimited">Unlimited</string>
     <string name="settings.clear_search_history">Clear search history</string>
     <string name="settings.search_history_cleared">Search history cleared</string>
     <string name="settings.other_title">Other settings</string>
@@ -384,192 +387,192 @@
     <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>
     <string name="settings.screen_lit_title">Keep screen on</string>
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
-	<string name="settings.playlist_title">Play</string>
-	<string name="settings.playlist_random_size_title">Shuffle Playlist Size</string>
-	<string name="settings.sleep_timer_title">Sleep Timer</string>
-	<string name="settings.sleep_timer_duration_title">Sleep Timer Duration</string>
-	<string name="settings.sleep_timer_off">Off</string>
-	<string name="settings.sleep_timer_on">On</string>
-	<string name="settings.sleep_timer_always_on">Always On</string>
-	<string name="settings.temp_loss_title">Temporary Loss of Focus</string>
-	<string name="settings.temp_loss_pause">Always Pause</string>
-	<string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
-	<string name="settings.temp_loss_lower">Always lower volume</string>
-	<string name="settings.temp_loss_nothing">Do Nothing</string>
-	<string name="settings.keep_played_count_title">Keep played tracks on phone</string>
-	<string name="settings.keep_played_count_none">Remove all played tracks</string>
-	<string name="settings.keep_played_count_one">Keep last played tracks</string>
-	<string name="settings.keep_played_count_two">Keep 2 played tracks</string>
-	<string name="settings.keep_played_count_three">Keep 3 played tracks</string>
-	<string name="settings.disconnect_pause_title">Pause on Disconnect</string>
-	<string name="settings.disconnect_pause_both">Pause</string>
-	<string name="settings.disconnect_pause_neither">Do Nothing</string>
-	<string name="settings.persistent_title">Persistent Notification</string>
-	<string name="settings.persistent_summary">Show the notification even after pausing.  Press the stop button to clear it away.</string>
-	<string name="settings.podcastplaylist_title">Handle podcasts as playlists</string>
-	<string name="settings.podcastplaylist_summary">When enabled podcasts will work just like books and add all the following episodes to the playlist and not just the selected one.</string>
-	<string name="settings.gapless_playback">Gapless Playback</string>
-	<string name="settings.gapless_playback_summary">If you are seeing strange bugs during playback, turning this off may help.</string>
-	<string name="settings.chat_refresh">Chat Refresh Rate (Secs)</string>
-	<string name="settings.chat_enabled">Chat Enabled</string>
-	<string name="settings.chat_enabled_summary">Whether or not to display the chat listing in the pull out drawer</string>
-	<string name="settings.video_title">Video</string>
-	<string name="settings.video_player">Video Player</string>
-	<string name="settings.video_raw">Raw (Requires Subsonic 4.8+)</string>
-	<string name="settings.video_hls">HTTP Live Stream (HLS) (Requires Subsonic 4.8+)</string>
-	<string name="settings.video_transcode">Direct Transcode (Requires video -> mp4 or similar setup on Server)</string>
-	<string name="settings.video_flash">Flash (Requires Plugin)</string>
-	<string name="settings.cache_screen_title">Download/Network</string>
-	<string name="settings.playback_title">Playback</string>
-	<string name="settings.hide_widget_title">Hide Widget</string>
-	<string name="settings.hide_widget_summary">Hide widget after exiting app</string>
-	<string name="settings.podcasts_enabled">Podcasts</string>
-	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
-	<string name="settings.bookmarks_enabled">Bookmarks</string>
-	<string name="settings.bookmarks_enabled_summary">Whether or not to display the bookmarks listing in the pull out drawer</string>
-	<string name="settings.internet_radio_enabled">Internet Radio Enabled</string>
-	<string name="settings.internet_radio_enabled_summary">Whether or not to display the internet radio listing in the pull out drawer</string>
-	<string name="settings.shares_enabled">Shares Enabled</string>
-	<string name="settings.shares_enabled_summary">Whether or not to display the shares listing in the pull out drawer</string>
-	<string name="settings.sync_title">Sync</string>
-	<string name="settings.sync_enabled">Sync Enabled</string>
-	<string name="settings.sync_enabled_summary">Whether or not playlists and podcasts are periodically checked for changes</string>
-	<string name="settings.sync_interval">Sync Interval</string>
-	<string name="settings.sync_interval_15">15 Minutes</string>
-	<string name="settings.sync_interval_30">30 Minutes</string>
-	<string name="settings.sync_interval_60">1 Hour</string>
-	<string name="settings.sync_interval_120">2 Hours</string>
-	<string name="settings.sync_interval_240">4 Hours</string>
-	<string name="settings.sync_interval_360">6 Hours</string>
-	<string name="settings.sync_interval_720">12 Hours</string>
-	<string name="settings.sync_interval_1440">Daily</string>
-	<string name="settings.sync_wifi">Sync on Wifi only</string>
-	<string name="settings.sync_wifi_summary">Only sync while on wifi</string>
-	<string name="settings.sync_most_recent">Download Recently Added</string>
-	<string name="settings.sync_most_recent_summary">Automatically download newly added books</string>
-	<string name="settings.sync_starred">Download Starred</string>
-	<string name="settings.sync_starred_summary">Automatically download books, and authors which are starred</string>
-	<string name="settings.sync_notification">Show Sync Notification</string>
-	<string name="settings.sync_notification_summary">Show a notification after new media has been synced</string>
-	<string name="settings.menu_options.title">Optional Menu Options</string>
-	<string name="settings.menu_options.play_now_summary">Show Now in menus</string>
-	<string name="settings.menu_options.play_shuffled_summary">Show Shuffled in menus</string>
-	<string name="settings.menu_options.play_next_summary">Show Play Next in menus</string>
-	<string name="settings.menu_options.play_last_summary">Show Play Last in menus</string>
-	<string name="settings.menu_options.download_summary">Show Download in menus</string>
-	<string name="settings.menu_options.pin_summary">Show Permanent Cache in menus</string>
-	<string name="settings.menu_options.delete_summary">Show Delete in menus</string>
-	<string name="settings.menu_options.star_summary">Show Star in menus</string>
-	<string name="settings.menu_options.shared_summary">Show Share in menus</string>
-	<string name="settings.menu_options.rate_summary">Show Rating in menus</string>
-	<string name="settings.browse_by_tags">Browse By Tags</string>
-	<string name="settings.browse_by_tags_summary">Browse by tags instead of by folder structure.</string>
-	<string name="settings.disable_exit_prompt">Disable Exit Prompt</string>
-	<string name="settings.disable_exit_prompt_summary">Exit the app immediately upon pressing back from the home screen</string>
-	<string name="settings.override_system_language">Override System Language</string>
-	<string name="settings.override_system_language_summary">Display app in english even if the system language is something Booksonic has a translation for.  May need to clear the app from memory for changes to take affect.</string>
-	<string name="settings.drawer_items_title">Drawer Tabs</string>
-	<string name="settings.song_press_action">Track Press Action</string>
-	<string name="settings.song_press_play_single">Play only that track</string>
-	<string name="settings.song_press_play_all">Adds everything in the book to the Now Playing Queue</string>
-	<string name="settings.song_press_play_next">Adds track as next track</string>
-	<string name="settings.song_press_play_last">Adds track to end of Now Playing Queue</string>
-	<string name="settings.large_album_art">Large Cover Art</string>
-	<string name="settings.large_album_art_summary">Display books with large cover art instead of in a list</string>
-	<string name="settings.admin_enabled">Admin</string>
-	<string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
-	<string name="settings.replay_gain">Replay Gain</string>
-	<string name="settings.replay_gain_summary">Whether or not to scale playback volume by track and book replay gain tags</string>
-	<string name="settings.replay_gain_type">Read from tags</string>
-	<string name="settings.replay_gain_type.smart">Smart detection</string>
-	<string name="settings.replay_gain_type.album">Book tags</string>
-	<string name="settings.replay_gain_type.track">Track tags</string>
-	<string name="settings.replay_gain_bump">Replay Gain Pre-amp</string>
-	<string name="settings.replay_gain_untagged">Tracks without Replay Gain</string>
-	<string name="settings.casting">Casting</string>
-	<string name="settings.casting_proxy">Use device as proxy</string>
-	<string name="settings.casting_proxy_summary">Stream everything through the device as a proxy.  This gets around issues such as using self-signed certificates that are not trusted by the cast device.</string>
-	<string name="settings.rename_duplicates">Rename duplicate tracks</string>
-	<string name="settings.rename_duplicates_summary">Rename duplicate tracks to the original filename so you can tell them apart.</string>
-	<string name="settings.start_on_headphones">Start on headphones</string>
-	<string name="settings.start_on_headphones_summary">Start when headphones are plugged in.  This requires the use of a service which starts on boot up to check for the headphone plug event even when Booksonic is not running.</string>
-	<string name="settings.color_action_bar">Color Action Bar</string>
-	<string name="settings.color_action_bar.summary">Color the action bar and status bar or leave them alone</string>
-	<string name="settings.shuffle_by_album">Shuffle By Book</string>
-	<string name="settings.shuffle_by_album.true">Shuffle order of books</string>
-	<string name="settings.shuffle_by_album.false">Shuffle all tracks together</string>
-	<string name="settings.casting_stream_original">Stream original</string>
-	<string name="settings.casting_stream_original_summary">Stream original files where supported by cast device</string>
-	<string name="settings.casting_cache">Cache While Casting</string>
-	<string name="settings.casting_cache_summary">Cache currently playing songs while casting</string>
-	<string name="settings.casting.dlna_casting_enabled">DLNA Enabled</string>
-	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems try turning this off</string>
+    <string name="settings.playlist_title">Play</string>
+    <string name="settings.playlist_random_size_title">Shuffle Playlist Size</string>
+    <string name="settings.sleep_timer_title">Sleep Timer</string>
+    <string name="settings.sleep_timer_duration_title">Sleep Timer Duration</string>
+    <string name="settings.sleep_timer_off">Off</string>
+    <string name="settings.sleep_timer_on">On</string>
+    <string name="settings.sleep_timer_always_on">Always On</string>
+    <string name="settings.temp_loss_title">Temporary Loss of Focus</string>
+    <string name="settings.temp_loss_pause">Always Pause</string>
+    <string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
+    <string name="settings.temp_loss_lower">Always lower volume</string>
+    <string name="settings.temp_loss_nothing">Do Nothing</string>
+    <string name="settings.keep_played_count_title">Keep played tracks on phone</string>
+    <string name="settings.keep_played_count_none">Remove all played tracks</string>
+    <string name="settings.keep_played_count_one">Keep last played tracks</string>
+    <string name="settings.keep_played_count_two">Keep 2 played tracks</string>
+    <string name="settings.keep_played_count_three">Keep 3 played tracks</string>
+    <string name="settings.disconnect_pause_title">Pause on Disconnect</string>
+    <string name="settings.disconnect_pause_both">Pause</string>
+    <string name="settings.disconnect_pause_neither">Do Nothing</string>
+    <string name="settings.persistent_title">Persistent Notification</string>
+    <string name="settings.persistent_summary">Show the notification even after pausing.  Press the stop button to clear it away.</string>
+    <string name="settings.podcastplaylist_title">Handle podcasts as playlists</string>
+    <string name="settings.podcastplaylist_summary">When enabled podcasts will work just like books and add all the following episodes to the playlist and not just the selected one.</string>
+    <string name="settings.gapless_playback">Gapless Playback</string>
+    <string name="settings.gapless_playback_summary">If you are seeing strange bugs during playback, turning this off may help.</string>
+    <string name="settings.chat_refresh">Chat Refresh Rate (Secs)</string>
+    <string name="settings.chat_enabled">Chat Enabled</string>
+    <string name="settings.chat_enabled_summary">Whether or not to display the chat listing in the pull out drawer</string>
+    <string name="settings.video_title">Video</string>
+    <string name="settings.video_player">Video Player</string>
+    <string name="settings.video_raw">Raw (Requires Subsonic 4.8+)</string>
+    <string name="settings.video_hls">HTTP Live Stream (HLS) (Requires Subsonic 4.8+)</string>
+    <string name="settings.video_transcode">Direct Transcode (Requires video -> mp4 or similar setup on Server)</string>
+    <string name="settings.video_flash">Flash (Requires Plugin)</string>
+    <string name="settings.cache_screen_title">Download/Network</string>
+    <string name="settings.playback_title">Playback</string>
+    <string name="settings.hide_widget_title">Hide Widget</string>
+    <string name="settings.hide_widget_summary">Hide widget after exiting app</string>
+    <string name="settings.podcasts_enabled">Podcasts</string>
+    <string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
+    <string name="settings.bookmarks_enabled">Bookmarks</string>
+    <string name="settings.bookmarks_enabled_summary">Whether or not to display the bookmarks listing in the pull out drawer</string>
+    <string name="settings.internet_radio_enabled">Internet Radio Enabled</string>
+    <string name="settings.internet_radio_enabled_summary">Whether or not to display the internet radio listing in the pull out drawer</string>
+    <string name="settings.shares_enabled">Shares Enabled</string>
+    <string name="settings.shares_enabled_summary">Whether or not to display the shares listing in the pull out drawer</string>
+    <string name="settings.sync_title">Sync</string>
+    <string name="settings.sync_enabled">Sync Enabled</string>
+    <string name="settings.sync_enabled_summary">Whether or not playlists and podcasts are periodically checked for changes</string>
+    <string name="settings.sync_interval">Sync Interval</string>
+    <string name="settings.sync_interval_15">15 Minutes</string>
+    <string name="settings.sync_interval_30">30 Minutes</string>
+    <string name="settings.sync_interval_60">1 Hour</string>
+    <string name="settings.sync_interval_120">2 Hours</string>
+    <string name="settings.sync_interval_240">4 Hours</string>
+    <string name="settings.sync_interval_360">6 Hours</string>
+    <string name="settings.sync_interval_720">12 Hours</string>
+    <string name="settings.sync_interval_1440">Daily</string>
+    <string name="settings.sync_wifi">Sync on Wifi only</string>
+    <string name="settings.sync_wifi_summary">Only sync while on wifi</string>
+    <string name="settings.sync_most_recent">Download Recently Added</string>
+    <string name="settings.sync_most_recent_summary">Automatically download newly added books</string>
+    <string name="settings.sync_starred">Download Starred</string>
+    <string name="settings.sync_starred_summary">Automatically download books, and authors which are starred</string>
+    <string name="settings.sync_notification">Show Sync Notification</string>
+    <string name="settings.sync_notification_summary">Show a notification after new media has been synced</string>
+    <string name="settings.menu_options.title">Optional Menu Options</string>
+    <string name="settings.menu_options.play_now_summary">Show Now in menus</string>
+    <string name="settings.menu_options.play_shuffled_summary">Show Shuffled in menus</string>
+    <string name="settings.menu_options.play_next_summary">Show Play Next in menus</string>
+    <string name="settings.menu_options.play_last_summary">Show Play Last in menus</string>
+    <string name="settings.menu_options.download_summary">Show Download in menus</string>
+    <string name="settings.menu_options.pin_summary">Show Permanent Cache in menus</string>
+    <string name="settings.menu_options.delete_summary">Show Delete in menus</string>
+    <string name="settings.menu_options.star_summary">Show Star in menus</string>
+    <string name="settings.menu_options.shared_summary">Show Share in menus</string>
+    <string name="settings.menu_options.rate_summary">Show Rating in menus</string>
+    <string name="settings.browse_by_tags">Browse By Tags</string>
+    <string name="settings.browse_by_tags_summary">Browse by tags instead of by folder structure.</string>
+    <string name="settings.disable_exit_prompt">Disable Exit Prompt</string>
+    <string name="settings.disable_exit_prompt_summary">Exit the app immediately upon pressing back from the home screen</string>
+    <string name="settings.override_system_language">Override System Language</string>
+    <string name="settings.override_system_language_summary">Display app in english even if the system language is something Booksonic has a translation for.  May need to clear the app from memory for changes to take affect.</string>
+    <string name="settings.drawer_items_title">Drawer Tabs</string>
+    <string name="settings.song_press_action">Track Press Action</string>
+    <string name="settings.song_press_play_single">Play only that track</string>
+    <string name="settings.song_press_play_all">Adds everything in the book to the Now Playing Queue</string>
+    <string name="settings.song_press_play_next">Adds track as next track</string>
+    <string name="settings.song_press_play_last">Adds track to end of Now Playing Queue</string>
+    <string name="settings.large_album_art">Large Cover Art</string>
+    <string name="settings.large_album_art_summary">Display books with large cover art instead of in a list</string>
+    <string name="settings.admin_enabled">Admin</string>
+    <string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
+    <string name="settings.replay_gain">Replay Gain</string>
+    <string name="settings.replay_gain_summary">Whether or not to scale playback volume by track and book replay gain tags</string>
+    <string name="settings.replay_gain_type">Read from tags</string>
+    <string name="settings.replay_gain_type.smart">Smart detection</string>
+    <string name="settings.replay_gain_type.album">Book tags</string>
+    <string name="settings.replay_gain_type.track">Track tags</string>
+    <string name="settings.replay_gain_bump">Replay Gain Pre-amp</string>
+    <string name="settings.replay_gain_untagged">Tracks without Replay Gain</string>
+    <string name="settings.casting">Casting</string>
+    <string name="settings.casting_proxy">Use device as proxy</string>
+    <string name="settings.casting_proxy_summary">Stream everything through the device as a proxy.  This gets around issues such as using self-signed certificates that are not trusted by the cast device.</string>
+    <string name="settings.rename_duplicates">Rename duplicate tracks</string>
+    <string name="settings.rename_duplicates_summary">Rename duplicate tracks to the original filename so you can tell them apart.</string>
+    <string name="settings.start_on_headphones">Start on headphones</string>
+    <string name="settings.start_on_headphones_summary">Start when headphones are plugged in.  This requires the use of a service which starts on boot up to check for the headphone plug event even when Booksonic is not running.</string>
+    <string name="settings.color_action_bar">Color Action Bar</string>
+    <string name="settings.color_action_bar.summary">Color the action bar and status bar or leave them alone</string>
+    <string name="settings.shuffle_by_album">Shuffle By Book</string>
+    <string name="settings.shuffle_by_album.true">Shuffle order of books</string>
+    <string name="settings.shuffle_by_album.false">Shuffle all tracks together</string>
+    <string name="settings.casting_stream_original">Stream original</string>
+    <string name="settings.casting_stream_original_summary">Stream original files where supported by cast device</string>
+    <string name="settings.casting_cache">Cache While Casting</string>
+    <string name="settings.casting_cache_summary">Cache currently playing songs while casting</string>
+    <string name="settings.casting.dlna_casting_enabled">DLNA Enabled</string>
+    <string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems try turning this off</string>
     <string name="settings.rewind_interval">Rewind Interval</string>
     <string name="settings.fastforward_interval">Fast Forward Interval</string>
 
-	<string name="shuffle.title">Shuffle By</string>
-	<string name="shuffle.startYear">Start Year:</string>
-	<string name="shuffle.endYear">End Year:</string>
-	<string name="shuffle.genre">Genre:</string>
-	<string name="shuffle.pick_genre">Pick a genre</string>
+    <string name="shuffle.title">Shuffle By</string>
+    <string name="shuffle.startYear">Start Year:</string>
+    <string name="shuffle.endYear">End Year:</string>
+    <string name="shuffle.genre">Genre:</string>
+    <string name="shuffle.pick_genre">Pick a genre</string>
 
-	<string name="share.create_error">Failed to create share %s</string>
-	<string name="share.expires">Expires: %s</string>
-	<string name="share.expires_never">Never Expires</string>
-	<string name="share.deleted">Deleted share %s</string>
-	<string name="share.deleted_error">Failed to delete share %s</string>
-	<string name="share.no_expiration">No expiration</string>
-	<string name="share.expiration">Expires:</string>
-	<string name="share.updated_info">Updated share information for %s</string>
-	<string name="share.updated_info_error">Failed to update share information for %s</string>
-	<string name="share.via">Share via</string>
-	<string name="share.delete">Delete Share</string>
+    <string name="share.create_error">Failed to create share %s</string>
+    <string name="share.expires">Expires: %s</string>
+    <string name="share.expires_never">Never Expires</string>
+    <string name="share.deleted">Deleted share %s</string>
+    <string name="share.deleted_error">Failed to delete share %s</string>
+    <string name="share.no_expiration">No expiration</string>
+    <string name="share.expiration">Expires:</string>
+    <string name="share.updated_info">Updated share information for %s</string>
+    <string name="share.updated_info_error">Failed to update share information for %s</string>
+    <string name="share.via">Share via</string>
+    <string name="share.delete">Delete Share</string>
 
-	<string name="admin.add_user_username">Username:</string>
-	<string name="admin.add_user_email">Email:</string>
-	<string name="admin.add_user_password">Password:</string>
-	<string name="admin.create_user_success">Successfully created new user</string>
-	<string name="admin.create_user_error">Failed to create new user</string>
-	<string name="admin.change_username_invalid">Enter a valid username</string>
-	<string name="admin.update_permissions">Update Permissions</string>
-	<string name="admin.update_permissions_success">Successfully updated permission for %1$s</string>
-	<string name="admin.update_permissions_error">Failed to update permissions for %1$s</string>
-	<string name="admin.change_email">Change Email</string>
-	<string name="admin.change_email_success">Successfully changed email for %1$s</string>
-	<string name="admin.change_email_error">Failed to change email for %1$s</string>
-	<string name="admin.change_email_label">New Email:</string>
-	<string name="admin.change_email_invalid">Enter a valid email</string>
-	<string name="admin.change_password">Change Password</string>
-	<string name="admin.change_password_success">Successfully changed password for %1$s</string>
-	<string name="admin.change_password_error">Failed to change password for %1$s</string>
-	<string name="admin.change_password_current_label">Current Password:</string>
-	<string name="admin.change_password_label">New Password:</string>
-	<string name="admin.change_password_invalid">Enter a valid password</string>
-	<string name="admin.delete_user">Delete User</string>
-	<string name="admin.delete_user_success">Successfully deleted %1$s</string>
-	<string name="admin.delete_user_error">Failed to delete %1$s</string>
-	<string name="admin.confirm_password">Confirm Password</string>
-	<string name="admin.confirm_password_bad">Entered password is wrong</string>
-	<string name="admin.permissions">Permissions</string>
-	<string name="admin.musicFolders">Music Folders</string>
+    <string name="admin.add_user_username">Username:</string>
+    <string name="admin.add_user_email">Email:</string>
+    <string name="admin.add_user_password">Password:</string>
+    <string name="admin.create_user_success">Successfully created new user</string>
+    <string name="admin.create_user_error">Failed to create new user</string>
+    <string name="admin.change_username_invalid">Enter a valid username</string>
+    <string name="admin.update_permissions">Update Permissions</string>
+    <string name="admin.update_permissions_success">Successfully updated permission for %1$s</string>
+    <string name="admin.update_permissions_error">Failed to update permissions for %1$s</string>
+    <string name="admin.change_email">Change Email</string>
+    <string name="admin.change_email_success">Successfully changed email for %1$s</string>
+    <string name="admin.change_email_error">Failed to change email for %1$s</string>
+    <string name="admin.change_email_label">New Email:</string>
+    <string name="admin.change_email_invalid">Enter a valid email</string>
+    <string name="admin.change_password">Change Password</string>
+    <string name="admin.change_password_success">Successfully changed password for %1$s</string>
+    <string name="admin.change_password_error">Failed to change password for %1$s</string>
+    <string name="admin.change_password_current_label">Current Password:</string>
+    <string name="admin.change_password_label">New Password:</string>
+    <string name="admin.change_password_invalid">Enter a valid password</string>
+    <string name="admin.delete_user">Delete User</string>
+    <string name="admin.delete_user_success">Successfully deleted %1$s</string>
+    <string name="admin.delete_user_error">Failed to delete %1$s</string>
+    <string name="admin.confirm_password">Confirm Password</string>
+    <string name="admin.confirm_password_bad">Entered password is wrong</string>
+    <string name="admin.permissions">Permissions</string>
+    <string name="admin.musicFolders">Music Folders</string>
 
-	<string name="admin.scrobblingEnabled">Scrobbling allowed</string>
-	<string name="admin.role.admin">Administrator</string>
-	<string name="admin.role.settings">Change settings</string>
-	<string name="admin.role.download">Download original files</string>
-	<string name="admin.role.upload">Upload to server</string>
-	<string name="admin.role.coverArt">Change cover art</string>
-	<string name="admin.role.comment">Add comments</string>
-	<string name="admin.role.podcast">Manage podcasts</string>
-	<string name="admin.role.stream">Stream music</string>
-	<string name="admin.role.jukebox">Control jukebox</string>
-	<string name="admin.role.share">Manage shares</string>
-	<string name="admin.role.video_conversion">Convert videos</string>
-	<string name="admin.role.lastfm">Use Last.FM feature</string>
+    <string name="admin.scrobblingEnabled">Scrobbling allowed</string>
+    <string name="admin.role.admin">Administrator</string>
+    <string name="admin.role.settings">Change settings</string>
+    <string name="admin.role.download">Download original files</string>
+    <string name="admin.role.upload">Upload to server</string>
+    <string name="admin.role.coverArt">Change cover art</string>
+    <string name="admin.role.comment">Add comments</string>
+    <string name="admin.role.podcast">Manage podcasts</string>
+    <string name="admin.role.stream">Stream music</string>
+    <string name="admin.role.jukebox">Control jukebox</string>
+    <string name="admin.role.share">Manage shares</string>
+    <string name="admin.role.video_conversion">Convert videos</string>
+    <string name="admin.role.lastfm">Use Last.FM feature</string>
 
     <string name="music_service.retry">A network error occurred. Retrying %1$d of %2$d.</string>
 
-	<string name="background_task.no_network">This program requires network access. Please turn on Wi-Fi or mobile network.</string>
+    <string name="background_task.no_network">This program requires network access. Please turn on Wi-Fi or mobile network.</string>
     <string name="background_task.network_error">A network error occurred. Please check the server address or try again later.</string>
     <string name="background_task.not_found">Resource not found. Please check the server address.</string>
     <string name="background_task.parse_error">A problem occurred communicating with the server. Please check the server address and verify that you can connect using a regular browser on your device.</string>
@@ -581,25 +584,25 @@
     <string name="parser.not_authenticated">Wrong username or password.</string>
     <string name="parser.not_authorized">Not authorized. Check user permissions in the server.</string>
     <string name="parser.artist_count">Got %d authors.</string>
-	<string name="parser.server_error">Server error: %s</string>
-	<string name="parser.scan_count">Scanned %d entries</string>
+    <string name="parser.server_error">Server error: %s</string>
+    <string name="parser.scan_count">Scanned %d entries</string>
 
 
-	<string name="select_artist.folder">Select folder</string>
+    <string name="select_artist.folder">Select folder</string>
     <string name="select_artist.all_folders">All folders</string>
 
     <string name="equalizer.label">Equalizer</string>
     <string name="equalizer.enabled">Enabled</string>
     <string name="equalizer.preset">Select preset</string>
-	<string name="equalizer.bass_booster">Bass Booster</string>
-	<string name="equalizer.voice_booster">Voice Booster</string>
-	<string name="equalizer.db_size" translatable="false">%d dB</string>
-	<string name="equalizer.bass_size">%d mille</string>
+    <string name="equalizer.bass_booster">Bass Booster</string>
+    <string name="equalizer.voice_booster">Voice Booster</string>
+    <string name="equalizer.db_size" translatable="false">%d dB</string>
+    <string name="equalizer.bass_size">%d mille</string>
 
-	<string name="widget.4x1" translatable="false">Booksonic (4x1)</string>
-	<string name="widget.4x2" translatable="false">Booksonic (4x2)</string>
-	<string name="widget.4x3" translatable="false">Booksonic (4x3)</string>
-	<string name="widget.4x4" translatable="false">Booksonic (4x4)</string>
+    <string name="widget.4x1" translatable="false">Booksonic (4x1)</string>
+    <string name="widget.4x2" translatable="false">Booksonic (4x2)</string>
+    <string name="widget.4x3" translatable="false">Booksonic (4x3)</string>
+    <string name="widget.4x4" translatable="false">Booksonic (4x4)</string>
     <string name="widget.initial_text">Touch to select music</string>
     <string name="widget.sdcard_busy">SD card unavailable</string>
     <string name="widget.sdcard_missing">No SD card</string>
@@ -609,73 +612,73 @@
     <string name="util.bytes_format.kilobyte" translatable="false">0 KB</string>
     <string name="util.bytes_format.byte" translatable="false">0 B</string>
 
-	<string name="changelog_full_title">Change Log</string>
+    <string name="changelog_full_title">Change Log</string>
     <string name="changelog_title">What\'s New</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">More…</string>
 
-	<string name="chat.send_a_message">Send a message</string>
+    <string name="chat.send_a_message">Send a message</string>
 
 
     <string name="changelog_version_format">Version %s</string>
 
-	<string name="tasker.start_playing">Start playing</string>
-	<string name="tasker.start_playing_shuffled">Start playing in Shuffle Mode</string>
-	<string name="tasker.start_playing_title">Tasker -> Start Booksonic</string>
-	<string name="tasker.edit_shuffle_mode">Start in shuffle mode: </string>
-	<string name="tasker.edit_shuffle_start_year">Shuffle start year:</string>
-	<string name="tasker.edit_shuffle_end_year">Shuffle end year:</string>
-	<string name="tasker.edit_shuffle_genre">Shuffle from genre:</string>
-	<string name="tasker.edit_server_offline">Toggle offline: </string>
-	<string name="tasker.edit_do_nothing">Do Nothing</string>
+    <string name="tasker.start_playing">Start playing</string>
+    <string name="tasker.start_playing_shuffled">Start playing in Shuffle Mode</string>
+    <string name="tasker.start_playing_title">Tasker -> Start Booksonic</string>
+    <string name="tasker.edit_shuffle_mode">Start in shuffle mode: </string>
+    <string name="tasker.edit_shuffle_start_year">Shuffle start year:</string>
+    <string name="tasker.edit_shuffle_end_year">Shuffle end year:</string>
+    <string name="tasker.edit_shuffle_genre">Shuffle from genre:</string>
+    <string name="tasker.edit_server_offline">Toggle offline: </string>
+    <string name="tasker.edit_do_nothing">Do Nothing</string>
 
-	<string name="details.title.song">Track Details</string>
-	<string name="details.title.album">Book Details</string>
-	<string name="details.title.podcast">Podcast Details</string>
-	<string name="details.title.playlist">Playlist Details</string>
-	<string name="details.title.artist">Author Details</string>
-	<string name="details.title.internet_radio_station">Internet Radio Details</string>
-	<string name="details.podcast">Podcast</string>
-	<string name="details.status">Status</string>
-	<string name="details.artist">Author</string>
-	<string name="details.album">Book</string>
-	<string name="details.track">Track</string>
-	<string name="details.genre">Genre</string>
-	<string name="details.year">Year</string>
-	<string name="details.server_format">Server Format</string>
-	<string name="details.server_bitrate">Server Bitrate</string>
-	<string name="details.cached_format">Cached Format</string>
-	<string name="details.cached_bitrate">Cached Bitrate</string>
-	<string name="details.size">Size</string>
-	<string name="details.length">Length</string>
-	<string name="details.bookmark_position">Bookmark Position</string>
-	<string name="details.rating">Rating</string>
-	<string name="details.description">Description</string>
-	<string name="details.owner">Owner</string>
-	<string name="details.comments">Comments</string>
-	<string name="details.song_count">Track Count</string>
-	<string name="details.public">Public</string>
-	<string name="details.created">Created</string>
-	<string name="details.title">Title</string>
-	<string name="details.url">URL</string>
-	<string name="details.error">Error Message</string>
-	<string name="details.author">Author</string>
-	<string name="details.email">Email</string>
-	<string name="details.version">Version</string>
-	<string name="details.files_cached">Downloaded files</string>
-	<string name="details.files_permanent">Permanent Cached</string>
-	<string name="details.used_space">Used Space</string>
-	<string name="details.available_space">Available Space</string>
-	<string name="details.of">%1$s of %2$s</string>
-	<string name="details.song">Track</string>
-	<string name="details.position">Position</string>
-	<string name="details.updated">Updated</string>
-	<string name="details.starred">Starred</string>
-	<string name="details.last_played">Last Played</string>
-	<string name="details.expiration">Expiration</string>
-	<string name="details.played_count">Played Count</string>
-	<string name="details.stream_url">Stream URL</string>
-	<string name="details.home_page">Home Page</string>
+    <string name="details.title.song">Track Details</string>
+    <string name="details.title.album">Book Details</string>
+    <string name="details.title.podcast">Podcast Details</string>
+    <string name="details.title.playlist">Playlist Details</string>
+    <string name="details.title.artist">Author Details</string>
+    <string name="details.title.internet_radio_station">Internet Radio Details</string>
+    <string name="details.podcast">Podcast</string>
+    <string name="details.status">Status</string>
+    <string name="details.artist">Author</string>
+    <string name="details.album">Book</string>
+    <string name="details.track">Track</string>
+    <string name="details.genre">Genre</string>
+    <string name="details.year">Year</string>
+    <string name="details.server_format">Server Format</string>
+    <string name="details.server_bitrate">Server Bitrate</string>
+    <string name="details.cached_format">Cached Format</string>
+    <string name="details.cached_bitrate">Cached Bitrate</string>
+    <string name="details.size">Size</string>
+    <string name="details.length">Length</string>
+    <string name="details.bookmark_position">Bookmark Position</string>
+    <string name="details.rating">Rating</string>
+    <string name="details.description">Description</string>
+    <string name="details.owner">Owner</string>
+    <string name="details.comments">Comments</string>
+    <string name="details.song_count">Track Count</string>
+    <string name="details.public">Public</string>
+    <string name="details.created">Created</string>
+    <string name="details.title">Title</string>
+    <string name="details.url">URL</string>
+    <string name="details.error">Error Message</string>
+    <string name="details.author">Author</string>
+    <string name="details.email">Email</string>
+    <string name="details.version">Version</string>
+    <string name="details.files_cached">Downloaded files</string>
+    <string name="details.files_permanent">Permanent Cached</string>
+    <string name="details.used_space">Used Space</string>
+    <string name="details.available_space">Available Space</string>
+    <string name="details.of">%1$s of %2$s</string>
+    <string name="details.song">Track</string>
+    <string name="details.position">Position</string>
+    <string name="details.updated">Updated</string>
+    <string name="details.starred">Starred</string>
+    <string name="details.last_played">Last Played</string>
+    <string name="details.expiration">Expiration</string>
+    <string name="details.played_count">Played Count</string>
+    <string name="details.stream_url">Stream URL</string>
+    <string name="details.home_page">Home Page</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No tracks</item>
@@ -696,45 +699,45 @@
     </plurals>
 
 
-	<!--PopMod-->
-	<string name="main.author">Author</string>
-	<string name="album.book_desc">noInfo</string>
-	<string name="menu.timer">Timer</string>
-	<string name="album.book.length">Length</string>
-	<string name="album.book.reader">Narrator</string>
-	<string name="playlist.reverse">Reverse</string>
+    <!--PopMod-->
+    <string name="main.author">Author</string>
+    <string name="album.book_desc">noInfo</string>
+    <string name="menu.timer">Timer</string>
+    <string name="album.book.length">Length</string>
+    <string name="album.book.reader">Narrator</string>
+    <string name="playlist.reverse">Reverse</string>
     <string name="details.fork">Forked from</string>
-	<string name="imported">Imported</string>
-	<string name="exported">Exported to</string>
-	<string name="exported.password.warning">Warning, you password to the server is in the backup. Keep it safe!</string>
-	<string name="menu.import">Import</string>
-	<string name="menu.export">Export</string>
-	<string name="button.yes">YES</string>
-	<string name="button.no">NO</string>
-	<string name="export.title">Export</string>
-	<string name="export.server.text">Should the server details and accounts be exported?\n\nIf yes you need to enter the password for your top server here.</string>
-	<string name="export.wrong.password">Password incorrect. Servers and accounts will be skipped</string>
-	<string name="settings.theme_classic">Classic</string>
-	<string name="msg.server.outdated">Your server is outdated</string>
-	<string name="msg.server.outdated_beta">Your server is an outdated beta version</string>
-	<string name="msg.server.notBooksonic">Your server is outdated or not running Booksonic</string>
+    <string name="imported">Imported</string>
+    <string name="exported">Exported to</string>
+    <string name="exported.password.warning">Warning, you password to the server is in the backup. Keep it safe!</string>
+    <string name="menu.import">Import</string>
+    <string name="menu.export">Export</string>
+    <string name="button.yes">YES</string>
+    <string name="button.no">NO</string>
+    <string name="export.title">Export</string>
+    <string name="export.server.text">Should the server details and accounts be exported?\n\nIf yes you need to enter the password for your top server here.</string>
+    <string name="export.wrong.password">Password incorrect. Servers and accounts will be skipped</string>
+    <string name="settings.theme_classic">Classic</string>
+    <string name="msg.server.outdated">Your server is outdated</string>
+    <string name="msg.server.outdated_beta">Your server is an outdated beta version</string>
+    <string name="msg.server.notBooksonic">Your server is outdated or not running Booksonic</string>
     <string name="msg.server.offline">The server is offline</string>
     <string name="msg.noInternet">There is no internet connection</string>
 
-	<string name="login.header">Sign in</string>
-	<string name="login.hint.server">Server address</string>
-	<string name="login.hint.username">Username</string>
-	<string name="login.hint.password">Password</string>
-	<string name="login.button.demo">Demo server</string>
-	<string name="login.button.signin">Sign in</string>
+    <string name="login.header">Sign in</string>
+    <string name="login.hint.server">Server address</string>
+    <string name="login.hint.username">Username</string>
+    <string name="login.hint.password">Password</string>
+    <string name="login.button.demo">Demo server</string>
+    <string name="login.button.signin">Sign in</string>
 
-	<!-- Strings related to login -->
-	<string name="prompt_email">Username</string>
-	<string name="prompt_password">Password</string>
-	<string name="action_sign_in">Sign in</string>
-	<string name="action_demo">Use demo server</string>
-	<string name="error_invalid_password">This password is too short</string>
-	<string name="error_incorrect_password">This password is incorrect</string>
-	<string name="error_field_required">This field is required</string>
-	<string name="widget.1x1" translatable="false">Booksonic (1x1)</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_demo">Use demo server</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="widget.1x1" translatable="false">Booksonic (1x1)</string>
 </resources>

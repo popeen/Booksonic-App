@@ -108,24 +108,6 @@
 			myns:display="%+.1f dB"/>
 	</PreferenceCategory>
 
-
-	<PreferenceCategory
-		android:title="Podcast">
-
-		<CheckBoxPreference
-			android:title="Reverse podcasts by default"
-			android:summary="Should the order the podcasts episodes are shown in be reversed by default?"
-			android:key="reversePodcastsEnabled"
-			android:defaultValue="true"/>
-
-		<CheckBoxPreference
-			android:title="@string/settings.podcastplaylist_title"
-			android:summary="@string/settings.podcastplaylist_summary"
-			android:key="podcastPlaylistEnabled"
-			android:defaultValue="false"/>
-
-	</PreferenceCategory>
-
 	<PreferenceCategory
 		android:title="@string/settings.other_title">
 

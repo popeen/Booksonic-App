@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myns="http://schemas.android.com/apk/res-auto"
+	android:title="@string/settings.podcast_screen_title">
+
+	<PreferenceCategory
+		android:title="Podcast">
+
+		<CheckBoxPreference
+			android:title="Reverse podcasts by default"
+			android:summary="Should the order the podcasts episodes are shown in be reversed by default?"
+			android:key="reversePodcastsEnabled"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.podcastplaylist_title"
+			android:summary="@string/settings.podcastplaylist_summary"
+			android:key="podcastPlaylistEnabled"
+			android:defaultValue="false"/>
+
+	</PreferenceCategory>
+</PreferenceScreen>
