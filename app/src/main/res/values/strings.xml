@@ -97,7 +97,7 @@
     <string name="menu.deleted_playlist">Deleted playlist %s</string>
     <string name="menu.deleted_playlist_error">Failed to delete playlist %s</string>
     <string name="menu.log">Send Log</string>
-    <string name="menu.set_timer">Set Sleep Timer</string>
+    <string name="menu.set_timer">Set One-time Sleep Timer</string>
     <string name="menu.check_podcasts">Check For New Episodes</string>
     <string name="menu.add_podcast">Add Podcast url or name</string>
     <string name="menu.keep_synced">Keep Synced</string>
