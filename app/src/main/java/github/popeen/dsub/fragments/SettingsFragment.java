@@ -507,7 +507,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			this.findPreference("visitWindowsGuide").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					Uri uri = Uri.parse("https://popeen.com/2016/01/14/how-to-stream-audiobooks-to-your-phone-with-booksonic/");
+					Uri uri = Uri.parse("https://booksonic.org/how");
 					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
 					startActivity(browserIntent);
 					return true;
