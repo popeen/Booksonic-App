@@ -18,6 +18,7 @@ package github.popeen.dsub.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 
 import java.util.Locale;
 
@@ -28,10 +29,31 @@ import github.popeen.dsub.activity.SubsonicFragmentActivity;
 public final class ThemeUtil {
 	public static final String THEME_DARK = "dark";
 	public static final String THEME_LIGHT = "light";
+	private static final String THEME_DAY_NIGHT = "day/night";
 
 	public static String getTheme(Context context) {
 		SharedPreferences prefs = Util.getPreferences(context);
-		String theme = prefs.getString(Constants.PREFERENCES_KEY_THEME, null);
+		String theme;
+
+		if (Build.VERSION.SDK_INT<29) {
+			// If Android Pie or older, default to null (handled below as light)
+			theme = prefs.getString(Constants.PREFERENCES_KEY_THEME, null);
+		} else {
+			// Else, for Android 10+, default to follow system dark mode setting
+			theme = prefs.getString(Constants.PREFERENCES_KEY_THEME, THEME_DAY_NIGHT);
+
+			if (THEME_DAY_NIGHT.equals(theme)) {
+				int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+				if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+					theme = THEME_DARK;
+				} else {
+					theme = THEME_LIGHT;
+				}
+			}
+
+		}
+
+
 
 		return theme;
 	}

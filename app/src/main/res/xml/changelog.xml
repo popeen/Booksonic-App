@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="220X" versioncode="65" releasedate="2022-XX-XX">
-        <change>Added auto sleep timer option, thanks Andi3000</change>
+    <release version="2201.1" versioncode="65" releasedate="2022-01-10">
+        <change>Added auto sleep timer option</change>
+        <change>Added theme setting that follows the systems dark mode setting</change>
     </release>
     <release version="2201" versioncode="64" releasedate="2022-01-09">
         <change>Changed settings menu to easier find the settings</change>

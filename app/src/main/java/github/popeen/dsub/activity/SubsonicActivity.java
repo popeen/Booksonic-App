@@ -138,7 +138,13 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	boolean checkShake = false;
 
 	static {
-		AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+		// If Android Pie or older, set night mode by system clock
+		if (Build.VERSION.SDK_INT<29) {
+			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+		} else {
+			// Else, for Android 10+, follow system dark mode setting
+			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+		}
 	}
 
 	@Override
