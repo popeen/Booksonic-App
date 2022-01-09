@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="2111" versioncode="61" releasedate="2021-11-03">
-        <change>Possible fix for custom download location not working</change>
+    <release version="2201" versioncode="64" releasedate="2022-01-09">
+        <change>Changed settings menu to easier find the settings</change>
+        <change>Fix for downloads to custom location being deleted as soon as they finish, on some devices you cant set custom location at the moment</change>
     </release>
     <release version="2103.2" versioncode="60" releasedate="2021-03-23">
         <change>Fixed bug where it was no longer possible to send log file to developer</change>

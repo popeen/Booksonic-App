@@ -14,8 +14,8 @@ android {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 15
 		targetSdkVersion 30
-		versionCode 61
-		versionName '2111'
+		versionCode 64
+		versionName '2201'
 		setProperty("archivesBaseName", "Booksonic $versionName")
 		resConfigs "sv", "ru"
 	}
@@ -25,6 +25,7 @@ android {
 			shrinkResources true
 			proguardFiles 'proguard.cfg'
 			zipAlignEnabled true
+			signingConfig signingConfigs.debug
 		}
 		fix {
 			minifyEnabled true
@@ -52,11 +53,6 @@ android {
 	lintOptions {
 		checkReleaseBuilds false
 	}
-	signingConfigs {
-		debug {
-			storeFile file('debug.keystore')
-		}
-	}
 	buildToolsVersion '29.0.3'
 }
 
@@ -79,4 +75,5 @@ dependencies {
 	implementation group: 'org.eclipse.jetty', name: 'jetty-client', version:'8.1.16.v20140903'
 	implementation 'org.jsoup:jsoup:1.13.1'
 	implementation 'io.github.kobakei:ratethisapp:1.2.0'
+	implementation 'com.android.support.constraint:constraint-layout:2.0.4'
 }
