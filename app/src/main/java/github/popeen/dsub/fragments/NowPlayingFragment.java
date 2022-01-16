@@ -1188,27 +1188,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	private void updateMediaButton(boolean shouldFastForward) {
-		DownloadService downloadService = getDownloadService();
-		if(downloadService.isCurrentPlayingSingle()) {
-			previousButton.setVisibility(View.GONE);
-			nextButton.setVisibility(View.GONE);
-			rewindButton.setVisibility(View.GONE);
-			fastforwardButton.setVisibility(View.GONE);
-		} else {
-			if (downloadService.shouldFastForward()) {
-				previousButton.setVisibility(View.GONE);
-				nextButton.setVisibility(View.GONE);
-
-				rewindButton.setVisibility(View.VISIBLE);
-				fastforwardButton.setVisibility(View.VISIBLE);
-			} else {
-				previousButton.setVisibility(View.VISIBLE);
-				nextButton.setVisibility(View.VISIBLE);
-
-				rewindButton.setVisibility(View.VISIBLE);
-				fastforwardButton.setVisibility(View.VISIBLE);
-			}
-		}
+		//These buttons should always show in Booksonic
+		previousButton.setVisibility(View.VISIBLE);
+		nextButton.setVisibility(View.VISIBLE);
+		rewindButton.setVisibility(View.VISIBLE);
+		fastforwardButton.setVisibility(View.VISIBLE);
 	}
 
 	private void setupSubtitle(int currentPlayingIndex) {
