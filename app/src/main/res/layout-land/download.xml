@@ -87,6 +87,12 @@
 					style="@style/DownloadActionImageButton"
 					android:src="?attr/rating_good"
 					android:visibility="gone"/>
+
+				<ImageButton
+					android:id="@+id/download_lock"
+					style="@style/DownloadActionImageButton"
+					android:src="@drawable/unlocked"/>
+
 			</LinearLayout>
 		</LinearLayout>
 

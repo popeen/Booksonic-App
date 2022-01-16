@@ -86,10 +86,16 @@
 									android:src="@drawable/ic_menu_bookmark_dark"/>
 
 								<ImageButton
+									android:id="@+id/download_lock"
+									style="@style/DownloadActionImageButton"
+									android:src="@drawable/unlocked"/>
+
+								<ImageButton
 									android:id="@+id/download_rating_good"
 									style="@style/DownloadActionImageButton"
 									android:src="@drawable/ic_action_rating_good_dark"
 									android:visibility="gone"/>
+
 						</LinearLayout>
 					</FrameLayout>
 				</FrameLayout>
