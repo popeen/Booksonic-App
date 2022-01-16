@@ -1168,6 +1168,34 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		});
 	}
+
+	private void setupCoverArtImpl2(RecyclingImageView coverArtView, String url) {
+		final ImageLoader imageLoader = getImageLoader();
+
+		// Try a few times to get a random cover art
+		if(artistInfo != null) {
+			imageLoader.loadImage(coverArtView, url, true);
+		} else if(entries.size() > 0) {
+
+			coverArtRep = null;
+			this.coverArtView = coverArtView;
+			for (int i = 0; (i < 3) && (coverArtRep == null || coverArtRep.getCoverArt() == null); i++) {
+				coverArtRep = entries.get(random.nextInt(entries.size()));
+			}
+
+			synchronized (coverArtRep) {
+				coverArtId = coverArtRep.getCoverArt();
+				updateCoverArtTask = imageLoader.loadImage(coverArtView, coverArtRep, true, true);
+			}
+		}
+
+		coverArtView.setOnInvalidated(new RecyclingImageView.OnInvalidated() {
+			@Override
+			public void onInvalidated(RecyclingImageView imageView) {
+				setupCoverArtImpl(imageView);
+			}
+		});
+	}
 	private void setupTextDisplay(final View header) {
 
 		final TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
@@ -1345,6 +1373,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							Util.setMargins(coverArtDownloadView, 0, (display.getWidth()-120) ,70 ,0);
 
 						}else{
+							String coverArtUrl =  Util.getRestUrl(context, "getCoverArt") + "&id=" + directory.getId();
+							setupCoverArtImpl2((RecyclingImageView) header.findViewById(R.id.select_album_art), coverArtUrl);
 							coverArtDownloadView.setVisibility(View.GONE);
 							autorView.setVisibility(View.GONE);
 							narratorView.setVisibility(View.GONE);
