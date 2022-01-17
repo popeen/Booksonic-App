@@ -235,7 +235,7 @@ public class ServerInfo implements Serializable {
 		return canUseToken(context, Util.getActiveServer(context));
 	}
 	public static boolean canUseToken(Context context, int instance) {
-		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_FORCE_PASSWORD_API, false)){
+		if(Util.isForcePasswordApiEnabled(context, instance)){
 			return false;
 		}else {
 			if (isStockSubsonic(context, instance) && checkServerVersion(context, "1.14", instance)) {

@@ -861,6 +861,12 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverAuthHeaderPreference.setSummary(R.string.settings_server_authheaders_summary);
 		serverAuthHeaderPreference.setTitle(R.string.settings_server_authheaders);
 
+		final CheckBoxPreference serverForcePasswordApi = new CheckBoxPreference(context);
+		serverForcePasswordApi.setKey(Constants.PREFERENCES_KEY_FORCE_PASSWORD_API + instance);
+		serverForcePasswordApi.setChecked(Util.isForcePasswordApiEnabled(context, instance));
+		serverForcePasswordApi.setSummary("This will force the API calls to pass the password instead of a token. This is a workaround for using LDAP authentication on your server. If you don't then you should not check this box.");
+		serverForcePasswordApi.setTitle("Force password in API calls");
+
 		final Preference serverOpenBrowser = new Preference(context);
 		serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
 		serverOpenBrowser.setPersistent(false);
@@ -936,6 +942,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		screen.addPreference(serverPasswordPreference);
 		screen.addPreference(serverSyncPreference);
 		screen.addPreference(serverAuthHeaderPreference);
+		screen.addPreference(serverForcePasswordApi);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);
 		screen.addPreference(serverRemoveServerPreference);

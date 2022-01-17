@@ -112,12 +112,6 @@
 		android:title="@string/settings.other_title">
 
 		<CheckBoxPreference
-			android:title="Force password in API calls"
-			android:summary="This will force the API calls to pass the password instead of a token. This is a workaround for using LDAP authentication on your server. If you don't then you should not check this box."
-			android:key="forcePasswordApi"
-			android:defaultValue="false"/>
-
-		<CheckBoxPreference
 			android:title="@string/settings.start_on_headphones"
 			android:summary="@string/settings.start_on_headphones_summary"
 			android:key="startOnHeadphones"
