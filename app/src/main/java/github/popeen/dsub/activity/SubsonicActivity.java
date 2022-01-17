@@ -1366,7 +1366,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		checkShake = true;
+		checkShake = Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_SHAKE_TO_RESET, true);
 		if(checkShake) {
 			if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 

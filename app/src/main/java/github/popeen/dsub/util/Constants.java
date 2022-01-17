@@ -114,6 +114,7 @@ public final class Constants {
     public static final String PREFERENCES_KEY_LOCAL_NETWORK_REQUIRED_FOR_DOWNLOAD = "localNetworkRequiredForDownload";
 	public static final String PREFERENCES_KEY_RANDOM_SIZE = "randomSize";
 	public static final String PREFERENCES_KEY_SLEEP_TIMER_DURATION = "sleepTimerDuration";
+	public static final String PREFERENCES_KEY_SHAKE_TO_RESET = "shakeToReset";
 	public static final String PREFERENCES_KEY_OFFLINE = "offline";
 	public static final String PREFERENCES_KEY_HOME = "away";
 	public static final String PREFERENCES_KEY_TEMP_LOSS = "tempLoss";

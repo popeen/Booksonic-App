@@ -397,6 +397,8 @@
     <string name="settings.sleep_timer_off">Off</string>
     <string name="settings.sleep_timer_on">On</string>
     <string name="settings.sleep_timer_always_on">Always On</string>
+    <string name="settings.shake_to_reset">Shake to reset</string>
+    <string name="settings.shake_to_reset_summary">By moving / shaking the phone the sleep timer will be reset to the set time</string>
     <string name="settings.temp_loss_title">Temporary Loss of Focus</string>
     <string name="settings.temp_loss_pause">Always Pause</string>
     <string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>

@@ -14,6 +14,12 @@
 			android:entryValues="@array/autoSleepValues"
 			android:entries="@array/autoSleepNames"/>
 
+		<CheckBoxPreference
+			android:title="@string/settings.shake_to_reset"
+			android:summary="@string/settings.shake_to_reset_summary"
+			android:key="shakeToReset"
+			android:defaultValue="true"/>
+
 		<ListPreference
 			android:title="@string/settings.keep_played_count_title"
 			android:key="keepPlayedCount"
