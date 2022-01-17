@@ -1135,7 +1135,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		final DownloadService downloadService = getDownloadService();
-		if (downloadService == null || e1 == null || e2 == null) {
+		if (downloadService == null || e1 == null || e2 == null || controlsHidden) {
 			return false;
 		}
 
