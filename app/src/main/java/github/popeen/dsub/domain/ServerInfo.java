@@ -234,7 +234,7 @@ public class ServerInfo implements Serializable {
 		return canUseToken(context, Util.getActiveServer(context));
 	}
 	public static boolean canUseToken(Context context, int instance) {
-		if(isStockSubsonic(context, instance) && checkServerVersion(context, "1.14", instance)) {
+	/*	if(isStockSubsonic(context, instance) && checkServerVersion(context, "1.14", instance)) {
 			if(Util.getBlockTokenUse(context, instance)) {
 				return false;
 			} else {
@@ -242,7 +242,8 @@ public class ServerInfo implements Serializable {
 			}
 		} else {
 			return false;
-		}
+		}*/
+		return false;
 	}
 	public static boolean hasSimilarArtists(Context context) {
 		return !ServerInfo.isMadsonic(context) || ServerInfo.checkServerVersion(context, "2.0");
