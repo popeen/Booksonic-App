@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="2202" versioncode="66" releasedate="2022-02-XX">
+        <change>THIS IS A BETA RELEASE, please report any bugs to support@booksonic.org</change>
+        <change>Added a button for locking on-screen playback controls</change>
+        <change>Previous/Next buttons will now always be there</change>
+        <change>Added a server setting that will make authentication using LDAP possible</change>
+        <change>Fixed bug with external storage, for now permission needs to be given manually from phone settings -> apps -> booksonic -> permissions -> storage. Shortcut will be added to the app soon</change>
+        <change>Fixed bug with import/export (see manual steps above)</change>
+        <change>Updated dependencies</change>
+    </release>
     <release version="2201.1" versioncode="65" releasedate="2022-01-10">
         <change>Added auto sleep timer option</change>
         <change>Added theme setting that follows the systems dark mode setting</change>
