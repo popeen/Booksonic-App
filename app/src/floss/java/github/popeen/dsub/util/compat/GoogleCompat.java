@@ -1,7 +1,7 @@
 package github.popeen.dsub.util.compat;
 
 import android.content.Context;
-import android.support.v7.media.MediaRouter;
+import androidx.mediarouter.media.MediaRouter;
 
 import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.RemoteController;

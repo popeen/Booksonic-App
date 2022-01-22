@@ -16,9 +16,9 @@
 package github.popeen.dsub.util;
 
 import android.os.Build;
-import android.support.v7.media.MediaRouteProvider;
-import android.support.v7.media.MediaRouteSelector;
-import android.support.v7.media.MediaRouter;
+import androidx.mediarouter.media.MediaRouteProvider;
+import androidx.mediarouter.media.MediaRouteSelector;
+import androidx.mediarouter.media.MediaRouter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import github.popeen.dsub.service.DownloadService;
 import github.popeen.dsub.service.RemoteController;
 import github.popeen.dsub.util.compat.GoogleCompat;
 
-import static android.support.v7.media.MediaRouter.RouteInfo;
+import static androidx.mediarouter.media.MediaRouter.RouteInfo;
 
 /**
  * Created by owner on 2/8/14.

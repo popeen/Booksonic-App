@@ -12,7 +12,7 @@ android {
 
 	defaultConfig {
 		applicationId "github.popeen.dsub"
-		minSdkVersion 15
+		minSdkVersion 16
 		targetSdkVersion 30
 		versionCode 67
 		versionName '2202.b2'
@@ -59,12 +59,12 @@ android {
 dependencies {
 	implementation project(path: ':ServerProxy')
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	implementation 'com.android.support:support-v4:28.0.+'
-	implementation 'com.android.support:appcompat-v7:28.0.+'
-	implementation 'com.android.support:mediarouter-v7:28.0.+'
-	implementation 'com.android.support:recyclerview-v7:28.0.+'
-	implementation 'com.android.support:design:28.0.+'
-	implementation 'com.google.android.gms:play-services-cast:8.1.0'
+	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+	implementation 'androidx.appcompat:appcompat:1.0.0'
+	implementation 'androidx.mediarouter:mediarouter:1.0.0'
+	implementation 'androidx.recyclerview:recyclerview:1.0.0'
+	implementation 'com.google.android.material:material:1.0.0'
+	implementation 'com.google.android.gms:play-services-cast:21.0.1'
 	implementation 'com.sothree.slidinguppanel:library:3.4.0'
 	implementation 'de.hdodenhof:circleimageview:3.1.0'
 	implementation 'com.shehabic.droppy:Droppy:0.6.0@aar'
@@ -75,5 +75,5 @@ dependencies {
 	implementation group: 'org.eclipse.jetty', name: 'jetty-client', version:'8.1.16.v20140903'
 	implementation 'org.jsoup:jsoup:1.14.3'
 	implementation 'io.github.kobakei:ratethisapp:1.2.0'
-	implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+	implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

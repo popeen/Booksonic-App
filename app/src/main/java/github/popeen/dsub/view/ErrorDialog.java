@@ -21,7 +21,7 @@ package github.popeen.dsub.view;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.activity.SubsonicFragmentActivity;

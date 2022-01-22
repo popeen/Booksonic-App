@@ -36,9 +36,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
-import android.support.v4.util.LruCache;
-import android.support.v7.media.MediaRouteSelector;
-import android.support.v7.media.MediaRouter;
+import androidx.collection.LruCache;
+import androidx.mediarouter.media.MediaRouteSelector;
+import androidx.mediarouter.media.MediaRouter;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -83,7 +83,7 @@ import github.popeen.dsub.util.compat.RemoteControlClientBase;
 import github.popeen.dsub.util.tags.BastpUtil;
 import github.popeen.dsub.view.UpdateView;
 
-import static android.support.v7.media.MediaRouter.RouteInfo;
+import static androidx.mediarouter.media.MediaRouter.RouteInfo;
 import static github.popeen.dsub.domain.PlayerState.COMPLETED;
 import static github.popeen.dsub.domain.PlayerState.DOWNLOADING;
 import static github.popeen.dsub.domain.PlayerState.IDLE;

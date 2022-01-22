@@ -21,7 +21,7 @@ package github.popeen.dsub.activity;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.fragments.PreferenceCompatFragment;
