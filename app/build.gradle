@@ -53,7 +53,7 @@ android {
 	lintOptions {
 		checkReleaseBuilds false
 	}
-	buildToolsVersion '29.0.3'
+	buildToolsVersion '30.0.2'
 }
 
 dependencies {
