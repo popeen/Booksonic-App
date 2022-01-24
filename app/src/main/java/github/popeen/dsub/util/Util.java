@@ -402,24 +402,19 @@ public final class Util {
 		if(instance<1){
 			instance = 1;
 		}
+
 		StringBuilder builder = new StringBuilder();
 
 		// TODO tag, location
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
-		//if(allowAltAddress && Util.isWifiConnected(context)) {
-		//	String SSID = prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "");
-			if(Util.isHome(context)) {
-			/*	String currentSSID = Util.getSSID(context);
 
-				String[] ssidParts = SSID.split(",");
-				if ("".equals(SSID) || SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {*/
-					serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
-				/*	if (internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
-						serverUrl = internalUrl;
-					}
-				}*/
-			}
-		//}
+		if(Util.isHome(context)) {
+				String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+				if (internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)){
+					//This if makes sure we can only switch to internal if one is set, otherwise we ignore the address change
+					serverUrl = internalUrl;
+				}
+		}
 
 		String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
 		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
