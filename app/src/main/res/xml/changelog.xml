@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="2202.b3" versioncode="68" releasedate="2022-02-XX">
-        <change>THIS IS A BETA RELEASE, please report any bugs to support@booksonic.org</change>
+    <release version="2202" versioncode="70" releasedate="2022-02-01">
         <change>Added a button for locking on-screen playback controls</change>
         <change>Previous/Next buttons will now always be there</change>
         <change>Shake to reset the sleep timer is now optional and can be disabled in settings -> playback</change>
