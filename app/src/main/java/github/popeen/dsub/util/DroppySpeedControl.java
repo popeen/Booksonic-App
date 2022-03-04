@@ -30,6 +30,7 @@ public class DroppySpeedControl extends DroppyMenuCustomItem {
 
     public DroppySpeedControl setOnClicks(Context context, final DroppyClickCallbackInterface callback, int ... elementsByID){
         render(context);
+        seekBar.setMax(45);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
