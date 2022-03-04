@@ -4,21 +4,25 @@
 	android:title="@string/settings.playback_title">
 
 	<PreferenceCategory
+		android:title="Sleep timer">
+
+	<ListPreference
+		android:title="@string/settings.auto_sleep_value"
+		android:summary="@string/settings.auto_sleep_value_summary"
+		android:key="autoSleepValue"
+		android:defaultValue="0"
+		android:entryValues="@array/autoSleepValues"
+		android:entries="@array/autoSleepNames"/>
+
+	<CheckBoxPreference
+		android:title="@string/settings.shake_to_reset"
+		android:summary="@string/settings.shake_to_reset_summary"
+		android:key="shakeToReset"
+		android:defaultValue="true"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
 		android:title="@string/settings.playback_title">
-
-		<ListPreference
-			android:title="@string/settings.auto_sleep_value"
-			android:summary="@string/settings.auto_sleep_value_summary"
-			android:key="autoSleepValue"
-			android:defaultValue="0"
-			android:entryValues="@array/autoSleepValues"
-			android:entries="@array/autoSleepNames"/>
-
-		<CheckBoxPreference
-			android:title="@string/settings.shake_to_reset"
-			android:summary="@string/settings.shake_to_reset_summary"
-			android:key="shakeToReset"
-			android:defaultValue="true"/>
 
 		<ListPreference
 			android:title="@string/settings.keep_played_count_title"
