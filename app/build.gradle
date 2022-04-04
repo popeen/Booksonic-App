@@ -72,7 +72,7 @@ dependencies {
 	implementation 'io.github.kobakei:ratethisapp:1.2.0'
 	implementation 'org.eclipse.jetty:jetty-server:8.1.16.v20140903'
 	implementation 'org.eclipse.jetty:jetty-servlet:8.1.16.v20140903'
-	implementation 'org.eclipse.jetty:jetty-client:8.1.16.v20140903'
+	implementation 'org.eclipse.jetty:jetty-client:11.0.9'
 	implementation 'org.fourthline.cling:cling-core:2.1.2'
 	implementation 'org.fourthline.cling:cling-support:2.1.2'
 	implementation 'org.jsoup:jsoup:1.14.3'
