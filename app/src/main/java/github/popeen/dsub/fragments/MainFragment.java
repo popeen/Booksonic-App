@@ -116,6 +116,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		List<Integer> albums = new ArrayList<>();
 		albums.add(R.string.main_albums_newest);
 		albums.add(R.string.main_albums_recent);
+		albums.add(R.string.main_albums_bookmarks);
 		albums.add(R.string.main_author);
 		if(ServerInfo.checkServerVersion(context, "1.8")) {
 			albums.add(R.string.main_albums_alphabetical);
@@ -167,6 +168,9 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			replaceFragment(fragment);
 		} else if("author".equals(type)) {
 			SubsonicFragment fragment = new SelectArtistFragment();
+			replaceFragment(fragment);
+		} else if("bookmarks".equals(type)) {
+			SubsonicFragment fragment = new SelectBookmarkFragment();
 			replaceFragment(fragment);
 		} else if("podcast".equals(type)) {
 			SubsonicFragment fragment = new SelectPodcastsFragment();
@@ -401,6 +405,8 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			showAlbumList("highest");
 		} else if (item == R.string.main_albums_recent) {
 			showAlbumList("recent");
+		}  else if (item == R.string.main_albums_bookmarks) {
+			showAlbumList("bookmarks");
 		} else if (item == R.string.main_albums_frequent) {
 			showAlbumList("frequent");
 		} else if (item == R.string.main_albums_starred) {

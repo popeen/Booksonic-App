@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="2207" versioncode="71" releasedate="2022-07-XX">
+        <change>Changed max playback speed to 5X</change>
+        <change>Added Bookmarks to main view</change>
+        <change>Updated dependencies</change>
+    </release>
     <release version="2202" versioncode="70" releasedate="2022-02-01">
         <change>Added a button for locking on-screen playback controls</change>
         <change>Previous/Next buttons will now always be there</change>

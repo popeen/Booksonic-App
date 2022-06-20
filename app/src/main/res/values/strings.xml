@@ -64,6 +64,7 @@
     <string name="main.albums_title">Book Lists</string>
     <string name="main.albums_per_folder">Per Folder</string>
     <string name="main.albums_newest">Recently added</string>
+    <string name="main.albums_bookmarks">Bookmarks</string>
     <string name="main.albums_recent">Recently played</string>
     <string name="main.albums_frequent">Most played</string>
     <string name="main.albums_highest">Top rated</string>
