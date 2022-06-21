@@ -70,7 +70,7 @@ dependencies {
 	implementation 'com.sothree.slidinguppanel:library:3.4.0'
 	implementation 'de.hdodenhof:circleimageview:3.1.0'
 	implementation 'io.github.kobakei:ratethisapp:1.2.0'
-	implementation 'org.eclipse.jetty:jetty-server:8.1.16.v20140903'
+	implementation 'org.eclipse.jetty:jetty-server:11.0.10'
 	implementation 'org.eclipse.jetty:jetty-servlet:8.1.16.v20140903'
 	implementation 'org.eclipse.jetty:jetty-client:8.1.16.v20140903'
 	implementation 'org.fourthline.cling:cling-core:2.1.2'
