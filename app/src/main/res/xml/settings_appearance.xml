@@ -42,6 +42,12 @@
 			android:defaultValue="false"/>
 
 		<CheckBoxPreference
+			android:title="@string/settings.hide_duplicate_title"
+			android:summary="@string/settings.hide_duplicate_summary"
+			android:key="hideDuplicate"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
 			android:title="@string/settings.custom_sort"
 			android:summary="@string/settings.custom_sort_summary"
 			android:key="customSortEnabled"

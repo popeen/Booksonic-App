@@ -359,6 +359,8 @@
 	<string name="settings.playback_title">Lecture</string>
 	<string name="settings.hide_widget_title">Cacher le Widget</string>
 	<string name="settings.hide_widget_summary">Cacher le widget après avoir quitté l\'application</string>
+	<string name="settings.hide_duplicate_title">Cacher les doublons</string>
+	<string name="settings.hide_duplicate_summary">Cache les doublons (garde en preférence les mp3)</string>
 	<string name="settings.podcasts_enabled">Podcasts autorisés</string>
 	<string name="settings.podcasts_enabled_summary">Afficher ou non l\'accès aux podcasts</string>
 	<string name="settings.bookmarks_enabled">Favoris autorisés</string>

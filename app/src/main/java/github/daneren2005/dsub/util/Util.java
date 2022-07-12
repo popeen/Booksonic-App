@@ -1533,4 +1533,10 @@ public final class Util {
 
 		return random;
 	}
+
+	public static boolean isHideDuplicateEnable(Context context)
+	{
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_DUPLICATE, false);
+	}
 }

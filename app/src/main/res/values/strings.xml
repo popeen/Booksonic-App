@@ -412,6 +412,8 @@
 	<string name="settings.playback_title">Playback</string>
 	<string name="settings.hide_widget_title">Hide Widget</string>
 	<string name="settings.hide_widget_summary">Hide widget after exiting app</string>
+	<string name="settings.hide_duplicate_title">Hide Duplicate</string>
+	<string name="settings.hide_duplicate_summary">Hide duplicate songs (prefer to keep mp3)</string>
 	<string name="settings.podcasts_enabled">Podcasts Enabled</string>
 	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
 	<string name="settings.bookmarks_enabled">Bookmarks Enabled</string>

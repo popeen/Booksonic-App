@@ -97,28 +97,70 @@ public class MusicDirectory implements Serializable {
 	public void addChildren(List<Entry> children) {
 		this.children.addAll(children);
 	}
-    
+
 	public void replaceChildren(List<Entry> children) {
 		this.children = children;
 	}
 
-    public synchronized List<Entry> getChildren() {
-        return getChildren(true, true);
-    }
+	public synchronized List<Entry> getChildren() {
+		return getChildren(true, true);
+	}
 
-    public synchronized List<Entry> getChildren(boolean includeDirs, boolean includeFiles) {
-        if (includeDirs && includeFiles) {
-            return children;
-        }
+	public synchronized List<Entry> getChildren(boolean includeDirs, boolean includeFiles) { return getChildren(includeDirs, includeFiles, false); }
 
-        List<Entry> result = new ArrayList<Entry>(children.size());
-        for (Entry child : children) {
-            if (child != null && child.isDirectory() && includeDirs || !child.isDirectory() && includeFiles) {
-                result.add(child);
-            }
-        }
-        return result;
-    }
+	public synchronized List<Entry> getChildren(boolean includeDirs, boolean includeFiles, boolean hideDuplicate) {
+		if (includeDirs && includeFiles && !hideDuplicate) {
+			return children;
+		}
+
+		List<Entry> result = new ArrayList<Entry>(children.size());
+		Iterator<Entry> ite_main = children.iterator();
+		while(ite_main.hasNext())
+		{
+			Entry child = ite_main.next();
+			if (child != null && child.isDirectory() && includeDirs || !child.isDirectory() && includeFiles) {
+				if(hideDuplicate)
+				{
+					boolean duplicateFound = false;
+					Iterator<Entry> ite_list_added = result.iterator();
+					while(ite_list_added.hasNext())
+					{
+						Entry child_list_added = ite_list_added.next();
+						if(child_list_added.getTitle().compareToIgnoreCase(child.getTitle()) == 0
+								&& child_list_added.getArtist().compareToIgnoreCase(child.getArtist()) == 0
+								&& child_list_added.getAlbum().compareToIgnoreCase(child.getAlbum()) == 0)
+						{
+							duplicateFound = true;
+
+							// If previous added is mp3 keep it
+							if(child_list_added.getSuffix().compareToIgnoreCase("mp3") == 0) {
+								Log.d("RAMINOU", "current: '" + child.getTitle() + "' Previous mp3");
+								break;
+							}
+
+							// If previous added is not mp3 and this child is mp3, replace it
+							if(child.getSuffix().compareToIgnoreCase("mp3") == 0) {
+								Log.d("RAMINOU", "current: '" + child.getTitle() + "' Replace previous");
+								ite_list_added.remove();
+								result.add(child);
+							}
+
+							// If both are not mp3 keep the previous one
+							break;
+						}
+					}
+
+					if(!duplicateFound)
+						result.add(child);
+				}
+				else {
+					result.add(child);
+				}
+			}
+		}
+		return result;
+	}
+
 	public synchronized List<Entry> getSongs() {
 		List<Entry> result = new ArrayList<Entry>();
 		for (Entry child : children) {

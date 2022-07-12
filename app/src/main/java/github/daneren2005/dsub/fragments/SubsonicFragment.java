@@ -2078,7 +2078,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				getSongsRecursively(musicDirectory, songs);
 			}
 
-			for (Entry song : parent.getChildren(false, true)) {
+			for (Entry song : parent.getChildren(false, true, Util.isHideDuplicateEnable(context))) {
 				if ((!song.isVideo() || allowVideo) && song.getRating() != 1) {
 					songs.add(song);
 				}
