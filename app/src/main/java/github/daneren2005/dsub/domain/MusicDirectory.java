@@ -701,7 +701,11 @@ public class MusicDirectory implements Serializable {
 
 				return collator.compare(lhs.getAlbumDisplay(), rhs.getAlbumDisplay());
 			}
-			
+
+			int formatCompare = lhs.getSuffix().compareToIgnoreCase(rhs.getSuffix());
+			if(formatCompare != 0)
+				return formatCompare;
+
 			Integer lhsDisc = lhs.getDiscNumber();
 			Integer rhsDisc = rhs.getDiscNumber();
 			
