@@ -661,5 +661,7 @@
 	<string name="login.hint.password">Lösenord</string>
 	<string name="login.button.demo">Demo server</string>
 	<string name="login.button.signin">Logga in</string>
+    <string name="settings.file_suffix">Visa filändelse</string>
+    <string name="settings.file_suffix_summary">Visa spårens filändelse</string>
 
 </resources>
