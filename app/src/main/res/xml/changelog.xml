@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="2207" versioncode="71" releasedate="2022-07-XX">
+    <release version="2207" versioncode="71" releasedate="2022-07-27">
         <change>Changed max playback speed to 5X</change>
         <change>Added Bookmarks to main view</change>
         <change>Added option to show file suffix (Thanks Raminou!)</change>
