@@ -663,5 +663,29 @@
 	<string name="login.button.signin">Logga in</string>
     <string name="settings.file_suffix">Visa filändelse</string>
     <string name="settings.file_suffix_summary">Visa spårens filändelse</string>
+	<string name="button_bar.internet_radio">Internet radio</string>
+	<string name="main.albums_bookmarks">Bokmärken</string>
+	<string name="main.songs_top_played">Mest spelade</string>
+	<string name="menu.similar_artists.missing">Författare saknas</string>
+	<string name="select_podcasts.channels">Podcast kanaler</string>
+	<string name="settings.server_help">Hjälp / Instruktioner</string>
+	<string name="settings.cache_location_internal">Intern</string>
+	<string name="settings.cache_location_external">Extern</string>
+	<string name="settings.local_network_required_title">Streama inte under roaming</string>
+	<string name="settings.local_network_required_summary">Streama inte media under roaming</string>
+	<string name="settings.auto_sleep_value">Automatisk sömntimer</string>
+	<string name="settings.auto_sleep_value_summary">Startar sömntimern automatiskt</string>
+	<string name="settings.shake_to_reset">Skaka för att återställa</string>
+	<string name="settings.shake_to_reset_summary">När du skakar telefonen så återställs sömntimern till den satta tiden</string>
+	<string name="settings.podcastplaylist_title">Hantera podcasts som spellistor</string>
+	<string name="settings.podcastplaylist_summary">När aktiverad så handeras podcasts precis som böcker. Lägger du till en fil i spellistan kommer alla efterföljande läggas till med.</string>
+	<string name="error_field_required">Det här fältet krävs</string>
+	<string name="error_incorrect_password">Lösenordet är felaktigt</string>
+	<string name="error_invalid_password">Lösenordet är för kort</string>
+	<string name="action_demo">Använd demo servern</string>
+	<string name="action_sign_in">Logga in</string>
+	<string name="prompt_password">Lösenord</string>
+	<string name="prompt_email">Användarnamn</string>
+	<string name="details.home_page">Startsida</string>
 
 </resources>

@@ -114,7 +114,7 @@
     <string name="menu.rate">Set Rating</string>
     <string name="menu.top_tracks">Last.FM Top Tracks</string>
     <string name="menu.similar_artists">Similar Author</string>
-    <string name="menu.similar_artists.missing">Missing Artists</string>
+    <string name="menu.similar_artists.missing">Missing author</string>
     <string name="menu.start_radio">Start Radio</string>
     <string name="menu.first_level_artist">First level authors</string>
 
@@ -328,7 +328,7 @@
     <string name="settings.file_suffix">Display file suffix</string>
 
     <string name="settings.track_summary">Display Track # in front of tracks if one exists</string>
-    <string name="settings.file_suffix_summary">Display the file suffix for your tracks</string>
+    <string name="settings.file_suffix_summary">Display the suffix for your tracks</string>
     <string name="settings.custom_sort">Sort By Year</string>
     <string name="settings.custom_sort_summary">Sort books by year, or by alphabetical</string>
     <string name="settings.open_to_tab">Open To Tab</string>
