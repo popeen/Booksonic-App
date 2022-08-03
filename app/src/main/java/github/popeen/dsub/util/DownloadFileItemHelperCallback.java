@@ -3,7 +3,7 @@ package github.popeen.dsub.util;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 
-import org.eclipse.jetty.util.ArrayQueue;
+import java.util.ArrayDeque;
 
 import java.util.Queue;
 
@@ -21,7 +21,7 @@ public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallba
 	private boolean mainList;
 
 	private BackgroundTask pendingTask = null;
-	private Queue pendingOperations = new ArrayQueue();
+	private Queue pendingOperations = new ArrayDeque();
 
 	public DownloadFileItemHelperCallback(SubsonicFragment fragment, boolean mainList) {
 		super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
