@@ -2,6 +2,7 @@
 <changelog>
     <release version="2301" versioncode="73" releasedate="2023-01-XX">
         <change>Added option to hide duplicate tracks(Thanks Raminou!)</change>
+        <change>Updated dependencies</change>
     </release>
     <release version="2208" versioncode="72" releasedate="2022-08-04">
         <change>Changed max playback speed to 5X</change>
