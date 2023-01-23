@@ -378,6 +378,8 @@
 	<string name="settings.playback_title">Uppspelning</string>
 	<string name="settings.hide_widget_title">Dölj widget</string>
 	<string name="settings.hide_widget_summary">Dölj widget efter att jag lämnat appen</string>
+	<string name="settings.hide_duplicate_title">Dölj dubbletter</string>
+	<string name="settings.hide_duplicate_summary">Dölj dubbla spår (föredra mp3)</string>
 	<string name="settings.podcasts_enabled">Podcasts</string>
 	<string name="settings.podcasts_enabled_summary">Om podcast ska visas eller inte i menyn till vänster</string>
 	<string name="settings.bookmarks_enabled">Bokmärken</string>

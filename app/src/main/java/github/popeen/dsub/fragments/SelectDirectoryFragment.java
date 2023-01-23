@@ -637,7 +637,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			licenseValid = musicService.isLicenseValid(context, this);
 
 			albums = dir.getChildren(true, false);
-			entries = dir.getChildren();
+			entries = dir.getChildren(true, true, Util.isHideDuplicateEnable(context));
 
 			// This isn't really an artist if no albums on it!
 			if(albums.size() == 0) {

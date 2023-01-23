@@ -1608,6 +1608,12 @@ public final class Util {
 		return random;
 	}
 
+	public static boolean isHideDuplicateEnable(Context context)
+	{
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_DUPLICATE, false);
+	}
+
 	public static void setMargins (View view, int left, int top, int right, int bottom) {
 		if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
 			ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();

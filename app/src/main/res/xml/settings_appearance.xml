@@ -58,6 +58,12 @@
 			android:key="displayFileSuffix"
 			android:defaultValue="true"/>
 
+		<CheckBoxPreference
+			android:title="@string/settings.hide_duplicate_title"
+			android:summary="@string/settings.hide_duplicate_summary"
+			android:key="hideDuplicate"
+			android:defaultValue="false"/>
+
 
 	</PreferenceCategory>
 
