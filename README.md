@@ -72,7 +72,7 @@ If you have any questions or ideas, come visit us at [/r/booksonic](https://redd
 
 [googleplay-shield]: https://img.shields.io/badge/released-google%20play-green.svg
 [googleplay-link]: https://play.google.com/store/apps/details?id=github.popeen.dsub
-[googleplaydownloads-shield]: https://img.shields.io/badge/google%20play%20downloads-10.000%2B-blue.svg
+[googleplaydownloads-shield]: https://img.shields.io/badge/google%20play%20downloads-19.000%2B-blue.svg
 
 [issues-shield]: https://img.shields.io/github/issues-raw/popeen/Booksonic-App.svg
 [license-shield]: https://img.shields.io/github/license/popeen/Booksonic-App.svg
