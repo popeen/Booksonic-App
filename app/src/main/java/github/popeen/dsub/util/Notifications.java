@@ -91,7 +91,7 @@ public final class Notifications {
 		MediaStyle mediaStyle = new MediaStyle()
 				.setShowActionsInCompactView(compactActions)
 				.setShowCancelButton(true)
-				.setCancelButtonIntent(PendingIntent.getService(context, 0, cancelIntent, 0));
+				.setCancelButtonIntent(PendingIntent.getService(context, 0, cancelIntent, PendingIntent.FLAG_IMMUTABLE));
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
 			builder.setPriority(Notification.PRIORITY_HIGH);
@@ -99,7 +99,7 @@ public final class Notifications {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 				RemoteControlClientLP remoteControlClientLP = (RemoteControlClientLP) downloadService.getRemoteControlClient();
 				mediaStyle.setMediaSession(remoteControlClientLP.getMediaSession().getSessionToken());
-				builder.setVisibility(Notification.VISIBILITY_PUBLIC).setColor(context.getResources().getColor(R.color.lightPrimary));
+				builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC).setColor(context.getResources().getColor(R.color.lightPrimary));
 				if(!UpdateView.hasActiveActivity()) {
 					builder.setVibrate(new long[0]);
 				}
@@ -108,7 +108,7 @@ public final class Notifications {
 			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 			notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			builder.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
+			builder.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE));
 			final Notification notification = builder.build();
 			if(playing) {
 				notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
@@ -190,27 +190,27 @@ public final class Notifications {
 		Intent rewindIntent = new Intent("KEYCODE_MEDIA_REWIND");
 		rewindIntent.setComponent(new ComponentName(context, DownloadService.class));
 		rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_REWIND));
-		pendingIntent = PendingIntent.getService(context, 0, rewindIntent, 0);
+		pendingIntent = PendingIntent.getService(context, 0, rewindIntent, PendingIntent.FLAG_IMMUTABLE);
 		builder.addAction(R.drawable.ic_fast_rewind, "Rewind", pendingIntent);
 
 		if(playing) {
 			Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
 			pauseIntent.setComponent(new ComponentName(context, DownloadService.class));
 			pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
-			pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
+			pendingIntent = PendingIntent.getService(context, 0, pauseIntent, PendingIntent.FLAG_IMMUTABLE);
 			builder.addAction(R.drawable.ic_pause, "Pause", pendingIntent);
 		} else {
 			Intent playIntent = new Intent("KEYCODE_MEDIA_PLAY");
 			playIntent.setComponent(new ComponentName(context, DownloadService.class));
 			playIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
-			pendingIntent = PendingIntent.getService(context, 0, playIntent, 0);
+			pendingIntent = PendingIntent.getService(context, 0, playIntent, PendingIntent.FLAG_IMMUTABLE);
 			builder.addAction(R.drawable.ic_play_arrow, "Play", pendingIntent);
 		}
 
 		Intent fastForwardIntent = new Intent("KEYCODE_MEDIA_FAST_FORWARD");
 		fastForwardIntent.setComponent(new ComponentName(context, DownloadService.class));
 		fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
-		pendingIntent = PendingIntent.getService(context, 0, fastForwardIntent, 0);
+		pendingIntent = PendingIntent.getService(context, 0, fastForwardIntent, PendingIntent.FLAG_IMMUTABLE);
 		builder.addAction(R.drawable.ic_fast_forward, "Fast Forward", pendingIntent);
 	}
 	private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean expanded, boolean playing, boolean remote, boolean isSingleFile, boolean shouldFastForward) {
@@ -340,14 +340,14 @@ public final class Notifications {
 			prevIntent.setComponent(new ComponentName(context, DownloadService.class));
 
 			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
-			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
+			pendingIntent = PendingIntent.getService(context, 0, prevIntent, PendingIntent.FLAG_IMMUTABLE);
 			rv.setOnClickPendingIntent(previous, pendingIntent);
 		}
 		if(rewind > 0) {
 			Intent rewindIntent = new Intent("KEYCODE_MEDIA_REWIND");
 			rewindIntent.setComponent(new ComponentName(context, DownloadService.class));
 			rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_REWIND));
-			pendingIntent = PendingIntent.getService(context, 0, rewindIntent, 0);
+			pendingIntent = PendingIntent.getService(context, 0, rewindIntent, PendingIntent.FLAG_IMMUTABLE);
 			rv.setOnClickPendingIntent(rewind, pendingIntent);
 		}
 		if(pause > 0) {
@@ -356,7 +356,7 @@ public final class Notifications {
 				pauseIntent.setComponent(new ComponentName(context, DownloadService.class));
 
 				pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
-				pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
+				pendingIntent = PendingIntent.getService(context, 0, pauseIntent, PendingIntent.FLAG_IMMUTABLE);
 				rv.setOnClickPendingIntent(pause, pendingIntent);
 			} else {
 				Intent prevIntent = new Intent("KEYCODE_MEDIA_START");
@@ -372,14 +372,14 @@ public final class Notifications {
 			nextIntent.setComponent(new ComponentName(context, DownloadService.class));
 
 			nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
-			pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
+			pendingIntent = PendingIntent.getService(context, 0, nextIntent, PendingIntent.FLAG_IMMUTABLE);
 			rv.setOnClickPendingIntent(next, pendingIntent);
 		}
 		if(fastForward > 0) {
 			Intent fastForwardIntent = new Intent("KEYCODE_MEDIA_FAST_FORWARD");
 			fastForwardIntent.setComponent(new ComponentName(context, DownloadService.class));
 			fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
-			pendingIntent = PendingIntent.getService(context, 0, fastForwardIntent, 0);
+			pendingIntent = PendingIntent.getService(context, 0, fastForwardIntent, PendingIntent.FLAG_IMMUTABLE);
 			rv.setOnClickPendingIntent(fastForward, pendingIntent);
 		}
 		if(close > 0) {
@@ -387,7 +387,7 @@ public final class Notifications {
 			prevIntent.setComponent(new ComponentName(context, DownloadService.class));
 
 			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
-			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
+			pendingIntent = PendingIntent.getService(context, 0, prevIntent, PendingIntent.FLAG_IMMUTABLE);
 			rv.setOnClickPendingIntent(close, pendingIntent);
 		}
 	}
@@ -438,7 +438,7 @@ public final class Notifications {
 
 		Intent cancelIntent = new Intent(context, DownloadService.class);
 		cancelIntent.setAction(DownloadService.CANCEL_DOWNLOADS);
-		PendingIntent cancelPI = PendingIntent.getService(context, 0, cancelIntent, 0);
+		PendingIntent cancelPI = PendingIntent.getService(context, 0, cancelIntent, PendingIntent.FLAG_IMMUTABLE);
 
 		String currentDownloading, currentSize;
 		if(file != null) {
@@ -467,7 +467,7 @@ public final class Notifications {
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
 
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		builder.setContentIntent(PendingIntent.getActivity(context, 2, notificationIntent, 0));
+		builder.setContentIntent(PendingIntent.getActivity(context, 2, notificationIntent, PendingIntent.FLAG_IMMUTABLE));
 
 		final Notification notification = builder.build();
 		downloadShowing = true;
@@ -587,7 +587,7 @@ public final class Notifications {
 				notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_ID, extraId);
 			}
 
-			builder.setContentIntent(PendingIntent.getActivity(context, stringId, notificationIntent, 0));
+			builder.setContentIntent(PendingIntent.getActivity(context, stringId, notificationIntent, PendingIntent.FLAG_IMMUTABLE));
 
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			notificationManager.notify(stringId, builder.build());
