@@ -87,13 +87,13 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
 		mediaButtonIntent.setComponent(mediaButtonReceiverComponent);
-		PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 0, mediaButtonIntent, 0);
+		PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 0, mediaButtonIntent, PendingIntent.FLAG_IMMUTABLE);
 		mediaSession.setMediaButtonReceiver(mediaPendingIntent);
 
 		Intent activityIntent = new Intent(context, SubsonicFragmentActivity.class);
 		activityIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 		activityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		PendingIntent activityPendingIntent = PendingIntent.getActivity(context, 0, activityIntent, 0);
+		PendingIntent activityPendingIntent = PendingIntent.getActivity(context, 0, activityIntent, PendingIntent.FLAG_IMMUTABLE);
 		mediaSession.setSessionActivity(activityPendingIntent);
 
 		mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
