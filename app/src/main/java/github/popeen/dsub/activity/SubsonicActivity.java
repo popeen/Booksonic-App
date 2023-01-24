@@ -208,11 +208,13 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
 		switch (requestCode) {
 			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
-				// If request is cancelled, the result arrays are empty.
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) { //We only need this if android is 12 or older
+					// If request is cancelled, the result arrays are empty.
+					if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-				} else {
-					ActivityCompat.requestPermissions(this, new String[]{ permission.WRITE_EXTERNAL_STORAGE }, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+					} else {
+						ActivityCompat.requestPermissions(this, new String[]{permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+					}
 				}
 			}
 		}
@@ -250,8 +252,10 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		*/
 		checkIfServerOutdated();
 
-		if (ContextCompat.checkSelfPermission(this, permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(this, new String[]{ permission.WRITE_EXTERNAL_STORAGE }, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) { //We only need this if android is 12 or older
+			if (ContextCompat.checkSelfPermission(this, permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+				ActivityCompat.requestPermissions(this, new String[]{permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+			}
 		}
 	}
 
