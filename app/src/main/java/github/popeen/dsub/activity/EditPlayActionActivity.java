@@ -16,11 +16,8 @@
 package github.popeen.dsub.activity;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,9 +25,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,36 +63,23 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		final Activity context = this;
 		doNothing = context.getResources().getString(R.string.tasker_edit_do_nothing);
 
-		shuffleCheckbox = (CheckBox) findViewById(R.id.edit_shuffle_checkbox);
-		shuffleCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton view, boolean isChecked) {
-				startYearCheckbox.setEnabled(isChecked);
-				endYearCheckbox.setEnabled(isChecked);
-				genreButton.setEnabled(isChecked);
-			}
+		shuffleCheckbox = findViewById(R.id.edit_shuffle_checkbox);
+		shuffleCheckbox.setOnCheckedChangeListener((view, isChecked) -> {
+			startYearCheckbox.setEnabled(isChecked);
+			endYearCheckbox.setEnabled(isChecked);
+			genreButton.setEnabled(isChecked);
 		});
 
-		startYearCheckbox = (CheckBox) findViewById(R.id.edit_start_year_checkbox);
-		startYearBox = (EditText) findViewById(R.id.edit_start_year);
+		startYearCheckbox = findViewById(R.id.edit_start_year_checkbox);
+		startYearBox = findViewById(R.id.edit_start_year);
 		// Disable/enable number box if checked
-		startYearCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton view, boolean isChecked) {
-				startYearBox.setEnabled(isChecked);
-			}
-		});
+		startYearCheckbox.setOnCheckedChangeListener((view, isChecked) -> startYearBox.setEnabled(isChecked));
 		
-		endYearCheckbox = (CheckBox) findViewById(R.id.edit_end_year_checkbox);
-		endYearBox = (EditText) findViewById(R.id.edit_end_year);
-		endYearCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton view, boolean isChecked) {
-				endYearBox.setEnabled(isChecked);
-			}
-		});
+		endYearCheckbox = findViewById(R.id.edit_end_year_checkbox);
+		endYearBox = findViewById(R.id.edit_end_year);
+		endYearCheckbox.setOnCheckedChangeListener((view, isChecked) -> endYearBox.setEnabled(isChecked));
 
-		genreButton = (Button) findViewById(R.id.edit_genre_spinner);
+		genreButton = findViewById(R.id.edit_genre_spinner);
 		genreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				new LoadingTask<List<Genre>>(context, true) {
@@ -105,7 +91,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 
 					@Override
 					protected void done(final List<Genre> genres) {
-						List<String> names = new ArrayList<String>();
+						List<String> names = new ArrayList<>();
 						String blank = context.getResources().getString(R.string.select_genre_blank);
 						names.add(doNothing);
 						names.add(blank);
@@ -116,13 +102,11 @@ public class EditPlayActionActivity extends SubsonicActivity {
 
 						AlertDialog.Builder builder = new AlertDialog.Builder(context);
 						builder.setTitle(R.string.shuffle_pick_genre)
-								.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int which) {
-										if(which == 1) {
-											genreButton.setText("");
-										} else {
-											genreButton.setText(finalNames.get(which));
-										}
+								.setItems(names.toArray(new CharSequence[0]), (dialog, which) -> {
+									if(which == 1) {
+										genreButton.setText("");
+									} else {
+										genreButton.setText(finalNames.get(which));
 									}
 								});
 						AlertDialog dialog = builder.create();
@@ -145,7 +129,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		});
 		genreButton.setText(doNothing);
 
-		offlineSpinner = (Spinner) findViewById(R.id.edit_offline_spinner);
+		offlineSpinner = findViewById(R.id.edit_offline_spinner);
 		ArrayAdapter<CharSequence> offlineAdapter = ArrayAdapter.createFromResource(this, R.array.editServerOptions, android.R.layout.simple_spinner_item);
 		offlineAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		offlineSpinner.setAdapter(offlineAdapter);
