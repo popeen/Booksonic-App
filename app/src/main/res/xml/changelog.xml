@@ -3,6 +3,7 @@
     <release version="2301" versioncode="75" releasedate="2023-01-XX">
         <change>This is a beta version, please report any bugs</change>
         <change>Added option to hide duplicate tracks(Thanks Raminou!)</change>
+        <change>Optimizations and code cleanups</change>
         <change>Updated dependencies</change>
     </release>
     <release version="2208" versioncode="72" releasedate="2022-08-04">
