@@ -23,7 +23,6 @@ import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -48,6 +47,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.MusicDirectory;
@@ -86,12 +86,10 @@ import github.popeen.dsub.view.ChangeLog;
  */
 public class SubsonicFragmentActivity extends SubsonicActivity implements DownloadService.OnSongChangedListener {
 	private static String TAG = SubsonicFragmentActivity.class.getSimpleName();
-	private static boolean infoDialogDisplayed;
 	private static boolean sessionInitialized = false;
 	private static long ALLOWED_SKEW = 30000L;
 
 	private SlidingUpPanelLayout slideUpPanel;
-	private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
 	private boolean isPanelClosing = false;
 	private NowPlayingFragment nowPlayingFragment;
 	private SubsonicFragment secondaryFragment;
@@ -106,7 +104,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	private ImageButton startButton;
 	private long lastBackPressTime = 0;
 	private DownloadFile currentPlaying;
-	private PlayerState currentState;
 	private ImageButton previousButton;
 	private ImageButton nextButton;
 	private ImageButton rewindButton;
@@ -195,8 +192,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			}
 		}
 
-		slideUpPanel = (SlidingUpPanelLayout) findViewById(R.id.slide_up_panel);
-		panelSlideListener = new SlidingUpPanelLayout.PanelSlideListener() {
+		slideUpPanel = findViewById(R.id.slide_up_panel);
+		// Disable custom view before switching
+		SlidingUpPanelLayout.PanelSlideListener panelSlideListener = new SlidingUpPanelLayout.PanelSlideListener() {
 			@Override
 			public void onPanelSlide(View panel, float slideOffset) {
 
@@ -204,16 +202,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 			@Override
 			public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-				if(newState == SlidingUpPanelLayout.PanelState.COLLAPSED){
+				if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
 					isPanelClosing = false;
-					if(bottomBar.getVisibility() == View.GONE) {
+					if (bottomBar.getVisibility() == View.GONE) {
 						bottomBar.setVisibility(View.VISIBLE);
 						nowPlayingToolbar.setVisibility(View.GONE);
 						nowPlayingFragment.setPrimaryFragment(false);
 						setSupportActionBar(mainToolbar);
 						recreateSpinner();
 					}
-				}else{
+				} else {
 					isPanelClosing = false;
 					currentFragment.stopActionMode();
 
@@ -225,7 +223,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 					nowPlayingToolbar.setVisibility(View.VISIBLE);
 					setSupportActionBar(nowPlayingToolbar);
 
-					if(secondaryFragment == null) {
+					if (secondaryFragment == null) {
 						nowPlayingFragment.setPrimaryFragment(true);
 					} else {
 						secondaryFragment.setPrimaryFragment(true);
@@ -240,23 +238,18 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
 			// Post this later so it actually runs
-			handler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					openNowPlaying();
-				}
-			}, 200);
+			handler.postDelayed(this::openNowPlaying, 200);
 
 			getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD);
 		}
 
 		bottomBar = findViewById(R.id.bottom_bar);
 		bottomBarControls = findViewById(R.id.bottom_bar_controls);
-		mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
-		nowPlayingToolbar = (Toolbar) findViewById(R.id.now_playing_toolbar);
-		coverArtView = (ImageView) bottomBar.findViewById(R.id.album_art);
-		trackView = (TextView) bottomBar.findViewById(R.id.track_name);
-		artistView = (TextView) bottomBar.findViewById(R.id.artist_name);
+		mainToolbar = findViewById(R.id.main_toolbar);
+		nowPlayingToolbar = findViewById(R.id.now_playing_toolbar);
+		coverArtView = bottomBar.findViewById(R.id.album_art);
+		trackView = bottomBar.findViewById(R.id.track_name);
+		artistView = bottomBar.findViewById(R.id.artist_name);
 
 		bottomBarControls = findViewById(R.id.bottom_bar_controls);
 		if(Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_BOTTOM_BAR_CONTROLS_ENABLED, false)){
@@ -274,99 +267,74 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			trans.commit();
 		}
 
-		rewindButton = (ImageButton) findViewById(R.id.download_rewind);
-		rewindButton.setOnClickListener(new View.OnClickListener() {
+		rewindButton = findViewById(R.id.download_rewind);
+		rewindButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 			@Override
-			public void onClick(View v) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						if (getDownloadService() == null) {
-							return null;
-						}
+			protected Void doInBackground() {
+				if (getDownloadService() == null) {
+					return null;
+				}
 
-						getDownloadService().rewind();
-						return null;
-					}
-				}.execute();
+				getDownloadService().rewind();
+				return null;
 			}
-		});
+		}.execute());
 
-		previousButton = (ImageButton) findViewById(R.id.download_previous);
-		previousButton.setOnClickListener(new View.OnClickListener() {
+		previousButton = findViewById(R.id.download_previous);
+		previousButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 			@Override
-			public void onClick(View v) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						if(getDownloadService() == null) {
-							return null;
-						}
+			protected Void doInBackground() {
+				if(getDownloadService() == null) {
+					return null;
+				}
 
-						getDownloadService().previous();
-						return null;
-					}
-				}.execute();
+				getDownloadService().previous();
+				return null;
 			}
-		});
+		}.execute());
 
-		startButton = (ImageButton) findViewById(R.id.download_start);
-		startButton.setOnClickListener(new View.OnClickListener() {
+		startButton = findViewById(R.id.download_start);
+		startButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 			@Override
-			public void onClick(View v) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						PlayerState state = getDownloadService().getPlayerState();
-						if(state == PlayerState.STARTED) {
-							getDownloadService().pause();
-						} else if(state == PlayerState.IDLE) {
-							getDownloadService().play();
-						} else {
-							getDownloadService().start();
-						}
+			protected Void doInBackground() {
+				PlayerState state = getDownloadService().getPlayerState();
+				if(state == PlayerState.STARTED) {
+					getDownloadService().pause();
+				} else if(state == PlayerState.IDLE) {
+					getDownloadService().play();
+				} else {
+					getDownloadService().start();
+				}
 
-						return null;
-					}
-				}.execute();
+				return null;
 			}
-		});
+		}.execute());
 
-		nextButton = (ImageButton) findViewById(R.id.download_next);
-		nextButton.setOnClickListener(new View.OnClickListener() {
+		nextButton = findViewById(R.id.download_next);
+		nextButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 			@Override
-			public void onClick(View v) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						if(getDownloadService() == null) {
-							return null;
-						}
+			protected Void doInBackground() {
+				if(getDownloadService() == null) {
+					return null;
+				}
 
-						getDownloadService().next();
-						return null;
-					}
-				}.execute();
+				getDownloadService().next();
+				return null;
 			}
-		});
+		}.execute());
 
-		fastforwardButton = (ImageButton) findViewById(R.id.download_fastforward);
-		fastforwardButton.setOnClickListener(new View.OnClickListener() {
+		fastforwardButton = findViewById(R.id.download_fastforward);
+		fastforwardButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 			@Override
-			public void onClick(View v) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						if (getDownloadService() == null) {
-							return null;
-						}
+			protected Void doInBackground() {
+				if (getDownloadService() == null) {
+					return null;
+				}
 
-						getDownloadService().fastForward();
-						return null;
-					}
-				}.execute();
+				getDownloadService().fastForward();
+				return null;
 			}
-		});
+		}.execute());
 	}
 
 	@Override
@@ -469,12 +437,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 		UserUtil.seedCurrentUser(this);
 		createAccount();
-		runWhenServiceAvailable(new Runnable() {
-			@Override
-			public void run() {
-				getDownloadService().addOnSongChangedListener(SubsonicFragmentActivity.this, true);
-			}
-		});
+		runWhenServiceAvailable(() -> getDownloadService().addOnSongChangedListener(SubsonicFragmentActivity.this, true));
 	}
 
 	@Override
@@ -519,9 +482,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			drawerToggle.setDrawerIndicatorEnabled(false);
 		}
 
-		if(savedInstanceState.getInt(Constants.MAIN_SLIDE_PANEL_STATE, -1) == SlidingUpPanelLayout.PanelState.EXPANDED.hashCode()) {
-			//panelSlideListener.onPanelExpanded(null);
-		}
 	}
 
 	@Override
@@ -611,7 +571,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	@Override
 	public void setTitle(CharSequence title) {
 		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-			getSupportActionBar().setTitle(title);
+			Objects.requireNonNull(getSupportActionBar()).setTitle(title);
 		} else {
 			super.setTitle(title);
 		}
@@ -700,7 +660,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			Updater updater = new Updater(ver);
 			updater.checkUpdates(this);
 		}
-		catch(Exception e) {}
+		catch(Exception ignored) {}
 	}
 
 	private void loadSession() {
@@ -745,12 +705,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			editor.putString(Constants.PREFERENCES_KEY_USERNAME + 1, "guest");
 			editor.putString(Constants.PREFERENCES_KEY_PASSWORD + 1, "guest");
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-			editor.commit();
+			editor.apply();
 		}
 		if(!prefs.contains(Constants.PREFERENCES_KEY_SERVER_COUNT)) {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
-			editor.commit();
+			editor.apply();
 		}
 	}
 
@@ -762,7 +722,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		} else {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, newDirectory);
-			editor.commit();
+			editor.apply();
 			return true;
 		}
 	}
@@ -794,7 +754,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			private PlayerQueue playerQueue;
 
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				try {
 					MusicService musicService = MusicServiceFactory.getMusicService(context);
 					PlayerQueue remoteState = musicService.getPlayQueue(context, null);
@@ -836,50 +796,35 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		builder.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.common_confirm)
 				.setMessage(message)
-				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+				.setPositiveButton(R.string.common_ok, (dialogInterface, i) -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-							@Override
-							protected Void doInBackground() throws Throwable {
-								DownloadService downloadService = getDownloadService();
-								downloadService.clear();
-								downloadService.download(remoteState.songs, false, false, false, false, remoteState.currentPlayingIndex, remoteState.currentPlayingPosition);
-								return null;
-							}
-						}.execute();
+					protected Void doInBackground() {
+						DownloadService downloadService = getDownloadService();
+						downloadService.clear();
+						downloadService.download(remoteState.songs, false, false, false, false, remoteState.currentPlayingIndex, remoteState.currentPlayingPosition);
+						return null;
 					}
-				})
-				.setNeutralButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
+				}.execute())
+				.setNeutralButton(R.string.common_cancel, (dialogInterface, i) -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-							@Override
-							protected Void doInBackground() throws Throwable {
-								DownloadService downloadService = getDownloadService();
-								downloadService.serializeQueue(false);
-								return null;
-							}
-						}.execute();
+					protected Void doInBackground() {
+						DownloadService downloadService = getDownloadService();
+						downloadService.serializeQueue(false);
+						return null;
 					}
-				})
-				.setNegativeButton(R.string.common_never, new DialogInterface.OnClickListener() {
+				}.execute())
+				.setNegativeButton(R.string.common_never, (dialogInterface, i) -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-							@Override
-							protected Void doInBackground() throws Throwable {
-								DownloadService downloadService = getDownloadService();
-								downloadService.serializeQueue(false);
+					protected Void doInBackground() {
+						DownloadService downloadService = getDownloadService();
+						downloadService.serializeQueue(false);
 
-								SharedPreferences.Editor editor = Util.getPreferences(SubsonicFragmentActivity.this).edit();
-								editor.putBoolean(Constants.PREFERENCES_KEY_RESUME_PLAY_QUEUE_NEVER, true);
-								editor.commit();
-								return null;
-							}
-						}.execute();
+						SharedPreferences.Editor editor = Util.getPreferences(SubsonicFragmentActivity.this).edit();
+						editor.putBoolean(Constants.PREFERENCES_KEY_RESUME_PLAY_QUEUE_NEVER, true);
+						editor.apply();
+						return null;
 					}
-				});
+				}.execute());
 
 		builder.create().show();
 	}
@@ -889,7 +834,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 		new SilentBackgroundTask<Void>(this) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
 				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
 				accountManager.addAccountExplicitly(account, null, null);
@@ -920,14 +865,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	}
 
 	private void showInfoDialog() {
-		infoDialogDisplayed = true;
 		if(Util.getRestUrl(this, null).contains("demo.booksonic.org")) {
 			startActivity(new Intent(this, LoginActivity.class));
 		}
-	}
-
-	public Toolbar getActiveToolbar() {
-		return slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED ? nowPlayingToolbar : mainToolbar;
 	}
 
 	@Override
@@ -961,10 +901,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			getImageLoader().loadImage(coverArtView, song, false, height, false);
 		}
 
-		updateMediaButtons(true);
+		updateMediaButtons();
 	}
 
-	private void updateMediaButtons(boolean shouldFastForward) {
+	private void updateMediaButtons() {
 		DownloadService downloadService = getDownloadService();
 		if(downloadService.isCurrentPlayingSingle()) {
 			previousButton.setVisibility(View.GONE);
@@ -973,19 +913,11 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			rewindButton.setVisibility(View.GONE);
 			fastforwardButton.setVisibility(View.GONE);
 		} else {
-			if (shouldFastForward) {
-				previousButton.setVisibility(View.GONE);
-				nextButton.setVisibility(View.GONE);
+			previousButton.setVisibility(View.GONE);
+			nextButton.setVisibility(View.GONE);
 
-				rewindButton.setVisibility(View.VISIBLE);
-				fastforwardButton.setVisibility(View.VISIBLE);
-			} else {
-				previousButton.setVisibility(View.VISIBLE);
-				nextButton.setVisibility(View.VISIBLE);
-
-				rewindButton.setVisibility(View.GONE);
-				fastforwardButton.setVisibility(View.GONE);
-			}
+			rewindButton.setVisibility(View.VISIBLE);
+			fastforwardButton.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -994,7 +926,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		if(this.currentPlaying != currentPlaying || this.currentPlaying == null) {
 			onSongChanged(currentPlaying, currentPlayingIndex, shouldFastForward);
 		} else {
-			updateMediaButtons(true);
+			updateMediaButtons();
 		}
 	}
 
