@@ -11,14 +11,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import org.jsoup.Jsoup;
 
@@ -27,8 +24,6 @@ import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.util.Constants;
 import github.popeen.dsub.util.Util;
-
-import static org.fourthline.cling.binding.xml.Descriptor.Device.ELEMENT.url;
 
 public class LoginActivity extends Activity {
 
@@ -41,86 +36,39 @@ public class LoginActivity extends Activity {
 	private EditText mPasswordView;
 	private View mProgressView;
 	private View mLoginFormView;
-	private View sideloadedView;
-	private Button minstructionsButton;
-	private Button mSettingsButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		// Set up the login form.
-		mAddressView = (EditText) findViewById(R.id.address);
-		mUsernameView = (AutoCompleteTextView) findViewById(R.id.email);
-		mPasswordView = (EditText) findViewById(R.id.password);
-		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-			@Override
-			public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-				if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-					attemptLogin();
-					return true;
-				}
-				return false;
-			}
-		});
-
-		minstructionsButton = (Button) findViewById(R.id.instructions_button);
-		minstructionsButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				goToUrl("https://booksonic.org/how.php");
-			}
-		});
-
-		mSettingsButton = (Button) findViewById(R.id.settings_button);
-		mSettingsButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				startActivity(new Intent(getBaseContext(), SettingsActivity.class));
-			}
-		});
-
-		Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-		mEmailSignInButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
+		mAddressView = findViewById(R.id.address);
+		mUsernameView = findViewById(R.id.email);
+		mPasswordView = findViewById(R.id.password);
+		mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
+			if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
 				attemptLogin();
+				return true;
 			}
+			return false;
 		});
 
-		Button mRegisterButton = (Button) findViewById(R.id.register_button);
-		mRegisterButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				finish();
-			}
-		});
+		Button minstructionsButton = findViewById(R.id.instructions_button);
+		minstructionsButton.setOnClickListener(view -> openHowTo());
+
+		Button mSettingsButton = findViewById(R.id.settings_button);
+		mSettingsButton.setOnClickListener(view -> startActivity(new Intent(getBaseContext(), SettingsActivity.class)));
+
+		Button mEmailSignInButton = findViewById(R.id.email_sign_in_button);
+		mEmailSignInButton.setOnClickListener(view -> attemptLogin());
+
+		Button mRegisterButton = findViewById(R.id.register_button);
+		mRegisterButton.setOnClickListener(view -> finish());
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mProgressView = findViewById(R.id.login_progress);
-		sideloadedView = findViewById(R.id.login_sideloaded);
+		View sideloadedView = findViewById(R.id.login_sideloaded);
 
-
-		/*
-			Some third party app stores have started publishing my builds of the app, this is not good since it will lead to users using old builds that might not work properly anymore.
-			When people build the app themselves they are aware that they will need to rebuild it later, people downloading from third party stores will no be so they will end up using older versions that will break and lead to frustration with Booksonic.
-
-			There is also the issue that some parts of Booksonic is relying on thirt party APIs, when people build the app themselves they are providing their own keys, when they are using my build they are using my keys meaning I will have to cover the cost.
-
-			For now we encourage users to get it from Play or build it themselves by only giving access to the demo server if it was signed with popeens key and then sideloaded. Anyone else building it will not be locked down to demo.
-
-		 */
-
-		/*
-		if(!Util.installedFromPlayStore(this) && Util.isSignedByPopeen(this)){
-			mAddressView.setEnabled(false);
-			mUsernameView.setEnabled(false);
-			mPasswordView.setEnabled(false);
-			mEmailSignInButton.setEnabled(false);
-			mLoginFormView = findViewById(R.id.login_form);
-			sideloadedView.setVisibility(View.VISIBLE);
-		}
-		*/
 	}
 
 
@@ -235,7 +183,7 @@ public class LoginActivity extends Activity {
 			editor.putString(Constants.PREFERENCES_KEY_USERNAME + 1, mEmail);
 			editor.putString(Constants.PREFERENCES_KEY_PASSWORD + 1, mPassword);
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-			editor.commit();
+			editor.apply();
 
 			MusicService musicService = MusicServiceFactory.getMusicService(context);
 			try {
@@ -265,12 +213,12 @@ public class LoginActivity extends Activity {
 				editor.putString(Constants.PREFERENCES_KEY_USERNAME + 1, "demo");
 				editor.putString(Constants.PREFERENCES_KEY_PASSWORD + 1, "demo");
 				editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-				editor.commit();
+				editor.apply();
 
 
 				try {
 					String ping = Jsoup.connect(address).ignoreContentType(true).execute().body();
-					if(ping.contains("subsonic") == false){
+					if(!ping.contains("subsonic")){
 						mAddressView.setError("Invalid URL");
 						mAddressView.requestFocus();
 					}else{
@@ -279,7 +227,7 @@ public class LoginActivity extends Activity {
 					}
 
 				}catch (Exception e){
-					Log.println(10, "Login", "Unable to validate login url.\n" + e.toString() );
+					Log.println(10, "Login", "Unable to validate login url.\n" + e);
 					if(e.toString().contains("android.os.NetworkOnMainThreadException") == false) {
 						mAddressView.setError("Invalid URL");
 						mAddressView.requestFocus();
@@ -305,8 +253,8 @@ public class LoginActivity extends Activity {
 		this.moveTaskToBack(true);
 	}
 
-	private void goToUrl (String url) {
-		Uri uriUrl = Uri.parse(url);
+	private void openHowTo() {
+		Uri uriUrl = Uri.parse("https://booksonic.org/how.php");
 		Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
 		startActivity(launchBrowser);
 	}
