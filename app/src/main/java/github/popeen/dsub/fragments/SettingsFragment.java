@@ -226,13 +226,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			}
 		} else if(Constants.PREFERENCES_KEY_THEME.equals(key)) {
 			String value = sharedPreferences.getString(key, null);
-		/* TODO tag, location
-			if("day/night".equals(value) || "day/black".equals(value)) {
-				if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-					ActivityCompat.requestPermissions(context, new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION }, SubsonicActivity.PERMISSIONS_REQUEST_LOCATION);
-				}
-			}
-		 */
 		} else if(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED.equals(key)) {
 			DownloadService downloadService = DownloadService.getInstance();
 			if(downloadService != null) {

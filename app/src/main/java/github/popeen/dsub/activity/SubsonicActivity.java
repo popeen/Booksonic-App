@@ -37,6 +37,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import com.google.android.material.navigation.NavigationView;
+
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -76,6 +78,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.domain.ServerInfo;
@@ -105,13 +108,12 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private static final int MENU_GROUP_SERVER = 10;
 	private static final int MENU_ITEM_SERVER_BASE = 100;
 	public static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
-	public static final int PERMISSIONS_REQUEST_LOCATION = 2;
 
 	private final List<Runnable> afterServiceAvailable = new ArrayList<>();
 	private boolean drawerIdle = true;
 	private boolean destroyed = false;
 	private boolean finished = false;
-	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
+	protected List<SubsonicFragment> backStack = new ArrayList<>();
 	protected SubsonicFragment currentFragment;
 	protected View primaryContainer;
 	protected View secondaryContainer;
@@ -133,14 +135,13 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	boolean showingTabs = true;
 	boolean drawerOpen = false;
 	SharedPreferences.OnSharedPreferenceChangeListener preferencesListener;
-	private SensorManager sensorManager;
 	float x,y,z;
 	boolean checkShake = false;
 
 	static {
 		// If Android Pie or older, set night mode by system clock
-		if (Build.VERSION.SDK_INT<29) {
-			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_TIME);
 		} else {
 			// Else, for Android 10+, follow system dark mode setting
 			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
@@ -151,7 +152,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	protected void onCreate(Bundle bundle) {
 
 
-		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		sensorManager.registerListener(this, sensorManager.getDefaultSensor
 				(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -176,21 +177,18 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 
 		if(preferencesListener == null) {
-			preferencesListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-				@Override
-				public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-					// When changing drawer settings change visibility
-					switch(key) {
-						case Constants.PREFERENCES_KEY_PODCASTS_ENABLED:
-							setDrawerItemVisible(R.id.drawer_podcasts, false);
-							break;
-						case Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED:
-							setDrawerItemVisible(R.id.drawer_bookmarks, false);
-							break;
-						case Constants.PREFERENCES_KEY_ADMIN_ENABLED:
-							setDrawerItemVisible(R.id.drawer_admin, false);
-							break;
-					}
+			preferencesListener = (sharedPreferences, key) -> {
+				// When changing drawer settings change visibility
+				switch(key) {
+					case Constants.PREFERENCES_KEY_PODCASTS_ENABLED:
+						setDrawerItemVisible(R.id.drawer_podcasts, false);
+						break;
+					case Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED:
+						setDrawerItemVisible(R.id.drawer_bookmarks, false);
+						break;
+					case Constants.PREFERENCES_KEY_ADMIN_ENABLED:
+						setDrawerItemVisible(R.id.drawer_admin, false);
+						break;
 				}
 			};
 			Util.getPreferences(this).registerOnSharedPreferenceChangeListener(preferencesListener);
@@ -205,16 +203,14 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-		switch (requestCode) {
-			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
-				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) { //We only need this if android is 12 or older
-					// If request is cancelled, the result arrays are empty.
-					if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		if (requestCode == PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) { //We only need this if android is 12 or older
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-					} else {
-						ActivityCompat.requestPermissions(this, new String[]{permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-					}
+				} else {
+					ActivityCompat.requestPermissions(this, new String[]{permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 				}
 			}
 		}
@@ -227,8 +223,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		if(spinnerAdapter == null) {
 			createCustomActionBarView();
 		}
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
+		Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+		Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
 
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		if(drawerToggle != null) {
@@ -262,69 +258,64 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private void checkIfServerOutdated(){
 		final Context context = this;
         if(!Util.isOffline(context)) {
-            new Thread(new Runnable() {
-                public void run() {
-                	try {
-						SharedPreferences prefs = Util.getPreferences(context);
-						String url = Util.getRestUrl(context, "ping") + "&f=json";
-						final String input = Jsoup.connect(url).get().body().outerHtml();
-						final String ip = Jsoup.connect("https://ip.popeen.com/api/").get().body().outerHtml();
-						Log.w("pinging", input);
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
+            new Thread(() -> {
+				try {
+					SharedPreferences prefs = Util.getPreferences(context);
+					String url = Util.getRestUrl(context, "ping") + "&f=json";
+					final String input = Jsoup.connect(url).get().body().outerHtml();
+					final String ip = Jsoup.connect("https://ip.popeen.com/api/").get().body().outerHtml();
+					Log.w("pinging", input);
+					runOnUiThread(() -> {
 
-								try {
-									JSONObject json = new JSONObject(input);
-									String resp = json.getJSONObject("subsonic-response").getString("booksonic");
-									Log.w("outdated?", resp);
-									TextView t = (TextView) findViewById(R.id.msg);
-									if (t != null) {
-										if (resp.equals("outdated")) {
-											Log.w(":/", ":/");
-											t.setText(context.getText(R.string.msg_server_outdated));
-											t.setVisibility(View.VISIBLE);
-										} else if (resp.equals("outdated_beta") || resp.equals("true")) { //early beta versions only returned "true"
-											Log.w(":(", ":(");
-											t.setText(context.getText(R.string.msg_server_outdated_beta));
-											t.setVisibility(View.VISIBLE);
-										} else {
-											Log.w(":)", ":)");
-											t.setVisibility(View.GONE);
-											try {
-												resp = json.getJSONObject("subsonic-response").getString("emulator");
-												t.setText("Server Emulator: " + resp.toString());
-												t.setVisibility(View.VISIBLE);
-											} catch (Exception e) {
-											}
-										}
-									}
-								} catch (Exception er) {
-									TextView t = (TextView) findViewById(R.id.msg);
-									if (t != null) {
-										Log.w("Network Error", er.toString());
-										if (er.toString().contains("End of input at character 0")) {
-											try {
-												JSONObject ipJson = new JSONObject(ip);
-												String ipResp = ipJson.getString("ip");
-												t.setText(context.getText(R.string.msg_server_offline));
-											} catch (Exception e) {
-												t.setText(context.getText(R.string.msg_noInternet));
-											}
-
-											t.setVisibility(View.VISIBLE);
-
-										} else {
-											t.setText(context.getText(R.string.msg_server_notBooksonic));
-											t.setVisibility(View.VISIBLE);
-										}
+						try {
+							JSONObject json = new JSONObject(input);
+							String resp = json.getJSONObject("subsonic-response").getString("booksonic");
+							Log.w("outdated?", resp);
+							TextView t = findViewById(R.id.msg);
+							if (t != null) {
+								if (resp.equals("outdated")) {
+									Log.w(":/", ":/");
+									t.setText(context.getText(R.string.msg_server_outdated));
+									t.setVisibility(View.VISIBLE);
+								} else if (resp.equals("outdated_beta") || resp.equals("true")) { //early beta versions only returned "true"
+									Log.w(":(", ":(");
+									t.setText(context.getText(R.string.msg_server_outdated_beta));
+									t.setVisibility(View.VISIBLE);
+								} else {
+									Log.w(":)", ":)");
+									t.setVisibility(View.GONE);
+									try {
+										resp = json.getJSONObject("subsonic-response").getString("emulator");
+										t.setText("Server Emulator: " + resp);
+										t.setVisibility(View.VISIBLE);
+									} catch (Exception ignored) {
 									}
 								}
 							}
-						});
-					}catch (Exception e){}
-                }
-            }).start();
+						} catch (Exception er) {
+							TextView t = findViewById(R.id.msg);
+							if (t != null) {
+								Log.w("Network Error", er.toString());
+								if (er.toString().contains("End of input at character 0")) {
+									try {
+										JSONObject ipJson = new JSONObject(ip);
+										String ipResp = ipJson.getString("ip");
+										t.setText(context.getText(R.string.msg_server_offline));
+									} catch (Exception e) {
+										t.setText(context.getText(R.string.msg_noInternet));
+									}
+
+									t.setVisibility(View.VISIBLE);
+
+								} else {
+									t.setText(context.getText(R.string.msg_server_notBooksonic));
+									t.setVisibility(View.VISIBLE);
+								}
+							}
+						}
+					});
+				}catch (Exception ignored){}
+			}).start();
         }
     }
 
@@ -338,7 +329,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		actionBarSpinner.setOnItemSelectedListener(this);
 		actionBarSpinner.setAdapter(spinnerAdapter);
 
-		getSupportActionBar().setCustomView(actionBarSpinner);
+		Objects.requireNonNull(getSupportActionBar()).setCustomView(actionBarSpinner);
 	}
 
 	@Override
@@ -397,103 +388,94 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		} else {
 			super.setContentView(R.layout.abstract_activity);
 		}
-		rootView = (ViewGroup) findViewById(R.id.content_frame);
+		rootView = findViewById(R.id.content_frame);
 
 		if(viewId != 0) {
 			LayoutInflater layoutInflater = getLayoutInflater();
 			layoutInflater.inflate(viewId, rootView);
 		}
 
-		drawerList = (NavigationView) findViewById(R.id.left_drawer);
-		drawerList.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-			@Override
-			public boolean onNavigationItemSelected(final MenuItem menuItem) {
-				if(showingTabs) {
-					// Settings are on a different selectable track
-					if (menuItem.getItemId() != R.id.drawer_settings && menuItem.getItemId() != R.id.drawer_admin && menuItem.getItemId() != R.id.drawer_offline) {
-						menuItem.setChecked(true);
-						lastSelectedPosition = menuItem.getItemId();
-					}
+		drawerList = findViewById(R.id.left_drawer);
+		drawerList.setNavigationItemSelectedListener(menuItem -> {
+			if(showingTabs) {
+				// Settings are on a different selectable track
+				if (menuItem.getItemId() != R.id.drawer_settings && menuItem.getItemId() != R.id.drawer_admin && menuItem.getItemId() != R.id.drawer_offline) {
+					menuItem.setChecked(true);
+					lastSelectedPosition = menuItem.getItemId();
+				}
 
-					switch (menuItem.getItemId()) {
-						case R.id.drawer_home:
-							drawerItemSelected("Home");
-							return true;
-						case R.id.drawer_library:
-							drawerItemSelected("Artist");
-							return true;
-						case R.id.drawer_podcasts:
-							drawerItemSelected("Podcast");
-							return true;
-						case R.id.drawer_bookmarks:
-							drawerItemSelected("Bookmark");
-							return true;
-						case R.id.drawer_admin:
-							if (UserUtil.isCurrentAdmin()) {
-								UserUtil.confirmCredentials(SubsonicActivity.this, new Runnable() {
-									@Override
-									public void run() {
-										drawerItemSelected("Admin");
-										menuItem.setChecked(true);
-										lastSelectedPosition = menuItem.getItemId();
-									}
-								});
-							} else {
+				switch (menuItem.getItemId()) {
+					case R.id.drawer_home:
+						drawerItemSelected("Home");
+						return true;
+					case R.id.drawer_library:
+						drawerItemSelected("Artist");
+						return true;
+					case R.id.drawer_podcasts:
+						drawerItemSelected("Podcast");
+						return true;
+					case R.id.drawer_bookmarks:
+						drawerItemSelected("Bookmark");
+						return true;
+					case R.id.drawer_admin:
+						if (UserUtil.isCurrentAdmin()) {
+							UserUtil.confirmCredentials(SubsonicActivity.this, () -> {
 								drawerItemSelected("Admin");
 								menuItem.setChecked(true);
 								lastSelectedPosition = menuItem.getItemId();
-							}
-							return true;
-						case R.id.drawer_downloading:
-							drawerItemSelected("Download");
-							return true;
-						case R.id.drawer_offline:
-							toggleOffline();
-							return true;
-						case R.id.drawer_ishome:
-							toggleHome();
-							return true;
-						case R.id.drawer_settings:
-							startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
-							drawer.closeDrawers();
-							return true;
-					}
-				} else {
-					int activeServer = menuItem.getItemId() - MENU_ITEM_SERVER_BASE;
-					SubsonicActivity.this.setActiveServer(activeServer);
-					populateTabs();
-					return true;
+							});
+						} else {
+							drawerItemSelected("Admin");
+							menuItem.setChecked(true);
+							lastSelectedPosition = menuItem.getItemId();
+						}
+						return true;
+					case R.id.drawer_downloading:
+						drawerItemSelected("Download");
+						return true;
+					case R.id.drawer_offline:
+						toggleOffline();
+						return true;
+					case R.id.drawer_ishome:
+						toggleHome();
+						return true;
+					case R.id.drawer_settings:
+						startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
+						drawer.closeDrawers();
+						return true;
 				}
-
-				return false;
+			} else {
+				int activeServer = menuItem.getItemId() - MENU_ITEM_SERVER_BASE;
+				SubsonicActivity.this.setActiveServer(activeServer);
+				populateTabs();
+				return true;
 			}
+
+			return false;
 		});
 
 		drawerHeader = drawerList.inflateHeaderView(R.layout.drawer_header);
-		drawerHeader.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(showingTabs) {
-					populateServers();
-				} else {
-					populateTabs();
-				}
+		drawerHeader.setOnClickListener(v -> {
+			if(showingTabs) {
+				populateServers();
+			} else {
+				populateTabs();
 			}
 		});
 
-		drawerHeaderToggle = (ImageView) drawerHeader.findViewById(R.id.header_select_image);
-		drawerServerName = (TextView) drawerHeader.findViewById(R.id.header_server_name);
-		drawerUserName = (TextView) drawerHeader.findViewById(R.id.header_user_name);
+		drawerHeaderToggle = drawerHeader.findViewById(R.id.header_select_image);
+		drawerServerName = drawerHeader.findViewById(R.id.header_server_name);
+		drawerUserName = drawerHeader.findViewById(R.id.header_user_name);
 
-		drawerUserAvatar = (ImageView) drawerHeader.findViewById(R.id.header_user_avatar);
+		drawerUserAvatar = drawerHeader.findViewById(R.id.header_user_avatar);
 
 		updateDrawerHeader();
 
 		if(!isTv()) {
-			drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+			drawer = findViewById(R.id.drawer_layout);
 
 			// Pass in toolbar if it exists
-			Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+			Toolbar toolbar = findViewById(R.id.main_toolbar);
 			drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.common_appname, R.string.common_appname) {
 				@Override
 				public void onDrawerClosed(View view) {
@@ -527,13 +509,11 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			drawer.setDrawerListener(drawerToggle);
 			drawerToggle.setDrawerIndicatorEnabled(true);
 
-			drawer.setOnTouchListener(new View.OnTouchListener() {
-				public boolean onTouch(View v, MotionEvent event) {
-					if (drawerIdle && currentFragment != null && currentFragment.getGestureDetector() != null) {
-						return currentFragment.getGestureDetector().onTouchEvent(event);
-					} else {
-						return false;
-					}
+			drawer.setOnTouchListener((v, event) -> {
+				if (drawerIdle && currentFragment != null && currentFragment.getGestureDetector() != null) {
+					return currentFragment.getGestureDetector().onTouchEvent(event);
+				} else {
+					return false;
 				}
 			});
 		}
@@ -1038,7 +1018,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private void applyTheme() {
 		theme = ThemeUtil.getTheme(this);
 
-		if(theme != null && theme.indexOf("fullscreen") != -1) {
+		if(theme != null && theme.contains("fullscreen")) {
 			theme = theme.substring(0, theme.indexOf("_fullscreen"));
 			ThemeUtil.setTheme(this, theme);
 		}
@@ -1056,8 +1036,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 						View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
 				getWindow().getDecorView().setSystemUiVisibility(flags);
-			} else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-				getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 			}
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
@@ -1115,22 +1093,13 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 	private void checkIfServiceAvailable() {
 		if(getDownloadService() == null) {
-			handler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					checkIfServiceAvailable();
-				}
-			}, 50);
+			handler.postDelayed(this::checkIfServiceAvailable, 50);
 		} else if(afterServiceAvailable.size() > 0) {
 			for(Runnable runnable: afterServiceAvailable) {
 				handler.post(runnable);
 			}
 			afterServiceAvailable.clear();
 		}
-	}
-
-	public static String getThemeName() {
-		return theme;
 	}
 
 	public boolean isTv() {
@@ -1153,7 +1122,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			if (service != null) {
 				new SilentBackgroundTask<Void>(this) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						service.clearIncomplete();
 						return null;
 					}
@@ -1230,34 +1199,23 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 
 		View checkBoxView = this.getLayoutInflater().inflate(R.layout.sync_dialog, null);
-		final CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.sync_default);
+		final CheckBox checkBox = checkBoxView.findViewById(R.id.sync_default);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(android.R.drawable.ic_dialog_info)
 				.setTitle(R.string.offline_sync_dialog_title)
 				.setMessage(this.getResources().getString(R.string.offline_sync_dialog_message, scrobbleCount, starsCount))
 				.setView(checkBoxView)
-				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						if(checkBox.isChecked()) {
-							Util.setSyncDefault(SubsonicActivity.this, "sync");
-						}
-						syncOffline(scrobbleCount, starsCount);
+				.setPositiveButton(R.string.common_ok, (dialogInterface, i) -> {
+					if(checkBox.isChecked()) {
+						Util.setSyncDefault(SubsonicActivity.this, "sync");
 					}
-				}).setNeutralButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-				dialogInterface.dismiss();
+					syncOffline(scrobbleCount, starsCount);
+				}).setNeutralButton(R.string.common_cancel, (dialogInterface, i) -> dialogInterface.dismiss()).setNegativeButton(R.string.common_delete, (dialogInterface, i) -> {
+			if (checkBox.isChecked()) {
+				Util.setSyncDefault(SubsonicActivity.this, "delete");
 			}
-		}).setNegativeButton(R.string.common_delete, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-				if (checkBox.isChecked()) {
-					Util.setSyncDefault(SubsonicActivity.this, "delete");
-				}
-				deleteOffline();
-			}
+			deleteOffline();
 		});
 
 		builder.create().show();
@@ -1292,7 +1250,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		SharedPreferences.Editor offline = Util.getOfflineSync(this).edit();
 		offline.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
 		offline.putInt(Constants.OFFLINE_STAR_COUNT, 0);
-		offline.commit();
+		offline.apply();
 	}
 	
 	public int getDrawerItemId(String fragmentType) {
@@ -1301,8 +1259,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 
 		switch(fragmentType) {
-			case "Home":
-				return R.id.drawer_home;
 			case "Artist":
 				return R.id.drawer_library;
 			case "Podcast":
@@ -1343,7 +1299,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				PackageInfo packageInfo = context.getPackageManager().getPackageInfo("github.popeen.dsub", 0);
 				file = new File(Environment.getExternalStorageDirectory(), "dsub-stacktrace.txt");
 				printWriter = new PrintWriter(file);
-				printWriter.println("Android API level: " + Build.VERSION.SDK);
+				printWriter.println("Android API level: " + Build.VERSION.SDK_INT);
 				printWriter.println("Subsonic version name: " + packageInfo.versionName);
 				printWriter.println("Subsonic version code: " + packageInfo.versionCode);
 				printWriter.println();
