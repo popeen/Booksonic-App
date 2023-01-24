@@ -227,7 +227,7 @@ public class LoginActivity extends Activity {
 					}
 
 				}catch (Exception e){
-					Log.println(10, "Login", "Unable to validate login url.\n" + e);
+					Log.println(Log.ERROR, "Login", "Unable to validate login url.\n" + e);
 					if(e.toString().contains("android.os.NetworkOnMainThreadException") == false) {
 						mAddressView.setError("Invalid URL");
 						mAddressView.requestFocus();
