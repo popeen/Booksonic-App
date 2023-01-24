@@ -18,9 +18,8 @@
  */
 package github.popeen.dsub.activity;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
+
 import androidx.appcompat.widget.Toolbar;
 
 import github.popeen.dsub.R;
@@ -30,9 +29,7 @@ import github.popeen.dsub.util.Constants;
 
 public class SettingsActivity extends SubsonicActivity {
 	private static final String TAG = SettingsActivity.class.getSimpleName();
-	private PreferenceCompatFragment fragment;
 
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,7 +37,7 @@ public class SettingsActivity extends SubsonicActivity {
 		setContentView(R.layout.settings_activity);
 
 		if (savedInstanceState == null) {
-			fragment = new SettingsFragment();
+			PreferenceCompatFragment fragment = new SettingsFragment();
 			Bundle args = new Bundle();
 			args.putInt(Constants.INTENT_EXTRA_FRAGMENT_TYPE, R.xml.settings);
 
@@ -52,7 +49,7 @@ public class SettingsActivity extends SubsonicActivity {
 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 		}
 
-		Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+		Toolbar mainToolbar = findViewById(R.id.main_toolbar);
 		setSupportActionBar(mainToolbar);
 	}
 }
