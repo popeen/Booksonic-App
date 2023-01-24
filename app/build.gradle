@@ -7,13 +7,13 @@ repositories {
 }
 
 android {
-	compileSdkVersion 32
+	compileSdkVersion 33
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
 		applicationId "github.popeen.dsub"
 		minSdkVersion 16
-		targetSdkVersion 32
+		targetSdkVersion 33
 		versionCode 75
 		versionName '2301'
 		setProperty("archivesBaseName", "Booksonic $versionName")
