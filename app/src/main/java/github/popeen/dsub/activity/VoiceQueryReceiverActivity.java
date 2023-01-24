@@ -50,7 +50,7 @@ public class VoiceQueryReceiverActivity extends Activity {
         if (query != null) {
             Intent intent = new Intent(VoiceQueryReceiverActivity.this, SubsonicFragmentActivity.class);
             intent.putExtra(Constants.INTENT_EXTRA_NAME_QUERY, query);
-			if(!GMS_SEARCH_ACTION.equals(getIntent().getAction())) {
+            if(!GMS_SEARCH_ACTION.equals(getIntent().getAction())) {
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
 			}
 
