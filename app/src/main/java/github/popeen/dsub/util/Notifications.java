@@ -363,7 +363,7 @@ public final class Notifications {
 				prevIntent.setComponent(new ComponentName(context, DownloadService.class));
 
 				prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
-				pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
+				pendingIntent = PendingIntent.getService(context, 0, prevIntent, PendingIntent.FLAG_IMMUTABLE);
 				rv.setOnClickPendingIntent(pause, pendingIntent);
 			}
 		}
