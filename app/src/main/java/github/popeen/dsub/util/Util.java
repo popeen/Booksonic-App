@@ -40,6 +40,7 @@ import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
@@ -49,6 +50,7 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Base64;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -59,16 +61,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -85,6 +94,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
@@ -1614,6 +1624,142 @@ public final class Util {
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_DUPLICATE, false);
 	}
 
+	public static void sendLogfile(Context context){
+		if (EnvironmentVariables.LOG_API_KEY == null) {
+			Util.toast(context, "No LOG_API_KEY configured - can't upload logs");
+			return;
+		}
+
+		try {
+			final PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			new LoadingTask<String>((Activity)context) {
+				@Override
+				protected String doInBackground() throws Throwable {
+					updateProgress("Gathering Logs");
+					File logcat = new File(context.getFilesDir(), "dsub-logcat.txt");
+					Util.delete(logcat);
+					Process logcatProc = null;
+
+					try {
+						List<String> progs = new ArrayList<String>();
+						progs.add("logcat");
+						progs.add("-v");
+						progs.add("time");
+						progs.add("-d");
+						progs.add("-f");
+						progs.add(logcat.getCanonicalPath());
+						progs.add("*:I");
+
+						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[progs.size()]));
+						logcatProc.waitFor();
+					} finally {
+						if(logcatProc != null) {
+							logcatProc.destroy();
+						}
+					}
+
+					URL url = new URL("https://booksonic.org/logs/index.php");
+					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+					StringBuffer responseBuffer = new StringBuffer();
+					try {
+						urlConnection.setReadTimeout(10000);
+						urlConnection.setConnectTimeout(15000);
+						urlConnection.setRequestMethod("POST");
+						urlConnection.setDoInput(true);
+						urlConnection.setDoOutput(true);
+
+						OutputStream os = urlConnection.getOutputStream();
+						BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, Constants.UTF_8));
+						writer.write("api_dev_key=" + URLEncoder.encode(EnvironmentVariables.LOG_API_KEY, Constants.UTF_8) + "&api_option=paste&api_paste_private=1&api_paste_code=");
+
+						BufferedReader reader = null;
+						try {
+							reader = new BufferedReader(new InputStreamReader(new FileInputStream(logcat)));
+							String line;
+							while ((line = reader.readLine()) != null) {
+								writer.write(URLEncoder.encode(line + "\n", Constants.UTF_8));
+							}
+						} finally {
+							Util.close(reader);
+						}
+
+						File stacktrace = new File(context.getFilesDir(), "dsub-stacktrace.txt");
+						if(stacktrace.exists() && stacktrace.isFile()) {
+							writer.write("\n\nMost Recent Stacktrace:\n\n");
+
+							reader = null;
+							try {
+								reader = new BufferedReader(new InputStreamReader(new FileInputStream(stacktrace)));
+								String line;
+								while ((line = reader.readLine()) != null) {
+									writer.write(URLEncoder.encode(line + "\n", Constants.UTF_8));
+								}
+							} finally {
+								Util.close(reader);
+							}
+						}
+
+						writer.flush();
+						writer.close();
+						os.close();
+
+						BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+						String inputLine;
+						while ((inputLine = in.readLine()) != null) {
+							responseBuffer.append(inputLine);
+						}
+						in.close();
+					} finally {
+						urlConnection.disconnect();
+					}
+
+					String response = responseBuffer.toString();
+
+					urlConnection.disconnect();
+					if(response.indexOf("http") == 0) {
+						return response.replace("http:", "https:");
+					} else {
+						throw new Exception("Paste Error: " + response);
+					}
+				}
+
+				@Override
+				protected void error(Throwable error) {
+					Log.e(TAG, "Failed to gather logs", error);
+					Util.toast(context, "Failed to gather logs");
+				}
+
+				@Override
+				protected void done(String logcat) {
+					String footer = "\nLogs: " + logcat;
+					footer += "\nAndroid SDK: " + Build.VERSION.SDK;
+					footer += "\nDevice Model: " + Build.MODEL;
+					footer += "\nDevice Name: " + Build.MANUFACTURER + " "  + Build.PRODUCT;
+					footer += "\nROM: " + Build.DISPLAY;
+					footer += "\nBuild Number: " + packageInfo.versionCode;
+
+					try {
+						MessageDigest md;
+						md = MessageDigest.getInstance("SHA");
+						md.update(context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES).signatures[0].toByteArray());
+						footer += "\nSignature: " + new String(Base64.encode(md.digest(), 0));
+					}catch(Exception e){}
+
+
+					Intent selectorIntent = new Intent(Intent.ACTION_SENDTO);
+					selectorIntent.setData(Uri.parse("mailto:"));
+
+					final Intent emailIntent = new Intent(Intent.ACTION_SEND);
+					emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"support@booksonic.org"});
+					emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Booksonic " + packageInfo.versionName + " Error Logs");
+					emailIntent.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n-------------------------\n\n\n\n-------------------------\n\n" + footer);
+					emailIntent.setSelector( selectorIntent );
+
+					context.startActivity(Intent.createChooser(emailIntent, "Send log..."));
+				}
+			}.execute();
+		} catch(Exception ignored) {}
+	}
 	public static void setMargins (View view, int left, int top, int right, int bottom) {
 		if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
 			ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
