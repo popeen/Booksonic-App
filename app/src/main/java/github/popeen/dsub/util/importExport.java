@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.util.Base64;
 import android.widget.EditText;
 
 import org.json.JSONArray;
@@ -30,7 +31,8 @@ public class importExport {
         SongDBHandler sdbh = SongDBHandler.getHandler(context);
 
         String jsonString = "{}";
-        try{ jsonString = KakaduaUtil.getStringFromFile(path); }catch (Exception e){}
+        // This need to be replaced as KakaduaUtil is not available anymore
+        //try{ jsonString = KakaduaUtil.getStringFromFile(path); }catch (Exception e){}
 
 
         try{ //import Booksonic.db
@@ -54,7 +56,7 @@ public class importExport {
                 else{num = Integer.toString(prefs.getInt("serverCount", 0) + i + 1);}
                 editor.putString("serverName" + num, row.getString("serverName"));
                 editor.putString("username" + num, row.getString("username"));
-                editor.putString("password" + num, KakaduaUtil.base64Decode(row.getString("password").substring(1)));
+                editor.putString("password" + num, new String(Base64.decode((row.getString("password")), 0)));
                 editor.putString("serverUrl" + num, row.getString("serverUrl"));
                 editor.putString("serverInternalUrl" + num, row.getString("serverInternalUrl"));
                 editor.putInt("mostRecentCount" + num, row.getInt("mostRecentCount"));
@@ -63,7 +65,7 @@ public class importExport {
             editor.commit();
         }catch(Exception e){}
 
-        KakaduaUtil.toastLong(context, context.getString(R.string.imported));
+        Util.toast(context, context.getString(R.string.imported), false);
     }
 
     public static void exportData(Context context){
@@ -83,7 +85,7 @@ public class importExport {
                             if (txtUrl.getText().toString().equals(prefs.getString("password1", "")) && txtUrl.getText().toString() != "") {
                                 importExport.doExport(con, true);
                             } else {
-                                KakaduaUtil.toastLong(con, con.getString(R.string.export_wrong_password));
+                                Util.toast(con, con.getString(R.string.export_wrong_password), false);
                                 importExport.doExport(con, false);
                             }
                         }
@@ -133,7 +135,7 @@ public class importExport {
                     tempJson.put("serverName", prefs.getString("serverName" + num, ""));
                     tempJson.put("username", prefs.getString("username" + num, ""));
                     //OBS, Base 64 IS NOT ENCRYPTION, it is only used so the password will not be in clear text readable to humans but a potential attacker would get the password from it in less then a second.
-                    tempJson.put("password", KakaduaUtil.randomChar() + KakaduaUtil.base64Encode(prefs.getString("password" + num, "")).replace("=", ""));
+                    tempJson.put("password", new String(Base64.encode(prefs.getString("password" + num, "").getBytes(), 0)));
                     tempJson.put("serverUrl", prefs.getString("serverUrl" + num, ""));
                     tempJson.put("serverInternalUrl", prefs.getString("serverInternalUrl" + num, ""));
                     tempJson.put("mostRecentCount", prefs.getInt("mostRecentCount" + num, 0));
@@ -150,6 +152,6 @@ public class importExport {
             fileos.close();
         }catch (Exception e){}
 
-        KakaduaUtil.toastLong(context, context.getString(R.string.exported) + " " + Environment.getExternalStorageDirectory() + "/booksonic_backup.json");
+        Util.toast(context, context.getString(R.string.exported) + " " + Environment.getExternalStorageDirectory() + "/booksonic_backup.json", false);
     }
 }
