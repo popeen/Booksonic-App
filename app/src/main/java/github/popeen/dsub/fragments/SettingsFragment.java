@@ -74,8 +74,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference theme;
 	private ListPreference maxBitrateWifi;
 	private ListPreference maxBitrateMobile;
-	private ListPreference maxVideoBitrateWifi;
-	private ListPreference maxVideoBitrateMobile;
 	private ListPreference networkTimeout;
 	private CacheLocationPreference cacheLocation;
 	private ListPreference preloadCountWifi;
@@ -83,11 +81,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference keepPlayedCount;
 	private ListPreference tempLoss;
 	private ListPreference pauseDisconnect;
-	private Preference addServerPreference;
-	private Preference serverHelpPreference;
 	private PreferenceCategory serversCategory;
-	private ListPreference songPressAction;
-	private ListPreference videoPlayer;
 	private ListPreference syncInterval;
 	private CheckBoxPreference syncEnabled;
 	private CheckBoxPreference syncWifi;
@@ -98,8 +92,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference replayGainType;
 	private Preference replayGainBump;
 	private Preference replayGainUntagged;
-	private String internalSSID;
-	private String internalSSIDDisplay;
 	private EditTextPreference cacheSize;
 	private ListPreference openToTab;
 
@@ -212,8 +204,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			} else {
 				context.stopService(serviceIntent);
 			}
-		} else if(Constants.PREFERENCES_KEY_THEME.equals(key)) {
-			String value = sharedPreferences.getString(key, null);
 		} else if(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED.equals(key)) {
 			DownloadService downloadService = DownloadService.getInstance();
 			if(downloadService != null) {
@@ -235,17 +225,15 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	protected void onInitPreferences(PreferenceScreen preferenceScreen) {
 		this.setTitle(preferenceScreen.getTitle());
 
-		internalSSID = Util.getSSID(context);
+		String internalSSID = Util.getSSID(context);
 		if (internalSSID == null) {
 			internalSSID = "";
 		}
-		internalSSIDDisplay = context.getResources().getString(R.string.settings_server_local_network_ssid_hint, internalSSID);
+		String internalSSIDDisplay = context.getResources().getString(R.string.settings_server_local_network_ssid_hint, internalSSID);
 
 		theme = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_THEME);
 		maxBitrateWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI);
-		maxBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE);;
-		//maxVideoBitrateWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
-		//maxVideoBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
+		maxBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE);
 		networkTimeout = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
 		cacheLocation = (CacheLocationPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
 		preloadCountWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI);
@@ -254,10 +242,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		tempLoss = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
 		pauseDisconnect = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
 		serversCategory = (PreferenceCategory) this.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
-		addServerPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
-		serverHelpPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_HELP);
-		//videoPlayer = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
-		songPressAction = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION);
+		Preference addServerPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
+		Preference serverHelpPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_HELP);
 		syncInterval = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
 		syncEnabled = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
 		syncWifi = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
@@ -341,7 +327,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				aboutInfo += "\nBuild Number: " + packageInfo.versionCode;
 				aboutInfo += "\nSignature: " + new String(Base64.encode(md.digest(), 0));
 				this.findPreference("copyAppInfo").setSummary("Click here to copy the information about your app version to the clipboard\n\n" + aboutInfo);
-				
+
 			}catch(Exception e){ this.findPreference("copyAppInfo").setSummary("Click here to copy the information about your app version to the clipboard\n\nCould not get app data"); }
 
 			this.findPreference("copyAppInfo").setOnPreferenceClickListener(preference -> {
@@ -442,9 +428,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 		if(cacheSize != null) {
 			maxBitrateWifi.setSummary(maxBitrateWifi.getEntry());
-			maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());;
-			//maxVideoBitrateWifi.setSummary(maxVideoBitrateWifi.getEntry());
-			//maxVideoBitrateMobile.setSummary(maxVideoBitrateMobile.getEntry());
+			maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());
 			networkTimeout.setSummary(networkTimeout.getEntry());
 			cacheLocation.setSummary(cacheLocation.getText());
 			preloadCountWifi.setSummary(preloadCountWifi.getEntry());
@@ -887,17 +871,14 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			new ErrorDialog(context, R.string.settings_invalid_url, false);
 			return;
 		}
-		Uri uriServer = Uri.parse(url);
 
-		Intent browserIntent = new Intent(Intent.ACTION_VIEW, uriServer);
-		startActivity(browserIntent);
+		Util.openWebsite(context, url);
 	}
 
 	private class ServerSettings {
 		private int instance;
 		private EditTextPreference serverName;
 		private EditTextPreference serverUrl;
-		private EditTextPreference serverLocalNetworkSSID;
 		private EditTextPreference serverInternalUrl;
 		private EditTextPreference username;
 		private PreferenceScreen screen;
@@ -907,7 +888,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			screen = (PreferenceScreen) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY + instance);
 			serverName = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_NAME + instance);
 			serverUrl = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_URL + instance);
-			serverLocalNetworkSSID = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
+			EditTextPreference serverLocalNetworkSSID = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
 			serverInternalUrl = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
 			username = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_USERNAME + instance);
 
