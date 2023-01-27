@@ -27,41 +27,30 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import org.jsoup.Jsoup;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import github.popeen.dsub.R;
 import github.popeen.dsub.service.DownloadService;
@@ -69,7 +58,6 @@ import github.popeen.dsub.service.HeadphoneListenerService;
 import github.popeen.dsub.service.MusicService;
 import github.popeen.dsub.service.MusicServiceFactory;
 import github.popeen.dsub.util.Constants;
-import github.popeen.dsub.util.EnvironmentVariables;
 import github.popeen.dsub.util.FileUtil;
 import github.popeen.dsub.util.LoadingTask;
 import github.popeen.dsub.util.MediaRouteManager;
@@ -81,7 +69,7 @@ import github.popeen.dsub.view.ErrorDialog;
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private final static String TAG = SettingsFragment.class.getSimpleName();
 
-	private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<String, ServerSettings>();
+	private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<>();
 	private boolean testingConnection;
 	private ListPreference theme;
 	private ListPreference maxBitrateWifi;
