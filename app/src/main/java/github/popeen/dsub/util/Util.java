@@ -111,93 +111,431 @@ import github.popeen.dsub.service.DownloadService;
  * @version $Id$
  */
 public final class Util {
+    public static final String EVENT_META_CHANGED = "github.popeen.dsub.EVENT_META_CHANGED";
+    public static final String EVENT_PLAYSTATE_CHANGED = "github.popeen.dsub.EVENT_PLAYSTATE_CHANGED";
+	public static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
+	public static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
     private static final String TAG = Util.class.getSimpleName();
-
     private static final DecimalFormat GIGA_BYTE_FORMAT = new DecimalFormat("0.00 GB");
     private static final DecimalFormat MEGA_BYTE_FORMAT = new DecimalFormat("0.00 MB");
     private static final DecimalFormat KILO_BYTE_FORMAT = new DecimalFormat("0 KB");
-
-    private static DecimalFormat GIGA_BYTE_LOCALIZED_FORMAT = null;
-    private static DecimalFormat MEGA_BYTE_LOCALIZED_FORMAT = null;
-    private static DecimalFormat KILO_BYTE_LOCALIZED_FORMAT = null;
-    private static DecimalFormat BYTE_LOCALIZED_FORMAT = null;
 	private static final SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
 	private static final SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
 	private static final SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
 	private static final int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
-
-    public static final String EVENT_META_CHANGED = "github.popeen.dsub.EVENT_META_CHANGED";
-    public static final String EVENT_PLAYSTATE_CHANGED = "github.popeen.dsub.EVENT_PLAYSTATE_CHANGED";
-	
-	public static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
-	public static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
-
+    // Used by hexEncode()
+    private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+	private static final SparseArray<Pair<String, String>> tokens = new SparseArray<>();
+    private static DecimalFormat GIGA_BYTE_LOCALIZED_FORMAT = null;
+    private static DecimalFormat MEGA_BYTE_LOCALIZED_FORMAT = null;
+    private static DecimalFormat KILO_BYTE_LOCALIZED_FORMAT = null;
+    private static DecimalFormat BYTE_LOCALIZED_FORMAT = null;
 	private static OnAudioFocusChangeListener focusListener;
 	private static AudioFocusRequest audioFocusRequest;
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
-
-    // Used by hexEncode()
-    private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-
     private static Toast toast;
-	private static final SparseArray<Pair<String, String>> tokens = new SparseArray<>();
 	private static Random random;
 
     private Util() {
     }
 
-	public static boolean isHome(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_HOME, false);
+	private static void addTrackInfo(Context context, MusicDirectory.Entry song, Intent intent) {
+		if (song != null) {
+			DownloadService downloadService = (DownloadService)context;
+			File albumArtFile = FileUtil.getAlbumArtFile(context, song);
+
+			intent.putExtra("track", song.getTitle());
+			intent.putExtra("artist", song.getArtist());
+			intent.putExtra("album", song.getAlbum());
+			intent.putExtra("ListSize", (long) downloadService.getSongs().size());
+			intent.putExtra("id", (long) downloadService.getCurrentPlayingIndex() + 1);
+			intent.putExtra("duration", (long) downloadService.getPlayerDuration());
+			intent.putExtra("position", (long) downloadService.getPlayerPosition());
+			intent.putExtra("coverart", albumArtFile.getAbsolutePath());
+			intent.putExtra("package","github.popeen.dsub");
+		} else {
+			intent.putExtra("track", "");
+			intent.putExtra("artist", "");
+			intent.putExtra("album", "");
+			intent.putExtra("ListSize", (long) 0);
+			intent.putExtra("id", (long) 0);
+			intent.putExtra("duration", (long) 0);
+			intent.putExtra("position", (long) 0);
+			intent.putExtra("coverart", "");
+			intent.putExtra("package","github.popeen.dsub");
+		}
 	}
 
-	public static void setHome(Context context, boolean home) {
-		SharedPreferences prefs = getPreferences(context);
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putBoolean(Constants.PREFERENCES_KEY_HOME, home);
-		editor.apply();
-	}
+    /**
+     * <p>Broadcasts the given song info as the new song being played.</p>
+     */
+    public static void broadcastNewTrackInfo(Context context, MusicDirectory.Entry song) {
 
-    public static boolean isOffline(Context context) {
-        SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false);
+		try {
+			Intent intent = new Intent(EVENT_META_CHANGED);
+			Intent avrcpIntent = new Intent(AVRCP_METADATA_CHANGED);
+
+
+			if (song != null) {
+				intent.putExtra("title", song.getTitle());
+				intent.putExtra("artist", song.getArtist());
+				intent.putExtra("album", song.getAlbum());
+
+
+				File albumArtFile = FileUtil.getAlbumArtFile(context, song);
+				intent.putExtra("coverart", albumArtFile.getAbsolutePath());
+				avrcpIntent.putExtra("playing", true);
+			} else {
+				intent.putExtra("title", "");
+				intent.putExtra("artist", "");
+				intent.putExtra("album", "");
+				intent.putExtra("coverart", "");
+				avrcpIntent.putExtra("playing", false);
+			}
+			addTrackInfo(context, song, avrcpIntent);
+
+
+			context.sendBroadcast(intent);
+			context.sendBroadcast(avrcpIntent);
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to broadcastNewTrackInfo", e);
+		}
+    }
+
+    /**
+     * <p>Broadcasts the given player state as the one being set.</p>
+     */
+    public static void broadcastPlaybackStatusChange(Context context, MusicDirectory.Entry song, PlayerState state) {
+
+		try {
+			Intent intent = new Intent(EVENT_PLAYSTATE_CHANGED);
+			Intent avrcpIntent = new Intent(AVRCP_PLAYSTATE_CHANGED);
+
+			switch (state) {
+				case STARTED:
+					intent.putExtra("state", "play");
+					avrcpIntent.putExtra("playing", true);
+					break;
+				case STOPPED:
+					intent.putExtra("state", "stop");
+					avrcpIntent.putExtra("playing", false);
+
+					break;
+				case PAUSED:
+					intent.putExtra("state", "pause");
+					avrcpIntent.putExtra("playing", false);
+					break;
+				case PREPARED:
+					// Only send quick pause event for samsung devices, causes issues for others
+					if (Build.MANUFACTURER.toLowerCase().contains("samsung")) {
+						avrcpIntent.putExtra("playing", false);
+					} else {
+						return; // Don't broadcast anything
+					}
+					break;
+				case COMPLETED:
+					intent.putExtra("state", "complete");
+					avrcpIntent.putExtra("playing", false);
+					break;
+				default:
+					return; // No need to broadcast.
+			}
+			addTrackInfo(context, song, avrcpIntent);
+
+
+			if (state != PlayerState.PREPARED) {
+				context.sendBroadcast(intent);
+			}
+			context.sendBroadcast(avrcpIntent);
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to broadcastPlaybackStatusChange", e);
+		}
+
     }
 	
-	public static void setOffline(Context context, boolean offline) {
-		SharedPreferences prefs = getPreferences(context);
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putBoolean(Constants.PREFERENCES_KEY_OFFLINE, offline);
-		editor.apply();
+	public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+
+			// Calculate ratios of height and width to requested height and
+			// width
+			final int heightRatio = Math.round((float) height / (float) reqHeight);
+			final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+			// Choose the smallest ratio as inSampleSize value, this will
+			// guarantee
+			// a final image with both dimensions larger than or equal to the
+			// requested height and width.
+			inSampleSize = Math.min(heightRatio, widthRatio);
+		}
+
+		return inSampleSize;
 	}
 
-    public static boolean isScreenLitOnDownload(Context context) {
-        SharedPreferences prefs = getPreferences(context);
-        return prefs.getBoolean(Constants.PREFERENCES_KEY_SCREEN_LIT_ON_DOWNLOAD, false);
+    public static void close(Closeable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (Throwable x) {
+            // Ignored
+        }
     }
 
-    public static RepeatMode getRepeatMode(Context context) {
-        SharedPreferences prefs = getPreferences(context);
-        return RepeatMode.valueOf(prefs.getString(Constants.PREFERENCES_KEY_REPEAT_MODE, RepeatMode.OFF.name()));
+	public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick) {
+		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, null);
+	}
+
+	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick) {
+		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, null);
+	}
+
+	public static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
+		new AlertDialog.Builder(context)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(R.string.common_confirm)
+			.setMessage(context.getResources().getString(R.string.common_confirm_message, action, subject))
+			.setPositiveButton(R.string.common_ok, onClick)
+			.setNegativeButton(R.string.common_cancel, onCancel)
+			.show();
+	}
+
+    public static long copy(InputStream input, OutputStream output)
+            throws IOException {
+        byte[] buffer = new byte[1024 * 4];
+        long count = 0;
+        int n;
+        while (-1 != (n = input.read(buffer))) {
+            output.write(buffer, 0, n);
+            count += n;
+        }
+        return count;
     }
 
-    public static void setRepeatMode(Context context, RepeatMode repeatMode) {
-        SharedPreferences prefs = getPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(Constants.PREFERENCES_KEY_REPEAT_MODE, repeatMode.name());
-        editor.apply();
+    public static Drawable createDrawableFromBitmap(Context context, Bitmap bitmap) {
+        // BitmapDrawable(Resources, Bitmap) was introduced in Android 1.6.  Use reflection to maintain
+        // compatibility with 1.5.
+        try {
+            Constructor<BitmapDrawable> constructor = BitmapDrawable.class.getConstructor(Resources.class, Bitmap.class);
+            return constructor.newInstance(context.getResources(), bitmap);
+        } catch (Throwable x) {
+            return new BitmapDrawable(context.getResources(), bitmap);
+        }
     }
 
-    public static boolean isScrobblingEnabled(Context context) {
-        SharedPreferences prefs = getPreferences(context);
-        return prefs.getBoolean(Constants.PREFERENCES_KEY_SCROBBLE, true) && (isOffline(context) || UserUtil.canScrobble());
+	public static WifiManager.WifiLock createWifiLock(Context context, String tag) {
+		WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+		return wm.createWifiLock(3, tag);
+	}
+	
+    public static boolean delete(File file) {
+        if (file != null && file.exists()) {
+            if (!file.delete()) {
+                Log.w(TAG, "Failed to delete file " + file);
+                return false;
+            }
+            Log.i(TAG, "Deleted file " + file);
+        }
+        return true;
     }
 
-    public static void setActiveServer(Context context, int instance) {
-        SharedPreferences prefs = getPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, instance);
-        editor.apply();
+	public static boolean disableExitPrompt(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_DISABLE_EXIT_PROMPT, false);
+	}
+
+    public static void disablePendingTransition(Activity activity) {
+
+        // Activity.overridePendingTransition() was introduced in Android 2.0.  Use reflection to maintain
+        // compatibility with 1.5.
+        try {
+            Method method = Activity.class.getMethod("overridePendingTransition", int.class, int.class);
+            method.invoke(activity, 0, 0);
+        } catch (Throwable x) {
+            // Ignored
+        }
+    }
+
+    public static boolean equals(Object object1, Object object2) {
+        if (object1 == object2) {
+            return true;
+        }
+        if (object1 == null || object2 == null) {
+            return false;
+        }
+        return object1.equals(object2);
+
+    }
+
+	public static String formatBoolean(Context context, boolean value) {
+		return context.getResources().getString(value ? R.string.common_true : R.string.common_false);
+	}
+
+    /**
+     * Converts a byte-count to a formatted string suitable for display to the user.
+     * For instance:
+     * <ul>
+     * <li><code>format(918)</code> returns <em>"918 B"</em>.</li>
+     * <li><code>format(98765)</code> returns <em>"96 KB"</em>.</li>
+     * <li><code>format(1238476)</code> returns <em>"1.2 MB"</em>.</li>
+     * </ul>
+     * This method assumes that 1 KB is 1024 bytes.
+     * To get a localized string, please use formatLocalizedBytes instead.
+     *
+     * @param byteCount The number of bytes.
+     * @return The formatted string.
+     */
+    public static synchronized String formatBytes(long byteCount) {
+
+        // More than 1 GB?
+        if (byteCount >= 1024 * 1024 * 1024) {
+			return GIGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024 * 1024));
+        }
+
+        // More than 1 MB?
+        if (byteCount >= 1024 * 1024) {
+			return MEGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024));
+        }
+
+        // More than 1 KB?
+        if (byteCount >= 1024) {
+			return KILO_BYTE_FORMAT.format((double) byteCount / 1024);
+        }
+
+        return byteCount + " B";
+    }
+
+	public static String formatDate(Context context, String dateString, boolean includeTime) {
+		if(dateString == null) {
+			return "";
+		}
+
+		try {
+			dateString = dateString.replace(' ', 'T');
+			boolean isDateNormalized = ServerInfo.checkServerVersion(context, "1.11");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+			if (isDateNormalized) {
+				dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+			}
+
+			return formatDate(dateFormat.parse(dateString), includeTime);
+		} catch(ParseException e) {
+			Log.e(TAG, "Failed to parse date string", e);
+			return dateString;
+		}
+	}
+
+	public static String formatDate(Date date) {
+		return formatDate(date, true);
+	}
+
+	public static String formatDate(Date date, boolean includeTime) {
+		if(date == null) {
+			return "Never";
+		} else {
+
+			if(includeTime) {
+				if (Calendar.getInstance().get(Calendar.YEAR) != CURRENT_YEAR) {
+					return DATE_FORMAT_LONG.format(date);
+				} else {
+					return DATE_FORMAT_SHORT.format(date);
+				}
+			} else {
+
+				return DATE_FORMAT_NO_TIME.format(date);
+			}
+		}
+	}
+
+	public static String formatDate(long millis) {
+		return formatDate(new Date(millis));
+	}
+
+	public static String formatDuration(Integer seconds) {
+		return Util.formatDuration(seconds, false);
+	}
+	
+    public static String formatDuration(Integer seconds, boolean inText) {
+        if (seconds == null) {
+            return null;
+        }
+
+		int hours = seconds / 3600;
+        int minutes = (seconds / 60) % 60;
+        int secs = seconds % 60;
+
+        if(inText){
+			return hours + "h " + minutes + "min";
+		}else {
+			StringBuilder builder = new StringBuilder(7);
+			if (hours > 0) {
+				builder.append(hours).append(":");
+				if (minutes < 10) {
+					builder.append("0");
+				}
+			}
+			builder.append(minutes).append(":");
+			if (secs < 10) {
+				builder.append("0");
+			}
+			builder.append(secs);
+			return builder.toString();
+		}
+    }
+
+    /**
+     * Converts a byte-count to a formatted string suitable for display to the user.
+     * For instance:
+     * <ul>
+     * <li><code>format(918)</code> returns <em>"918 B"</em>.</li>
+     * <li><code>format(98765)</code> returns <em>"96 KB"</em>.</li>
+     * <li><code>format(1238476)</code> returns <em>"1.2 MB"</em>.</li>
+     * </ul>
+     * This method assumes that 1 KB is 1024 bytes.
+     * This version of the method returns a localized string.
+     *
+     * @param byteCount The number of bytes.
+     * @return The formatted string.
+     */
+    public static synchronized String formatLocalizedBytes(long byteCount, Context context) {
+
+        // More than 1 GB?
+        if (byteCount >= 1024 * 1024 * 1024) {
+            if (GIGA_BYTE_LOCALIZED_FORMAT == null) {
+                GIGA_BYTE_LOCALIZED_FORMAT = new DecimalFormat(context.getResources().getString(R.string.util_bytes_format_gigabyte));
+            }
+
+            return GIGA_BYTE_LOCALIZED_FORMAT.format((double) byteCount / (1024 * 1024 * 1024));
+        }
+
+        // More than 1 MB?
+        if (byteCount >= 1024 * 1024) {
+            if (MEGA_BYTE_LOCALIZED_FORMAT == null) {
+                MEGA_BYTE_LOCALIZED_FORMAT = new DecimalFormat(context.getResources().getString(R.string.util_bytes_format_megabyte));
+            }
+
+            return MEGA_BYTE_LOCALIZED_FORMAT.format((double) byteCount / (1024 * 1024));
+        }
+
+        // More than 1 KB?
+        if (byteCount >= 1024) {
+            if (KILO_BYTE_LOCALIZED_FORMAT == null) {
+                KILO_BYTE_LOCALIZED_FORMAT = new DecimalFormat(context.getResources().getString(R.string.util_bytes_format_kilobyte));
+            }
+
+            return KILO_BYTE_LOCALIZED_FORMAT.format((double) byteCount / 1024);
+        }
+
+        if (BYTE_LOCALIZED_FORMAT == null) {
+            BYTE_LOCALIZED_FORMAT = new DecimalFormat(context.getResources().getString(R.string.util_bytes_format_byte));
+        }
+
+        return BYTE_LOCALIZED_FORMAT.format((double) byteCount);
     }
 
     public static int getActiveServer(Context context) {
@@ -206,101 +544,93 @@ public final class Util {
         return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false) ? 0 : Math.max(1, prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1));
     }
 
-	public static int getMostRecentActiveServer(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		return Math.max(1, prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1));
-	}
-	
-	public static int getServerCount(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
-	}
-
-	public static void removeInstanceName(Context context, int instance, int activeInstance) {
-		SharedPreferences prefs = getPreferences(context);
-		SharedPreferences.Editor editor = prefs.edit();
-
-		int newInstance = instance + 1;
-
-		// Get what the +1 server details are
-		String server = prefs.getString(Constants.PREFERENCES_KEY_SERVER_KEY + newInstance, null);
-		String serverName = prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + newInstance, null);
-		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + newInstance, null);
-		String userName = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
-		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
-		String musicFolderId = prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + newInstance, null);
-
-		// Store the +1 server details in the to be deleted instance
-		editor.putString(Constants.PREFERENCES_KEY_SERVER_KEY + instance, server);
-		editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, serverName);
-		editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + instance, serverUrl);
-		editor.putString(Constants.PREFERENCES_KEY_USERNAME + instance, userName);
-		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + instance, password);
-		editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, musicFolderId);
-
-		// Delete the +1 server instance
-		// Calling method will loop up to fill this in if +2 server exists
-		editor.putString(Constants.PREFERENCES_KEY_SERVER_KEY + newInstance, null);
-		editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + newInstance, null);
-		editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + newInstance, null);
-		editor.putString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
-		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
-		editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + newInstance, null);
-		editor.apply();
-
-		if (instance == activeInstance) {
-			if(instance != 1) {
-				Util.setActiveServer(context, 1);
-			} else {
-				Util.setOffline(context, true);
-			}
-		} else if (newInstance == activeInstance) {
-			Util.setActiveServer(context, instance);
-		}
-	}
-
-	public static String getServerName(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-        return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
-	}
-
-    public static String getServerName(Context context, int instance) {
-        SharedPreferences prefs = getPreferences(context);
-        return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
-    }
-
-    public static void setSelectedMusicFolderId(Context context, String musicFolderId) {
-        int instance = getActiveServer(context);
-        SharedPreferences prefs = getPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, musicFolderId);
-        editor.apply();
-    }
-
-    public static String getSelectedMusicFolderId(Context context) {
-        return getSelectedMusicFolderId(context, getActiveServer(context));
-    }
-
-	public static String getSelectedMusicFolderId(Context context, int instance) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
-	}
-
 	public static boolean getAlbumListsPerFolder(Context context, int instance) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_ALBUMS_PER_FOLDER + instance, false);
 	}
 
+    private static OnAudioFocusChangeListener getAudioFocusChangeListener(final Context context, final AudioManager audioManager) {
+		return new OnAudioFocusChangeListener() {
+			public void onAudioFocusChange(int focusChange) {
+				DownloadService downloadService = (DownloadService)context;
+				if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) && !downloadService.isRemoteEnabled()) {
+					if(downloadService.getPlayerState() == PlayerState.STARTED) {
+						Log.i(TAG, "Temporary loss of focus");
+						SharedPreferences prefs = getPreferences(context);
+						int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
+						if(lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
+							lowerFocus = true;
+							downloadService.setVolume(0.1f);
+						} else if(lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
+							pauseFocus = true;
+							downloadService.pause(true);
+						}
+					}
+				} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+					if(pauseFocus) {
+						pauseFocus = false;
+						downloadService.start();
+					}
+					if(lowerFocus) {
+						lowerFocus = false;
+						downloadService.setVolume(1.0f);
+					}
+				} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS && !downloadService.isRemoteEnabled()) {
+					Log.i(TAG, "Permanently lost focus");
+					focusListener = null;
+					downloadService.pause();
 
-	public static boolean getDisplayTrack(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-        return prefs.getBoolean(Constants.PREFERENCES_KEY_DISPLAY_TRACK, true);
+					if(audioFocusRequest != null && Build.VERSION.SDK_INT >= 26) {
+						audioManager.abandonAudioFocusRequest(audioFocusRequest);
+						audioFocusRequest = null;
+					} else {
+						audioManager.abandonAudioFocus(this);
+					}
+				}
+			}
+		};
 	}
+
+	public static boolean getBlockTokenUse(Context context, int instance) {
+		return getPreferences(context).getBoolean(getBlockTokenUsePref(context, instance), false);
+	}
+
+	public static String getBlockTokenUsePref(Context context, int instance) {
+		return Constants.CACHE_BLOCK_TOKEN_USE + Util.getRestUrl(context, null, instance, false);
+	}
+
+	public static String getCacheName(Context context, String name, String id) {
+		return getCacheName(context, getActiveServer(context), name, id);
+	}
+
+	public static String getCacheName(Context context, int instance, String name, String id) {
+		String s = getRestUrl(context, null, instance, false) + id;
+		return name + "-" + s.hashCode() + ".ser";
+	}
+
+	public static String getCacheName(Context context, String name) {
+		return getCacheName(context, getActiveServer(context), name);
+	}
+
+	public static String getCacheName(Context context, int instance, String name) {
+		String s = getRestUrl(context, null, instance, false);
+		return name + "-" + s.hashCode() + ".ser";
+	}
+
+    public static int getCacheSizeMB(Context context) {
+        SharedPreferences prefs = getPreferences(context);
+        int cacheSize = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_CACHE_SIZE, "-1"));
+        return cacheSize == -1 ? Integer.MAX_VALUE : cacheSize;
+    }
 
 	public static boolean getDisplayFileSuffix(Context context){
     	SharedPreferences prefs = getPreferences(context);
     	return prefs.getBoolean(Constants.PREFERENCES_KEY_DISPLAY_FILE_SUFFIX, true);
+	}
+
+	public static boolean getDisplayTrack(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_DISPLAY_TRACK, true);
 	}
 
     public static int getMaxBitrate(Context context) {
@@ -314,7 +644,7 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return Integer.parseInt(prefs.getString(wifi ? Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI : Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE, "0"));
     }
-	
+
 	public static int getMaxVideoBitrate(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -327,28 +657,61 @@ public final class Util {
         return Integer.parseInt(prefs.getString(wifi ? Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI : Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE, "0"));
     }
 
+	public static int getMostRecentActiveServer(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return Math.max(1, prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1));
+	}
+
+	public static SharedPreferences getOfflineSync(Context context) {
+		return context.getSharedPreferences(Constants.OFFLINE_SYNC_NAME, 0);
+	}
+	
+    public static SharedPreferences getPreferences(Context context) {
+        return context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, 0);
+    }
+
     public static int getPreloadCount(Context context) {
 		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         if (networkInfo == null) {
             return 3;
         }
-		
+
         SharedPreferences prefs = getPreferences(context);
 		boolean wifi = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
         int preloadCount = Integer.parseInt(prefs.getString(wifi ? Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI : Constants.PREFERENCES_KEY_PRELOAD_COUNT_MOBILE, "-1"));
         return preloadCount == -1 ? Integer.MAX_VALUE : preloadCount;
     }
 
-    public static int getCacheSizeMB(Context context) {
+	public static Random getRandom() {
+		if(random == null) {
+			random = new SecureRandom();
+		}
+
+		return random;
+	}
+
+    public static int getRemainingTrialDays(Context context) {
         SharedPreferences prefs = getPreferences(context);
-        int cacheSize = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_CACHE_SIZE, "-1"));
-        return cacheSize == -1 ? Integer.MAX_VALUE : cacheSize;
+        long installTime = prefs.getLong(Constants.PREFERENCES_KEY_INSTALL_TIME, 0L);
+
+        if (installTime == 0L) {
+            installTime = System.currentTimeMillis();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putLong(Constants.PREFERENCES_KEY_INSTALL_TIME, installTime);
+            editor.apply();
+        }
+
+        long now = System.currentTimeMillis();
+        long millisPerDay = 24L * 60L * 60L * 1000L;
+        int daysSinceInstall = (int) ((now - installTime) / millisPerDay);
+        return Math.max(0, Constants.FREE_TRIAL_DAYS - daysSinceInstall);
     }
 
-	public static boolean isBatchMode(Context context) {
-		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false);
-	}
+    public static RepeatMode getRepeatMode(Context context) {
+        SharedPreferences prefs = getPreferences(context);
+        return RepeatMode.valueOf(prefs.getString(Constants.PREFERENCES_KEY_REPEAT_MODE, RepeatMode.OFF.name()));
+    }
 
 	public static String getRestUrl(Context context, String method) {
         return getRestUrl(context, method, true);
@@ -369,7 +732,7 @@ public final class Util {
 		}
     	return getRestUrl(context, method, instance, true);
     }
-
+	
 	public static String getRestUrl(Context context, String method, int instance, boolean allowAltAddress) {
 		if(instance<1){
 			instance = 1;
@@ -460,594 +823,18 @@ public final class Util {
 		return builder.toString().hashCode();
 	}
 
-	public static String getBlockTokenUsePref(Context context, int instance) {
-		return Constants.CACHE_BLOCK_TOKEN_USE + Util.getRestUrl(context, null, instance, false);
-	}
-
-	public static boolean getBlockTokenUse(Context context, int instance) {
-		return getPreferences(context).getBoolean(getBlockTokenUsePref(context, instance), false);
-	}
-
-	public static void setBlockTokenUse(Context context, int instance, boolean block) {
-		SharedPreferences.Editor editor = getPreferences(context).edit();
-		editor.putBoolean(getBlockTokenUsePref(context, instance), block);
-		editor.apply();
-	}
-
-	public static String replaceInternalUrl(Context context, String url) {
-		// Only change to internal when using https
-		if(url.contains("https")) {
-			SharedPreferences prefs = Util.getPreferences(context);
-			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
-			if(internalUrl != null && !"".equals(internalUrl)) {
-				String externalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
-				url = url.replace(internalUrl, externalUrl);
+	public static String getSSID(Context context) {
+		Context applicationContext = context.getApplicationContext();
+		if (isWifiConnected(applicationContext)) {
+			WifiManager wifiManager = (WifiManager) applicationContext.getSystemService(Context.WIFI_SERVICE);
+			if (wifiManager.getConnectionInfo() != null && wifiManager.getConnectionInfo().getSSID() != null) {
+				return wifiManager.getConnectionInfo().getSSID().replace("\"", "");
 			}
-		}
-
-		//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
-		return url.replace("c=" + Constants.REST_CLIENT_ID, "c=" + Constants.CHROMECAST_CLIENT_ID);
-	}
-
-	public static boolean isTagBrowsing(Context context) {
-		return isTagBrowsing(context, Util.getActiveServer(context));
-	}
-
-	public static boolean isTagBrowsing(Context context, int instance) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance, false);
-	}
-	
-	public static boolean isSyncEnabled(Context context, int instance) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_SYNC + instance, true);
-	}
-
-	public static boolean isAuthHeaderEnabled(Context context, int instance) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_AUTHHEADER + instance, true);
-	}
-
-	public static boolean isForcePasswordApiEnabled(Context context, int instance) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_FORCE_PASSWORD_API+ instance, false);
-	}
-
-	public static String openToTab(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getString(Constants.PREFERENCES_KEY_OPEN_TO_TAB, null);
-	}
-
-	public static boolean disableExitPrompt(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_DISABLE_EXIT_PROMPT, false);
-	}
-
-	public static String getVideoPlayerType(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getString(Constants.PREFERENCES_KEY_VIDEO_PLAYER, "raw"); 
-	}
-
-    public static SharedPreferences getPreferences(Context context) {
-        return context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, 0);
-    }
-
-	public static SharedPreferences getOfflineSync(Context context) {
-		return context.getSharedPreferences(Constants.OFFLINE_SYNC_NAME, 0);
-	}
-	
-	public static String getSyncDefault(Context context) {
-		SharedPreferences prefs = Util.getOfflineSync(context);
-		return prefs.getString(Constants.OFFLINE_SYNC_DEFAULT, null);
-	}
-
-	public static void setSyncDefault(Context context, String defaultValue) {
-		SharedPreferences.Editor editor = Util.getOfflineSync(context).edit();
-		editor.putString(Constants.OFFLINE_SYNC_DEFAULT, defaultValue);
-		editor.apply();
-	}
-
-	public static String getCacheName(Context context, String name, String id) {
-		return getCacheName(context, getActiveServer(context), name, id);
-	}
-
-	public static String getCacheName(Context context, int instance, String name, String id) {
-		String s = getRestUrl(context, null, instance, false) + id;
-		return name + "-" + s.hashCode() + ".ser";
-	}
-
-	public static String getCacheName(Context context, String name) {
-		return getCacheName(context, getActiveServer(context), name);
-	}
-
-	public static String getCacheName(Context context, int instance, String name) {
-		String s = getRestUrl(context, null, instance, false);
-		return name + "-" + s.hashCode() + ".ser";
-	}
-	
-	public static int offlineScrobblesCount(Context context) {
-		SharedPreferences offline = getOfflineSync(context);
-		return offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
-	}
-
-	public static int offlineStarsCount(Context context) {
-		SharedPreferences offline = getOfflineSync(context);
-		return offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
-	}
-	
-	public static String parseOfflineIDSearch(Context context, String id, String cacheLocation) {
-		// Try to get this info based off of tags first
-		String name = parseOfflineIDSearch(id);
-		if(name != null) {
-			return name;
-		}
-
-		// Otherwise go nuts trying to parse from file structure
-		name = id.replace(cacheLocation, "");
-		if(name.startsWith("/")) {
-			name = name.substring(1);
-		}
-		name = name.replace(".complete", "").replace(".partial", "");
-		int index = name.lastIndexOf(".");
-		name = index == -1 ? name : name.substring(0, index);
-		String[] details = name.split("/");
-		
-		String title = details[details.length - 1];
-		if(index == -1) {
-			if(details.length > 1) {
-				String artist = "artist:\"" + details[details.length - 2] + "\"";
-				String simpleArtist = "artist:\"" + title + "\"";
-				title = "album:\"" + title + "\"";
-				if(details[details.length - 1].equals(details[details.length - 2])) {
-					name = title;
-				} else {
-					name = "(" + artist + " AND " + title + ")" + " OR " + simpleArtist;
-				}
-			} else {
-				name = "artist:\"" + title + "\" OR album:\"" + title + "\"";
-			}
-		} else {
-			String artist;
-			if(details.length > 2) {
-				artist = "artist:\"" + details[details.length - 3] + "\"";
-			} else {
-				artist = "(artist:\"" + details[0] + "\" OR album:\"" + details[0] + "\")";
-			}
-			title = "title:\"" + title.substring(title.indexOf('-') + 1) + "\"";
-			name = artist + " AND " + title;
-		}
-		
-		return name;
-	}
-
-	public static String parseOfflineIDSearch(String id) {
-		MusicDirectory.Entry entry = new MusicDirectory.Entry();
-		File file = new File(id);
-
-		if(file.exists()) {
-			entry.loadMetadata(file);
-
-			if(entry.getArtist() != null) {
-				String title = file.getName();
-				title = title.replace(".complete", "").replace(".partial", "");
-				int index = title.lastIndexOf(".");
-				title = index == -1 ? title : title.substring(0, index);
-				title = title.substring(title.indexOf('-') + 1);
-
-				return "artist:\"" + entry.getArtist() + "\" AND title:\"" + title + "\"";
-			} else {
-				return null;
-			}
-		} else {
 			return null;
 		}
+		return null;
 	}
-
-    public static int getRemainingTrialDays(Context context) {
-        SharedPreferences prefs = getPreferences(context);
-        long installTime = prefs.getLong(Constants.PREFERENCES_KEY_INSTALL_TIME, 0L);
-
-        if (installTime == 0L) {
-            installTime = System.currentTimeMillis();
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putLong(Constants.PREFERENCES_KEY_INSTALL_TIME, installTime);
-            editor.apply();
-        }
-
-        long now = System.currentTimeMillis();
-        long millisPerDay = 24L * 60L * 60L * 1000L;
-        int daysSinceInstall = (int) ((now - installTime) / millisPerDay);
-        return Math.max(0, Constants.FREE_TRIAL_DAYS - daysSinceInstall);
-    }
-
-	public static boolean isCastProxy(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_CAST_PROXY, false);
-	}
-
-	public static boolean isFirstLevelArtist(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true);
-	}
-	public static void toggleFirstLevelArtist(Context context) {
-		SharedPreferences prefs = Util.getPreferences(context);
-		SharedPreferences.Editor editor = prefs.edit();
-		String firstLevelArtist = Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context);
-
-		editor.putBoolean(firstLevelArtist, !prefs.getBoolean(firstLevelArtist, true));
-		editor.apply();
-	}
-
-	public static boolean shouldCacheDuringCasting(Context context) {
-		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CAST_CACHE, false);
-	}
-
-	public static boolean shouldStartOnHeadphones(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_START_ON_HEADPHONES, false);
-	}
-
-	public static String getSongPressAction(Context context) {
-		return getPreferences(context).getString(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION, "all");
-	}
-
-    /**
-     * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
-     * <p/>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
-     *
-     * @param input the <code>InputStream</code> to read from
-     * @return the requested byte array
-     * @throws NullPointerException if the input is null
-     * @throws IOException          if an I/O error occurs
-     */
-    public static byte[] toByteArray(InputStream input) throws IOException {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        copy(input, output);
-        return output.toByteArray();
-    }
-
-    public static long copy(InputStream input, OutputStream output)
-            throws IOException {
-        byte[] buffer = new byte[1024 * 4];
-        long count = 0;
-        int n;
-        while (-1 != (n = input.read(buffer))) {
-            output.write(buffer, 0, n);
-            count += n;
-        }
-        return count;
-    }
-
-	public static void renameFile(File from, File to) throws IOException {
-		if(!from.renameTo(to)) {
-			Log.i(TAG, "Failed to rename " + from + " to " + to);
-		}
-	}
-
-    public static void close(Closeable closeable) {
-        try {
-            if (closeable != null) {
-                closeable.close();
-            }
-        } catch (Throwable x) {
-            // Ignored
-        }
-    }
-
-    public static boolean delete(File file) {
-        if (file != null && file.exists()) {
-            if (!file.delete()) {
-                Log.w(TAG, "Failed to delete file " + file);
-                return false;
-            }
-            Log.i(TAG, "Deleted file " + file);
-        }
-        return true;
-    }
-
-	public static void toast(Context context, int messageId) {
-        toast(context, messageId, true);
-    }
-
-    public static void toast(Context context, int messageId, boolean shortDuration) {
-        toast(context, context.getString(messageId), shortDuration);
-    }
-
-    public static void toast(Context context, String message) {
-        toast(context, message, true);
-    }
-
-    public static void toast(Context context, String message, boolean shortDuration) {
-        if (toast == null) {
-            toast = Toast.makeText(context, message, shortDuration ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG);
-        } else {
-            toast.setText(message);
-            toast.setDuration(shortDuration ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG);
-        }
-        toast.show();
-    }
 	
-	public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick) {
-		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, null);
-	}
-
-	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick) {
-		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, null);
-	}
-
-	public static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
-		new AlertDialog.Builder(context)
-			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle(R.string.common_confirm)
-			.setMessage(context.getResources().getString(R.string.common_confirm_message, action, subject))
-			.setPositiveButton(R.string.common_ok, onClick)
-			.setNegativeButton(R.string.common_cancel, onCancel)
-			.show();
-	}
-
-    /**
-     * Converts a byte-count to a formatted string suitable for display to the user.
-     * For instance:
-     * <ul>
-     * <li><code>format(918)</code> returns <em>"918 B"</em>.</li>
-     * <li><code>format(98765)</code> returns <em>"96 KB"</em>.</li>
-     * <li><code>format(1238476)</code> returns <em>"1.2 MB"</em>.</li>
-     * </ul>
-     * This method assumes that 1 KB is 1024 bytes.
-     * To get a localized string, please use formatLocalizedBytes instead.
-     *
-     * @param byteCount The number of bytes.
-     * @return The formatted string.
-     */
-    public static synchronized String formatBytes(long byteCount) {
-
-        // More than 1 GB?
-        if (byteCount >= 1024 * 1024 * 1024) {
-			return GIGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024 * 1024));
-        }
-
-        // More than 1 MB?
-        if (byteCount >= 1024 * 1024) {
-			return MEGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024));
-        }
-
-        // More than 1 KB?
-        if (byteCount >= 1024) {
-			return KILO_BYTE_FORMAT.format((double) byteCount / 1024);
-        }
-
-        return byteCount + " B";
-    }
-
-    /**
-     * Converts a byte-count to a formatted string suitable for display to the user.
-     * For instance:
-     * <ul>
-     * <li><code>format(918)</code> returns <em>"918 B"</em>.</li>
-     * <li><code>format(98765)</code> returns <em>"96 KB"</em>.</li>
-     * <li><code>format(1238476)</code> returns <em>"1.2 MB"</em>.</li>
-     * </ul>
-     * This method assumes that 1 KB is 1024 bytes.
-     * This version of the method returns a localized string.
-     *
-     * @param byteCount The number of bytes.
-     * @return The formatted string.
-     */
-    public static synchronized String formatLocalizedBytes(long byteCount, Context context) {
-
-        // More than 1 GB?
-        if (byteCount >= 1024 * 1024 * 1024) {
-            if (GIGA_BYTE_LOCALIZED_FORMAT == null) {
-                GIGA_BYTE_LOCALIZED_FORMAT = new DecimalFormat(context.getResources().getString(R.string.util_bytes_format_gigabyte));
-            }
-
-            return GIGA_BYTE_LOCALIZED_FORMAT.format((double) byteCount / (1024 * 1024 * 1024));
-        }
-
-        // More than 1 MB?
-        if (byteCount >= 1024 * 1024) {
-            if (MEGA_BYTE_LOCALIZED_FORMAT == null) {
-                MEGA_BYTE_LOCALIZED_FORMAT = new DecimalFormat(context.getResources().getString(R.string.util_bytes_format_megabyte));
-            }
-
-            return MEGA_BYTE_LOCALIZED_FORMAT.format((double) byteCount / (1024 * 1024));
-        }
-
-        // More than 1 KB?
-        if (byteCount >= 1024) {
-            if (KILO_BYTE_LOCALIZED_FORMAT == null) {
-                KILO_BYTE_LOCALIZED_FORMAT = new DecimalFormat(context.getResources().getString(R.string.util_bytes_format_kilobyte));
-            }
-
-            return KILO_BYTE_LOCALIZED_FORMAT.format((double) byteCount / 1024);
-        }
-
-        if (BYTE_LOCALIZED_FORMAT == null) {
-            BYTE_LOCALIZED_FORMAT = new DecimalFormat(context.getResources().getString(R.string.util_bytes_format_byte));
-        }
-
-        return BYTE_LOCALIZED_FORMAT.format((double) byteCount);
-    }
-
-	public static String formatDuration(Integer seconds) {
-		return Util.formatDuration(seconds, false);
-	}
-
-    public static String formatDuration(Integer seconds, boolean inText) {
-        if (seconds == null) {
-            return null;
-        }
-
-		int hours = seconds / 3600;
-        int minutes = (seconds / 60) % 60;
-        int secs = seconds % 60;
-
-        if(inText){
-			return hours + "h " + minutes + "min";
-		}else {
-			StringBuilder builder = new StringBuilder(7);
-			if (hours > 0) {
-				builder.append(hours).append(":");
-				if (minutes < 10) {
-					builder.append("0");
-				}
-			}
-			builder.append(minutes).append(":");
-			if (secs < 10) {
-				builder.append("0");
-			}
-			builder.append(secs);
-			return builder.toString();
-		}
-    }
-
-	public static String formatDate(Context context, String dateString, boolean includeTime) {
-		if(dateString == null) {
-			return "";
-		}
-
-		try {
-			dateString = dateString.replace(' ', 'T');
-			boolean isDateNormalized = ServerInfo.checkServerVersion(context, "1.11");
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
-			if (isDateNormalized) {
-				dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-			}
-
-			return formatDate(dateFormat.parse(dateString), includeTime);
-		} catch(ParseException e) {
-			Log.e(TAG, "Failed to parse date string", e);
-			return dateString;
-		}
-	}
-
-	public static String formatDate(Date date) {
-		return formatDate(date, true);
-	}
-
-	public static String formatDate(Date date, boolean includeTime) {
-		if(date == null) {
-			return "Never";
-		} else {
-
-			if(includeTime) {
-				if (Calendar.getInstance().get(Calendar.YEAR) != CURRENT_YEAR) {
-					return DATE_FORMAT_LONG.format(date);
-				} else {
-					return DATE_FORMAT_SHORT.format(date);
-				}
-			} else {
-
-				return DATE_FORMAT_NO_TIME.format(date);
-			}
-		}
-	}
-	public static String formatDate(long millis) {
-		return formatDate(new Date(millis));
-	}
-
-	public static String formatBoolean(Context context, boolean value) {
-		return context.getResources().getString(value ? R.string.common_true : R.string.common_false);
-	}
-
-    public static boolean equals(Object object1, Object object2) {
-        if (object1 == object2) {
-            return true;
-        }
-        if (object1 == null || object2 == null) {
-            return false;
-        }
-        return object1.equals(object2);
-
-    }
-
-    /**
-     * Encodes the given string by using the hexadecimal representation of its UTF-8 bytes.
-     *
-     * @param s The string to encode.
-     * @return The encoded string.
-     */
-    public static String utf8HexEncode(String s) {
-        if (s == null) {
-            return null;
-        }
-        byte[] utf8;
-        try {
-            utf8 = s.getBytes(Constants.UTF_8);
-        } catch (UnsupportedEncodingException x) {
-            throw new RuntimeException(x);
-        }
-        return hexEncode(utf8);
-    }
-
-    /**
-     * Converts an array of bytes into an array of characters representing the hexadecimal values of each byte in order.
-     * The returned array will be double the length of the passed array, as it takes two characters to represent any
-     * given byte.
-     *
-     * @param data Bytes to convert to hexadecimal characters.
-     * @return A string containing hexadecimal characters.
-     */
-    public static String hexEncode(byte[] data) {
-        int length = data.length;
-        char[] out = new char[length << 1];
-        // two characters form the hex value.
-        for (int i = 0, j = 0; i < length; i++) {
-            out[j++] = HEX_DIGITS[(0xF0 & data[i]) >>> 4];
-            out[j++] = HEX_DIGITS[0x0F & data[i]];
-        }
-        return new String(out);
-    }
-
-    /**
-     * Calculates the MD5 digest and returns the value as a 32 character hex string.
-     *
-     * @param s Data to digest.
-     * @return MD5 digest as a hex string.
-     */
-    public static String md5Hex(String s) {
-        if (s == null) {
-            return null;
-        }
-
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            return hexEncode(md5.digest(s.getBytes(Constants.UTF_8)));
-        } catch (Exception x) {
-            throw new RuntimeException(x.getMessage(), x);
-        }
-    }
-	
-	public static boolean isNullOrWhiteSpace(String string) {
-		return string == null || "".equals(string.trim());
-	}
-
-	public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-		// Raw height and width of image
-		final int height = options.outHeight;
-		final int width = options.outWidth;
-		int inSampleSize = 1;
-
-		if (height > reqHeight || width > reqWidth) {
-
-			// Calculate ratios of height and width to requested height and
-			// width
-			final int heightRatio = Math.round((float) height / (float) reqHeight);
-			final int widthRatio = Math.round((float) width / (float) reqWidth);
-
-			// Choose the smallest ratio as inSampleSize value, this will
-			// guarantee
-			// a final image with both dimensions larger than or equal to the
-			// requested height and width.
-			inSampleSize = Math.min(heightRatio, widthRatio);
-		}
-
-		return inSampleSize;
-	}
-
 	public static int getScaledHeight(double height, double width, int newWidth) {
 		// Try to keep correct aspect ratio of the original image, do not force a square
 		double aspectRatio = height / width;
@@ -1059,6 +846,35 @@ public final class Util {
 
 	public static int getScaledHeight(Bitmap bitmap, int width) {
 		return Util.getScaledHeight((double) bitmap.getHeight(), (double) bitmap.getWidth(), width);
+	}
+	
+    public static String getSelectedMusicFolderId(Context context) {
+        return getSelectedMusicFolderId(context, getActiveServer(context));
+    }
+
+	public static String getSelectedMusicFolderId(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
+	}
+
+	public static int getServerCount(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
+	}
+
+	public static String getServerName(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+        return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
+	}
+
+    public static String getServerName(Context context, int instance) {
+        SharedPreferences prefs = getPreferences(context);
+        return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
+    }
+
+	public static String getSongPressAction(Context context) {
+		return getPreferences(context).getString(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION, "all");
 	}
 
 	public static int getStringDistance(CharSequence s, CharSequence t) {
@@ -1117,9 +933,111 @@ public final class Util {
 		return p[n];
 	}
 
+	public static String getSyncDefault(Context context) {
+		SharedPreferences prefs = Util.getOfflineSync(context);
+		return prefs.getString(Constants.OFFLINE_SYNC_DEFAULT, null);
+	}
+
+	public static String getVideoPlayerType(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getString(Constants.PREFERENCES_KEY_VIDEO_PLAYER, "raw");
+	}
+
+    /**
+     * Converts an array of bytes into an array of characters representing the hexadecimal values of each byte in order.
+     * The returned array will be double the length of the passed array, as it takes two characters to represent any
+     * given byte.
+     *
+     * @param data Bytes to convert to hexadecimal characters.
+     * @return A string containing hexadecimal characters.
+     */
+    public static String hexEncode(byte[] data) {
+        int length = data.length;
+        char[] out = new char[length << 1];
+        // two characters form the hex value.
+        for (int i = 0, j = 0; i < length; i++) {
+            out[j++] = HEX_DIGITS[(0xF0 & data[i]) >>> 4];
+            out[j++] = HEX_DIGITS[0x0F & data[i]];
+        }
+        return new String(out);
+    }
+
+    public static void info(Context context, int titleId, int messageId) {
+    	info(context, titleId, messageId, true);
+    }
+
+	public static void info(Context context, int titleId, String message) {
+		info(context, titleId, message, true);
+	}
+
+	public static void info(Context context, String title, String message) {
+		info(context, title, message, true);
+	}
+
+	public static void info(Context context, int titleId, int messageId, boolean linkify) {
+        showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId, linkify);
+    }
+
+	public static void info(Context context, int titleId, String message, boolean linkify) {
+		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message, linkify);
+	}
+
+	public static void info(Context context, String title, String message, boolean linkify) {
+		showDialog(context, android.R.drawable.ic_dialog_info, title, message, linkify);
+	}
+
+	public static boolean isAllowedToDownload(Context context) {
+		return isNetworkConnected(context, true) && !isOffline(context);
+	}
+
+	public static boolean isAuthHeaderEnabled(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_AUTHHEADER + instance, true);
+	}
+	
+	public static boolean isBatchMode(Context context) {
+		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false);
+	}
+
+	public static boolean isCastProxy(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_CAST_PROXY, false);
+	}
+
+    public static boolean isExternalStoragePresent() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+	public static boolean isFirstLevelArtist(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true);
+	}
+
+	public static boolean isForcePasswordApiEnabled(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_FORCE_PASSWORD_API+ instance, false);
+	}
+
+	public static boolean isHideDuplicateEnable(Context context)
+	{
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_DUPLICATE, false);
+	}
+
+	public static boolean isHome(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_HOME, false);
+	}
+
+    public static boolean isLocalNetworkRequiredForDownload(Context context) {
+        SharedPreferences prefs = getPreferences(context);
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_LOCAL_NETWORK_REQUIRED_FOR_DOWNLOAD, false);
+    }
+
 	public static boolean isNetworkConnected(Context context) {
 		return isNetworkConnected(context, false);
 	}
+
     public static boolean isNetworkConnected(Context context, boolean streaming) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -1137,160 +1055,158 @@ public final class Util {
 			return connected;
 		}
     }
+
+	public static boolean isNullOrWhiteSpace(String string) {
+		return string == null || "".equals(string.trim());
+	}
+
+    public static boolean isOffline(Context context) {
+        SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false);
+    }
+
+    public static boolean isScreenLitOnDownload(Context context) {
+        SharedPreferences prefs = getPreferences(context);
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_SCREEN_LIT_ON_DOWNLOAD, false);
+    }
+
+    public static boolean isScrobblingEnabled(Context context) {
+        SharedPreferences prefs = getPreferences(context);
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_SCROBBLE, true) && (isOffline(context) || UserUtil.canScrobble());
+    }
+
+	public static boolean isSyncEnabled(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_SYNC + instance, true);
+	}
+
+	public static boolean isTagBrowsing(Context context) {
+		return isTagBrowsing(context, Util.getActiveServer(context));
+	}
+	
+	public static boolean isTagBrowsing(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance, false);
+	}
+
 	public static boolean isWifiConnected(Context context) {
 		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 		boolean connected = networkInfo != null && networkInfo.isConnected();
 		return connected && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI);
 	}
-	public static String getSSID(Context context) {
-		Context applicationContext = context.getApplicationContext();
-		if (isWifiConnected(applicationContext)) {
-			WifiManager wifiManager = (WifiManager) applicationContext.getSystemService(Context.WIFI_SERVICE);
-			if (wifiManager.getConnectionInfo() != null && wifiManager.getConnectionInfo().getSSID() != null) {
-				return wifiManager.getConnectionInfo().getSSID().replace("\"", "");
-			}
-			return null;
-		}
-		return null;
-	}
 
-    public static boolean isExternalStoragePresent() {
-        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
-    }
-
-	public static boolean isAllowedToDownload(Context context) {
-		return isNetworkConnected(context, true) && !isOffline(context);
-	}
     public static boolean isWifiRequiredForDownload(Context context) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getBoolean(Constants.PREFERENCES_KEY_WIFI_REQUIRED_FOR_DOWNLOAD, false);
     }
 
-    public static boolean isLocalNetworkRequiredForDownload(Context context) {
-        SharedPreferences prefs = getPreferences(context);
-        return prefs.getBoolean(Constants.PREFERENCES_KEY_LOCAL_NETWORK_REQUIRED_FOR_DOWNLOAD, false);
+    /**
+     * Calculates the MD5 digest and returns the value as a 32 character hex string.
+     *
+     * @param s Data to digest.
+     * @return MD5 digest as a hex string.
+     */
+    public static String md5Hex(String s) {
+        if (s == null) {
+            return null;
+        }
+
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            return hexEncode(md5.digest(s.getBytes(Constants.UTF_8)));
+        } catch (Exception x) {
+            throw new RuntimeException(x.getMessage(), x);
+        }
     }
 
-    public static void info(Context context, int titleId, int messageId) {
-    	info(context, titleId, messageId, true);
-    }
-	public static void info(Context context, int titleId, String message) {
-		info(context, titleId, message, true);
-	}
-	public static void info(Context context, String title, String message) {
-		info(context, title, message, true);
-	}
-	public static void info(Context context, int titleId, int messageId, boolean linkify) {
-        showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId, linkify);
-    }
-	public static void info(Context context, int titleId, String message, boolean linkify) {
-		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message, linkify);
-	}
-	public static void info(Context context, String title, String message, boolean linkify) {
-		showDialog(context, android.R.drawable.ic_dialog_info, title, message, linkify);
+	public static int offlineScrobblesCount(Context context) {
+		SharedPreferences offline = getOfflineSync(context);
+		return offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
 	}
 
-	public static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
-		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId), linkify);
+	public static int offlineStarsCount(Context context) {
+		SharedPreferences offline = getOfflineSync(context);
+		return offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
 	}
-	public static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
-		showDialog(context, icon, context.getResources().getString(titleId), message, linkify);
+
+	public static String openToTab(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getString(Constants.PREFERENCES_KEY_OPEN_TO_TAB, null);
 	}
-	public static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
-		SpannableString ss = new SpannableString(message);
-		if(linkify) {
-			Linkify.addLinks(ss, Linkify.ALL);
+
+	public static void openWebsite(Context context, String url) {
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+		context.startActivity(browserIntent);
+	}
+
+	public static String parseOfflineIDSearch(Context context, String id, String cacheLocation) {
+		// Try to get this info based off of tags first
+		String name = parseOfflineIDSearch(id);
+		if(name != null) {
+			return name;
 		}
-		
-		AlertDialog dialog = new AlertDialog.Builder(context)
-			.setIcon(icon)
-			.setTitle(title)
-			.setMessage(ss)
-			.setPositiveButton(R.string.common_ok, (dialog1, i) -> dialog1.dismiss())
-			.show();
-		
-		((TextView) Objects.requireNonNull(dialog.findViewById(android.R.id.message))).setMovementMethod(LinkMovementMethod.getInstance());
-    }
 
-	public static void showDetailsDialog(Context context, @StringRes int title, List<Integer> headers, List<String> details) {
-		List<String> headerStrings = new ArrayList<>();
-		for(@StringRes Integer res: headers) {
-			headerStrings.add(context.getResources().getString(res));
+		// Otherwise go nuts trying to parse from file structure
+		name = id.replace(cacheLocation, "");
+		if(name.startsWith("/")) {
+			name = name.substring(1);
 		}
-		showDetailsDialog(context, context.getResources().getString(title), headerStrings, details);
-	}
+		name = name.replace(".complete", "").replace(".partial", "");
+		int index = name.lastIndexOf(".");
+		name = index == -1 ? name : name.substring(0, index);
+		String[] details = name.split("/");
 
-	public static void showDetailsDialog(Context context, String title, List<String> headers, final List<String> details) {
-		ListView listView = new ListView(context);
-		listView.setAdapter(new DetailsAdapter(context, R.layout.details_item, headers, details));
-		listView.setDivider(null);
-		listView.setScrollbarFadingEnabled(false);
-
-		// Let the user long-click on a row to copy its value to the clipboard
-		final Context contextRef = context;
-		listView.setOnItemLongClickListener((parent, view, pos, id) -> {
-			TextView nameView = (TextView) view.findViewById(R.id.detail_name);
-			TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
-			if(nameView == null || detailsView == null) {
-				return false;
+		String title = details[details.length - 1];
+		if(index == -1) {
+			if(details.length > 1) {
+				String artist = "artist:\"" + details[details.length - 2] + "\"";
+				String simpleArtist = "artist:\"" + title + "\"";
+				title = "album:\"" + title + "\"";
+				if(details[details.length - 1].equals(details[details.length - 2])) {
+					name = title;
+				} else {
+					name = "(" + artist + " AND " + title + ")" + " OR " + simpleArtist;
+				}
+			} else {
+				name = "artist:\"" + title + "\" OR album:\"" + title + "\"";
 			}
+		} else {
+			String artist;
+			if(details.length > 2) {
+				artist = "artist:\"" + details[details.length - 3] + "\"";
+			} else {
+				artist = "(artist:\"" + details[0] + "\" OR album:\"" + details[0] + "\")";
+			}
+			title = "title:\"" + title.substring(title.indexOf('-') + 1) + "\"";
+			name = artist + " AND " + title;
+		}
 
-			CharSequence name = nameView.getText();
-			CharSequence value = detailsView.getText();
-
-			ClipboardManager clipboard = (ClipboardManager) contextRef.getSystemService(Context.CLIPBOARD_SERVICE);
-			ClipData clip = ClipData.newPlainText(name, value);
-			clipboard.setPrimaryClip(clip);
-
-			toast(contextRef, "Copied " + name + " to clipboard");
-
-			return true;
-		});
-
-		new AlertDialog.Builder(context)
-				// .setIcon(android.R.drawable.ic_dialog_info)
-				.setTitle(title)
-				.setView(listView)
-				.setPositiveButton(R.string.common_close, (dialog, i) -> dialog.dismiss())
-				.show();
+		return name;
 	}
 
-    public static void sleepQuietly(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException x) {
-            Log.w(TAG, "Interrupted from sleep.", x);
-        }
-    }
+	public static String parseOfflineIDSearch(String id) {
+		MusicDirectory.Entry entry = new MusicDirectory.Entry();
+		File file = new File(id);
 
-    public static void startActivityWithoutTransition(Activity currentActivity, Intent intent) {
-        currentActivity.startActivity(intent);
-        disablePendingTransition(currentActivity);
-    }
+		if(file.exists()) {
+			entry.loadMetadata(file);
 
-    public static void disablePendingTransition(Activity activity) {
+			if(entry.getArtist() != null) {
+				String title = file.getName();
+				title = title.replace(".complete", "").replace(".partial", "");
+				int index = title.lastIndexOf(".");
+				title = index == -1 ? title : title.substring(0, index);
+				title = title.substring(title.indexOf('-') + 1);
 
-        // Activity.overridePendingTransition() was introduced in Android 2.0.  Use reflection to maintain
-        // compatibility with 1.5.
-        try {
-            Method method = Activity.class.getMethod("overridePendingTransition", int.class, int.class);
-            method.invoke(activity, 0, 0);
-        } catch (Throwable x) {
-            // Ignored
-        }
-    }
-
-    public static Drawable createDrawableFromBitmap(Context context, Bitmap bitmap) {
-        // BitmapDrawable(Resources, Bitmap) was introduced in Android 1.6.  Use reflection to maintain
-        // compatibility with 1.5.
-        try {
-            Constructor<BitmapDrawable> constructor = BitmapDrawable.class.getConstructor(Resources.class, Bitmap.class);
-            return constructor.newInstance(context.getResources(), bitmap);
-        } catch (Throwable x) {
-            return new BitmapDrawable(context.getResources(), bitmap);
-        }
-    }
+				return "artist:\"" + entry.getArtist() + "\" AND title:\"" + title + "\"";
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
 
     public static void registerMediaButtonEventReceiver(Context context) {
 
@@ -1313,18 +1229,70 @@ public final class Util {
         }
     }
 
-    public static void unregisterMediaButtonEventReceiver(Context context) {
-        // AudioManager.unregisterMediaButtonEventReceiver() was introduced in Android 2.2.
-        // Use reflection to maintain compatibility with 1.5.
-        try {
-            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            ComponentName componentName = new ComponentName(context.getPackageName(), MediaButtonIntentReceiver.class.getName());
-            Method method = AudioManager.class.getMethod("unregisterMediaButtonEventReceiver", ComponentName.class);
-            method.invoke(audioManager, componentName);
-        } catch (Throwable x) {
-            // Ignored.
-        }
-    }
+	public static void removeInstanceName(Context context, int instance, int activeInstance) {
+		SharedPreferences prefs = getPreferences(context);
+		SharedPreferences.Editor editor = prefs.edit();
+
+		int newInstance = instance + 1;
+
+		// Get what the +1 server details are
+		String server = prefs.getString(Constants.PREFERENCES_KEY_SERVER_KEY + newInstance, null);
+		String serverName = prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + newInstance, null);
+		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + newInstance, null);
+		String userName = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
+		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
+		String musicFolderId = prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + newInstance, null);
+
+		// Store the +1 server details in the to be deleted instance
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_KEY + instance, server);
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, serverName);
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + instance, serverUrl);
+		editor.putString(Constants.PREFERENCES_KEY_USERNAME + instance, userName);
+		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + instance, password);
+		editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, musicFolderId);
+
+		// Delete the +1 server instance
+		// Calling method will loop up to fill this in if +2 server exists
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_KEY + newInstance, null);
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + newInstance, null);
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + newInstance, null);
+		editor.putString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
+		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
+		editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + newInstance, null);
+		editor.apply();
+
+		if (instance == activeInstance) {
+			if(instance != 1) {
+				Util.setActiveServer(context, 1);
+			} else {
+				Util.setOffline(context, true);
+			}
+		} else if (newInstance == activeInstance) {
+			Util.setActiveServer(context, instance);
+		}
+	}
+
+	public static void renameFile(File from, File to) throws IOException {
+		if(!from.renameTo(to)) {
+			Log.i(TAG, "Failed to rename " + from + " to " + to);
+		}
+	}
+
+	public static String replaceInternalUrl(Context context, String url) {
+		// Only change to internal when using https
+		if(url.contains("https")) {
+			SharedPreferences prefs = Util.getPreferences(context);
+			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+			if(internalUrl != null && !"".equals(internalUrl)) {
+				String externalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
+				url = url.replace(internalUrl, externalUrl);
+			}
+		}
+
+		//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
+		return url.replace("c=" + Constants.REST_CLIENT_ID, "c=" + Constants.CHROMECAST_CLIENT_ID);
+	}
 
 	public static void requestAudioFocus(final Context context, final AudioManager audioManager) {
     	if(Build.VERSION.SDK_INT >= 26 && audioFocusRequest == null) {
@@ -1343,181 +1311,6 @@ public final class Util {
     		audioManager.requestAudioFocus(focusListener = getAudioFocusChangeListener(context, audioManager), AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     	}
     }
-
-    private static OnAudioFocusChangeListener getAudioFocusChangeListener(final Context context, final AudioManager audioManager) {
-		return new OnAudioFocusChangeListener() {
-			public void onAudioFocusChange(int focusChange) {
-				DownloadService downloadService = (DownloadService)context;
-				if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) && !downloadService.isRemoteEnabled()) {
-					if(downloadService.getPlayerState() == PlayerState.STARTED) {
-						Log.i(TAG, "Temporary loss of focus");
-						SharedPreferences prefs = getPreferences(context);
-						int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
-						if(lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
-							lowerFocus = true;
-							downloadService.setVolume(0.1f);
-						} else if(lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
-							pauseFocus = true;
-							downloadService.pause(true);
-						}
-					}
-				} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-					if(pauseFocus) {
-						pauseFocus = false;
-						downloadService.start();
-					}
-					if(lowerFocus) {
-						lowerFocus = false;
-						downloadService.setVolume(1.0f);
-					}
-				} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS && !downloadService.isRemoteEnabled()) {
-					Log.i(TAG, "Permanently lost focus");
-					focusListener = null;
-					downloadService.pause();
-
-					if(audioFocusRequest != null && Build.VERSION.SDK_INT >= 26) {
-						audioManager.abandonAudioFocusRequest(audioFocusRequest);
-						audioFocusRequest = null;
-					} else {
-						audioManager.abandonAudioFocus(this);
-					}
-				}
-			}
-		};
-	}
-
-    /**
-     * <p>Broadcasts the given song info as the new song being played.</p>
-     */
-    public static void broadcastNewTrackInfo(Context context, MusicDirectory.Entry song) {
-
-		try {
-			Intent intent = new Intent(EVENT_META_CHANGED);
-			Intent avrcpIntent = new Intent(AVRCP_METADATA_CHANGED);
-
-
-			if (song != null) {
-				intent.putExtra("title", song.getTitle());
-				intent.putExtra("artist", song.getArtist());
-				intent.putExtra("album", song.getAlbum());
-
-
-				File albumArtFile = FileUtil.getAlbumArtFile(context, song);
-				intent.putExtra("coverart", albumArtFile.getAbsolutePath());
-				avrcpIntent.putExtra("playing", true);
-			} else {
-				intent.putExtra("title", "");
-				intent.putExtra("artist", "");
-				intent.putExtra("album", "");
-				intent.putExtra("coverart", "");
-				avrcpIntent.putExtra("playing", false);
-			}
-			addTrackInfo(context, song, avrcpIntent);
-
-
-			context.sendBroadcast(intent);
-			context.sendBroadcast(avrcpIntent);
-		} catch(Exception e) {
-			Log.e(TAG, "Failed to broadcastNewTrackInfo", e);
-		}
-    }
-
-    /**
-     * <p>Broadcasts the given player state as the one being set.</p>
-     */
-    public static void broadcastPlaybackStatusChange(Context context, MusicDirectory.Entry song, PlayerState state) {
-
-		try {
-			Intent intent = new Intent(EVENT_PLAYSTATE_CHANGED);
-			Intent avrcpIntent = new Intent(AVRCP_PLAYSTATE_CHANGED);
-
-			switch (state) {
-				case STARTED:
-					intent.putExtra("state", "play");
-					avrcpIntent.putExtra("playing", true);
-					break;
-				case STOPPED:
-					intent.putExtra("state", "stop");
-					avrcpIntent.putExtra("playing", false);
-
-					break;
-				case PAUSED:
-					intent.putExtra("state", "pause");
-					avrcpIntent.putExtra("playing", false);
-					break;
-				case PREPARED:
-					// Only send quick pause event for samsung devices, causes issues for others
-					if (Build.MANUFACTURER.toLowerCase().contains("samsung")) {
-						avrcpIntent.putExtra("playing", false);
-					} else {
-						return; // Don't broadcast anything
-					}
-					break;
-				case COMPLETED:
-					intent.putExtra("state", "complete");
-					avrcpIntent.putExtra("playing", false);
-					break;
-				default:
-					return; // No need to broadcast.
-			}
-			addTrackInfo(context, song, avrcpIntent);
-
-
-			if (state != PlayerState.PREPARED) {
-				context.sendBroadcast(intent);
-			}
-			context.sendBroadcast(avrcpIntent);
-		} catch(Exception e) {
-			Log.e(TAG, "Failed to broadcastPlaybackStatusChange", e);
-		}
-
-    }
-
-	private static void addTrackInfo(Context context, MusicDirectory.Entry song, Intent intent) {
-		if (song != null) {
-			DownloadService downloadService = (DownloadService)context;
-			File albumArtFile = FileUtil.getAlbumArtFile(context, song);
-
-			intent.putExtra("track", song.getTitle());
-			intent.putExtra("artist", song.getArtist());
-			intent.putExtra("album", song.getAlbum());
-			intent.putExtra("ListSize", (long) downloadService.getSongs().size());
-			intent.putExtra("id", (long) downloadService.getCurrentPlayingIndex() + 1);
-			intent.putExtra("duration", (long) downloadService.getPlayerDuration());
-			intent.putExtra("position", (long) downloadService.getPlayerPosition());
-			intent.putExtra("coverart", albumArtFile.getAbsolutePath());
-			intent.putExtra("package","github.popeen.dsub");
-		} else {
-			intent.putExtra("track", "");
-			intent.putExtra("artist", "");
-			intent.putExtra("album", "");
-			intent.putExtra("ListSize", (long) 0);
-			intent.putExtra("id", (long) 0);
-			intent.putExtra("duration", (long) 0);
-			intent.putExtra("position", (long) 0);
-			intent.putExtra("coverart", "");
-			intent.putExtra("package","github.popeen.dsub");
-		}
-	}
-	
-	public static WifiManager.WifiLock createWifiLock(Context context, String tag) {
-		WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-		return wm.createWifiLock(3, tag);
-	}
-
-	public static Random getRandom() {
-		if(random == null) {
-			random = new SecureRandom();
-		}
-
-		return random;
-	}
-
-	public static boolean isHideDuplicateEnable(Context context)
-	{
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_DUPLICATE, false);
-	}
 
 	public static void sendLogfile(Context context){
 		if (EnvironmentVariables.LOG_API_KEY == null) {
@@ -1619,12 +1412,6 @@ public final class Util {
 				}
 
 				@Override
-				protected void error(Throwable error) {
-					Log.e(TAG, "Failed to gather logs", error);
-					Util.toast(context, "Failed to gather logs");
-				}
-
-				@Override
 				protected void done(String logcat) {
 					String footer = "\nLogs: " + logcat;
 					footer += "\nAndroid SDK: " + Build.VERSION.SDK_INT;
@@ -1652,8 +1439,34 @@ public final class Util {
 
 					context.startActivity(Intent.createChooser(emailIntent, "Send log..."));
 				}
+
+				@Override
+				protected void error(Throwable error) {
+					Log.e(TAG, "Failed to gather logs", error);
+					Util.toast(context, "Failed to gather logs");
+				}
 			}.execute();
 		} catch(Exception ignored) {}
+	}
+
+    public static void setActiveServer(Context context, int instance) {
+        SharedPreferences prefs = getPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, instance);
+        editor.apply();
+    }
+
+	public static void setBlockTokenUse(Context context, int instance, boolean block) {
+		SharedPreferences.Editor editor = getPreferences(context).edit();
+		editor.putBoolean(getBlockTokenUsePref(context, instance), block);
+		editor.apply();
+	}
+
+	public static void setHome(Context context, boolean home) {
+		SharedPreferences prefs = getPreferences(context);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean(Constants.PREFERENCES_KEY_HOME, home);
+		editor.apply();
 	}
 
 	public static void setMargins (View view, int left, int top, int right, int bottom) {
@@ -1664,16 +1477,128 @@ public final class Util {
 		}
 	}
 
-	public static SSLSocketFactory socketFactory() {
-		TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-				return new X509Certificate[0];
+	public static void setOffline(Context context, boolean offline) {
+		SharedPreferences prefs = getPreferences(context);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean(Constants.PREFERENCES_KEY_OFFLINE, offline);
+		editor.apply();
+	}
+
+    public static void setRepeatMode(Context context, RepeatMode repeatMode) {
+        SharedPreferences prefs = getPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.PREFERENCES_KEY_REPEAT_MODE, repeatMode.name());
+        editor.apply();
+    }
+
+    public static void setSelectedMusicFolderId(Context context, String musicFolderId) {
+        int instance = getActiveServer(context);
+        SharedPreferences prefs = getPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, musicFolderId);
+        editor.apply();
+    }
+
+	public static void setSyncDefault(Context context, String defaultValue) {
+		SharedPreferences.Editor editor = Util.getOfflineSync(context).edit();
+		editor.putString(Constants.OFFLINE_SYNC_DEFAULT, defaultValue);
+		editor.apply();
+	}
+
+	public static boolean shouldCacheDuringCasting(Context context) {
+		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CAST_CACHE, false);
+	}
+
+	public static boolean shouldStartOnHeadphones(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_START_ON_HEADPHONES, false);
+	}
+
+	public static void showDetailsDialog(Context context, @StringRes int title, List<Integer> headers, List<String> details) {
+		List<String> headerStrings = new ArrayList<>();
+		for(@StringRes Integer res: headers) {
+			headerStrings.add(context.getResources().getString(res));
+		}
+		showDetailsDialog(context, context.getResources().getString(title), headerStrings, details);
+	}
+
+	public static void showDetailsDialog(Context context, String title, List<String> headers, final List<String> details) {
+		ListView listView = new ListView(context);
+		listView.setAdapter(new DetailsAdapter(context, R.layout.details_item, headers, details));
+		listView.setDivider(null);
+		listView.setScrollbarFadingEnabled(false);
+
+		// Let the user long-click on a row to copy its value to the clipboard
+		final Context contextRef = context;
+		listView.setOnItemLongClickListener((parent, view, pos, id) -> {
+			TextView nameView = (TextView) view.findViewById(R.id.detail_name);
+			TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+			if(nameView == null || detailsView == null) {
+				return false;
 			}
 
+			CharSequence name = nameView.getText();
+			CharSequence value = detailsView.getText();
+
+			ClipboardManager clipboard = (ClipboardManager) contextRef.getSystemService(Context.CLIPBOARD_SERVICE);
+			ClipData clip = ClipData.newPlainText(name, value);
+			clipboard.setPrimaryClip(clip);
+
+			toast(contextRef, "Copied " + name + " to clipboard");
+
+			return true;
+		});
+
+		new AlertDialog.Builder(context)
+				// .setIcon(android.R.drawable.ic_dialog_info)
+				.setTitle(title)
+				.setView(listView)
+				.setPositiveButton(R.string.common_close, (dialog, i) -> dialog.dismiss())
+				.show();
+	}
+
+	public static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
+		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId), linkify);
+	}
+
+	public static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
+		showDialog(context, icon, context.getResources().getString(titleId), message, linkify);
+	}
+
+	public static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
+		SpannableString ss = new SpannableString(message);
+		if(linkify) {
+			Linkify.addLinks(ss, Linkify.ALL);
+		}
+
+		AlertDialog dialog = new AlertDialog.Builder(context)
+			.setIcon(icon)
+			.setTitle(title)
+			.setMessage(ss)
+			.setPositiveButton(R.string.common_ok, (dialog1, i) -> dialog1.dismiss())
+			.show();
+
+		((TextView) Objects.requireNonNull(dialog.findViewById(android.R.id.message))).setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    public static void sleepQuietly(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException x) {
+            Log.w(TAG, "Interrupted from sleep.", x);
+        }
+    }
+
+	public static SSLSocketFactory socketFactory() {
+		TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
 			public void checkClientTrusted(X509Certificate[] certs, String authType) {
 			}
 
 			public void checkServerTrusted(X509Certificate[] certs, String authType) {
+			}
+
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return new X509Certificate[0];
 			}
 		}};
 
@@ -1687,8 +1612,88 @@ public final class Util {
 		}
 	}
 
-	public static void openWebsite(Context context, String url) {
-		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-		context.startActivity(browserIntent);
+    public static void startActivityWithoutTransition(Activity currentActivity, Intent intent) {
+        currentActivity.startActivity(intent);
+        disablePendingTransition(currentActivity);
+    }
+
+    /**
+     * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
+     * <p/>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedInputStream</code>.
+     *
+     * @param input the <code>InputStream</code> to read from
+     * @return the requested byte array
+     * @throws NullPointerException if the input is null
+     * @throws IOException          if an I/O error occurs
+     */
+    public static byte[] toByteArray(InputStream input) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        copy(input, output);
+        return output.toByteArray();
+    }
+	
+	public static void toast(Context context, int messageId) {
+        toast(context, messageId, true);
+    }
+
+    public static void toast(Context context, int messageId, boolean shortDuration) {
+        toast(context, context.getString(messageId), shortDuration);
+    }
+
+    public static void toast(Context context, String message) {
+        toast(context, message, true);
+    }
+
+    public static void toast(Context context, String message, boolean shortDuration) {
+        if (toast == null) {
+            toast = Toast.makeText(context, message, shortDuration ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG);
+        } else {
+            toast.setText(message);
+            toast.setDuration(shortDuration ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG);
+        }
+        toast.show();
+    }
+
+	public static void toggleFirstLevelArtist(Context context) {
+		SharedPreferences prefs = Util.getPreferences(context);
+		SharedPreferences.Editor editor = prefs.edit();
+		String firstLevelArtist = Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context);
+
+		editor.putBoolean(firstLevelArtist, !prefs.getBoolean(firstLevelArtist, true));
+		editor.apply();
 	}
+
+    public static void unregisterMediaButtonEventReceiver(Context context) {
+        // AudioManager.unregisterMediaButtonEventReceiver() was introduced in Android 2.2.
+        // Use reflection to maintain compatibility with 1.5.
+        try {
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            ComponentName componentName = new ComponentName(context.getPackageName(), MediaButtonIntentReceiver.class.getName());
+            Method method = AudioManager.class.getMethod("unregisterMediaButtonEventReceiver", ComponentName.class);
+            method.invoke(audioManager, componentName);
+        } catch (Throwable x) {
+            // Ignored.
+        }
+    }
+
+    /**
+     * Encodes the given string by using the hexadecimal representation of its UTF-8 bytes.
+     *
+     * @param s The string to encode.
+     * @return The encoded string.
+     */
+    public static String utf8HexEncode(String s) {
+        if (s == null) {
+            return null;
+        }
+        byte[] utf8;
+        try {
+            utf8 = s.getBytes(Constants.UTF_8);
+        } catch (UnsupportedEncodingException x) {
+            throw new RuntimeException(x);
+        }
+        return hexEncode(utf8);
+    }
 }
