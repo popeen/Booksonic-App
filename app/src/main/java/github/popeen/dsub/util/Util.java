@@ -775,7 +775,6 @@ public final class Util {
     public static void toast(Context context, String message, boolean shortDuration) {
         if (toast == null) {
             toast = Toast.makeText(context, message, shortDuration ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
         } else {
             toast.setText(message);
             toast.setDuration(shortDuration ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG);
