@@ -1536,7 +1536,7 @@ public final class Util {
 					Process logcatProc = null;
 
 					try {
-						List<String> progs = new ArrayList<String>();
+						List<String> progs = new ArrayList<>();
 						progs.add("logcat");
 						progs.add("-v");
 						progs.add("time");
@@ -1545,7 +1545,7 @@ public final class Util {
 						progs.add(logcat.getCanonicalPath());
 						progs.add("*:I");
 
-						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[progs.size()]));
+						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[0]));
 						logcatProc.waitFor();
 					} finally {
 						if(logcatProc != null) {
@@ -1627,7 +1627,7 @@ public final class Util {
 				@Override
 				protected void done(String logcat) {
 					String footer = "\nLogs: " + logcat;
-					footer += "\nAndroid SDK: " + Build.VERSION.SDK;
+					footer += "\nAndroid SDK: " + Build.VERSION.SDK_INT;
 					footer += "\nDevice Model: " + Build.MODEL;
 					footer += "\nDevice Name: " + Build.MANUFACTURER + " "  + Build.PRODUCT;
 					footer += "\nROM: " + Build.DISPLAY;
@@ -1680,9 +1680,8 @@ public final class Util {
 		try {
 			SSLContext sslContext = SSLContext.getInstance("SSL");
 			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-			SSLSocketFactory result = sslContext.getSocketFactory();
 
-			return result;
+			return sslContext.getSocketFactory();
 		} catch (NoSuchAlgorithmException | KeyManagementException e) {
 			throw new RuntimeException("Failed to create a SSL socket factory", e);
 		}
