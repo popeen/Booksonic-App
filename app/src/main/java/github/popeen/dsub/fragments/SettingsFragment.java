@@ -367,7 +367,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			this.findPreference("visitDockerGuide").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					Uri uri = Uri.parse("https://hub.docker.com/r/linuxserver/booksonic/");
+					Uri uri = Uri.parse("https://hub.docker.com/r/linuxserver/booksonic-air");
 					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
 					startActivity(browserIntent);
 					return true;
