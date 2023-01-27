@@ -88,6 +88,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -127,7 +128,7 @@ public final class Util {
 	private static SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
 	private static SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
 	private static SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
-	private static int CURRENT_YEAR = new Date().getYear();
+	private static int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     public static final String EVENT_META_CHANGED = "github.popeen.dsub.EVENT_META_CHANGED";
     public static final String EVENT_PLAYSTATE_CHANGED = "github.popeen.dsub.EVENT_PLAYSTATE_CHANGED";
@@ -1416,23 +1417,20 @@ public final class Util {
         }
     }
 
-    @TargetApi(8)
 	public static void requestAudioFocus(final Context context, final AudioManager audioManager) {
-    	if(Build.VERSION.SDK_INT >= 26) {
-    		if(audioFocusRequest == null) {
-				AudioAttributes playbackAttributes = new AudioAttributes.Builder()
-						.setUsage(AudioAttributes.USAGE_MEDIA)
-						.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-						.build();
+    	if(Build.VERSION.SDK_INT >= 26 && audioFocusRequest == null) {
+			AudioAttributes playbackAttributes = new AudioAttributes.Builder()
+					.setUsage(AudioAttributes.USAGE_MEDIA)
+					.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+					.build();
 
-				audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-						.setAudioAttributes(playbackAttributes)
-						.setOnAudioFocusChangeListener(getAudioFocusChangeListener(context, audioManager))
-						.setWillPauseWhenDucked(true)
-						.build();
-				audioManager.requestAudioFocus(audioFocusRequest);
-			}
-		} else if (Build.VERSION.SDK_INT >= 8 && focusListener == null) {
+			audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+					.setAudioAttributes(playbackAttributes)
+					.setOnAudioFocusChangeListener(getAudioFocusChangeListener(context, audioManager))
+					.setWillPauseWhenDucked(true)
+					.build();
+			audioManager.requestAudioFocus(audioFocusRequest);
+		} else if (Build.VERSION.SDK_INT < 26 && focusListener == null) {
     		audioManager.requestAudioFocus(focusListener = getAudioFocusChangeListener(context, audioManager), AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     	}
     }
@@ -1658,7 +1656,7 @@ public final class Util {
 						}
 					}
 
-					URL url = new URL("https://booksonic.org/logs/index.php");
+					URL url = new URL("https://booksonic.org/logs/");
 					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
 					StringBuffer responseBuffer = new StringBuffer();
 					try {
