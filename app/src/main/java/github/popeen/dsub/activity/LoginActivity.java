@@ -67,7 +67,6 @@ public class LoginActivity extends Activity {
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mProgressView = findViewById(R.id.login_progress);
-		View sideloadedView = findViewById(R.id.login_sideloaded);
 
 	}
 
@@ -163,7 +162,7 @@ public class LoginActivity extends Activity {
 		private final String mEmail;
 		private final String mPassword;
 
-		private Context context;
+		private final Context context;
 
 		UserLoginTask(String address, String email, String password) {
 			mAddress = address;
@@ -228,7 +227,7 @@ public class LoginActivity extends Activity {
 
 				}catch (Exception e){
 					Log.println(Log.ERROR, "Login", "Unable to validate login url.\n" + e);
-					if(e.toString().contains("android.os.NetworkOnMainThreadException") == false) {
+					if(!e.toString().contains("android.os.NetworkOnMainThreadException")) {
 						mAddressView.setError("Invalid URL");
 						mAddressView.requestFocus();
 					}else{
