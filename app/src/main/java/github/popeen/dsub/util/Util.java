@@ -42,9 +42,6 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
-
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -53,10 +50,12 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -81,7 +80,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,6 +87,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -122,10 +121,10 @@ public final class Util {
     private static DecimalFormat MEGA_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat KILO_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat BYTE_LOCALIZED_FORMAT = null;
-	private static SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
-	private static SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
-	private static SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
-	private static int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+	private static final SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
+	private static final SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
+	private static final SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
+	private static final int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     public static final String EVENT_META_CHANGED = "github.popeen.dsub.EVENT_META_CHANGED";
     public static final String EVENT_PLAYSTATE_CHANGED = "github.popeen.dsub.EVENT_PLAYSTATE_CHANGED";
@@ -138,14 +137,11 @@ public final class Util {
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
 
-
-	private static String CERTIFICATE_SHA1 = "E51AECDFB8DE9260698023CAB97EE4D265707307";
-
     // Used by hexEncode()
     private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     private static Toast toast;
-	private static SparseArray<Pair<String, String>> tokens = new SparseArray<>();
+	private static final SparseArray<Pair<String, String>> tokens = new SparseArray<>();
 	private static Random random;
 
     private Util() {
@@ -160,7 +156,7 @@ public final class Util {
 		SharedPreferences prefs = getPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean(Constants.PREFERENCES_KEY_HOME, home);
-		editor.commit();
+		editor.apply();
 	}
 
     public static boolean isOffline(Context context) {
@@ -172,7 +168,7 @@ public final class Util {
 		SharedPreferences prefs = getPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean(Constants.PREFERENCES_KEY_OFFLINE, offline);
-		editor.commit();
+		editor.apply();
 	}
 
     public static boolean isScreenLitOnDownload(Context context) {
@@ -189,7 +185,7 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Constants.PREFERENCES_KEY_REPEAT_MODE, repeatMode.name());
-        editor.commit();
+        editor.apply();
     }
 
     public static boolean isScrobblingEnabled(Context context) {
@@ -201,7 +197,7 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, instance);
-        editor.commit();
+        editor.apply();
     }
 
     public static int getActiveServer(Context context) {
@@ -250,7 +246,7 @@ public final class Util {
 		editor.putString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
 		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
 		editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + newInstance, null);
-		editor.commit();
+		editor.apply();
 
 		if (instance == activeInstance) {
 			if(instance != 1) {
@@ -279,7 +275,7 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, musicFolderId);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getSelectedMusicFolderId(Context context) {
@@ -475,12 +471,12 @@ public final class Util {
 	public static void setBlockTokenUse(Context context, int instance, boolean block) {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putBoolean(getBlockTokenUsePref(context, instance), block);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static String replaceInternalUrl(Context context, String url) {
 		// Only change to internal when using https
-		if(url.indexOf("https") != -1) {
+		if(url.contains("https")) {
 			SharedPreferences prefs = Util.getPreferences(context);
 			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
 			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
@@ -549,7 +545,7 @@ public final class Util {
 	public static void setSyncDefault(Context context, String defaultValue) {
 		SharedPreferences.Editor editor = Util.getOfflineSync(context).edit();
 		editor.putString(Constants.OFFLINE_SYNC_DEFAULT, defaultValue);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static String getCacheName(Context context, String name, String id) {
@@ -639,10 +635,7 @@ public final class Util {
 				title = index == -1 ? title : title.substring(0, index);
 				title = title.substring(title.indexOf('-') + 1);
 
-				String query = "artist:\"" + entry.getArtist() + "\"" +
-					" AND title:\"" + title + "\"";
-
-				return query;
+				return "artist:\"" + entry.getArtist() + "\" AND title:\"" + title + "\"";
 			} else {
 				return null;
 			}
@@ -659,7 +652,7 @@ public final class Util {
             installTime = System.currentTimeMillis();
             SharedPreferences.Editor editor = prefs.edit();
             editor.putLong(Constants.PREFERENCES_KEY_INSTALL_TIME, installTime);
-            editor.commit();
+            editor.apply();
         }
 
         long now = System.currentTimeMillis();
@@ -680,14 +673,10 @@ public final class Util {
 	public static void toggleFirstLevelArtist(Context context) {
 		SharedPreferences prefs = Util.getPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
+		String firstLevelArtist = Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context);
 
-		if(prefs.getBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true)) {
-			editor.putBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), false);
-		} else {
-			editor.putBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true);
-		}
-
-		editor.commit();
+		editor.putBoolean(firstLevelArtist, !prefs.getBoolean(firstLevelArtist, true));
+		editor.apply();
 	}
 
 	public static boolean shouldCacheDuringCasting(Context context) {
@@ -817,20 +806,17 @@ public final class Util {
 
         // More than 1 GB?
         if (byteCount >= 1024 * 1024 * 1024) {
-            NumberFormat gigaByteFormat = GIGA_BYTE_FORMAT;
-            return gigaByteFormat.format((double) byteCount / (1024 * 1024 * 1024));
+			return GIGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024 * 1024));
         }
 
         // More than 1 MB?
         if (byteCount >= 1024 * 1024) {
-            NumberFormat megaByteFormat = MEGA_BYTE_FORMAT;
-            return megaByteFormat.format((double) byteCount / (1024 * 1024));
+			return MEGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024));
         }
 
         // More than 1 KB?
         if (byteCount >= 1024) {
-            NumberFormat kiloByteFormat = KILO_BYTE_FORMAT;
-            return kiloByteFormat.format((double) byteCount / 1024);
+			return KILO_BYTE_FORMAT.format((double) byteCount / 1024);
         }
 
         return byteCount + " B";
@@ -948,7 +934,7 @@ public final class Util {
 		} else {
 
 			if(includeTime) {
-				if (date.getYear() != CURRENT_YEAR) {
+				if (Calendar.getInstance().get(Calendar.YEAR) != CURRENT_YEAR) {
 					return DATE_FORMAT_LONG.format(date);
 				} else {
 					return DATE_FORMAT_SHORT.format(date);
@@ -1036,7 +1022,7 @@ public final class Util {
     }
 	
 	public static boolean isNullOrWhiteSpace(String string) {
-		return string == null || "".equals(string) || "".equals(string.trim());
+		return string == null || "".equals(string.trim());
 	}
 
 	public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -1056,7 +1042,7 @@ public final class Util {
 			// guarantee
 			// a final image with both dimensions larger than or equal to the
 			// requested height and width.
-			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+			inSampleSize = Math.min(heightRatio, widthRatio);
 		}
 
 		return inSampleSize;
@@ -1080,7 +1066,7 @@ public final class Util {
 			throw new IllegalArgumentException("Strings must not be null");
 		}
 
-		if(t.toString().toLowerCase().indexOf(s.toString().toLowerCase()) != -1) {
+		if(t.toString().toLowerCase().contains(s.toString().toLowerCase())) {
 			return 1;
 		}
 
@@ -1101,9 +1087,9 @@ public final class Util {
 			m = t.length();
 		}
 
-		int p[] = new int[n + 1];
-		int d[] = new int[n + 1];
-		int _d[];
+		int[] p = new int[n + 1];
+		int[] d = new int[n + 1];
+		int[] _d;
 
 		int i;
 		int j;
@@ -1158,8 +1144,9 @@ public final class Util {
 		return connected && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI);
 	}
 	public static String getSSID(Context context) {
-		if (isWifiConnected(context)) {
-			WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		Context applicationContext = context.getApplicationContext();
+		if (isWifiConnected(applicationContext)) {
+			WifiManager wifiManager = (WifiManager) applicationContext.getSystemService(Context.WIFI_SERVICE);
 			if (wifiManager.getConnectionInfo() != null && wifiManager.getConnectionInfo().getSSID() != null) {
 				return wifiManager.getConnectionInfo().getSSID().replace("\"", "");
 			}
@@ -1220,15 +1207,10 @@ public final class Util {
 			.setIcon(icon)
 			.setTitle(title)
 			.setMessage(ss)
-			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int i) {
-					dialog.dismiss();
-				}
-			})
+			.setPositiveButton(R.string.common_ok, (dialog1, i) -> dialog1.dismiss())
 			.show();
 		
-		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+		((TextView) Objects.requireNonNull(dialog.findViewById(android.R.id.message))).setMovementMethod(LinkMovementMethod.getInstance());
     }
 
 	public static void showDetailsDialog(Context context, @StringRes int title, List<Integer> headers, List<String> details) {
@@ -1247,38 +1229,30 @@ public final class Util {
 
 		// Let the user long-click on a row to copy its value to the clipboard
 		final Context contextRef = context;
-		listView.setOnItemLongClickListener(new ListView.OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
-				TextView nameView = (TextView) view.findViewById(R.id.detail_name);
-				TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
-				if(nameView == null || detailsView == null) {
-					return false;
-				}
-
-				CharSequence name = nameView.getText();
-				CharSequence value = detailsView.getText();
-
-				ClipboardManager clipboard = (ClipboardManager) contextRef.getSystemService(Context.CLIPBOARD_SERVICE);
-				ClipData clip = ClipData.newPlainText(name, value);
-				clipboard.setPrimaryClip(clip);
-
-				toast(contextRef, "Copied " + name + " to clipboard");
-
-				return true;
+		listView.setOnItemLongClickListener((parent, view, pos, id) -> {
+			TextView nameView = (TextView) view.findViewById(R.id.detail_name);
+			TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+			if(nameView == null || detailsView == null) {
+				return false;
 			}
+
+			CharSequence name = nameView.getText();
+			CharSequence value = detailsView.getText();
+
+			ClipboardManager clipboard = (ClipboardManager) contextRef.getSystemService(Context.CLIPBOARD_SERVICE);
+			ClipData clip = ClipData.newPlainText(name, value);
+			clipboard.setPrimaryClip(clip);
+
+			toast(contextRef, "Copied " + name + " to clipboard");
+
+			return true;
 		});
 
 		new AlertDialog.Builder(context)
 				// .setIcon(android.R.drawable.ic_dialog_info)
 				.setTitle(title)
 				.setView(listView)
-				.setPositiveButton(R.string.common_close, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int i) {
-						dialog.dismiss();
-					}
-				})
+				.setPositiveButton(R.string.common_close, (dialog, i) -> dialog.dismiss())
 				.show();
 	}
 
@@ -1314,7 +1288,7 @@ public final class Util {
             Constructor<BitmapDrawable> constructor = BitmapDrawable.class.getConstructor(Resources.class, Bitmap.class);
             return constructor.newInstance(context.getResources(), bitmap);
         } catch (Throwable x) {
-            return new BitmapDrawable(bitmap);
+            return new BitmapDrawable(context.getResources(), bitmap);
         }
     }
 
@@ -1473,7 +1447,7 @@ public final class Util {
 					break;
 				case PREPARED:
 					// Only send quick pause event for samsung devices, causes issues for others
-					if (Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
+					if (Build.MANUFACTURER.toLowerCase().contains("samsung")) {
 						avrcpIntent.putExtra("playing", false);
 					} else {
 						return; // Don't broadcast anything
@@ -1527,12 +1501,8 @@ public final class Util {
 	}
 	
 	public static WifiManager.WifiLock createWifiLock(Context context, String tag) {
-		WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		int lockType = WifiManager.WIFI_MODE_FULL;
-		if (Build.VERSION.SDK_INT >= 12) {
-			lockType = 3;
-		}
-		return wm.createWifiLock(lockType, tag);
+		WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+		return wm.createWifiLock(3, tag);
 	}
 
 	public static Random getRandom() {
@@ -1585,7 +1555,7 @@ public final class Util {
 
 					URL url = new URL("https://booksonic.org/logs/");
 					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-					StringBuffer responseBuffer = new StringBuffer();
+					StringBuilder responseBuffer = new StringBuilder();
 					try {
 						urlConnection.setReadTimeout(10000);
 						urlConnection.setConnectTimeout(15000);
@@ -1668,7 +1638,7 @@ public final class Util {
 						md = MessageDigest.getInstance("SHA");
 						md.update(context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES).signatures[0].toByteArray());
 						footer += "\nSignature: " + new String(Base64.encode(md.digest(), 0));
-					}catch(Exception e){}
+					} catch(Exception ignored) {}
 
 
 					Intent selectorIntent = new Intent(Intent.ACTION_SENDTO);
