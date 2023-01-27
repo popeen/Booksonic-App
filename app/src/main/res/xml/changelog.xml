@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="2301" versioncode="76" releasedate="2023-01-XX">
-        <change>Early spring cleaning!</change>
+    <release version="2301" versioncode="77" releasedate="2023-01-XX">
+        <change>Early spring cleaning! This version includes A LOT of changes under the hood. They should improve stability, batterylife etc but as always with big changes there is a risk of new bugs as well, please report any bugs you find to support@booksonic.org</change>
         <change>Added option to hide duplicate tracks (Thanks Raminou!)</change>
         <change>Removed old unused code and imports</change>
         <change>Optimizations</change>
