@@ -211,7 +211,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.menu_exit:
 				exit();
 				return true;
-			case R.id.menu_export:
+			/*case R.id.menu_export:
 				importExport.exportData(context);
 				return true;
 			case R.id.menu_import:
@@ -221,7 +221,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						importExport.importData(context, file.getPath().toString());
 					}
 				}).showDialog();
-				return true;
+				return true;*/
 			case R.id.menu_refresh:
 				refresh();
 				return true;

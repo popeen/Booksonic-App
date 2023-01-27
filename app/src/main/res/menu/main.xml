@@ -29,13 +29,13 @@
         android:id="@+id/menu_changelog"
         android:title="@string/changelog_full_title"/>
 
-	<item
+	<!--<item
 		android:id="@+id/menu_export"
 		android:title="@string/menu.export"/>
 
 	<item
 		android:id="@+id/menu_import"
-		android:title="@string/menu.import"/>
+		android:title="@string/menu.import"/>-->
 
 	<item
 		android:id="@+id/menu_exit"
