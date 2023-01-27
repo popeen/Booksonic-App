@@ -329,9 +329,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			this.findPreference("visitFaq").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					Uri uri = Uri.parse("https://booksonic.org/faq");
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-					startActivity(browserIntent);
+					Util.openWebsite(context, "https://booksonic.org/faq");
 					return true;
 				}
 			});
@@ -339,9 +337,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			this.findPreference("visitSubredit").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					Uri uri = Uri.parse("https://www.reddit.com/r/Booksonic/");
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-					startActivity(browserIntent);
+					Util.openWebsite(context, "https://www.reddit.com/r/Booksonic/");
 					return true;
 				}
 			});
@@ -357,9 +353,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			this.findPreference("visitWindowsGuide").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					Uri uri = Uri.parse("https://booksonic.org/how");
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-					startActivity(browserIntent);
+					Util.openWebsite(context, "https://booksonic.org/how");
 					return true;
 				}
 			});
@@ -367,9 +361,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			this.findPreference("visitDockerGuide").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					Uri uri = Uri.parse("https://hub.docker.com/r/linuxserver/booksonic-air");
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-					startActivity(browserIntent);
+					Util.openWebsite(context, "https://hub.docker.com/r/linuxserver/booksonic-air");
 					return true;
 				}
 			});
@@ -452,9 +444,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			serverHelpPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					Uri uri = Uri.parse("https://popeen.com/2016/01/14/how-to-stream-audiobooks-to-your-phone-with-booksonic/");
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-					startActivity(browserIntent);
+					Util.openWebsite(context, "https://popeen.com/2016/01/14/how-to-stream-audiobooks-to-your-phone-with-booksonic/");
 					return true;
 				}
 			});

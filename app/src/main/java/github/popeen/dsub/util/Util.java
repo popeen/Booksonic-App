@@ -1553,7 +1553,7 @@ public final class Util {
 						}
 					}
 
-					URL url = new URL("https://booksonic.org/logs/");
+					URL url = new URL("https://booksonic.org/logs/index.php");
 					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
 					StringBuilder responseBuffer = new StringBuilder();
 					try {
@@ -1685,5 +1685,10 @@ public final class Util {
 		} catch (NoSuchAlgorithmException | KeyManagementException e) {
 			throw new RuntimeException("Failed to create a SSL socket factory", e);
 		}
+	}
+
+	public static void openWebsite(Context context, String url) {
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+		context.startActivity(browserIntent);
 	}
 }
