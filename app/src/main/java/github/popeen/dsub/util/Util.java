@@ -17,7 +17,6 @@
  */
 package github.popeen.dsub.util;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -28,7 +27,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,7 +44,7 @@ import android.os.Build;
 import android.os.Environment;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
-import android.text.Html;
+
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -148,7 +146,6 @@ public final class Util {
     private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     private static Toast toast;
-	// private static Map<Integer, Pair<String, String>> tokens = new HashMap<>();
 	private static SparseArray<Pair<String, String>> tokens = new SparseArray<>();
 	private static Random random;
 
@@ -213,6 +210,7 @@ public final class Util {
 		// Don't allow the SERVER_INSTANCE to ever be 0
         return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false) ? 0 : Math.max(1, prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1));
     }
+
 	public static int getMostRecentActiveServer(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return Math.max(1, prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1));
@@ -271,6 +269,7 @@ public final class Util {
 		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
         return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
 	}
+
     public static String getServerName(Context context, int instance) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
@@ -287,24 +286,15 @@ public final class Util {
     public static String getSelectedMusicFolderId(Context context) {
         return getSelectedMusicFolderId(context, getActiveServer(context));
     }
+
 	public static String getSelectedMusicFolderId(Context context, int instance) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
 	}
 
-	public static boolean getAlbumListsPerFolder(Context context) {
-		return getAlbumListsPerFolder(context, getActiveServer(context));
-	}
 	public static boolean getAlbumListsPerFolder(Context context, int instance) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_ALBUMS_PER_FOLDER + instance, false);
-	}
-	public static void setAlbumListsPerFolder(Context context, boolean perFolder) {
-		int instance = getActiveServer(context);
-		SharedPreferences prefs = getPreferences(context);
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putBoolean(Constants.PREFERENCES_KEY_ALBUMS_PER_FOLDER + instance, perFolder);
-		editor.commit();
 	}
 
 
@@ -360,33 +350,15 @@ public final class Util {
         int cacheSize = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_CACHE_SIZE, "-1"));
         return cacheSize == -1 ? Integer.MAX_VALUE : cacheSize;
     }
+
 	public static boolean isBatchMode(Context context) {
 		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false);
 	}
-	public static void setBatchMode(Context context, boolean batchMode) {
-		Util.getPreferences(context).edit().putBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, batchMode).commit();
-	}
 
-	public static String getRestUsername(Context context, String method) {
-		SharedPreferences prefs = getPreferences(context);
-		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-		String Username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
-		return  Username;
-	}
-
-	public static void setRestCredentials(Context context, String method, String username, String password, String server) {
-		SharedPreferences prefs = getPreferences(context);
-		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString(Constants.PREFERENCES_KEY_USERNAME + 1, username);
-		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + 1, password);
-		editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + 1, server);
-		editor.commit();
-	}
-
-    public static String getRestUrl(Context context, String method) {
+	public static String getRestUrl(Context context, String method) {
         return getRestUrl(context, method, true);
     }
+
 	public static String getRestUrl(Context context, String method, boolean allowAltAddress) {
 		SharedPreferences prefs = getPreferences(context);
 		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
@@ -395,12 +367,14 @@ public final class Util {
 		}
 		return getRestUrl(context, method, prefs, instance, allowAltAddress);
 	}
+
     public static String getRestUrl(Context context, String method, int instance) {
 		if(instance<1){
 			instance = 1;
 		}
     	return getRestUrl(context, method, instance, true);
     }
+
 	public static String getRestUrl(Context context, String method, int instance, boolean allowAltAddress) {
 		if(instance<1){
 			instance = 1;
@@ -408,12 +382,14 @@ public final class Util {
 		SharedPreferences prefs = getPreferences(context);
 		return getRestUrl(context, method, prefs, instance, allowAltAddress);
 	}
+
     public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance) {
 		if(instance<1){
 			instance = 1;
 		}
         return getRestUrl(context, method, prefs, instance, true);
     }
+
 	public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
 		if(instance<1){
 			instance = 1;
@@ -474,9 +450,11 @@ public final class Util {
 
 		return builder.toString();
 	}
+
 	public static int getRestUrlHash(Context context) {
 		return getRestUrlHash(context, Util.getMostRecentActiveServer(context));
 	}
+
 	public static int getRestUrlHash(Context context, int instance) {
 		StringBuilder builder = new StringBuilder();
 
@@ -490,9 +468,11 @@ public final class Util {
 	public static String getBlockTokenUsePref(Context context, int instance) {
 		return Constants.CACHE_BLOCK_TOKEN_USE + Util.getRestUrl(context, null, instance, false);
 	}
+
 	public static boolean getBlockTokenUse(Context context, int instance) {
 		return getPreferences(context).getBoolean(getBlockTokenUsePref(context, instance), false);
 	}
+
 	public static void setBlockTokenUse(Context context, int instance, boolean block) {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putBoolean(getBlockTokenUsePref(context, instance), block);
@@ -518,6 +498,7 @@ public final class Util {
 	public static boolean isTagBrowsing(Context context) {
 		return isTagBrowsing(context, Util.getActiveServer(context));
 	}
+
 	public static boolean isTagBrowsing(Context context, int instance) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance, false);
@@ -538,20 +519,6 @@ public final class Util {
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_FORCE_PASSWORD_API+ instance, false);
 	}
 
-	public static String getParentFromEntry(Context context, MusicDirectory.Entry entry) {
-		if(Util.isTagBrowsing(context)) {
-			if(!entry.isDirectory()) {
-				return entry.getAlbumId();
-			} else if(entry.isAlbum()) {
-				return entry.getArtistId();
-			} else {
-				return null;
-			}
-		} else {
-			return entry.getParent();
-		}
-	}
-
 	public static String openToTab(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getString(Constants.PREFERENCES_KEY_OPEN_TO_TAB, null);
@@ -570,6 +537,7 @@ public final class Util {
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, 0);
     }
+
 	public static SharedPreferences getOfflineSync(Context context) {
 		return context.getSharedPreferences(Constants.OFFLINE_SYNC_NAME, 0);
 	}
@@ -578,6 +546,7 @@ public final class Util {
 		SharedPreferences prefs = Util.getOfflineSync(context);
 		return prefs.getString(Constants.OFFLINE_SYNC_DEFAULT, null);
 	}
+
 	public static void setSyncDefault(Context context, String defaultValue) {
 		SharedPreferences.Editor editor = Util.getOfflineSync(context).edit();
 		editor.putString(Constants.OFFLINE_SYNC_DEFAULT, defaultValue);
@@ -587,13 +556,16 @@ public final class Util {
 	public static String getCacheName(Context context, String name, String id) {
 		return getCacheName(context, getActiveServer(context), name, id);
 	}
+
 	public static String getCacheName(Context context, int instance, String name, String id) {
 		String s = getRestUrl(context, null, instance, false) + id;
 		return name + "-" + s.hashCode() + ".ser";
 	}
+
 	public static String getCacheName(Context context, String name) {
 		return getCacheName(context, getActiveServer(context), name);
 	}
+
 	public static String getCacheName(Context context, int instance, String name) {
 		String s = getRestUrl(context, null, instance, false);
 		return name + "-" + s.hashCode() + ".ser";
@@ -603,6 +575,7 @@ public final class Util {
 		SharedPreferences offline = getOfflineSync(context);
 		return offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
 	}
+
 	public static int offlineStarsCount(Context context) {
 		SharedPreferences offline = getOfflineSync(context);
 		return offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
@@ -813,15 +786,11 @@ public final class Util {
 	public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick) {
 		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, null);
 	}
-	public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
-		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, onCancel);
-	}
+
 	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick) {
 		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, null);
 	}
-	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
-		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, onCancel);
-	}
+
 	public static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
 		new AlertDialog.Builder(context)
 			.setIcon(android.R.drawable.ic_dialog_alert)
@@ -951,9 +920,6 @@ public final class Util {
 		}
     }
 
-	public static String formatDate(Context context, String dateString) {
-		return formatDate(context, dateString, true);
-	}
 	public static String formatDate(Context context, String dateString, boolean includeTime) {
 		if(dateString == null) {
 			return "";
@@ -973,9 +939,11 @@ public final class Util {
 			return dateString;
 		}
 	}
+
 	public static String formatDate(Date date) {
 		return formatDate(date, true);
 	}
+
 	public static String formatDate(Date date, boolean includeTime) {
 		if(date == null) {
 			return "Never";
@@ -1238,15 +1206,6 @@ public final class Util {
 		showDialog(context, android.R.drawable.ic_dialog_info, title, message, linkify);
 	}
 
-	public static void showDialog(Context context, int icon, int titleId, int messageId) {
-		showDialog(context, icon, titleId, messageId, true);
-	}
-	public static void showDialog(Context context, int icon, int titleId, String message) {
-		showDialog(context, icon, titleId, message, true);
-	}
-	public static void showDialog(Context context, int icon, String title, String message) {
-		showDialog(context, icon, title, message, true);
-	}
 	public static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
 		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId), linkify);
 	}
@@ -1273,24 +1232,6 @@ public final class Util {
 		
 		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
-	public static void showHTMLDialog(Context context, int title, int message) {
-		showHTMLDialog(context, title, context.getResources().getString(message));
-	}
-	public static void showHTMLDialog(Context context, int title, String message) {
-		AlertDialog dialog = new AlertDialog.Builder(context)
-			.setIcon(android.R.drawable.ic_dialog_info)
-			.setTitle(title)
-			.setMessage(Html.fromHtml(message))
-			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int i) {
-					dialog.dismiss();
-				}
-			})
-			.show();
-
-		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-	}
 
 	public static void showDetailsDialog(Context context, @StringRes int title, List<Integer> headers, List<String> details) {
 		List<String> headerStrings = new ArrayList<>();
@@ -1349,10 +1290,6 @@ public final class Util {
         } catch (InterruptedException x) {
             Log.w(TAG, "Interrupted from sleep.", x);
         }
-    }
-
-    public static void startActivityWithoutTransition(Activity currentActivity, Class<? extends Activity> newActivitiy) {
-        startActivityWithoutTransition(currentActivity, new Intent(currentActivity, newActivitiy));
     }
 
     public static void startActivityWithoutTransition(Activity currentActivity, Intent intent) {
@@ -1475,14 +1412,6 @@ public final class Util {
 				}
 			}
 		};
-	}
-
-	public static void abandonAudioFocus(Context context) {
-		if(focusListener != null) {
-			final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-			audioManager.abandonAudioFocus(focusListener);
-			focusListener = null;
-		}
 	}
 
     /**
@@ -1758,66 +1687,13 @@ public final class Util {
 			}.execute();
 		} catch(Exception ignored) {}
 	}
+
 	public static void setMargins (View view, int left, int top, int right, int bottom) {
 		if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
 			ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
 			p.setMargins(left, top, right, bottom);
 			view.requestLayout();
 		}
-	}
-
-	private static String calcSHA1(byte[] signature) throws NoSuchAlgorithmException {
-		MessageDigest digest = MessageDigest.getInstance("SHA1");
-		digest.update(signature);
-		byte[] signatureHash = digest.digest();
-		return bytesToHex(signatureHash);
-	}
-
-	public static String bytesToHex(byte[] bytes) {
-		final char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-		char[] hexChars = new char[bytes.length * 2];
-		int v;
-		for (int j = 0; j < bytes.length; j++) {
-			v = bytes[j] & 0xFF;
-			hexChars[j * 2] = hexArray[v >>> 4];
-			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-		}
-		return new String(hexChars);
-	}
-
-	public static boolean validateAppSignature(Context context) {
-		try {
-			// get the signature form the package manager
-			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
-			Signature[] appSignatures = packageInfo.signatures;
-			// this sample only checks the first certificate
-			for (Signature signature : appSignatures) {
-				byte[] signatureBytes = signature.toByteArray();
-				// calc sha1 in hex
-				String currentSignature = calcSHA1(signatureBytes);
-				// compare signatures
-				Log.i("ValidateSigningCert", "Signature is " + currentSignature + " (" + CERTIFICATE_SHA1 + ")");
-				return CERTIFICATE_SHA1.equalsIgnoreCase(currentSignature);
-			}
-		} catch (Exception e) { // if error assume failed to validate
-			return false;
-		}
-
-		return false;
-	}
-
-	public static boolean isSignedByPopeen(Context context){
-		return validateAppSignature(context);
-	}
-
-	public static boolean installedFromPlayStore(Context context) {
-		boolean result = false;
-		try {
-			String installer = context.getPackageManager().getInstallerPackageName(context.getPackageName());
-			result = installer.equals("com.android.vending");
-		} catch (Throwable e) {}
-
-		return result;
 	}
 
 	public static SSLSocketFactory socketFactory() {
