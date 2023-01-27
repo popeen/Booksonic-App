@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-    <release version="2301" versioncode="75" releasedate="2023-01-XX">
+    <release version="2301" versioncode="76" releasedate="2023-01-XX">
         <change>Early spring cleaning!</change>
         <change>Added option to hide duplicate tracks (Thanks Raminou!)</change>
         <change>Removed old unused code and imports</change>
