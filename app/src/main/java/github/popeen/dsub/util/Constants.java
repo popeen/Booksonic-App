@@ -202,6 +202,11 @@ public final class Constants {
 
 	public static final String PREFERENCES_KEY_FORCE_PASSWORD_API = "forcePasswordApi";
 
+	public static final String PREFERENCES_KEY_ENABLE_INTERNET_METADATA = "enableInternetMetadata";
+	public static final String PREFERENCES_KEY_ALLOW_AI = "aiMetadata";
+	public static final String PREFERENCES_KEY_ALLOW_GOOGLE = "googleMetadata";
+	public static final String PREFERENCES_KEY_ALLOW_BOKTIPSET = "boktipsetMetadata";
+
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
 	public static final String OFFLINE_SCROBBLE_SEARCH = "scrobbleTitle";

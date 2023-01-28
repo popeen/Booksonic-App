@@ -1,6 +1,7 @@
 package github.popeen.dsub.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -51,54 +52,39 @@ public class BookInfoAPI extends AsyncTask<BookInfoAPIParams, Void, String[]> {
         }
 
         // If the server has no info or is not Booksonic API compatible try to get it from the internet
-        if (returnData[0].equals("noInfo")) {
+        SharedPreferences prefs = Util.getPreferences(context);
+        if ((returnData[0].equals("noInfo") || returnData[0].equals("No description availiable")) && prefs.getBoolean(Constants.PREFERENCES_KEY_ENABLE_INTERNET_METADATA, true)){
 
-            // If the apps language is Swedish try to get the info from Boktipset
-            if (context.getResources().getConfiguration().locale.getDisplayLanguage().equals("svenska")) {
-                try {
+            String language = context.getResources().getConfiguration().locale.getDisplayLanguage();
+            try {
 
-                    String url = "http://api.boktipset.se/book/search.cgi?accesskey=" + EnvironmentVariables.BOKTIPSET_API_KEY + "&format=json&value=" + URLEncoder.encode(apiParams[0].getTitle().replace("" + apiParams[0].getYear() + " - ", "").replace(" - Svensk", "").replace(" - Engelsk", ""), Constants.UTF_8);
-                    String input = Jsoup.connect(url).ignoreContentType(true).execute().body();
-
-                    Log.w("Boktipset", input);
-                    JSONObject json = new JSONObject(input);
-                    String title = json.getJSONObject("answer").getJSONObject("books").getJSONArray("book").getJSONObject(0).getString("name");
-                    String id = json.getJSONObject("answer").getJSONObject("books").getJSONArray("book").getJSONObject(0).getString("id");
-
-
-                    url = "http://api.boktipset.se/book/book.cgi?accesskey=" + EnvironmentVariables.BOKTIPSET_API_KEY + "&format=json&book=" + id;
-                    input = Jsoup.connect(url).ignoreContentType(true).execute().body();
-
-                    String description = new JSONObject(input).getJSONObject("answer").getString("saga").replace("\n", " ").replace("<br />", "").replace("<br/>", "").replace("<p>", "").replace("</p>", "").replace("<b>", "").replace("</b>", "").replaceAll("\\s+", " ").trim();
-
-                    returnData[0] = "Följande beskrivning är för boken " + title + ".\n\nBeskrivningen hämtades automatiskt från Boktipset.se\n\n" + description;
-
-                } catch (Exception e) {
-                    Log.w("Boktipset Error", e);
+                String services = "";
+                if(prefs.getBoolean(Constants.PREFERENCES_KEY_ALLOW_AI, true)) {
+                    services += "ai,";
                 }
-            }
-
-            //If we still have no info try to get it from Google Books
-            if (returnData[0].equals("noInfo")) {
-                try {
-
-                    String url = "https://www.googleapis.com/books/v1/volumes?q=" + URLEncoder.encode(apiParams[0].getAuthor(), Constants.UTF_8) + "+" + URLEncoder.encode(apiParams[0].getTitle(), Constants.UTF_8);
-                    String input = Jsoup.connect(url).ignoreContentType(true).execute().body();
-
-                    Log.w("GoogleBooks", input);
-                    JSONObject json = new JSONObject(input);
-
-                    try {
-                        String description = json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("description").toString();
-                        returnData[0] = "The following description is for the book " + json.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").get("title") + ".\n\nIt was automatically fetched from google books\n\n" + description;
-                    } catch (Exception e) {
-                        String description = json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("description").toString();
-                        returnData[0] = "The following is for the book " + json.getJSONArray("items").getJSONObject(1).getJSONObject("volumeInfo").get("title") + ".\nIt was automatically fetched from google books\n\n" + description;
-                    }
-
-                } catch (Exception e) {
-                    Log.w("GoogleBooks Error", e);
+                if(prefs.getBoolean(Constants.PREFERENCES_KEY_ALLOW_GOOGLE, true)) {
+                    services += "google,";
                 }
+                if(prefs.getBoolean(Constants.PREFERENCES_KEY_ALLOW_BOKTIPSET, true)) {
+                    services += "boktipset,";
+                }
+
+
+                String url = "https://booksonic.org/api/bookinfo/?author=" + URLEncoder.encode(apiParams[0].getAuthor(), Constants.UTF_8) + "&book=" + URLEncoder.encode(apiParams[0].getTitle(), Constants.UTF_8) + "&lang=" + language + "&services=" + services;
+                String input = Jsoup.connect(url).ignoreContentType(true).execute().body();
+
+                Log.w("Booksonic URL", url);
+                Log.w("Booksonic response", input);
+                JSONObject json = new JSONObject(input);
+
+                try {
+                    String description = json.get("description").toString();
+                    returnData[0] = description;
+                } catch (Exception ignored) {
+                }
+
+            } catch (Exception e) {
+                Log.w("Booksonic data error", e);
             }
         }
 

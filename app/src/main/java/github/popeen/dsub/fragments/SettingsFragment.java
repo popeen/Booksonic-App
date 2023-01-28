@@ -95,6 +95,11 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private EditTextPreference cacheSize;
 	private ListPreference openToTab;
 
+	private CheckBoxPreference enableInternetMetadata;
+	private CheckBoxPreference aiMetadata;
+	private CheckBoxPreference googleMetadata;
+	private CheckBoxPreference boktipsetMetadata;
+
 	private int serverCount = 3;
 	private SharedPreferences settings;
 	private DecimalFormat megabyteFromat;
@@ -145,6 +150,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			xml = R.xml.settings_sync;
 		} else if("playback".equals(name)) {
 			xml = R.xml.settings_playback;
+		} else if("metadata".equals(name)) {
+			xml = R.xml.settings_metadata;
 		} else if("servers".equals(name)) {
 			// if(Util.installedFromPlayStore(context) || !Util.isSignedByPopeen(context)) {
 			xml = R.xml.settings_servers;
@@ -256,6 +263,11 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		replayGainUntagged = this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
 		cacheSize = (EditTextPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
 		openToTab = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_OPEN_TO_TAB);
+
+		enableInternetMetadata = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_ENABLE_INTERNET_METADATA);
+		aiMetadata = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_ALLOW_AI);
+		googleMetadata = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_ALLOW_GOOGLE);
+		boktipsetMetadata = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_ALLOW_BOKTIPSET);
 
 		settings = Util.getPreferences(context);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
@@ -488,6 +500,20 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				replayGainUntagged.setEnabled(false);
 			}
 			replayGainType.setSummary(replayGainType.getEntry());
+
+		}
+
+		if(enableInternetMetadata != null) {
+
+			if(enableInternetMetadata.isChecked()) {
+				aiMetadata.setEnabled(true);
+				googleMetadata.setEnabled(true);
+				boktipsetMetadata.setEnabled(true);
+			} else {
+				aiMetadata.setEnabled(false);
+				googleMetadata.setEnabled(false);
+				boktipsetMetadata.setEnabled(false);
+			}
 
 		}
 		for (ServerSettings ss : serverSettings.values()) {

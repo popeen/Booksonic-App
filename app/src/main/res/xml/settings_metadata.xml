@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:myns="http://schemas.android.com/apk/res-auto"
+    android:title="metadata">
+
+    <PreferenceCategory
+        android:title="Metadata">
+
+        <CheckBoxPreference
+            android:title="Enable internet metadata"
+            android:summary="If there is no metadata available on the server, try and get it from the Booksonic webservice."
+            android:key="enableInternetMetadata"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Sources">
+
+        <Preference
+            android:key="pref_static_field_key"
+            android:selectable="false"
+            android:summary="The Booksonic webservice can ask several different sources. Check the ones you want to allow."/>
+
+        <CheckBoxPreference
+            android:title="Artificial Intelligence"
+            android:summary="Ask Davinci 003 to write the metadata. This usually works well but can sometimes be completely wrong."
+            android:key="aiMetadata"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:title="Google Books"
+            android:summary="Allow getting the metadata from Google Books."
+            android:key="googleMetadata"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:title="Boktipset"
+            android:summary="Allow getting the metadata from Boktipset.se"
+            android:key="boktipsetMetadata"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

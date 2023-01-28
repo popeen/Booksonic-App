@@ -13,6 +13,11 @@
 	</PreferenceScreen>
 
 	<PreferenceScreen
+		android:title="Metadata"
+		android:key="metadata">
+	</PreferenceScreen>
+
+	<PreferenceScreen
 		android:title="@string/settings.drawer_items_title"
 		android:key="drawer">
 	</PreferenceScreen>
