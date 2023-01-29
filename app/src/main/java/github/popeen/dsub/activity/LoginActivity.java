@@ -206,9 +206,9 @@ public class LoginActivity extends Activity {
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putBoolean(Constants.PREFERENCES_KEY_OFFLINE, false);
 
-				String address = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + 1, "http://demo.booksonic.org/booksonic/");
+				String address = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + 1, "http://demo.booksonic.org/");
 				editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + 1, "Booksonic");
-				editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + 1, "http://demo.booksonic.org/booksonic/");
+				editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + 1, "http://demo.booksonic.org/");
 				editor.putString(Constants.PREFERENCES_KEY_USERNAME + 1, "demo");
 				editor.putString(Constants.PREFERENCES_KEY_PASSWORD + 1, "demo");
 				editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
