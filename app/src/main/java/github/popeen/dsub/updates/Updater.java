@@ -71,6 +71,13 @@ public class Updater {
 				}
 			}
 		}
+
+		String firstServer = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + 1, "http://demo.booksonic.org/");
+		if(firstServer.contains("demo.booksonic.org/booksonic")){
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + 1, firstServer.replace("demo.booksonic.org/booksonic", "demo.booksonic.org"));
+			editor.commit();
+		}
 	}
 	
 	public String getName() {
