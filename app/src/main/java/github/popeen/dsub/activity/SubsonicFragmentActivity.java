@@ -865,7 +865,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	}
 
 	private void showInfoDialog() {
-		if(Util.getRestUrl(this, null).contains("demo.booksonic.org")) {
+		SharedPreferences prefs = Util.getPreferences(this);
+		if(prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + 1, "http://demo.booksonic.org/").contains("demo.booksonic.org")) {
 			startActivity(new Intent(this, LoginActivity.class));
 		}
 	}
