@@ -403,7 +403,11 @@ public class DownloadService extends Service {
 		return downloadList.size();
 	}
 	public static void startService(Context context) {
-		startService(context, new Intent(context, DownloadService.class));
+		try {
+			startService(context, new Intent(context, DownloadService.class));
+		} catch (Throwable x) {
+			Log.w(TAG, "Failed to start service", x);
+		}
 	}
 	public static void startService(Context context, Intent intent) {
 		PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
@@ -411,8 +415,10 @@ public class DownloadService extends Service {
 		// As a test I am removing that part and will check back at end of BETA to see if crashes stopped
 		if (Build.VERSION.SDK_INT < 26){ // || (powerManager != null && powerManager.isIgnoringBatteryOptimizations(intent.getPackage()))) {
 			context.startService(intent);
-		} else {
+		} else if(Build.VERSION.SDK_INT < 31){
 			context.startForegroundService(intent);
+		}else{
+			context.startService(intent); //startForegroundService is not allowed to be called from background from android 12 so we go back to the old way, need to evaluate if this is a problem
 		}
 	}
 	public static DownloadService getInstance() {
