@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="2302" versioncode="79" releasedate="2023-02-05">
+        <change>Fixed a crash that sometimes happened when pressing media buttons</change>
+        <change>Probably fixes a crash that sometimes happens on Android Auto but that I am unable to reproduce for testing.</change>
+    </release>
     <release version="2301" versioncode="78" releasedate="2023-01-30">
         <change>Early spring cleaning! This version includes A LOT of changes under the hood. They should improve stability, batterylife etc but as always with big changes there is a risk of new bugs as well, please report any bugs you find to support@booksonic.org</change>
         <change>Added option to hide duplicate tracks (Thanks Raminou!)</change>
