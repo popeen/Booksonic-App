@@ -35,23 +35,27 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
-		if(DownloadService.getInstance() == null && (event.getKeyCode() == KeyEvent.KEYCODE_MEDIA_STOP ||
-			event.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE || event.getKeyCode() == KeyEvent.KEYCODE_HEADSETHOOK)) {
-			Log.w(TAG, "Ignore keycode event because downloadService is off");
-			return;
-		}
-        Log.i(TAG, "Got MEDIA_BUTTON key event: " + event);
 
-        Intent serviceIntent = new Intent(context, DownloadService.class);
-        serviceIntent.putExtra(Intent.EXTRA_KEY_EVENT, event);
-        DownloadService.startService(context, serviceIntent);
-        if (isOrderedBroadcast()) {
-			try {
-				abortBroadcast();
-			} catch (Exception x) {
-				// Ignored.
-			}
-		}
+        try {
+            KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
+            if (DownloadService.getInstance() == null && (event.getKeyCode() == KeyEvent.KEYCODE_MEDIA_STOP ||
+                    event.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE || event.getKeyCode() == KeyEvent.KEYCODE_HEADSETHOOK)) {
+                Log.w(TAG, "Ignore keycode event because downloadService is off");
+                return;
+            }
+            Log.i(TAG, "Got MEDIA_BUTTON key event: " + event);
+
+            Intent serviceIntent = new Intent(context, DownloadService.class);
+            serviceIntent.putExtra(Intent.EXTRA_KEY_EVENT, event);
+            DownloadService.startService(context, serviceIntent);
+            if (isOrderedBroadcast()) {
+                try {
+                    abortBroadcast();
+                } catch (Exception ignored) {
+                }
+            }
+        } catch (Exception ignored){
+            //Was seeing crashes here on google play but I can't reproduce it and have no reports about it yet. For now we put it in a try/catch to at least avoid crashing the app.
+        }
     }
 }
