@@ -24,6 +24,9 @@
 	<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+	<uses-permission
+		android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+		android:minSdkVersion="34" />
 
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
@@ -99,10 +102,12 @@
 		</activity>
 
         <service android:name=".service.DownloadService"
-                 android:label="DSub Playback Service"/>
+                 android:label="DSub Playback Service"
+			     android:foregroundServiceType="mediaPlayback"/>
 
 		<service android:name=".service.AutoMediaBrowserService"
-				 android:exported="true">
+				 android:exported="true"
+				 android:foregroundServiceType="mediaPlayback">
 
 			<intent-filter>
 				<action android:name="android.media.browse.MediaBrowserService"/>

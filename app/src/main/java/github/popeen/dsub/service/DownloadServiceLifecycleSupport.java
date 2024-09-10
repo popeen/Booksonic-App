@@ -18,6 +18,8 @@
  */
 package github.popeen.dsub.service;
 
+import static android.content.Context.RECEIVER_EXPORTED;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -52,6 +54,8 @@ import github.popeen.dsub.util.SongDBHandler;
 import github.popeen.dsub.util.Util;
 
 import static github.popeen.dsub.domain.PlayerState.PREPARING;
+
+import androidx.core.content.ContextCompat;
 
 /**
  * @author Sindre Mehus
@@ -151,7 +155,11 @@ public class DownloadServiceLifecycleSupport {
 		IntentFilter ejectFilter = new IntentFilter(Intent.ACTION_MEDIA_EJECT);
 		ejectFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
 		ejectFilter.addDataScheme("file");
-		downloadService.registerReceiver(ejectEventReceiver, ejectFilter);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			downloadService.registerReceiver(ejectEventReceiver, ejectFilter, RECEIVER_EXPORTED);
+		}else {
+			downloadService.registerReceiver(ejectEventReceiver, ejectFilter);
+		}
 
 		// React to media buttons.
 		Util.registerMediaButtonEventReceiver(downloadService);
@@ -174,7 +182,11 @@ public class DownloadServiceLifecycleSupport {
 		commandFilter.addAction(DownloadService.CMD_PREVIOUS);
 		commandFilter.addAction(DownloadService.CMD_NEXT);
 		commandFilter.addAction(DownloadService.CANCEL_DOWNLOADS);
-		downloadService.registerReceiver(intentReceiver, commandFilter);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			downloadService.registerReceiver(intentReceiver, commandFilter, RECEIVER_EXPORTED);
+		}else {
+			downloadService.registerReceiver(intentReceiver, commandFilter);
+		}
 
 		new CacheCleaner(downloadService, downloadService).clean();
 	}

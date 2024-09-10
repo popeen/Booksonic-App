@@ -15,6 +15,8 @@
 
 package github.popeen.dsub.util;
 
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK;
+
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -608,7 +610,12 @@ public final class Notifications {
 	}
 
 	private static void startForeground(DownloadService downloadService, int notificationId, Notification notification) {
-		downloadService.startForeground(notificationId, notification);
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+			downloadService.startForeground(notificationId, notification);
+		} else {
+			downloadService.startForeground(notificationId, notification, FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+		}
+
 		downloadService.setIsForeground(true);
 	}
 

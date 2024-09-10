@@ -7,13 +7,14 @@ repositories {
 }
 
 android {
-	compileSdkVersion 33
+	compileSdkVersion 34
+	buildToolsVersion = "34.0.0"
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
 		applicationId "github.popeen.dsub"
-		minSdkVersion 16
-		targetSdkVersion 33
+		minSdkVersion 24
+		targetSdkVersion 34
 		versionCode 79
 		versionName '2302'
 		setProperty("archivesBaseName", "Booksonic $versionName")
@@ -68,7 +69,7 @@ dependencies {
 	implementation 'com.shehabic.droppy:Droppy:0.6.0@aar'
 	implementation 'com.sothree.slidinguppanel:library:3.4.0'
 	implementation 'de.hdodenhof:circleimageview:3.1.0'
-	implementation 'io.github.kobakei:ratethisapp:1.2.0'
+	//implementation 'io.github.kobakei:ratethisapp:1.2.0'
 	implementation 'org.eclipse.jetty:jetty-server:8.1.16.v20140903'
 	implementation 'org.eclipse.jetty:jetty-servlet:8.1.16.v20140903'
 	implementation 'org.eclipse.jetty:jetty-client:8.1.16.v20140903'

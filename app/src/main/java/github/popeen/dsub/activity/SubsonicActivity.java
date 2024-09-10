@@ -69,7 +69,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.kobakei.ratethisapp.RateThisApp;
+//import com.kobakei.ratethisapp.RateThisApp;
 
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -196,10 +196,10 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 
 
-		RateThisApp.Config config = new RateThisApp.Config(30, 150);
-		RateThisApp.init(config);
-		RateThisApp.onCreate(this);
-		RateThisApp.showRateDialogIfNeeded(this);
+		//RateThisApp.Config config = new RateThisApp.Config(30, 150);
+		//RateThisApp.init(config);
+		//RateThisApp.onCreate(this);
+		//RateThisApp.showRateDialogIfNeeded(this);
 	}
 
 	@Override

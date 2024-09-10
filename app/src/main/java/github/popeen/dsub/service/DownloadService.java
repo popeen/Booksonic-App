@@ -270,7 +270,12 @@ public class DownloadService extends Service {
 
 		Util.registerMediaButtonEventReceiver(this);
 		audioNoisyReceiver = new AudioNoisyReceiver();
-		registerReceiver(audioNoisyReceiver, audioNoisyIntent);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			registerReceiver(audioNoisyReceiver, audioNoisyIntent, RECEIVER_EXPORTED);
+		}else {
+			registerReceiver(audioNoisyReceiver, audioNoisyIntent);
+		}
 
 		if (mRemoteControl == null) {
 			// Use the remote control APIs (if available) to set the playback state
